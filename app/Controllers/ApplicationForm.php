@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\ApplicationModel;
+use App\Models\UserModel;
 
 class ApplicationForm extends BaseController 
 {
@@ -24,15 +25,47 @@ class ApplicationForm extends BaseController
             return view('applicationform', ['validation' => $this->validator]);
         }
 
-        $model = new ApplicationModel();
+        $applicationModel = new ApplicationModel();
 
-        $data = [
+        $applicationModel->insert([
             'fullname' => $this->request->getPost('fullname'),
             'email'    => $this->request->getPost('email'),
             'contactnum'   => $this->request->getPost('contactnum'),
-        ];
+        ]);
 
-        $model->insert($data);
+        // temporary password generator
+        $tempPassword = bin2hex(random_bytes(4));
+        $hashedPassword = password_hash($tempPassword, PASSWORD_DEFAULT);
+
+        // save users table
+        $userModel = new UserModel();
+
+        $userModel->insert([
+            'fullname' => $this->request->getPost('fullname'),
+            'email'    => $this->request->getPost('email'),
+            'password' => $hashedPassword,
+            'role'     => 'applicant',
+            'is_temp_password' => 1
+        ]);
+
+        // sending email
+        $email = \Config\Services::email();
+
+        $email->setTo($this->request->getPost('email'));
+        $email->setSubject('Your Temporary Akademus Account');
+
+        $email->setMessage(
+            "Hello,
+
+            Your temporary login credentials:
+
+            Email: " . $this->request->getPost('email') . "
+            Password: $tempPassword
+
+            Please login and complete your application."
+        );
+
+        $email->send();
 
         return redirect()->to('/applicationform')->with('success', 'Application submitted successfully');
     }

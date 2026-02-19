@@ -30,7 +30,7 @@
 
     
     <section class="form-section">
-        <h2>Application Form</h2>
+        <h2>Sign In</h2>
 
         <form action="<?= base_url('applicationform/submit') ?>" method="post">
 
