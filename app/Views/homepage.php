@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akademus</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?= base_url('assets/css/homepage.css') ?>">
+</head>
+<body>
+    <nav>
+        <div class="nav-brand">
+            <div class="nav-logo-box">
+                <img src="assets/images/logo_akademus.png" alt="Akademus Logo" class="nav-logo">
+            </div>
+            <span class="nav-title">AKADEMUS</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Admissions</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Login/Register</a></li>
+        </ul>
+    </nav>
+    
+    <!-- the big chunk of square in the center -->
+    <section class="hero">
+
+        <!-- bg (animated) -->
+        <canvas id="bgCanvas"></canvas>
+
+        <!-- Hero Card -->
+        <div class="hero-card">
+            <p class="eyebrow">Welcome to Akademus</p>
+            <h1>Lorem ipsum dolor sit amet</h1>
+            <a href="#" class="btn-learn">Learn More</a>
+        </div>
+
+        <!-- goto MENTORA -->
+        <a href="#" class="mentora-link">
+            <span class="label">Proceed to Mentora</span>
+            <span class="mentora-arrow">&#8594;</span>
+            <div class="mentora-logo-box">
+                <img src="assets/images/logo_mentora.png" alt="Mentora Logo" class="mentora-logo">
+            </div>
+        </a>
+
+    </section>
+    <!-- js boostrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- public/assets/js -->
+    <script src="<?= base_url('assets/js/homepage.js') ?>"></script>
+</body>
+</html>
