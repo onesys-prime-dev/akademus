@@ -26,6 +26,60 @@
     </nav>
     <canvas id="bgCanvas"></canvas>
 
+    <section class="programs-section">
+
+        <h2 class="programs-title">
+            Undergraduate Programs Offered
+        </h2>
+
+        <div class="programs-table">
+
+            <div class="program-row">
+                <div class="program-name">
+                    Bachelor of Science in Computer Engineering
+                </div>
+                <div class="program-actions">
+                    <a href="#" class="btn-more">More Info</a>
+                    <a href="<?= base_url('applicationform') ?>" 
+                        class="btn-apply-course"
+                        target="_blank">Apply Now</a>
+                </div>
+            </div>
+
+            <div class="program-row">
+                <div class="program-name">
+                    Bachelor of Science in Computer Science
+                </div>
+                <div class="program-actions">
+                    <a href="#" class="btn-more">More Info</a>
+                    <a href="#" class="btn-apply-course">Apply Now</a>
+                </div>
+            </div>
+
+            <div class="program-row">
+                <div class="program-name">
+                    Bachelor of Science in Information System
+                </div>
+                <div class="program-actions">
+                    <a href="#" class="btn-more">More Info</a>
+                    <a href="#" class="btn-apply-course">Apply Now</a>
+                </div>
+            </div>
+
+            <div class="program-row">
+                <div class="program-name">
+                    Bachelor of Science in Information Technology
+                </div>
+                <div class="program-actions">
+                    <a href="#" class="btn-more">More Info</a>
+                    <a href="#" class="btn-apply-course">Apply Now</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
     <!-- js boostrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

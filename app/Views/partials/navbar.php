@@ -1,3 +1,4 @@
+<!-- HOMEPAGE NAVBAR | homepage.php  -->
 <nav>
     <a href="<?= base_url('/') ?>" class="nav-brand">
         <div class="nav-logo-box">
