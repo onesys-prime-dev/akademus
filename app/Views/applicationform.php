@@ -16,6 +16,19 @@
         <span class="brand-text">AKADEMUS</span>    
     </a>
 
+    <?php if (isset($validation)): ?>
+        <div class="alert alert-danger">
+            <?= $validation->listErrors() ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if (session()->getFlashdata('success')): ?>
+        <div class="alert alert-success">
+            <?= session()->getFlashdata('success') ?>
+        </div>
+    <?php endif; ?>
+
+    
     <section class="form-section">
         <h2>Application Form</h2>
 
@@ -32,8 +45,8 @@
             </div>
 
             <div class="mb-3">
-                <label>Mobile Number</label>
-                <input type="text" name="mobile" class="form-control" required>
+                <label>Contact Number</label>
+                <input type="text" name="contactnum" class="form-control" required>
             </div>
 
             <button type="submit" class="btn btn-primary">
@@ -52,3 +65,6 @@
     <script src="<?= base_url('assets/js/applynowpage.js') ?>"></script>
 </body>
 </html>
+
+
+

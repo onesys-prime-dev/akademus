@@ -12,6 +12,6 @@ class ApplicationModel extends Model
     protected $allowedFields = [
         'fullname',
         'email',
-        'mobile'
+        'contactnum'
     ];
 }
