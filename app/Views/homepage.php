@@ -9,20 +9,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/homepage.css') ?>">
 </head>
 <body>
-    <nav>
-        <div class="nav-brand">
-            <div class="nav-logo-box">
-                <img src="assets/images/logo_akademus.png" alt="Akademus Logo" class="nav-logo">
-            </div>
-            <span class="nav-title">AKADEMUS</span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Admissions</a></li>
-            <li><a href="#">Contact Us</a></li>
-            <li><a href="#">Login/Register</a></li>
-        </ul>
-    </nav>
+    <?= view('partials/navbar') ?>
     
     <!-- the big chunk of square in the center -->
     <section class="hero">

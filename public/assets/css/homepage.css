@@ -30,6 +30,7 @@ nav {
     display: flex;
     align-items: center;
     gap: 20px;
+    text-decoration: none;
 }
 
 .nav-logo-box {
@@ -72,8 +73,22 @@ nav {
 }
 
 .nav-links a:hover {
-    color: #2196F3;
+    color: #ffb200;
 }
+
+.apply-btn {
+    background-color: #0040a6;
+    color: #fff !important;
+    padding: 10px 24px;
+    border-radius: 25px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.apply-btn:hover {
+    background-color: #ffb200;
+}
+
 
 /* ── HERO SECTION ── */
 .hero {
@@ -110,7 +125,7 @@ nav {
     border-radius: 50px; 
     box-shadow: 0 25px 70px rgba(0,0,0,0.50);
     margin-left: 120px;   
-    margin-bottom: 50   px;
+    margin-bottom: 55px;
 }
 
 .hero-card .eyebrow {

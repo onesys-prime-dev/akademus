@@ -10,17 +10,18 @@
 </head>
 <body>
     <nav>
-        <div class="nav-brand">
+        <a href="<?= base_url('/') ?>" class="nav-brand">
             <div class="nav-logo-box">
-                <img src="assets/images/logo_akademus.png" alt="Akademus Logo" class="nav-logo">
+                <img src="<?= base_url('assets/images/logo_akademus.png') ?>" alt="Akademus Logo" class="nav-logo">
             </div>
             <span class="nav-title">AKADEMUS</span>
-        </div>
+        </a>
         <ul class="nav-links">
             <li><a href="#">About Us</a></li>
             <li><a href="#">Admissions</a></li>
             <li><a href="#">Contact Us</a></li>
             <li><a href="#">Login/Register</a></li>
+            
         </ul>
     </nav>
     <canvas id="bgCanvas"></canvas>

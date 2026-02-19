@@ -29,6 +29,12 @@ nav {
     display: flex;
     align-items: center;
     gap: 20px;
+    text-decoration: none;
+}
+
+.nav-brand:visited,
+.nav-brand:active {
+    color: inherit;
 }
 
 .nav-logo-box {
