@@ -2,10 +2,10 @@
 
 <div class="auth-container">
     <div class="auth-left">
-        <div class="brand">
+        <a href="<?= base_url('/') ?>" class="nav-brand">
             <img src="<?= base_url('assets/images/logo_akademus.png') ?>">
             <h2>AKADEMUS</h2>
-        </div>
+        </a>
 
         <h1>Your Future <br><span>Starts Here</span></h1>
 
@@ -51,5 +51,5 @@
         });
     });
     </script>
-
+    
 </div>
