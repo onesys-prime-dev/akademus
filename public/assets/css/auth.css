@@ -6,7 +6,18 @@
 
 body {
     font-family: 'Segoe UI', sans-serif;
-    background: #111;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(-45deg, #0f2d6b, #1546a0, #1d5fd2, #0e2f6e);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+}
+
+/* Animated Background */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .auth-container {
@@ -18,12 +29,17 @@ body {
 /* LEFT SIDE */
 .auth-left {
     width: 60%;
-    background: #1546a0;
     color: white;
     padding: 80px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    animation: floatIn 1.2s ease forwards;
+}
+
+@keyframes floatIn {
+    from { opacity: 0; transform: translateX(-40px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
 .auth-left .brand {
@@ -34,11 +50,11 @@ body {
 }
 
 .auth-left img {
-    width: 50px;
+    width: 55px;
 }
 
 .auth-left h1 {
-    font-size: 42px;
+    font-size: 44px;
     margin-bottom: 20px;
 }
 
@@ -49,6 +65,7 @@ body {
 .auth-left p {
     margin-bottom: 30px;
     line-height: 1.6;
+    opacity: 0.9;
 }
 
 .auth-left ul {
@@ -57,17 +74,30 @@ body {
 
 .auth-left ul li {
     margin-bottom: 15px;
-    opacity: 0.9;
+    opacity: 0.8;
+    transition: 0.3s;
+}
+
+.auth-left ul li:hover {
+    opacity: 1;
+    transform: translateX(5px);
 }
 
 /* RIGHT SIDE */
 .auth-right {
     width: 40%;
-    background: #f5f5f5;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(15px);
     padding: 60px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    animation: slideIn 1.2s ease forwards;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
 .auth-right h2 {
@@ -84,8 +114,9 @@ body {
 .toggle {
     display: flex;
     background: #ddd;
-    border-radius: 10px;
+    border-radius: 30px;
     margin-bottom: 25px;
+    overflow: hidden;
 }
 
 .toggle a {
@@ -95,15 +126,15 @@ body {
     text-decoration: none;
     color: #333;
     font-weight: 600;
+    transition: 0.3s ease;
 }
 
 .toggle a.active {
     background: #1546a0;
     color: white;
-    border-radius: 10px;
 }
 
-/* Form */
+/* FORM */
 form {
     display: flex;
     flex-direction: column;
@@ -111,11 +142,20 @@ form {
 
 form input,
 form select {
-    padding: 12px;
+    padding: 14px;
     margin-bottom: 15px;
     border: none;
-    border-radius: 8px;
-    background: #e3e3e3;
+    border-radius: 10px;
+    background: #f0f0f0;
+    transition: 0.3s ease;
+    font-size: 14px;
+}
+
+form input:focus,
+form select:focus {
+    outline: none;
+    background: white;
+    box-shadow: 0 0 0 2px #1546a0;
 }
 
 .row {
@@ -123,25 +163,61 @@ form select {
     gap: 10px;
 }
 
+/* BUTTON */
 button {
-    padding: 12px;
+    padding: 14px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     background: #1546a0;
     color: white;
     font-weight: 600;
     cursor: pointer;
+    transition: 0.3s ease;
 }
 
 button:hover {
     background: #0e2f6e;
+    transform: translateY(-2px);
 }
 
-/* Alert */
+button:active {
+    transform: scale(0.97);
+}
+
+/* ALERT */
 .alert {
-    background: #ffdddd;
+    background: #ffe3e3;
     color: #900;
     padding: 10px;
-    border-radius: 6px;
+    border-radius: 8px;
     margin-bottom: 15px;
+    font-size: 14px;
+}
+
+/* SUCCESS */
+.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+    .auth-container {
+        flex-direction: column;
+    }
+
+    .auth-left {
+        width: 100%;
+        padding: 40px;
+        text-align: center;
+    }
+
+    .auth-right {
+        width: 100%;
+        padding: 40px;
+    }
+
+    .row {
+        flex-direction: column;
+    }
 }

@@ -62,5 +62,12 @@
 
         </form>
     </div>
-
+    <script>
+    document.querySelectorAll('.toggle a').forEach(btn => {
+        btn.addEventListener('click', function(e){
+            document.querySelectorAll('.toggle a').forEach(el => el.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+</script>
 </div>
