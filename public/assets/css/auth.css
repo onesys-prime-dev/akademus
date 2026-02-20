@@ -1,0 +1,147 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #111;
+}
+
+.auth-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* LEFT SIDE */
+.auth-left {
+    width: 60%;
+    background: #1546a0;
+    color: white;
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.auth-left .brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.auth-left img {
+    width: 50px;
+}
+
+.auth-left h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+.auth-left h1 span {
+    color: #ffb400;
+}
+
+.auth-left p {
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.auth-left ul {
+    list-style: none;
+}
+
+.auth-left ul li {
+    margin-bottom: 15px;
+    opacity: 0.9;
+}
+
+/* RIGHT SIDE */
+.auth-right {
+    width: 40%;
+    background: #f5f5f5;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.auth-right h2 {
+    color: #1546a0;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    margin-bottom: 25px;
+    color: #555;
+}
+
+/* Toggle */
+.toggle {
+    display: flex;
+    background: #ddd;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.toggle a {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+}
+
+.toggle a.active {
+    background: #1546a0;
+    color: white;
+    border-radius: 10px;
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form input,
+form select {
+    padding: 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #e3e3e3;
+}
+
+.row {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #1546a0;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0e2f6e;
+}
+
+/* Alert */
+.alert {
+    background: #ffdddd;
+    color: #900;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}

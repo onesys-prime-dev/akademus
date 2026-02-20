@@ -6,6 +6,6 @@ class ApplyNow extends BaseController
 {
     public function index(): string 
     {
-        return view('applynowpage.php');       
+        return view('applynowpage');       
     }
 }

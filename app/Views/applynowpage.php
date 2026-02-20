@@ -40,7 +40,7 @@
                 </div>
                 <div class="program-actions">
                     <a href="#" class="btn-more">More Info</a>
-                    <a href="<?= base_url('applicationform') ?>" 
+                    <a href="<?= base_url('sign_in') ?>" 
                         class="btn-apply-course"
                         target="_blank">Apply Now</a>
                 </div>

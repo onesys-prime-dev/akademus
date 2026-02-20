@@ -10,10 +10,12 @@ class UserModel extends Model
     protected $primaryKey = 'id';
 
     protected $allowedFields = [
-        'fullname',
+        'firstname',
+        'lastname',
         'email',
+        'mobile',
+        'program',
         'password',
-        'role',
-        'is_temp_password'
+        'role'
     ];
 }
