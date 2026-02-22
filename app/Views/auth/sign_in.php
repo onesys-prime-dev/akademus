@@ -3,7 +3,7 @@
 <div class="auth-container">
     <div class="auth-left">
         <a href="<?= base_url('/') ?>" class="nav-brand">
-            <img src="<?= base_url('assets/images/logo_akademus.png') ?>">
+            <img src="<?= base_url('assets/images/logo_akademus.png') ?>" alt="Akademus Logo">
             <h2>AKADEMUS</h2>
         </a>
 

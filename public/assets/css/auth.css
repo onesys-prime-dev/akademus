@@ -227,16 +227,25 @@ button:active {
     align-items: center;
     gap: 15px;
     margin-bottom: 40px;
-    text-decoration: none;
-    color: white;
-    transition: 0.3s ease;
+    text-decoration: none;      
+    color: white;              
+    cursor: pointer;
 }
 
-.brand:hover {
-    transform: scale(1.03);
-    opacity: 0.9;
+.brand:visited,
+.brand:active,
+.brand:focus {
+    color: white;               
+    text-decoration: none;
 }
 
 .brand h2 {
+    margin: 0;
     color: white;
+    font-weight: 700;
+}
+
+.brand:hover {
+    opacity: 0.9;
+    transform: scale(1.03);
 }
