@@ -53,11 +53,6 @@
                 <option>Information Technology</option>
             </select>
 
-            <div class="row">
-                <input type="password" name="password" placeholder="Password" required>
-                <input type="password" name="passconf" placeholder="Confirm Password" required>
-            </div>
-
             <button type="submit">Create Account</button>
 
         </form>
