@@ -35,9 +35,15 @@
 
     </section>
     <section class="section 2">
-        <div class="section 2">
-            <h1>additional sources </h1>
+        <div>
+            <h1>addtional sources</h1>
+            <p>(may dagdag details)</p>
+            <p>(dito e lagay mga other systems created by the company)</p>
         </div>
+
+        <article>
+            blog
+        </article>
     </section>
     <!-- js boostrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
