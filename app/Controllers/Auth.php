@@ -92,7 +92,7 @@ class Auth extends BaseController
         Hello,
 
         Your account has been created.
-
+        
         Portal: ".base_url('sign_in')."
 
         Email: ".$this->request->getPost('email')."
@@ -100,7 +100,7 @@ class Auth extends BaseController
         ");
 
         if (!$email->send()) {
-            echo $email->printDebugger(['headers']);
+            echo $email->printDebugger(['headers','subject','body']);
             exit;
         } 
 

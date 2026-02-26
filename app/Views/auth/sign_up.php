@@ -4,7 +4,7 @@
     <form 
         id="sign-up-form"
         class="form-container"
-        action="/register" 
+        action="<?= base_url('sign_up/register') ?>"
         method="post"
     >
         <div class="input-container">
