@@ -8,12 +8,40 @@ class Auth extends BaseController
 {
     public function sign_in()
     {
-        return view('auth/sign_in');
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'title' => 'Sign In',
+                'header' => 'Welcome Back!',
+                'subheader' => 'Sign in to continue your application.',
+                'form' => view('auth/sign_in')
+            ]);
+        }
+
+        $data['title'] = 'Sign In';
+        $data['auth_header'] = 'Welcome Back!';
+        $data['auth_sub_header'] = 'Sign in to continue your application.';
+        $data['auth_field'] = 'auth/sign_in';
+
+        return view('auth/main', $data);
     }
 
     public function sign_up()
     {
-        return view('auth/sign_up');
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'title' => 'Sign Up',
+                'header' => 'Create Account',
+                'subheader' => 'Start your admission journey today.',
+                'form' => view('auth/sign_up')
+            ]);
+        }
+
+        $data['title'] = 'Sign Up';
+        $data['auth_header'] = 'Create Account';
+        $data['auth_sub_header'] = 'Start your admission journey today.';
+        $data['auth_field'] = 'auth/sign_up';
+
+        return view('auth/main', $data);
     }
 
     public function register()
