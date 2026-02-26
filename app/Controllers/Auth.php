@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use App\Models\ProgramModel;
 
 class Auth extends BaseController
 {
@@ -27,19 +28,37 @@ class Auth extends BaseController
 
     public function sign_up()
     {
+        $model = new ProgramModel();
+        $programs = $model->findAll();
+
+        $programs = array_map(function($program) {
+            return [
+                'id' => $program['program_id'],
+                'name' => preg_replace(
+                    '/^Bachelor of Science in\s*/',
+                    '',
+                    $program['program_name']
+                )
+            ];
+        }, $programs);
+
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([
                 'title' => 'Sign Up',
                 'header' => 'Create Account',
                 'subheader' => 'Start your admission journey today.',
-                'form' => view('auth/sign_up')
+                'form' => view('auth/sign_up'),
+                'programs' => $programs // 👈 include programs here
             ]);
         }
 
-        $data['title'] = 'Sign Up';
-        $data['auth_header'] = 'Create Account';
-        $data['auth_sub_header'] = 'Start your admission journey today.';
-        $data['auth_field'] = 'auth/sign_up';
+        $data = [
+            'title' => 'Sign Up',
+            'auth_header' => 'Create Account',
+            'auth_sub_header' => 'Start your admission journey today.',
+            'auth_field' => 'auth/sign_up',
+            'programs' => $programs
+        ];
 
         return view('auth/main', $data);
     }
@@ -132,5 +151,10 @@ class Auth extends BaseController
     {
         session()->destroy();
         return redirect()->to('/sign_in');
+    }
+
+    public function get_programs()
+    {
+        
     }
 }
