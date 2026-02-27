@@ -132,8 +132,25 @@
                 headerTitle.textContent = data.header;
                 headerSubtitle.textContent = data.subheader;
 
-                // Update form
+                // Inject form FIRST
                 formContainer.innerHTML = data.form;
+
+                // ✅ Append programs if they exist (only for sign up)
+                if (data.programs) {
+                    const select = document.getElementById('program');
+
+                    if (select) {
+                        // Reset select (prevent duplicate options)
+                        select.innerHTML = '<option value="" disabled selected hidden>Select a Program</option>';
+
+                        data.programs.forEach(program => {
+                            const option = document.createElement('option');
+                            option.value = program.id;
+                            option.textContent = program.name;
+                            select.appendChild(option);
+                        });
+                    }
+                }
 
                 // Update active button
                 toggleSignIn.classList.remove('active');
