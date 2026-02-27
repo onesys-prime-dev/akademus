@@ -16,8 +16,6 @@ $routes->get('sign_up', 'Auth::sign_up');
 // under sa Auth.php
 $routes->post('sign_up/register', 'Auth::register');
 $routes->post('sign_in/login', 'Auth::login');
-$routes->get('logout', 'Auth::logout');
-$routes->get('dashboard', 'Dashboard::index');
-
 $routes->post('logout', 'Auth::logout');
 
+$routes->get('dashboard', 'Dashboard::index');

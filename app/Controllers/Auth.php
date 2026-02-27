@@ -65,7 +65,7 @@ class Auth extends BaseController
         $model = new UserModel();
 
         // auto generate temporary password :D
-        $tempPassword = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'), 0, 8);
+        $tempPassword = bin2hex(random_bytes(4));
 
         $hashedPassword = password_hash($tempPassword, PASSWORD_DEFAULT);
 
