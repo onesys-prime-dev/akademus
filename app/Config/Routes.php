@@ -20,7 +20,7 @@ $routes->get('success', 'Auth::success');
 
 // dashoard pages for student applicants
 $routes->get('dashboard', 'Dashboard::index');
-
+$routes->get('applicant-form', 'ApplicantForm::index');
 
 
 $routes->post('logout', 'Auth::logout');
