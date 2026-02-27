@@ -104,6 +104,10 @@
                     <?php if (isset($auth_field)) {
                         echo view($auth_field);
                     } ?>
+
+                    <?php if (isset($success)) {
+                        echo view($success);
+                    } ?>
                 </div>
             </div>
         </div>
@@ -185,10 +189,17 @@
 
             if (path.includes('sign_up')) {
                 loadAuth('<?= base_url('sign_up') ?>', toggleSignUp);
+            } else if (path.includes('success')) {
+                loadAuth('<?= base_url('success') ?>', toggleSignUp);
             } else {
                 loadAuth('<?= base_url('sign_in') ?>', toggleSignIn);
             }
         });
+        
+        // Handle if path.includes('success') is present (after registration) hide the switch-auth-toggle
+        if (window.location.pathname.includes('success')) {
+            document.querySelector('.switch-auth-toggle').style.display = 'none';
+        }
     </script>
 </body>
 </html>

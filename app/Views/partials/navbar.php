@@ -13,7 +13,7 @@
         <li><a href="#">About Us</a></li>
         <li><a href="#">Admissions</a></li>
         <li><a href="#">Contact Us</a></li>
-        <li><a href="#">Login/Register</a></li>
+        <li><a href="<?= base_url('/sign_in') ?>">Login/Register</a></li>
         <li>
             <a href="<?= base_url('applynowpage') ?>" 
                 class="apply-btn"
