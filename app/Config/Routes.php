@@ -21,8 +21,6 @@ $routes->get('logout', 'Auth::logout');
 // dashoard pages for student applicants
 $routes->get('dashboard', 'Dashboard::index');
 
-
-
 $routes->post('logout', 'Auth::logout');
 
 $routes->get('dashboard', 'Dashboard::index');
