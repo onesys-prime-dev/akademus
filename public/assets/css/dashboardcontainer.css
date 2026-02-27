@@ -230,6 +230,7 @@ main {
         height: 100px;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         padding: 0 30px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
@@ -241,3 +242,18 @@ main {
             color: #0040A6;
             line-height: normal;
         }
+
+        .header .application-status {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2px 24px;
+            border: 1px solid #31A646;
+            background-color: rgb(49, 166, 70, 0.3);
+            border-radius: 8px;
+            font-size: 16px;
+            color: #31A646;
+            font-weight: 600;
+        }
+
+        

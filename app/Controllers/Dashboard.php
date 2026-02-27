@@ -14,7 +14,7 @@ class Dashboard extends BaseController
         */
 
         $data['title'] = 'Dashboard';
-        $data['page_content'] = 'dashboard/menu/dashboard/dashboard';
+        $data['page_content'] = 'dashboard/menu/dashboard';
 
         return view('dashboard/main', $data);
     }

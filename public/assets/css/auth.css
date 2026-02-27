@@ -240,7 +240,7 @@ body {
                 font-size: 16px;
                 color: #3D3D3D;
                 opacity: 60%;
-                font-weight: 600;
+                font-weight: 700;
             }
 
         .right .switch-auth-toggle {
@@ -413,3 +413,64 @@ body {
                 font-weight: 700;
                 opacity: 80%;
             }
+
+
+    /* SUCCESS *//* SUCCESS *//* SUCCESS *//* SUCCESS */
+    .success-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 20px;
+    }
+
+    .applicant-id-box {
+        width: 100%;
+        padding: 14px 14px 30px 14px;
+        background-color: rgba(0, 64, 166, 0.2);
+        border-radius: 10px;
+        border: 1px solid rgba(0, 64, 166, 0.4);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        align-items: center;
+    }
+
+        .applicant-id-box span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0040A6;
+        }
+
+        .applicant-id-box p {
+            font-size: 24px;
+            font-weight: 700;
+            color: #031D46;
+        }
+
+    .go-back-link-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 48px;
+        background: #0040A6;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        margin-top: 20px;
+        transition: background-color 0.2s ease;
+        text-decoration: none;
+    }
+
+    .go-back-link-btn:hover {
+        background: #003080;
+        cursor: pointer;
+    }
+
+    .success-info span {
+        font-size: 16px;
+        color: #3D3D3D;
+        font-weight: 700;
+    }

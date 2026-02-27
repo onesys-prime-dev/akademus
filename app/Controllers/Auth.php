@@ -147,6 +147,16 @@ class Auth extends BaseController
         return redirect()->to('/dashboard');
     }
 
+    public function success()
+    {
+        $data['title'] = 'Sign Up Successful';
+        $data['auth_header'] = 'Account Created!';
+        $data['auth_sub_header'] = 'Your unique Applicant ID has been assigned.';
+        $data['success'] = 'auth/success';
+
+        return view('auth/main', $data);
+    }
+
     public function logout()
     {
         session()->destroy();

@@ -18,6 +18,7 @@
     <main class="main-content">
         <div class="header">
             <h1><?= $title ?></h1>
+            <div class="application-status">Approve</div>
         </div>
 
         <div class="content-container">
