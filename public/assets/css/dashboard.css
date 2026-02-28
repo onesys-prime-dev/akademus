@@ -203,7 +203,7 @@
     padding: 20px 0;
 }
 
-    .applicant-form-checklist-summary {
+    .dashboard-checklist-summary {
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -212,31 +212,31 @@
         padding: 30px 0;
     }
 
-        .top-applicant-form-container {
+        .top-dashboard-container {
             width: 100%;
             display: flex;
             flex-direction: column;
             border-bottom: 2px solid #B9B9B9;
         }
 
-            .top-applicant-form-header {
+            .top-dashboard-header {
                 display: flex;
                 flex-direction: column;
                 padding: 0 40px;
             }
 
-                .top-applicant-form-header h4 {
+                .top-dashboard-header h4 {
                     font-size: 18px;
                     font-weight: 600;
                 }
 
-                .top-applicant-form-header p {
+                .top-dashboard-header p {
                     font-size: 15px;
                     font-weight: 500;
                     color: #B9B9B9;
                 }
 
-            .applicant-form-checklist-row-container {
+            .dashboard-checklist-row-container {
                 width: 100%;
                 display: flex;
                 flex-direction: column;
@@ -244,7 +244,7 @@
                 padding: 14px 0;
             }
 
-                .applicant-form-checklist-row {
+                .dashboard-checklist-row {
                     width: 100%;
                     display: flex;
                     align-items: center;
@@ -253,13 +253,13 @@
                     border-top: 1px solid rgba(217, 211, 217, .4);
                 }
 
-                    .applicant-form-checklist-row p {
+                    .dashboard-checklist-row p {
                         font-size: 14px;
                         font-weight: 400;
                         color: #1E1E1E;
                     }
 
-                    .app-form-checklist-box {
+                    .dashboard-checklist-box {
                         width: 16px;
                         height: 16px;
                         border: 1px solid #B9B9B9;
@@ -267,12 +267,12 @@
                         border-radius: 4px;
                     }
                     
-                    .applicant-form-checklist-row span {
+                    .dashboard-checklist-row span {
                         font-size: 11px;
                         color: #B9B9B9;
                     }
 
-        .bottom-applicant-form-container {
+        .bottom-dashboard-container {
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -288,13 +288,13 @@
                     color: #B9B9B9;
                 }
 
-            .continue-applicant-form-btn-container {
+            .continue-dashboard-btn-container {
                 width: 100%;
                 display: flex;
                 justify-content: end;
             }
 
-                .continue-applicant-form-btn {
+                .continue-dashboard-btn {
                     text-decoration: none;
                     color: #FFFFFF;
                     font-size: 14px;
