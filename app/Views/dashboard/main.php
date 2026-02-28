@@ -1,4 +1,4 @@
-<!-- auth/main.php -->
+<!-- dashboard/main.php -->
 
 <!DOCTYPE html>
 <html lang="en">

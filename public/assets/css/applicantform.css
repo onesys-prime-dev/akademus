@@ -100,6 +100,7 @@
         width: 100%;
         display: flex;
         flex-direction: column;
+        padding: 20px 0;
     }
 
         .app-progress-header {
@@ -126,33 +127,282 @@
         .steps-container {
             width: 100%;
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
         }
 
-            .steps-bar-container {
+            .step-box {
                 width: 100%;
                 display: flex;
-                gap: 14px;
-                padding: 0 10px;
+                flex-direction: column;
+                gap: 15px;
+                flex: 1 1 200px;
             }
 
-                .steps-bar-container .steps-bar {
+                .step-bar-container {
                     width: 100%;
-                    height: 18px;
-                    background-color: #B9B9B9;
-                    border-radius: 64px;
+                    padding: 0 10px;
                 }
-                
-            .steps-label-row-container {
+
+                .step-bar {
+                    width: 100%;
+                    height: 20px;
+                    border-radius: 20px;
+                    background-color: rgba(178, 182, 216, 0.46);
+                }
+            
+            .step-bottom {
                 width: 100%;
                 display: flex;
-                gap: 20px;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
             }
 
-                .steps-label-row-container .step-label {
+                .step-bottom .step-ring {
                     width: 100%;
                     display: flex;
-                    flex-direction: column;
-                    gap: 10px;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 25px;
                 }
-                
+
+                    .step-line {
+                        flex: 1;
+                        width: 100%;
+                        height: 2px;
+                        background-color: rgba(178, 182, 216, 0.46);
+                    }
+
+                    .step-circle {
+                        width: 22px;
+                        height: 22px;
+                        background-color: rgba(178, 182, 216, 0.46);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        border-radius: 100%;
+                        font-size: 16px;
+                        font-weight: 500;
+                    }
+
+                    .step-bottom .left-line, .step-bottom .right-line {
+                        height: 0;
+                    }
+
+                    .step-bottom span {
+                        font-size: 15px;
+                        font-weight: 500;
+                        color: rgba(150, 153, 184, 0.8);
+                    }
+
+/* CHECKLIST SUMMARY *//* CHECKLIST SUMMARY *//* CHECKLIST SUMMARY *//* CHECKLIST SUMMARY */
+.checklist-summary-container {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+    .applicant-form-checklist-summary {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: #FFFFFF;
+        border-radius: 15px;
+        padding: 30px 0;
+    }
+
+        .top-applicant-form-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            border-bottom: 2px solid #B9B9B9;
+        }
+
+            .top-applicant-form-header {
+                display: flex;
+                flex-direction: column;
+                padding: 0 40px;
+            }
+
+                .top-applicant-form-header h4 {
+                    font-size: 18px;
+                    font-weight: 600;
+                }
+
+                .top-applicant-form-header p {
+                    font-size: 15px;
+                    font-weight: 500;
+                    color: #B9B9B9;
+                }
+
+            .applicant-form-checklist-row-container {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                margin-top: 14px;
+                padding: 14px 0;
+            }
+
+                .applicant-form-checklist-row {
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 8px 40px 4px;
+                    border-top: 1px solid rgba(217, 211, 217, .4);
+                }
+
+                    .applicant-form-checklist-row p {
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: #1E1E1E;
+                    }
+
+                    .app-form-checklist-box {
+                        width: 16px;
+                        height: 16px;
+                        border: 1px solid #B9B9B9;
+                        background-color: rgba(185, 185, 185, .3);
+                        border-radius: 4px;
+                    }
+                    
+                    .applicant-form-checklist-row span {
+                        font-size: 11px;
+                        color: #B9B9B9;
+                    }
+
+        .bottom-applicant-form-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 0 40px;
+        }
+
+            .checklist-completed-container {
+                padding: 6px 0;
+            }
+
+                .checklist-completed-container span {
+                    font-size: 12px;
+                    color: #B9B9B9;
+                }
+
+            .continue-applicant-form-btn-container {
+                width: 100%;
+                display: flex;
+                justify-content: end;
+            }
+
+                .continue-applicant-form-btn {
+                    text-decoration: none;
+                    color: #FFFFFF;
+                    font-size: 14px;
+                    font-weight: 600;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 6px 24px;
+                    background-color: #0040A6;
+                    border-radius: 8px;
+                }
+
+    .document-checklist-summary {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: #FFFFFF;
+        border-radius: 15px;
+        padding: 30px 0;
+    }
+
+        .documents-progress-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px 40px;
+        }
+
+            .documents-progress-bar {
+                width: 100%;
+                height: 12px;
+                background-color: rgba(217, 217, 217, .4);
+            }
+
+                .documents-current-progress {
+                    width: 30%;
+                    height: 12px;
+                    background-color: #0040A6;
+                }
+
+            .documents-progress-legend-container {
+                display: flex;
+                gap: 20px;
+                padding: 0 16px;
+            }
+
+                .document-progress-legend {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+
+                .documents-progress-legend-circle {
+                    width: 9px;
+                    height: 9px;
+                    border-radius: 100%;
+                    background-color: #B9B9B9;
+                }
+
+                .documents-progress-legend-container p {
+                    font-size: 11px;
+                    color: #B9B9B9;
+                    font-weight: 500;
+                }
+
+                .documents-progress-legend-container span {
+                    color: #000000;
+                }
+
+/* PAYMENT NOTIFICATION *//* PAYMENT NOTIFICATION *//* PAYMENT NOTIFICATION *//* PAYMENT NOTIFICATION *//* PAYMENT NOTIFICATION */
+.payment-notification-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #0040A6;
+    border-radius: 15px;
+    margin: 20px 0;
+}
+
+    .payment-notification-text-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .payment-notification-text-info p {
+            font-size: 16px;
+            font-weight: 600;
+            color: #FFFFFF;
+        }
+
+        .payment-notification-text-info span {
+            font-size: 12px;
+            font-weight: 400;
+            color: #B9B9B9;
+        }
+        
+    .payment-notification-container .pay-now-btn {
+        text-decoration: none;
+        color: #0040A6;
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 24px;
+        background-color: #FFB200;
+        border-radius: 8px;
+    }

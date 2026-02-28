@@ -6,7 +6,6 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    height: 100vh;
     background: linear-gradient(-20deg, #0D50BB, #0b2f69, #0D50BB, #0e2f6e);
     background-size: 400% 400%;
     animation: gradientBG 10s ease infinite;
@@ -219,10 +218,11 @@ nav {
 
 main {
     flex: 1;
-    color: #000000;
     width: 82%;
-    height: 100vh;
     background-color: #F8F8F8;
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* important */
 }
 
     .header {
@@ -233,6 +233,7 @@ main {
         justify-content: space-between;
         padding: 0 30px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        flex-shrink: 0;
     }
 
         .header h1 {
@@ -258,6 +259,8 @@ main {
         
     .content-container {
         width: 100%;
+        flex: 1;               /* take remaining height */
+        overflow-y: auto;      /* vertical scroll */
         padding: 20px;
     }
         
