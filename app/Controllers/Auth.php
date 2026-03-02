@@ -132,8 +132,18 @@ class Auth extends BaseController
 
         $user = $model->where('email', $this->request->getPost('email'))->first();
 
-        if (!$user || !password_verify($this->request->getPost('password'), $user['password'])) {
-            return redirect()->back()->with('error', 'Invalid email or password');
+        if (!$user) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'User not found'
+            ]);
+        }
+
+        if (!password_verify($this->request->getPost('password'), $user['password'])) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'Invalid email or password'
+            ]);
         }
 
         session()->set([
@@ -143,18 +153,17 @@ class Auth extends BaseController
             'role'     => $user['role'],
             'logged_in'=> true
         ]);
-
+        
         return redirect()->to('/dashboard');
+        // return $this->response->setJSON([
+        //     'status'   => 'success',
+        //     'redirect' => base_url('dashboard')
+        // ]);
     }
 
     public function logout()
     {
         session()->destroy();
         return redirect()->to('/sign_in');
-    }
-
-    public function get_programs()
-    {
-        
     }
 }

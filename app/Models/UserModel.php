@@ -14,7 +14,9 @@ class UserModel extends Model
         'lastname',
         'email',
         'mobile',
+        'password',
         'program',
-        'role'
+        'role',
+        'temp_password'
     ];
 }
