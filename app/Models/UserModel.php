@@ -17,6 +17,5 @@ class UserModel extends Model
         'password',
         'program',
         'role',
-        'temp_password'
     ];
 }

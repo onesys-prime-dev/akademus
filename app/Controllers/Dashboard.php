@@ -12,6 +12,11 @@ class Dashboard extends BaseController
             return redirect()->to('/sign_in');
         }
 
+        // ADMIN accounts
+        // if (!session()->get('logged_in') || session()->get('role') !== 'applicant') {
+        //     return redirect()->to('/sign_in');
+        // }
+
         $data['title'] = 'Dashboard';
         $data['page_content'] = 'dashboard/menu/dashboard';
 
