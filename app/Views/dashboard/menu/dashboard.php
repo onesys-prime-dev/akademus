@@ -1,12 +1,16 @@
 <!-- dashboard/menu/dashboard.php  -->
 <!-- FRONTEND MOCK DATA: These are example variables. Backend should populate dynamically. -->
 <?php
+    /*  i'll comment this for now; remove ko to soon
+        bali automatic na to, after user signs up and in
+        mapakit na nang applicant_num nya
+    - JOSH B */
     // Applicant
-    $applicantDetails = [
-        'firstname' => 'Juan',
-        'applicant_id' => 'APP-2025-08741',
-        'applicant_initials' => 'JD',
-    ];
+    // $applicantDetails = [
+    //     'firstname' => 'Juan',
+    //     'applicant_id' => 'APP-2025-08741',
+    //     'applicant_initials' => 'JD',
+    // ];
 
     // Progress
     $bannerProgress = [
@@ -30,7 +34,7 @@
         
         <div class="banner-name-header">
             <!-- FRONTEND NOTE: $applicantDetails['firstname'] contains the applicant's first name. Backend should populate dynamically -->
-            <h1>Hello, <span><?= $applicantDetails['firstname'] ?></span></h1>
+            <h1>Hello, <span><?= $firstname ?></span></h1>
         </div>
 
         <div class="banner-header-info">
@@ -42,7 +46,7 @@
             <div class="profile-banner-applicant-id-box">
                 <span>Applicant ID</span>
                 <!-- FRONTEND NOTE: $applicantDetails['applicant_id'] contains the applicant_id. -->
-                <p>#<?= $applicantDetails['applicant_id'] ?></p>
+                <p>#<?= $applicant_number ?></p>
             </div>
 
             <div class="quick-actions">

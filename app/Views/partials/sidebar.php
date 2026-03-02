@@ -15,7 +15,7 @@
 
             <div class="applicant-id-box">
                 <span>Applicant ID</span>
-                <p>#<?= $applicant_id ?></p>
+                <p>#<?= $applicant_number ?></p>
             </div>
         </div>
 

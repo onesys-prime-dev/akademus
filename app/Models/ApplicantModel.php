@@ -10,6 +10,8 @@ class ApplicantModel extends Model
     protected $primaryKey = 'applicant_id';
     
     protected $allowedFields = [
+        'user_id',
+        'applicant_number',
         'temporary_password',
         'application_status',
         'application_date',
