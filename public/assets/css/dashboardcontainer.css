@@ -255,5 +255,9 @@ main {
             color: #31A646;
             font-weight: 600;
         }
-
+        
+    .content-container {
+        width: 100%;
+        padding: 20px;
+    }
         
