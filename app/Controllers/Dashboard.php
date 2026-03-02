@@ -29,5 +29,10 @@ class Dashboard extends BaseController
         $data['firstname'] = session()->get('firstname');
 
         return view('dashboard/main', $data);
+
+        // more add this this
+        // REMINDER: CHECK THE DATABASE FIRST, CORRECT
+        // RELATIONAL STRUCTURE OF DATABASE
+        // CHECK IF applicant_num is fk in user or vice versa idk kajsdflkijas
     }
 }
