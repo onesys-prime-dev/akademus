@@ -187,12 +187,20 @@
         document.addEventListener('DOMContentLoaded', () => {
             const path = window.location.pathname;
 
-            if (path.includes('sign_up')) {
-                loadAuth('<?= base_url('sign_up') ?>', toggleSignUp);
-            } else if (path.includes('success')) {
-                loadAuth('<?= base_url('success') ?>', toggleSignUp);
-            } else {
-                loadAuth('<?= base_url('sign_in') ?>', toggleSignIn);
+            /* if (path.includes('sign_up')) {
+            //     loadAuth('<?= base_url('sign_up') ?>', toggleSignUp);
+            // } else if (path.includes('success')) {
+            //     loadAuth('<?= base_url('success') ?>', toggleSignUp);
+            // } else {
+            //     loadAuth('<?= base_url('sign_in') ?>', toggleSignIn);
+            } */
+            if (path.includes('sign_in') || path.includes('sign_up')) {
+                if (path.includes('sign_up')) {
+                    loadAuth('<?= base_url('sign_up') ?>', toggleSignUp);
+                } else {
+                    loadAuth('<?= base_url('sign_in') ?>', toggleSignIn);
+                }
+
             }
         });
         
