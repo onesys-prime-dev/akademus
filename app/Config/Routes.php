@@ -20,8 +20,15 @@ $routes->get('success', 'Auth::success');
 
 // dashoard pages for student applicants
 $routes->get('dashboard', 'Dashboard::index');
-$routes->get('applicant-form', 'ApplicantForm::index');
 
+// applicant form steps routes
+$routes->get('applicant-form', 'ApplicantForm::index');
+$routes->get('applicant-form/step/(:num)', 'ApplicantForm::getStep/$1');
+$routes->post('applicant-form/update/(:num)', 'ApplicantForm::updateForm/$1');
+
+// requirement steps routes
+$routes->get('requirements', 'Requirements::index');
+$routes->get('requirements/step/(:num)', 'Requirements::getStep/$1');
 
 $routes->post('logout', 'Auth::logout');
 
