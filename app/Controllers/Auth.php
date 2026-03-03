@@ -105,6 +105,7 @@ class Auth extends BaseController
         $userId = $userModel->getInsertID();
 
         // applicant_num generator
+        // e.g. #APP-2026-00001
         $year = date('Y');
 
         $countThisYear = $applicantModel
@@ -128,9 +129,7 @@ class Auth extends BaseController
 
         $email->setFrom('yourgmail@gmail.com', 'Akademus Portal');
         $email->setTo($this->request->getPost('email'));
-
         $email->setSubject('Your Akademus Temporary Account');
-
         $email->setMessage("
         Hello,
 
@@ -146,6 +145,11 @@ class Auth extends BaseController
             echo $email->printDebugger(['headers','subject','body']);
             exit;
         } 
+        // $email->send(); 
+
+        // if (!$email->send()) {
+        //     log_message('error', $email->printDebugger(['headers']));
+        // }
 
         return redirect()->to('/sign_in')->with('success', 'Account created successfully.\n Check your email for temporary login credentials');    
     }
