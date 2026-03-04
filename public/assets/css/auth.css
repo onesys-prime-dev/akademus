@@ -1,3 +1,6 @@
+/* --------------------------------------------- */
+/* ************* SIGN_IN & SIGN_UP ************* */
+/* --------------------------------------------- */
 * {
     margin: 0;
     padding: 0;
@@ -12,7 +15,7 @@ body {
     animation: gradientBG 10s ease infinite;
 }
 
-/* Animated Background */
+/* bg animation */
 @keyframes gradientBG {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
