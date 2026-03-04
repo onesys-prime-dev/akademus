@@ -8,7 +8,7 @@ class Dashboard extends BaseController
 {
     public function index()
     {
-        if (!session()->get('logged_in')) {
+        if (!session()->get('logged_in')) { 
             return redirect()->to('/sign_in');
         }
 
@@ -30,7 +30,7 @@ class Dashboard extends BaseController
 
         return view('dashboard/main', $data);
 
-        // more add this this
+        // more add to this
         // REMINDER: CHECK THE DATABASE FIRST, CORRECT
         // RELATIONAL STRUCTURE OF DATABASE
         // CHECK IF applicant_num is fk in user or vice versa idk kajsdflkijas
