@@ -13,7 +13,12 @@
 
     <div class="education-level-container">
         <label class="education-level-box">
-            <input type="radio" name="education_level" value="freshmen" class="large-radio">
+            <input 
+                type="radio"
+                name="applicant_type"
+                value="freshmen"
+                required
+            >
             <div class="radio-label-container">
                 <h5>Freshmen</h5>
                 <span>Senior high school graduate</span>
@@ -21,7 +26,12 @@
         </label>
 
         <label class="education-level-box">
-            <input type="radio" name="education_level" value="transferee" class="large-radio">
+            <input 
+                type="radio"
+                name="applicant_type"
+                value="transferee"
+                required
+            >
             <div class="radio-label-container">
                 <h5>Transferee</h5>
                 <span>From another college or university</span>
@@ -29,7 +39,12 @@
         </label>
 
         <label class="education-level-box">
-            <input type="radio" name="education_level" value="ladderized" class="large-radio">
+            <input 
+                type="radio"
+                name="applicant_type"
+                value="transferee"
+                required
+            >
             <div class="radio-label-container">
                 <h5>Ladderized</h5>
                 <span>TESDA or vocational to degree</span>
@@ -51,11 +66,6 @@
                         <span>1ST CHOICE</span>
                         <p>BS Computer Science</p>
                     </div>
-
-                    <div class="program-choice">
-                        <span>2ND CHOICE</span>
-                        <p>BS Information Technology</p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -63,15 +73,15 @@
         <div class="application-form-fields-container">
             <div class="application-form-input-field">
                 <label class="category-text-color">Confirmed Program</label>
-                <select name="program" id="program" class="high-select">
-                    <option value="BS Computer Science">BS Computer Science</option>
+                <select name="program_id" id="program" class="high-select" required>
+                    <option value="" disabled>Select a Program</option>
                 </select>
             </div>
 
             <div class="application-form-input-field">
                 <label class="category-text-color">School Year & Semester</label>
-                <select name="sy_semester" id="sy-semester" class="high-select">
-                    <option value="" disabled selected>Select School Year &amp; Semester</option>
+                <select name="sy_semester" id="sy-semester" class="high-select" required>
+                    <option value="" disabled>Select School Year &amp; Semester</option>
                     <option value="SY 2025-2026, 1st Semester">SY 2025-2026, 1st Semester</option>
                     <option value="SY 2025-2026, 2nd Semester">SY 2025-2026, 2nd Semester</option>
                     <option value="SY 2025-2026, Summer">SY 2025-2026, Summer</option>

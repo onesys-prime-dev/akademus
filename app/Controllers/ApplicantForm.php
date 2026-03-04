@@ -3,7 +3,7 @@
 
 namespace App\Controllers;
 
-use App\Models\ApplicationTypeModel;
+use App\Models\ApplicationModel;
 use App\Models\PersonalInformationModel;
 use App\Models\FamilyBackgroundModel;
 use App\Models\EducationalBackgroundModel;
@@ -17,28 +17,6 @@ class ApplicantForm extends BaseController
         return $this->renderLayout(1);
     }
 
-    public function getStep($step) {
-        $step = (int) $step;
-
-        if ($step < 1 || $step > $this->maxSteps) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        }
-
-        // Check if AJAX request
-        if ($this->request->isAJAX()) {
-            return $this->response->setJSON([
-                'title' => 'Applicant Information Form',
-                'step_num' => $step,
-                'form' => view("dashboard/menu/applicant_form_steps/step_{$step}", [
-                    'step_num' => $step
-                ])
-            ]);
-        }
-
-        // Non-AJAX request → full layout
-        return $this->renderLayout($step);
-    }
-
     private function renderLayout(int $step) {
         return view('dashboard/main', [
             'title' => 'Applicant Information Form',
@@ -48,28 +26,135 @@ class ApplicantForm extends BaseController
         ]);
     }
 
-    public function updateForm($step) {
-        $data = $this->request->getPost(); // collect POSTed form data
+    public function getStep($step)
+    {
+        $step = (int) $step;
+
+        if ($step < 1 || $step > $this->maxSteps) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $applicant_id = 1; // replace later with session
+
+        $applicationModel = new ApplicationModel();
+        $personalModel    = new PersonalInformationModel();
+        $familyModel      = new FamilyBackgroundModel();
+        $educationModel   = new EducationalBackgroundModel();
+
+        $application = $applicationModel
+            ->where('applicant_id', $applicant_id)
+            ->where('application_status !=', 'pending')
+            ->first();
+
+        $formData = [];
+
+        if ($application) {
+
+            $application_id = $application['application_id'];
+
+            switch ($step) {
+                case 1:
+                    $formData = $application;
+
+                    $formData['sy_semester'] = $formData['school_year'] . ', ' . $formData['semester'];
+                    break;
+
+                case 2:
+                    $formData = $personalModel
+                        ->where('application_id', $application_id)
+                        ->first();
+                    break;
+
+                case 3:
+                    $formData = $familyModel
+                        ->where('application_id', $application_id)
+                        ->first();
+                    break;
+
+                case 4:
+                    $formData = $educationModel
+                        ->where('application_id', $application_id)
+                        ->first();
+                        
+                    $formData['school_year'] = $formData['school_year_start'] . '-' . $formData['school_year_end'];
+                    break;
+            }
+        }
+
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'title' => 'Applicant Information Form',
+                'step_num' => $step,
+                'form' => view("dashboard/menu/applicant_form_steps/step_{$step}", [
+                    'step_num' => $step
+                ]),
+                'formData' => $formData
+            ]);
+        }
+
+        return $this->renderLayout($step);
+    }
+
+    public function updateForm($step)
+    {
+        $data = $this->request->getPost();
         $action = $data['action'] ?? 'draft';
 
-        // You can validate user/session here
-        // if (!$this->session->has('applicant_id')) { ... }
+        // SAMPLE applicant_id
+        $applicant_id = 1;
 
+        $applicationModel = new ApplicationModel();
+
+        // Check if draft application already exists
+        $application = $applicationModel
+            ->where('applicant_id', $applicant_id)
+            ->where('application_status !=', 'submitted')
+            ->first();
+
+        // If no application yet → create it (only once)
+        if (!$application) {
+
+            $application_id = $applicationModel->insert([
+                'applicant_id' => $applicant_id,
+                'applicant_type' => $data['applicant_type'] ?? null,
+                'program_id' => $data['program_id'] ?? null,
+                'sy_semester' => $data['sy_semester'] ?? null,
+                'application_status' => $action === 'submit' ? 'pending' : 'draft'
+            ]);
+
+            // Insert child rows immediately
+            (new PersonalInformationModel())->insert([
+                'application_id' => $application_id
+            ]);
+
+            (new FamilyBackgroundModel())->insert([
+                'application_id' => $application_id
+            ]);
+
+            (new EducationalBackgroundModel())->insert([
+                'application_id' => $application_id
+            ]);
+
+        } else {
+            $application_id = $application['application_id'];
+        }
+
+        // Now ALL steps are updates
         switch ($step) {
             case 1:
-                $result = $this->insertApplicationType($data);
+                $result = $this->updateApplication($data, $application_id, $action);
                 break;
 
             case 2:
-                $result = $this->insertPersonalInformation($data);
+                $result = $this->updatePersonalInformation($data, $application_id);
                 break;
 
             case 3:
-                $result = $this->insertFamilyBackground($data);
+                $result = $this->updateFamilyBackground($data, $application_id);
                 break;
 
             case 4:
-                $result = $this->insertEducationalBackground($data);
+                $result = $this->updateEducationalBackground($data, $application_id, $action);
                 break;
 
             default:
@@ -79,77 +164,106 @@ class ApplicantForm extends BaseController
                 ]);
         }
 
-        if ($result) {
-            return $this->response->setJSON([
-                'status' => 'success',
-                'message' => 'Step saved successfully'
-            ]);
-        } else {
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'Failed to save step'
-            ]);
-        }
+        return $this->response->setJSON([
+            'status' => $result ? 'success' : 'error',
+            'message' => $result ? 'Step saved successfully' : 'Failed to save step'
+        ]);
     }
     
-    private function insertApplicationType($data) {
-        $model = new ApplicationTypeModel();
+    private function updateApplication($data, $application_id, $action)
+    {
+        $model = new ApplicationModel();
 
-        // Example: validation
-        if (empty($data['education_level']) || empty($data['program'])) {
-            return false;
-        }
+        $sy_and_semester = explode(',', $data['sy_semester'] ?? '', 2);
 
-        return $model->insert([
-            'education_level' => $data['education_level'],
-            'program' => $data['program'],
-            'sy_semester' => $data['sy_semester'] ?? null,
-            'status' => $data['action'] === 'submit' ? 'submitted' : 'draft'
+        $school_year = trim($sy_and_semester[0] ?? null);
+        $semester    = trim($sy_and_semester[1] ?? null);
+
+        return $model->update($application_id, [
+            'applicant_type' => $data['applicant_type'] ?? null,
+            'program_id' => $data['program_id'] ?? null,
+            'school_year' => $school_year,
+            'semester' => $semester,
+            'application_status' => $action === 'submit' ? 'pending' : 'draft'
         ]);
     }
 
-    private function insertPersonalInformation($data) {
+    private function updatePersonalInformation($data, $application_id)
+    {
         $model = new PersonalInformationModel();
 
-        // Example validation
-        if (empty($data['first_name']) || empty($data['last_name'])) return false;
-
-        return $model->insert([
-            'first_name' => $data['first_name'],
-            'middle_name' => $data['middle_name'] ?? null,
-            'last_name' => $data['last_name'],
-            'suffix' => $data['suffix'] ?? null,
-            'gender' => $data['gender'],
-            'birth_date' => $data['birth_date'] ?? null,
-            'status' => $data['action'] === 'submit' ? 'submitted' : 'draft'
-        ]);
+        return $model->where('application_id', $application_id)
+            ->set([
+                'firstname' => $data['firstname'] ?? null,
+                'middlename' => $data['middlename'] ?? null,
+                'lastname' => $data['lastname'] ?? null,
+                'suffix' => $data['suffix'] ?? null,
+                'gender' => $data['gender'] ?? null,
+                'date_of_birth' => $data['date_of_birth'] ?? null,
+                'place_of_birth' => $data['place_of_birth'] ?? null,
+                'citizenship' => $data['citizenship'] ?? null,
+                'home_address' => $data['home_address'] ?? null,
+                'contact_number' => $data['contact_number'] ?? null,
+                'email_address' => $data['email_address'] ?? null
+            ])
+            ->update();
     }
 
-    private function insertFamilyBackground($data) {
+    private function updateFamilyBackground($data, $application_id)
+    {
         $model = new FamilyBackgroundModel();
 
-        // Example validation: at least one parent
-        if (empty($data['father_name']) && empty($data['mother_name'])) return false;
+        return $model->where('application_id', $application_id)
+            ->set([
+                // Father Details
+                'father_firstname' => $data['father_firstname'] ?? null,
+                'father_middlename' => $data['father_middlename'] ?? null,
+                'father_lastname' => $data['father_lastname'] ?? null,
+                'father_occupation' => $data['father_occupation'] ?? null,
+                'father_contact_number' => $data['father_contact_number'] ?? null,
 
-        return $model->insert([
-            'father_name' => $data['father_name'] ?? null,
-            'mother_name' => $data['mother_name'] ?? null,
-            'guardian_name' => $data['guardian_name'] ?? null,
-            'status' => $data['action'] === 'submit' ? 'submitted' : 'draft'
-        ]);
+                // Mother Details
+                'mother_firstname' => $data['mother_firstname'] ?? null,
+                'mother_middlename' => $data['mother_middlename'] ?? null,
+                'mother_lastname' => $data['mother_lastname'] ?? null,
+                'mother_occupation' => $data['mother_occupation'] ?? null,
+                'mother_contact_number' => $data['mother_contact_number'] ?? null,
+
+                // Guardian Details
+                'guardian_name' => $data['guardian_name'] ?? null,
+                'guardian_relationship' => $data['guardian_relationship'] ?? null,
+                'guardian_contact_number' => $data['guardian_contact_number'] ?? null,
+
+                // Family Income
+                'annual_family_income' => $data['annual_family_income'] ?? null
+            ])
+            ->update();
     }
 
-    private function insertEducationalBackground($data) {
+    private function updateEducationalBackground($data, $application_id, $action)
+    {
         $model = new EducationalBackgroundModel();
 
-        // Example validation: at least one school attended
-        if (empty($data['last_school'])) return false;
+        $schoolYear = preg_split('/\s*-\s*/', $data['school_year'] ?? '');
 
-        return $model->insert([
-            'last_school' => $data['last_school'],
-            'last_school_address' => $data['last_school_address'] ?? null,
-            'gpa' => $data['gpa'] ?? null,
-            'status' => $data['action'] === 'submit' ? 'submitted' : 'draft'
-        ]);
+        $educationUpdated = $model->where('application_id', $application_id)
+            ->set([
+                'school_name' => $data['school_name'] ?? null,
+                'school_location' => $data['school_location'] ?? null,
+                'strand' => $data['strand'] ?? null,
+                'school_year_start' => $schoolYear[0] ?? null,
+                'school_year_end' => $schoolYear[1] ?? null,
+                'gwa' => $data['gwa'] ?? null,
+                'school_type' => $data['school_type'] ?? null
+            ])
+            ->update();
+
+        if ($action === 'submit' && $educationUpdated) {
+            (new ApplicationModel())->update($application_id, [
+                'application_status' => 'pending'
+            ]);
+        }
+
+        return $educationUpdated;
     }
 }

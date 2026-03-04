@@ -22,19 +22,19 @@
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field">
                             <label class="category-text-color">SCHOOL NAME</label>
-                            <input type="text" name="school_name" placeholder="Full Name of your Senior High School" value="" required>
+                            <input type="text" name="school_name" placeholder="Full Name of your Senior High School" value="<?= esc($data['school_name'] ?? '') ?>" required>
                         </div>
                     </div>
 
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field">
                             <label class="category-text-color">LOCATION</label>
-                            <input type="text" name="school_location" placeholder="City, Province" value="" required>
+                            <input type="text" name="school_location" placeholder="City, Province" value="<?= esc($data['school_location'] ?? '') ?>" required>
                         </div>
 
                         <div class="application-form-input-field">
                             <label class="category-text-color">TRACK / STRAND</label>
-                            <select name="school_strand">
+                            <select name="strand" required>
                                 <option value="" disabled selected>Select track / strand</option>
 
                                 <!-- Academic Track -->
@@ -58,19 +58,19 @@
 
                         <div class="application-form-input-field medium-field">
                             <label class="category-text-color">SCHOOL YEAR</label>
-                            <input type="text" name="school_year" placeholder="e.g., 2025 - 2026" value="">
+                            <input type="text" name="school_year" placeholder="e.g., 2025 - 2026" value="<?= esc($data['school_year'] ?? '') ?>" required>
                         </div>
                     </div>
 
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field medium-field">
                             <label class="category-text-color">GENERAL AVERAGE (GWA)</label>
-                            <input type="text" name="school_gwa" placeholder="e.g., 92.3" value="" required>
+                            <input type="text" name="gwa" placeholder="e.g., 92.3" value="<?= esc($data['gwa'] ?? '') ?>" required>
                         </div>
 
                         <div class="application-form-input-field medium-field">
                             <label class="category-text-color">SCHOOL TYPE</label>
-                            <select name="school_type">
+                            <select name="school_type" required>
                                 <option value="" disabled selected>Select school type</option>
                                 <option value="Public">Public</option>
                                 <option value="Private">Private</option>

@@ -27,7 +27,7 @@
 
                 <div class="application-form-input-field">
                     <label>Last Name<span class="required-field">*</span></label>
-                    <input type="text" name="astnam" placeholder="e.g., Dela Cruz" value="" required>
+                    <input type="text" name="lastname" placeholder="e.g., Dela Cruz" value="" required>
                 </div>
 
                 <div class="application-form-input-field small-field">
@@ -47,7 +47,7 @@
             <div class="application-form-input-field-row">
                 <div class="application-form-input-field medium-field">
                     <label>Gender<span class="required-field">*</span></label>
-                    <select name="gender" id="gender">
+                    <select name="gender" id="gender" required>
                         <option value="" disabled selected>Select Gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
@@ -64,31 +64,31 @@
 
                 <div class="application-form-input-field">
                     <label>Place of Birth<span class="required-field">*</span></label>
-                    <input type="text" name="place_of_birth" placeholder="City, Province" value="">
+                    <input type="text" name="place_of_birth" placeholder="City, Province" value="" required>
                 </div>
                 
                 <div class="application-form-input-field medium-field">
                     <label>Citizenship<span class="required-field">*</span></label>
-                    <input type="text" name="citizenship" placeholder="e.g., Filipino" value="">
+                    <input type="text" name="citizenship" placeholder="e.g., Filipino" value="" required>
                 </div>
             </div>
 
             <div class="application-form-input-field-row">
                 <div class="application-form-input-field large-field">
                     <label>Home Address<span class="required-field">*</span></label>
-                    <input type="text" name="home_address" placeholder="Street, Barangay, City, Province" value="">
+                    <input type="text" name="home_address" placeholder="Street, Barangay, City, Province" value="" required>
                 </div>
                 
                 <div class="application-form-input-field medium-field">
                     <label>Contact Number<span class="required-field">*</span></label>
-                    <input type="text" name="contact_number" placeholder="+63 9XX XXX XXXX" value="">
+                    <input type="text" name="contact_number" placeholder="+63 9XX XXX XXXX" value="" required>
                 </div>
             </div>
 
             <div class="application-form-input-field-row">
                 <div class="application-form-input-field large-field">
                     <label>Email Address<span class="required-field">*</span></label>
-                    <input type="email" name="email" placeholder="e.g., sample@email.com" value="">
+                    <input type="email" name="email_address" placeholder="e.g., sample@email.com" value="" required>
                 </div>
             </div>
         </div>

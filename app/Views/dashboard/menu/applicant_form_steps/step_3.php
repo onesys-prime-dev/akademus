@@ -22,29 +22,29 @@
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field">
                             <label>First Name<span class="required-field">*</span></label>
-                            <input type="text" name="father_firstname" placeholder="e.g., Juan" value="" required>
+                            <input type="text" name="father_firstname" placeholder="e.g., Juan" value="<?= esc($data['father_firstname'] ?? '') ?>" required>
                         </div>
 
                         <div class="application-form-input-field">
                             <label>Middle Name</label>
-                            <input type="text" name="father_middlename" placeholder="e.g., Sanchez" value="">
+                            <input type="text" name="father_middlename" placeholder="e.g., Sanchez" value="<?= esc($data['father_middlename'] ?? '') ?>">
                         </div>
 
                         <div class="application-form-input-field">
                             <label>Last Name<span class="required-field">*</span></label>
-                            <input type="text" name="father_lastname" placeholder="e.g., Dela Cruz" value="" required>
+                            <input type="text" name="father_lastname" placeholder="e.g., Dela Cruz" value="<?= esc($data['father_lastname'] ?? '') ?>" required>
                         </div>
                     </div>
 
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field">
                             <label>Occupation</label>
-                            <input type="text" name="father_occupation" placeholder="e.g., Accountant" value="" required>
+                            <input type="text" name="father_occupation" placeholder="e.g., Accountant" value="<?= esc($data['father_occupation'] ?? '') ?>">
                         </div>
 
                         <div class="application-form-input-field medium-field">
                             <label>Contact Number</label>
-                            <input type="text" name="father_contact_number" placeholder="+63 9XX XXX XXXX" value="">
+                            <input type="text" name="father_contact_number" placeholder="+63 9XX XXX XXXX" value="<?= esc($data['father_contact_number'] ?? '') ?>">
                         </div>
                     </div>
                 </div>
@@ -59,29 +59,29 @@
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field">
                             <label>First Name<span class="required-field">*</span></label>
-                            <input type="text" name="mother_firstname" placeholder="e.g., Mary" value="" required>
+                            <input type="text" name="mother_firstname" placeholder="e.g., Mary" value="<?= esc($data['mother_firstname'] ?? '') ?>" required>
                         </div>
 
                         <div class="application-form-input-field">
                             <label>Middle Name</label>
-                            <input type="text" name="mother_middlename" placeholder="e.g., Alcantara" value="">
+                            <input type="text" name="mother_middlename" placeholder="e.g., Alcantara" value="<?= esc($data['mother_middlename'] ?? '') ?>">
                         </div>
 
                         <div class="application-form-input-field">
                             <label>Maiden Last Name<span class="required-field">*</span></label>
-                            <input type="text" name="mother_lastname" placeholder="e.g., Delos Santos" value="" required>
+                            <input type="text" name="mother_lastname" placeholder="e.g., Delos Santos" value="<?= esc($data['mother_lastname'] ?? '') ?>" required>
                         </div>
                     </div>
 
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field">
                             <label>Occupation</label>
-                            <input type="text" name="mother_occupation" placeholder="e.g., Accountant" value="" required>
+                            <input type="text" name="mother_occupation" placeholder="e.g., Accountant" value="<?= esc($data['mother_occupation'] ?? '') ?>">
                         </div>
 
                         <div class="application-form-input-field medium-field">
                             <label>Contact Number</label>
-                            <input type="text" name="mother_contact_number" placeholder="+63 9XX XXX XXXX" value="">
+                            <input type="text" name="mother_contact_number" placeholder="+63 9XX XXX XXXX" value="<?= esc($data['mother_contact_number'] ?? '') ?>">
                         </div>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field">
                             <label>Guardian Name</label>
-                            <input type="text" name="guardian_name" placeholder="If Different from Parents" value="" required>
+                            <input type="text" name="guardian_name" placeholder="If Different from Parents" value="<?= esc($data['guardian_name'] ?? '') ?>" required>
                         </div>
 
                         <div class="application-form-input-field medium-field">
@@ -120,7 +120,7 @@
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field medium-field">
                             <label>Contact Number</label>
-                            <input type="text" name="guardian_contact_number" placeholder="+63 9XX XXX XXXX" value="">
+                            <input type="text" name="guardian_contact_number" placeholder="+63 9XX XXX XXXX" value="<?= esc($data['guardian_contact_number'] ?? '') ?>">
                         </div>
                     </div>
                 </div>
@@ -135,7 +135,7 @@
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field">
                             <label>Annual Family Income</label>
-                            <select name="annual_family_income">
+                            <select name="annual_family_income" required>
                                 <option value="" disabled selected>Select income range</option>
                                 <option value="Below 100000">Below ₱100,000</option>
                                 <option value="100000-249999">₱100,000 – ₱249,999</option>
