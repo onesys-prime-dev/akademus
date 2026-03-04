@@ -43,6 +43,16 @@ class Auth extends BaseController
             ];
         }, $programs);
 
+        // $programId = $this->request->getPost('program');
+
+        // $program = (new ProgramModel())
+        //     ->where('program_id', $programId)
+        //     ->first();
+
+        // if (!$program) {
+        //     return redirect()->back()->with('error', 'Invalid program selected');
+        // }
+
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([
                 'title'     => 'Sign Up',
@@ -72,7 +82,7 @@ class Auth extends BaseController
             'firstname' => 'required',
             'lastname'  => 'required',
             'email'     => 'required|valid_email|is_unique[users.email]',
-            'mobile'    => 'required|min_length[10]',
+            'mobile'    => 'required|numeric|min_length[10]|max_length[11]',
             'program'   => 'required',
         ];
 
@@ -85,6 +95,15 @@ class Auth extends BaseController
 
         $userModel = new UserModel();
         $applicantModel = new ApplicantModel();
+        $programModel = new ProgramModel();
+
+        $programModel = $this->request->getPost('program');
+
+        // verification of provided programs (bs compsci, BSIT, etc.)
+        // $program = $programModel->where('program_id', $program)->first();
+        // if (!$program) {
+        //     return redirect()->back()->with('error', 'Invalid program selected');
+        // }
 
         // auto generate temporary password :D
         $tempPassword = bin2hex(random_bytes(4));
@@ -92,7 +111,7 @@ class Auth extends BaseController
 
         $db = \Config\Database::connect();
         $db->transBegin();
-
+        
         // INSERT USER 1st
         $userModel->insert([
             'firstname' => $this->request->getPost('firstname'),
