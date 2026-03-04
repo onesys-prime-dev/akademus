@@ -4,7 +4,11 @@
     <form 
         id="sign-in-form"
         class="form-container"
+<<<<<<< HEAD
         action="<?= base_url('sign_in/login') ?>"
+=======
+        action="/login" 
+>>>>>>> 8ebcf9595845a63114abee2ffe7621f670f8b483
         method="post"
     >
         <div class="input-container">
