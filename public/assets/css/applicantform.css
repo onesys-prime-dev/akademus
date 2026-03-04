@@ -1,0 +1,392 @@
+.applicant-form-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+    /* APPLICANT FORM PROGRESS */
+    .applicant-form-progress-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 20px 40px 30px;
+        border-radius: 15px;
+        background-color: #FFFFFF;
+        border: 1px solid rgba(0, 0, 0, .1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, .08);
+        gap: 20px;
+    }
+
+        .applicant-form-progress-container h4 {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .progress-timeline-container {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+            .progress-box {
+                width: fit-content;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+            }
+
+                .progress-box span {
+                    width: 60px;
+                    white-space: nowrap;
+                    flex: none;
+                    display: inline-block;
+                    min-width: max-content;
+                    text-align: center;
+                    font-size: 12px;
+                    font-weight: 500;
+                    color: rgba(178, 182, 216, 1);
+                }
+
+            .progress-circle {
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 100%;
+                background-color: rgba(178, 182, 216, 0.46);
+                font-size: 16px;
+                font-weight: 500;
+            }
+                
+            .progress-line {
+                width: 100%;
+                height: 4px;
+                margin-top: 13px;
+                background-color: rgba(178, 182, 216, 0.46);
+            }
+
+    /* APPLICANT FORM CONTENT */
+    .applicant-form-content-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 20px 40px;
+        border-radius: 15px;
+        background-color: #FFFFFF;
+        border: 1px solid rgba(0, 0, 0, .1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, .08);
+    }
+
+        .applicant-form-lower-actions {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(178, 182, 216, 0.2);
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+
+        .applicant-form-lower-actions span {
+            font-size: 12px;
+            font-weight: 400;
+            color: #B9B9B9;
+        }
+
+        .applicant-form-lower-actions-btn {
+            display: flex;
+            gap: 10px;
+        }
+
+        .applicant-form-lower-actions-btn .btn-primary {
+            text-decoration: none;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 24px;
+            background-color: #0040A6;
+            border-radius: 8px;
+            border: 0 none;
+        }
+
+        .applicant-form-lower-actions-btn .btn-primary:hover {
+            cursor: pointer;
+            background-color: #033483;
+            transition: 0.2s;
+        }
+
+        .applicant-form-lower-actions-btn .hidden {
+            display: none;
+        }
+
+        .applicant-form-lower-actions-btn #back-btn {
+            background-color: #FFFFFF;
+            border: 1px solid #B9B9B9;
+            color: #000000;
+        }
+
+        .applicant-form-lower-actions-btn #back-btn:hover {
+            background-color: #f3f3f3;
+            transition: 0.2s;
+        }
+
+        
+        /* FORM */
+        .applicant-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+            .form-header-text {
+                display: flex;
+                flex-direction: column;
+            }
+
+                .form-header-text h3 {
+                    font-size: 20px;
+                    font-weight: 600;
+                }
+
+                .form-header-text p {
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: #B9B9B9;
+                }
+        
+            /* EDUCATION LEVEL */
+            .education-level-container {
+                width: 100%;
+                display: flex;
+                gap: 80px;
+                padding: 20px 40px;
+            }
+
+                .education-level-box {
+                    width: 350px;
+                    padding: 20px 20px 20px 25px;
+                    display: flex;
+                    gap: 10px;
+                    border: 1px solid #B9B9B9;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+
+                    .education-level-box input {
+                        align-self: baseline;
+                        margin-top: 4px;
+                        margin-right: 6px;
+                    }
+
+                    .education-level-box:has(input:checked) {
+                        border: 1px solid #000000;
+                        background-color: #f0f6ff;
+                    }
+
+                        .large-radio {
+                            transform: scale(1.5);
+                        }
+
+                    .education-level-box .radio-label-container {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 2px;
+                    }
+
+                        .education-level-box .radio-label-container h5 {
+                            font-size: 20px;
+                            font-weight: 600;
+                            line-height: 1;
+                        }
+
+                        .education-level-box .radio-label-container span {
+                            font-size: 15px;
+                            font-weight: 600;
+                            color: #B9B9B9;
+                        }
+
+            /* PROGRAM AND SCHEDULE */
+            .program-sched-container {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                padding: 20px 0;
+                gap: 20px;
+            }
+
+                .program-sched-header {
+                    width: 100%;
+                    border-bottom: 1px solid rgba(178, 182, 216, 0.2);
+                    padding: 0 10px;
+                }
+                
+                    .program-sched-header h5 {
+                        font-size: 15px;
+                        font-weight: 500;
+                        color: #6E6E6E;
+                    }
+
+                .note-and-input-container {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                    padding: 0 10px;
+                }
+
+                    .program-sched-note {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        padding: 10px 20px;
+                        background-color: rgba(0, 64, 166, 0.2);
+                        border: 1px solid rgba(0, 64, 166, 0.4);
+                        border-radius: 15px;
+                        gap: 6px;
+                    }
+
+                        .program-sched-note h6 {
+                            font-size: 13px;
+                            font-weight: 500;
+                        }
+
+                        .program-choice-box {
+                            display: flex;
+                            gap: 50px;
+                        }
+
+                            .program-choice-box span {
+                                font-size: 12px;
+                                font-weight: 500;
+                                color: #a1a1a1;
+                            }
+
+                            .program-choice-box p {
+                                font-size: 14px;
+                                font-weight: 500;
+                            }
+            
+                /* FORM INPUT FIELDS */
+                .application-form-fields-container {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                    padding: 0 10px;
+                }
+
+                    .application-form-fields-category {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                    }
+
+                        .fields-category-header {
+                            width: 100%;
+                            border-bottom: 1px solid rgba(178, 182, 216, 0.2);
+                        }
+
+                            .fields-category-header h5 {
+                                font-size: 18px;
+                                font-weight: 500;
+                            }
+
+                            .category-text-color {
+                                color: #0040A6 !important;
+                            }
+
+                            .category-text-span {
+                                font-size: 14px !important;
+                                color: #B9B9B9;
+                            }
+
+                        .application-form-fields-category-row-container {
+                            width: 100%;
+                            display: flex;
+                            flex-direction: column;
+                            padding: 10px;
+                            gap: 15px;
+                        }
+
+                        .application-form-input-field-row {
+                            display: flex;
+                            gap: 40px;
+                        }
+
+                        .application-form-input-field {
+                            width: 100%;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 4px;
+                        }
+
+                        .small-field {
+                            flex: 0 0 160px;
+                        }
+
+                        .medium-field {
+                            flex: 0 0 260px;
+                        }
+
+                        .large-field {
+                            flex: 0 0 420px;
+                        }
+
+                            .application-form-input-field label {
+                                font-size: 15px;
+                                font-weight: 600;
+                                color: #000000;
+                            }
+
+                                .required-field {
+                                    color: #D73333;
+                                }
+
+                            .application-form-input-field select {
+                                width: 100%;
+                                height: 50px;
+                                background-color: rgba(217, 217, 217, .4);
+                                border: 0;
+                                outline: 0;
+                                border-radius: 12px;
+                                padding: 0 16px;
+                                cursor: pointer;
+                                transition: all 0.2s ease;
+                            }
+
+                            .application-form-input-field select:focus {
+                                background-color: #f0f6ff;
+                            }
+
+                            .application-form-input-field .high-select {
+                                background-color: #FFFFFF;
+                                border: 1px solid #6E6E6E
+                            }
+
+                            .application-form-input-field .high-select:focus {
+                                border: 1px solid #000000;
+                                background-color: #f0f6ff;
+                            }
+
+                            .application-form-input-field input {
+                                width: 100%;
+                                height: 50px;
+                                border: 0;
+                                border-radius: 12px;
+                                padding: 0 16px;
+                                transition: all 0.2s ease;
+                                background-color: rgba(217, 217, 217, .4);
+                            }
+
+                            .application-form-input-field input:focus {
+                                outline: 0;
+                                background-color: #f0f6ff;
+                            }
