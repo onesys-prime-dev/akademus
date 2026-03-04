@@ -91,32 +91,40 @@ class Auth extends BaseController
         $hashedPassword = password_hash($tempPassword, PASSWORD_DEFAULT);
 
         $db = \Config\Database::connect();
-        $db->transStart();
+        $db->transBegin();
 
-        // insert user 1st
+        // INSERT USER 1st
         $userModel->insert([
             'firstname' => $this->request->getPost('firstname'),
             'lastname'  => $this->request->getPost('lastname'),
             'email'     => $this->request->getPost('email'),
             'mobile'    => $this->request->getPost('mobile'),
             'program'   => $this->request->getPost('program'),
-            'password'  => $hashedPassword,
-            'role'      => 'applicant',
-            'temp_password' => 1
+            'role'      => 'applicant'
         ]);
         
         $userId = $userModel->getInsertID();
 
         // applicant_num generator
         // e.g. #APP-2026-00001
-        // insert applicant first (without applicant_number)
-        $applicantModel->insert([
+
+        // INSERT APPLICANT first (without applicant_number)
+        if (!$applicantModel->insert([
             'user_id' => $userId,
+            'applicant_number' => null,
+            'password' => $hashedPassword,
+            'temp_password' => 1,
             'application_status' => 'pending',
             'application_date' => date('Y-m-d H:i:s')
-        ]);
+        ])) {
+            dd($applicantModel->errors());
+        };
 
         $applicantId = $applicantModel->getInsertID();
+
+        if (!$applicantId) {
+            throw new \Exception('Applicant insert failed');
+        }
 
         // generate applicant number safely using primary key
         $year = date('Y');
@@ -164,7 +172,11 @@ class Auth extends BaseController
     {
         $model = new UserModel();
 
-        $user = $model->where('email', $this->request->getPost('email'))->first();
+        $user = $model
+            ->select('users.*, applicant.password')
+            ->join('applicant', 'applicant.user_id = users.user_id')
+            ->where('users.email', $this->request->getPost('email'))
+            ->first();
 
         if (!$user) {
             return $this->response->setJSON([
