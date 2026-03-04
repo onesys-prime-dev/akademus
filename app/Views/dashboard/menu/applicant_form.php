@@ -43,7 +43,7 @@
         </div>
 
         <div class="applicant-form-lower-actions">
-            <span>Auto-saved as draft</span>
+            <span id="save-changes-text-ui">Auto-saved as draft</span>
             
             <div class="applicant-form-lower-actions-btn">
                 <button type="button" id="back-btn" class="btn-primary">Back</button>
@@ -64,6 +64,8 @@
     let currentStep = <?= isset($initial_step) ? $initial_step : 1 ?>;
     const maxSteps = <?= isset($max_steps) ? $max_steps : 4 ?>;
 
+    let autoSaveTimeout;
+
     async function loadForm(step) {
         try {
             const response = await fetch(`<?= base_url('applicant-form/step/') ?>${step}`, {
@@ -78,12 +80,15 @@
             formProgressH4Text.textContent = `Form Progress — Step ${step} of ${maxSteps}`;
             formFillupContainer.innerHTML = data.form;
 
+            // If step 1, load programs first
+            if (step === 1) {
+                await loadPrograms(); // load options
+            }
+
+            // Populate all fields including dynamic selects
             populateForm(`applicant-form-${step}`, data.formData);
 
-            // Only load programs if step 1
-            if (step === 1) {
-                loadPrograms(data.selected_program_id);
-            }
+            setupAutoSave(step);
 
             const base = '<?= base_url() ?>';
             history.replaceState(null, '', `${base}applicant-form/step/${step}`);
@@ -99,7 +104,6 @@
 
         Object.keys(data).forEach(key => {
             const value = data[key];
-
             if (value === null || value === undefined) return;
 
             const field = form.querySelector(`[name="${key}"]`);
@@ -109,22 +113,28 @@
             if (field.type === 'radio') {
                 const radios = form.querySelectorAll(`[name="${key}"]`);
                 radios.forEach(radio => {
-                    if (radio.value == value) {
-                        radio.checked = true;
-                    }
+                    if (radio.value == value) radio.checked = true;
                 });
             }
-
             // CHECKBOX
             else if (field.type === 'checkbox') {
                 field.checked = !!value;
             }
-
             // SELECT
             else if (field.tagName === 'SELECT') {
-                field.value = value;
+                // If options are not loaded yet, wait for a tiny delay
+                if (!field.querySelector(`option[value="${value}"]`)) {
+                    const observer = new MutationObserver(() => {
+                        if (field.querySelector(`option[value="${value}"]`)) {
+                            field.value = value;
+                            observer.disconnect();
+                        }
+                    });
+                    observer.observe(field, { childList: true });
+                } else {
+                    field.value = value;
+                }
             }
-
             // TEXT / DATE / EMAIL / TEXTAREA
             else {
                 field.value = value;
@@ -132,33 +142,25 @@
         });
     }
 
-    async function loadPrograms(selectedId = null) {
+    async function loadPrograms() {
         try {
             const response = await fetch(`<?= base_url('get-programs') ?>`, {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
             });
-
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
             const data = await response.json();
+            if (!data.programs) return;
 
-            if (data.programs) {
-                const select = document.getElementById('program');
-                select.innerHTML = '<option value="" disabled>Select a Program</option>';
+            const select = document.getElementById('program');
+            select.innerHTML = '<option value="" disabled selected>Select a Program</option>';
 
-                data.programs.forEach(program => {
-                    const option = document.createElement('option');
-                    option.value = program.id;
-                    option.textContent = program.name;
-
-                    // ✅ Auto-select if matches saved data
-                    if (selectedId && selectedId == program.id) {
-                        option.selected = true;
-                    }
-
-                    select.appendChild(option);
-                });
-            }
+            data.programs.forEach(program => {
+                const option = document.createElement('option');
+                option.value = String(program.id); // force string
+                option.textContent = program.name;
+                select.appendChild(option);
+            });
         } catch (error) {
             console.error('Failed to load programs:', error);
         }
@@ -197,6 +199,44 @@
             alert('An error occurred while saving.');
             return false;
         }
+    }
+
+    function setupAutoSave(step) {
+        const form = document.getElementById(`applicant-form-${step}`);
+        if (!form) return;
+
+        // Remove previous listeners if any
+        form.querySelectorAll('[name]').forEach(field => {
+            field.removeEventListener('input', autoSaveHandler);
+            field.removeEventListener('change', autoSaveHandler);
+            field.addEventListener('input', autoSaveHandler);
+            field.addEventListener('change', autoSaveHandler);
+        });
+    }
+
+    async function autoSaveHandler() {
+        const saveTextUI = document.getElementById('save-changes-text-ui');
+        if (!saveTextUI) return;
+
+        if (autoSaveTimeout) clearTimeout(autoSaveTimeout);
+
+        // Show "Saving..." while waiting for debounce
+        saveTextUI.textContent = 'Saving...';
+
+        // Wait 1 second after last change before saving
+        autoSaveTimeout = setTimeout(async () => {
+            const success = await processForm(currentStep, 'draft');
+
+            if (success) {
+                saveTextUI.textContent = 'Auto-saved changes';
+                // Optional: fade out after 3s
+                setTimeout(() => {
+                    saveTextUI.textContent = '';
+                }, 3000);
+            } else {
+                saveTextUI.textContent = 'Auto-save failed';
+            }
+        }, 1000);
     }
 
     function checkAllFields(step) {
@@ -274,12 +314,25 @@
     // Buttons
     // UNCOMMENT THIS IF YOU WILL PROCEED TO FORM SUBMISSION. For now, use the saveAndContinueBtn listeners below if only for demo.
     saveAndContinueBtn.addEventListener('click', async () => {
+        if (!checkAllFields(currentStep)) return;
+
+        const saveTextUI = document.getElementById('save-changes-text-ui');
+        if (!saveTextUI) return;
+
+        // Show "Saving..." while waiting for debounce
+        saveTextUI.textContent = 'Saving...';
+
         const success = await processForm(currentStep, 'continue');
 
         if (success && currentStep < maxSteps) {
             currentStep++;
             await loadForm(currentStep);
             updateButtons();
+            
+            saveTextUI.textContent = 'Auto-saved changes';
+            setTimeout(() => {
+                    saveTextUI.textContent = '';
+                }, 3000);
         }
     });
 

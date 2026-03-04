@@ -96,7 +96,7 @@
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field">
                             <label>Guardian Name</label>
-                            <input type="text" name="guardian_name" placeholder="If Different from Parents" value="<?= esc($data['guardian_name'] ?? '') ?>" required>
+                            <input type="text" name="guardian_name" placeholder="If Different from Parents" value="<?= esc($data['guardian_name'] ?? '') ?>">
                         </div>
 
                         <div class="application-form-input-field medium-field">
@@ -135,7 +135,7 @@
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field">
                             <label>Annual Family Income</label>
-                            <select name="annual_family_income" required>
+                            <select name="annual_family_income">
                                 <option value="" disabled selected>Select income range</option>
                                 <option value="Below 100000">Below ₱100,000</option>
                                 <option value="100000-249999">₱100,000 – ₱249,999</option>

@@ -42,7 +42,7 @@
             <input 
                 type="radio"
                 name="applicant_type"
-                value="transferee"
+                value="ladderized"
                 required
             >
             <div class="radio-label-container">
@@ -64,7 +64,7 @@
                 <div class="program-choice-box">
                     <div class="program-choice">
                         <span>1ST CHOICE</span>
-                        <p>BS Computer Science</p>
+                        <p>BS Computer Science</p> <!-- FRONTEND NOTE: This should be fetched from users table after sign-up -->
                     </div>
                 </div>
             </div>
@@ -74,14 +74,13 @@
             <div class="application-form-input-field">
                 <label class="category-text-color">Confirmed Program</label>
                 <select name="program_id" id="program" class="high-select" required>
-                    <option value="" disabled>Select a Program</option>
                 </select>
             </div>
 
             <div class="application-form-input-field">
                 <label class="category-text-color">School Year & Semester</label>
                 <select name="sy_semester" id="sy-semester" class="high-select" required>
-                    <option value="" disabled>Select School Year &amp; Semester</option>
+                    <option value="" disabled selected>Select School Year &amp; Semester</option>
                     <option value="SY 2025-2026, 1st Semester">SY 2025-2026, 1st Semester</option>
                     <option value="SY 2025-2026, 2nd Semester">SY 2025-2026, 2nd Semester</option>
                     <option value="SY 2025-2026, Summer">SY 2025-2026, Summer</option>

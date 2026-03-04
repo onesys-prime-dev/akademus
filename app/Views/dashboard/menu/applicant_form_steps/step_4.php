@@ -21,19 +21,19 @@
                 <div class="application-form-fields-category-row-container">
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field">
-                            <label class="category-text-color">SCHOOL NAME</label>
+                            <label class="category-text-color">SCHOOL NAME<span class="required-field">*</span></label>
                             <input type="text" name="school_name" placeholder="Full Name of your Senior High School" value="<?= esc($data['school_name'] ?? '') ?>" required>
                         </div>
                     </div>
 
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field">
-                            <label class="category-text-color">LOCATION</label>
+                            <label class="category-text-color">LOCATION<span class="required-field">*</span></label>
                             <input type="text" name="school_location" placeholder="City, Province" value="<?= esc($data['school_location'] ?? '') ?>" required>
                         </div>
 
                         <div class="application-form-input-field">
-                            <label class="category-text-color">TRACK / STRAND</label>
+                            <label class="category-text-color">TRACK / STRAND<span class="required-field">*</span></label>
                             <select name="strand" required>
                                 <option value="" disabled selected>Select track / strand</option>
 
@@ -57,19 +57,19 @@
                         </div>
 
                         <div class="application-form-input-field medium-field">
-                            <label class="category-text-color">SCHOOL YEAR</label>
+                            <label class="category-text-color">SCHOOL YEAR<span class="required-field">*</span></label>
                             <input type="text" name="school_year" placeholder="e.g., 2025 - 2026" value="<?= esc($data['school_year'] ?? '') ?>" required>
                         </div>
                     </div>
 
                     <div class="application-form-input-field-row">
                         <div class="application-form-input-field medium-field">
-                            <label class="category-text-color">GENERAL AVERAGE (GWA)</label>
+                            <label class="category-text-color">GENERAL AVERAGE (GWA)<span class="required-field">*</span></label>
                             <input type="text" name="gwa" placeholder="e.g., 92.3" value="<?= esc($data['gwa'] ?? '') ?>" required>
                         </div>
 
                         <div class="application-form-input-field medium-field">
-                            <label class="category-text-color">SCHOOL TYPE</label>
+                            <label class="category-text-color">SCHOOL TYPE<span class="required-field">*</span></label>
                             <select name="school_type" required>
                                 <option value="" disabled selected>Select school type</option>
                                 <option value="Public">Public</option>
