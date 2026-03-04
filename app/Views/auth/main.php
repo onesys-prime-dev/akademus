@@ -104,6 +104,10 @@
                     <?php if (isset($auth_field)) {
                         echo view($auth_field);
                     } ?>
+
+                    <?php if (isset($success)) {
+                        echo view($success);
+                    } ?>
                 </div>
             </div>
         </div>
@@ -132,8 +136,25 @@
                 headerTitle.textContent = data.header;
                 headerSubtitle.textContent = data.subheader;
 
-                // Update form
+                // Inject form FIRST
                 formContainer.innerHTML = data.form;
+
+                // ✅ Append programs if they exist (only for sign up)
+                if (data.programs) {
+                    const select = document.getElementById('program');
+
+                    if (select) {
+                        // Reset select (prevent duplicate options)
+                        select.innerHTML = '<option value="" disabled selected hidden>Select a Program</option>';
+
+                        data.programs.forEach(program => {
+                            const option = document.createElement('option');
+                            option.value = program.id;
+                            option.textContent = program.name;
+                            select.appendChild(option);
+                        });
+                    }
+                }
 
                 // Update active button
                 toggleSignIn.classList.remove('active');
@@ -166,12 +187,27 @@
         document.addEventListener('DOMContentLoaded', () => {
             const path = window.location.pathname;
 
-            if (path.includes('sign_up')) {
-                loadAuth('<?= base_url('sign_up') ?>', toggleSignUp);
-            } else {
-                loadAuth('<?= base_url('sign_in') ?>', toggleSignIn);
+            /* if (path.includes('sign_up')) {
+            //     loadAuth('<?= base_url('sign_up') ?>', toggleSignUp);
+            // } else if (path.includes('success')) {
+            //     loadAuth('<?= base_url('success') ?>', toggleSignUp);
+            // } else {
+            //     loadAuth('<?= base_url('sign_in') ?>', toggleSignIn);
+            } */
+            if (path.includes('sign_in') || path.includes('sign_up')) {
+                if (path.includes('sign_up')) {
+                    loadAuth('<?= base_url('sign_up') ?>', toggleSignUp);
+                } else {
+                    loadAuth('<?= base_url('sign_in') ?>', toggleSignIn);
+                }
+
             }
         });
+        
+        // Handle if path.includes('success') is present (after registration) hide the switch-auth-toggle
+        if (window.location.pathname.includes('success')) {
+            document.querySelector('.switch-auth-toggle').style.display = 'none';
+        }
     </script>
 </body>
 </html>

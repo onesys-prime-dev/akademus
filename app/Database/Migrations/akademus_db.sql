@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 24, 2026 at 10:31 AM
+-- Generation Time: Mar 03, 2026 at 04:00 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,38 +40,19 @@ CREATE TABLE `academic_years` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `academic_years`
---
-
-INSERT INTO `academic_years` (`year_id`, `year_name`, `start_date`, `end_date`, `is_current`, `start_date_admission`, `end_date_admission`, `start_date_enrollment`, `end_date_enrollment`, `created_at`) VALUES
-(1, '2025-2026', '2025-08-01', '2026-05-30', 1, NULL, NULL, NULL, NULL, '2026-02-24 09:30:27');
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `applicants`
+-- Table structure for table `applicant`
 --
 
-CREATE TABLE `applicants` (
+CREATE TABLE `applicant` (
   `applicant_id` int(11) NOT NULL,
-  `temp_account_id` int(11) NOT NULL,
-  `applicant_num` varchar(30) NOT NULL,
-  `first_name` varchar(30) NOT NULL,
-  `middle_name` varchar(30) DEFAULT NULL,
-  `last_name` varchar(30) NOT NULL,
-  `suffix` varchar(10) DEFAULT NULL,
-  `email` varchar(50) NOT NULL,
-  `contact_num` varchar(20) NOT NULL,
-  `date_of_birth` datetime NOT NULL,
-  `gender` varchar(10) NOT NULL,
-  `address` varchar(100) NOT NULL,
-  `city` varchar(30) NOT NULL,
-  `province` varchar(30) NOT NULL,
-  `postal_code` varchar(15) DEFAULT NULL,
-  `nationality` varchar(30) NOT NULL,
-  `previous_school` varchar(50) DEFAULT NULL,
-  `program_id` int(11) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  `applicant_number` varchar(30) NOT NULL,
+  `temporary_password` varchar(50) DEFAULT NULL,
+  `application_status` enum('pending','approved','rejected','enrolled') DEFAULT 'pending',
+  `application_date` datetime DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -119,7 +100,7 @@ INSERT INTO `programs` (`program_id`, `program_code`, `program_name`, `created_a
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `firstname` varchar(100) NOT NULL,
   `lastname` varchar(100) NOT NULL,
   `email` varchar(150) NOT NULL,
@@ -134,8 +115,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `mobile`, `program`, `password`, `role`, `created_at`) VALUES
-(1, 'Josh', 'Baquiano', 'joshbaquiano@gmail.com', '09123456789', 'Computer Science', '$2y$10$uD7LRmzNW/S4QkThwJz/ceiUcX0Lo/vIQyXssno4M6nNAvUHkJ6/W', 'applicant', '2026-02-20 09:24:47');
+INSERT INTO `users` (`user_id`, `firstname`, `lastname`, `email`, `mobile`, `program`, `password`, `role`, `created_at`) VALUES
+(12, 'Josh', 'Baquiano', 'joshbaquiano@gmail.com', '09123456789', '1', '$2y$10$HRRVHJV9ABAjO5y4ssudnuJOXoCz5mSRxLezv8RXrPjKXGyUH9OQO', 'applicant', '2026-03-02 08:31:34');
 
 --
 -- Indexes for dumped tables
@@ -148,12 +129,11 @@ ALTER TABLE `academic_years`
   ADD PRIMARY KEY (`year_id`);
 
 --
--- Indexes for table `applicants`
+-- Indexes for table `applicant`
 --
-ALTER TABLE `applicants`
+ALTER TABLE `applicant`
   ADD PRIMARY KEY (`applicant_id`),
-  ADD UNIQUE KEY `applicant_num` (`applicant_num`),
-  ADD KEY `fk_applicant_program` (`program_id`);
+  ADD KEY `fk_applicant_user` (`user_id`);
 
 --
 -- Indexes for table `class_schedules`
@@ -173,7 +153,7 @@ ALTER TABLE `programs`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`user_id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
@@ -187,9 +167,9 @@ ALTER TABLE `academic_years`
   MODIFY `year_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `applicants`
+-- AUTO_INCREMENT for table `applicant`
 --
-ALTER TABLE `applicants`
+ALTER TABLE `applicant`
   MODIFY `applicant_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -208,17 +188,17 @@ ALTER TABLE `programs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `applicants`
+-- Constraints for table `applicant`
 --
-ALTER TABLE `applicants`
-  ADD CONSTRAINT `fk_applicant_program` FOREIGN KEY (`program_id`) REFERENCES `programs` (`program_id`) ON DELETE SET NULL;
+ALTER TABLE `applicant`
+  ADD CONSTRAINT `fk_applicant_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `class_schedules`

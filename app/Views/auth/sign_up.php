@@ -34,10 +34,7 @@
                 <label for="program">1ST CHOICE OF PROGRAM</label>
                 <select name="program" id="program" required>
                     <option value="" disabled selected hidden>Select a Program</option>
-                    <option value="Computer Engineering">Computer Engineering</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Information System">Information System</option>
-                    <option value="Information Technology">Information Technology</option>
+                    <!-- append programs -->
                 </select>
             </div>
         </div>
