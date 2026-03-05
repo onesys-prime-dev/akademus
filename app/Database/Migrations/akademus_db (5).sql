@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 03, 2026 at 04:00 AM
+-- Generation Time: Mar 04, 2026 at 09:43 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49,12 +49,20 @@ CREATE TABLE `academic_years` (
 CREATE TABLE `applicant` (
   `applicant_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `applicant_number` varchar(30) NOT NULL,
-  `temporary_password` varchar(50) DEFAULT NULL,
+  `applicant_number` varchar(30) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `temp_password` tinyint(1) DEFAULT 1,
   `application_status` enum('pending','approved','rejected','enrolled') DEFAULT 'pending',
   `application_date` datetime DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `applicant`
+--
+
+INSERT INTO `applicant` (`applicant_id`, `user_id`, `applicant_number`, `password`, `temp_password`, `application_status`, `application_date`, `created_at`) VALUES
+(9, 32, 'APP-2026-00009', '$2y$10$M8bf6HsXiKKss3lTI5IaQetQibMh/Kjjirt7TmeMaemaKRddgmQCC', 1, 'pending', '2026-03-04 07:19:32', '2026-03-04 07:19:32');
 
 -- --------------------------------------------------------
 
@@ -69,6 +77,20 @@ CREATE TABLE `class_schedules` (
   `section_name` varchar(20) DEFAULT NULL,
   `year_level` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment`
+--
+
+CREATE TABLE `payment` (
+  `payment_id` int(11) NOT NULL,
+  `amount` double DEFAULT NULL,
+  `payment_date` datetime DEFAULT NULL,
+  `payment_method` varchar(50) DEFAULT NULL,
+  `payment_status` enum('pending','paid') DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -106,7 +128,6 @@ CREATE TABLE `users` (
   `email` varchar(150) NOT NULL,
   `mobile` varchar(20) NOT NULL,
   `program` varchar(150) NOT NULL,
-  `password` varchar(255) NOT NULL,
   `role` varchar(50) DEFAULT 'applicant',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -115,8 +136,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `firstname`, `lastname`, `email`, `mobile`, `program`, `password`, `role`, `created_at`) VALUES
-(12, 'Josh', 'Baquiano', 'joshbaquiano@gmail.com', '09123456789', '1', '$2y$10$HRRVHJV9ABAjO5y4ssudnuJOXoCz5mSRxLezv8RXrPjKXGyUH9OQO', 'applicant', '2026-03-02 08:31:34');
+INSERT INTO `users` (`user_id`, `firstname`, `lastname`, `email`, `mobile`, `program`, `role`, `created_at`) VALUES
+(32, 'Josh', 'Baquiano', 'joshbaquiano@gmail.com', '09123456789', '1', 'applicant', '2026-03-04 07:19:32');
 
 --
 -- Indexes for dumped tables
@@ -133,6 +154,7 @@ ALTER TABLE `academic_years`
 --
 ALTER TABLE `applicant`
   ADD PRIMARY KEY (`applicant_id`),
+  ADD UNIQUE KEY `applicant_number` (`applicant_number`),
   ADD KEY `fk_applicant_user` (`user_id`);
 
 --
@@ -142,6 +164,12 @@ ALTER TABLE `class_schedules`
   ADD PRIMARY KEY (`schedule_id`),
   ADD KEY `fk_schedule_program` (`program_id`),
   ADD KEY `fk_schedule_academic_year` (`academic_year_id`);
+
+--
+-- Indexes for table `payment`
+--
+ALTER TABLE `payment`
+  ADD PRIMARY KEY (`payment_id`);
 
 --
 -- Indexes for table `programs`
@@ -170,7 +198,7 @@ ALTER TABLE `academic_years`
 -- AUTO_INCREMENT for table `applicant`
 --
 ALTER TABLE `applicant`
-  MODIFY `applicant_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `applicant_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `class_schedules`
@@ -188,7 +216,7 @@ ALTER TABLE `programs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- Constraints for dumped tables

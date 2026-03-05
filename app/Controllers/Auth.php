@@ -29,8 +29,8 @@ class Auth extends BaseController
 
     public function sign_up()
     {
-        $model = new ProgramModel();
-        $programs = $model->findAll();
+        $programModel = new ProgramModel();
+        $programs = $programModel->findAll();
 
         $programs = array_map(function($program) {
             return [
@@ -97,28 +97,28 @@ class Auth extends BaseController
         $applicantModel = new ApplicantModel();
         $programModel = new ProgramModel();
 
-        $programModel = $this->request->getPost('program');
+        $programId = $this->request->getPost('program');
 
         // verification of provided programs (bs compsci, BSIT, etc.)
         // $program = $programModel->where('program_id', $program)->first();
-        // if (!$program) {
-        //     return redirect()->back()->with('error', 'Invalid program selected');
-        // }
+
+        if (!$program) {
+            return redirect()->back()->with('error', 'Invalid program selected');
+        }
 
         // auto generate temporary password :D
-        $tempPassword = bin2hex(random_bytes(4));
+        $tempPassword = bin2hex(random_bytes(6));
         $hashedPassword = password_hash($tempPassword, PASSWORD_DEFAULT);
 
         $db = \Config\Database::connect();
         $db->transBegin();
-        
+
         // INSERT USER 1st
         $userModel->insert([
             'firstname' => $this->request->getPost('firstname'),
             'lastname'  => $this->request->getPost('lastname'),
             'email'     => $this->request->getPost('email'),
             'mobile'    => $this->request->getPost('mobile'),
-            'program'   => $this->request->getPost('program'),
             'role'      => 'applicant'
         ]);
         
@@ -130,14 +130,18 @@ class Auth extends BaseController
         // INSERT APPLICANT first (without applicant_number)
         if (!$applicantModel->insert([
             'user_id' => $userId,
+            'program_id' => $programId,
             'applicant_number' => null,
             'password' => $hashedPassword,
             'temp_password' => 1,
             'application_status' => 'pending',
             'application_date' => date('Y-m-d H:i:s')
         ])) {
-            dd($applicantModel->errors());
-        };
+            throw new \Exception('Applicant creation failed');
+        }
+        // {
+        //     dd($applicantModel->errors());
+        // };
 
         $applicantId = $applicantModel->getInsertID();
 
@@ -165,14 +169,16 @@ class Auth extends BaseController
         $email->setTo($this->request->getPost('email'));
         $email->setSubject('Your Akademus Temporary Account');
         $email->setMessage("
-        Hello,
+        <h2>Welcome to Akademus Portal</h2>
 
-        Your account has been created.
+        <p> Your account has been created successfully. <p>
         
-        Portal: ".base_url('sign_in')."
+        <p><b> Portal:</b> " . base_url('sign_in') . "<p>
 
-        Email: ".$this->request->getPost('email')."
-        Temporary Password: $tempPassword
+        <p><b> Email: </b> " .$this->request->getPost('email') . "</p>
+        <p><b> Temporary Password: $tempPassword </p>
+
+        <p> Please login </p>
         ");
 
         // if (!$email->send()) {
@@ -194,6 +200,7 @@ class Auth extends BaseController
         $user = $model
             ->select('users.*, applicant.password')
             ->join('applicant', 'applicant.user_id = users.user_id')
+            ->join('programs', 'programs.program_id = applicant.program_id')
             ->where('users.email', $this->request->getPost('email'))
             ->first();
 
