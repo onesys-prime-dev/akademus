@@ -74,6 +74,19 @@ class Auth extends BaseController
         return view('auth/main', $data);
     }
 
+    public function success($applicantNumber = null)
+    {
+        $applicantNumber = session()->getFlashdata('applicant_number');
+
+        $data['title'] = 'Success';
+        $data['auth_header'] = 'Account Created!';
+        $data['auth_sub_header'] = 'Your unique Applicant ID has been assigned.';
+        $data['applicant_number'] = $applicantNumber;
+        $data['auth_field'] = 'auth/success';
+
+        return view('auth/main', $data);
+    }
+
     public function register()
     {
         helper(['form']);
@@ -192,8 +205,9 @@ class Auth extends BaseController
         if (!$email->send()) {
             log_message('error', $email->printDebugger(['headers']));
         }
-
-        return redirect()->to('/sign_in')->with('success', 'Account created successfully.\n Check your email for temporary login credentials');    
+        
+        return redirect()->to('/success')->with('applicant_number', $applicantNumber);
+        //return redirect()->to('/sign_in')->with('success', 'Account created successfully.\n Check your email for temporary login credentials');    
     }
 
     public function login()
