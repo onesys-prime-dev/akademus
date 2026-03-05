@@ -38,13 +38,14 @@ class Email extends BaseConfig
     /**
      * SMTP Username
      */
-    public string $SMTPUser = 'joshbaquiano@gmail.com'; // pwede nyo e try gmail nyo for testing punta lng google app password to generate
+    public string $SMTPUser = 'testakademusmentora@gmail.com'; // pwede nyo e try gmail nyo for testing punta lng google app password to generate
+    // public string $SMTPUser = $myemail;
 
     /**
      * SMTP Password
      */
-    public string $SMTPPass = 'juziapbrusyfrrvh'; // gumamit ako app password from gmail, BEFORE E PUSH DELETE NIYO ANG LAMAN NATO :D
-    // juziapbrusyfrrvh
+    public string $SMTPPass = 'vhgevthzlwtkweqg'; // gumamit ako app password from gmail :D
+
     /**
      * SMTP Port
      */
