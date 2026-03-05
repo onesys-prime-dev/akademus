@@ -6,8 +6,23 @@ use CodeIgniter\Config\BaseConfig;
 
 class Email extends BaseConfig
 {
-    public string $fromEmail  = 'joshbaquiano@gmail.com';
-    public string $fromName   = 'Akademus Portal';
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->fromEmail   = env('email.fromEmail');
+        $this->fromName    = env('email.fromName');
+
+        $this->SMTPHost    = env('email.SMTPHost');
+        $this->SMTPUser    = env('email.SMTPUser');
+        $this->SMTPPass    = env('email.SMTPPass');
+        $this->SMTPPort    = (int) env('email.SMTPPort');
+        $this->SMTPTimeout = (int) env('email.SMTPTimeout');
+        $this->SMTPCrypto  = env('email.SMTPCrypto');
+    }
+    
+    public string $fromEmail;
+    public string $fromName;
     public string $recipients = '';
 
     /**
@@ -28,7 +43,7 @@ class Email extends BaseConfig
     /**
      * SMTP Server Hostname
      */
-    public string $SMTPHost = 'smtp.gmail.com';
+    public string $SMTPHost;
 
     /**
      * Which SMTP authentication method to use: login, plain
@@ -38,22 +53,22 @@ class Email extends BaseConfig
     /**
      * SMTP Username
      */
-    public string $SMTPUser = 'testakademusmentora@gmail.com'; // pwede nyo e try gmail nyo for testing punta lng google app password to generate
+    public string $SMTPUser; // pwede nyo e try gmail nyo for testing punta lng google app password to generate
 
     /**
      * SMTP Password
      */
-    public string $SMTPPass = 'vhgevthzlwtkweqg'; // gumamit ako app password from gmail, BEFORE E PUSH DELETE NIYO ANG LAMAN NATO :D
+    public string $SMTPPass; // gumamit ako app password from gmail, BEFORE E PUSH DELETE NIYO ANG LAMAN NATO :D
     // juziapbrusyfrrvh
     /**
      * SMTP Port
      */
-    public int $SMTPPort = 587;
+    public int $SMTPPort;
 
     /**
      * SMTP Timeout (in seconds)
      */
-    public int $SMTPTimeout = 5;
+    public int $SMTPTimeout;
 
     /**
      * Enable persistent SMTP connections
@@ -67,7 +82,7 @@ class Email extends BaseConfig
      *             to the server. 'ssl' means implicit SSL. Connection on port
      *             465 should set this to ''.
      */
-    public string $SMTPCrypto = 'tls';
+    public string $SMTPCrypto;
 
     /**
      * Enable word-wrap
