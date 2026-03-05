@@ -1,5 +1,4 @@
 <!-- HOMEPAGE NAVBAR | homepage.php  -->
-<?php $applicant_id = 'APP-2025-08741' ?>
 <?php $applicant_initials = 'JD' ?>
 
 <nav>

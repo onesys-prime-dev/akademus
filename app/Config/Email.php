@@ -45,7 +45,6 @@ class Email extends BaseConfig
      */
     public string $SMTPPass = ''; // gumamit ako app password from gmail, BEFORE E PUSH DELETE NIYO ANG LAMAN NATO :D
     // juziapbrusyfrrvh
-
     /**
      * SMTP Port
      */
