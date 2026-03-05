@@ -1,5 +1,6 @@
 <!-- HOMEPAGE NAVBAR | homepage.php  -->
 <?php $applicant_initials = 'JD' ?>
+<?php $applicant_number = session()->get('applicant_number')?>
 
 <nav>
     <div class="sidebar-top-and-links">

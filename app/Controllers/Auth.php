@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\UserModel;
 use App\Models\ProgramModel;
 use App\Models\ApplicantModel;
+use App\Models\ApplicantsViewModel;
 
 class Auth extends BaseController
 {
@@ -212,14 +213,20 @@ class Auth extends BaseController
 
     public function login()
     {
-        $model = new UserModel();
+        //$model = new UserModel();
+        $model = new ApplicantsViewModel();
 
+        $user = $model
+            ->where('email', $this->request->getPost('email'))
+            ->first();
+        /*
         $user = $model
             ->select('users.*, applicant.password')
             ->join('applicant', 'applicant.user_id = users.user_id')
             ->join('programs', 'programs.program_id = applicant.program_id')
             ->where('users.email', $this->request->getPost('email'))
             ->first();
+        */
 
         if (!$user) {
             return $this->response->setJSON([
@@ -236,11 +243,13 @@ class Auth extends BaseController
         }
 
         session()->set([
-            'user_id'  => $user['user_id'],
-            'firstname'=> $user['firstname'],
-            'email'    => $user['email'],
-            'role'     => $user['role'],
-            'logged_in'=> true
+            'user_id'         => $user['user_id'],
+            'firstname'       => $user['firstname'],
+            'email'           => $user['email'],
+            'role'            => $user['role'],
+            'applicant_number'=> $user['applicant_number'], 
+            'applicant_id'    => $user['applicant_id'],
+            'logged_in'       => true
         ]);
         
         return redirect()->to('/dashboard');
@@ -248,6 +257,7 @@ class Auth extends BaseController
         //     'status'   => 'success',
         //     'redirect' => base_url('dashboard')
         // ]);
+
     }
 
     public function logout()

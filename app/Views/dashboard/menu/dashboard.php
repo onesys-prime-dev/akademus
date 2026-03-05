@@ -1,4 +1,6 @@
 <!-- dashboard/menu/dashboard.php  -->
+<?php $applicant_number = session()->get('applicant_number') ?>
+
 <!-- FRONTEND MOCK DATA: These are example variables. Backend should populate dynamically. -->
 <?php
     /*  i'll comment this for now; remove ko to soon

@@ -1,6 +1,4 @@
 <!-- auth/success.php -->
-<?php $applicant_id = 'APP-2025-08741' ?>
-
 <div class="success-container">
     <div class="applicant-id-box">
         <span>Applicant ID</span>

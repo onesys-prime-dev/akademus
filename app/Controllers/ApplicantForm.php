@@ -34,7 +34,7 @@ class ApplicantForm extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        $applicant_id = 1; // replace later with session
+        $applicant_id = session()->get('applicant_id'); // replace later with session
 
         $applicationModel = new ApplicationModel();
         $personalModel    = new PersonalInformationModel();
@@ -101,7 +101,7 @@ class ApplicantForm extends BaseController
         $action = $data['action'] ?? 'draft';
 
         // SAMPLE applicant_id
-        $applicant_id = 1;
+        $applicant_id = session()->get('applicant_id');
 
         $applicationModel = new ApplicationModel();
 
