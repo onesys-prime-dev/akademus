@@ -100,7 +100,7 @@ class Auth extends BaseController
         $programId = $this->request->getPost('program');
 
         // verification of provided programs (bs compsci, BSIT, etc.)
-        // $program = $programModel->where('program_id', $program)->first();
+        $program = $programModel->find($programId);
 
         if (!$programId) {
             return redirect()->back()->with('error', 'Invalid program selected');
