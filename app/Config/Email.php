@@ -44,7 +44,7 @@ class Email extends BaseConfig
     /**
      * SMTP Password
      */
-    public string $SMTPPass = 'vhgevthzlwtkweqg'; // gumamit ako app password from gmail :D
+    public string $SMTPPass = 'oaiwcevgwtfiovtk'; // gumamit ako app password from gmail :D
 
     /**
      * SMTP Port
