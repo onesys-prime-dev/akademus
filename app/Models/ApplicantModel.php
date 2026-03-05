@@ -12,7 +12,8 @@ class ApplicantModel extends Model
     protected $allowedFields = [
         'user_id',
         'applicant_number',
-        'temporary_password',
+        'password',
+        'temp_password',
         'application_status',
         'application_date',
     ];

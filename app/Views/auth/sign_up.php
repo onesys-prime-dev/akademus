@@ -4,7 +4,7 @@
     <form 
         id="sign-up-form"
         class="form-container"
-        action="<?= base_url('sign_up/register') ?>"
+        action="/register" 
         method="post"
     >
         <div class="input-container">
@@ -33,7 +33,10 @@
                 <label for="program">1ST CHOICE OF PROGRAM</label>
                 <select name="program" id="program" required>
                     <option value="" disabled selected hidden>Select a Program</option>
-                    <!-- append programs -->
+                    <option value="Computer Engineering">Computer Engineering</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Information System">Information System</option>
+                    <option value="Information Technology">Information Technology</option>
                 </select>
             </div>
         </div>
