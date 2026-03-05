@@ -303,18 +303,19 @@
     }
 
     function updateProgress(step) {
-        document.querySelectorAll('.progress-circle').forEach(circle => {
-            const num = +circle.dataset.step;
+        const circles = document.querySelectorAll('.progress-circle');
+        const lines = document.querySelectorAll('.progress-line');
 
+        circles.forEach(circle => {
+            const num = Number(circle.dataset.step);
             circle.classList.toggle('progress-circle-done', num < step);
             circle.classList.toggle('progress-circle-active', num === step);
+            circle.textContent = num < step ? '✔' : num;
         });
 
-        document.querySelectorAll('.progress-line').forEach(line => {
-            const num = +line.dataset.step+1;
-
+        lines.forEach(line => {
+            const num = Number(line.dataset.step);
             line.classList.toggle('progress-line-done', num < step);
-            line.classList.toggle('progress-line-active', num === step);
         });
     }
 

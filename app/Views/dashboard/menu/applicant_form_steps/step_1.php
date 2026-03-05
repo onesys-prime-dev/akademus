@@ -1,5 +1,10 @@
 <!-- dashboard/menu/applicant_form_steps/step_1.php -->
 
+<?php 
+    $program_name = session()->get('program_name');
+    $program_name = preg_replace('/^Bachelor of Science\s*/', 'BS ', $program_name)
+?>
+
 <form 
     action=""
     method="post"
@@ -64,7 +69,7 @@
                 <div class="program-choice-box">
                     <div class="program-choice">
                         <span>1ST CHOICE</span>
-                        <p>BS Computer Science</p> <!-- FRONTEND NOTE: This should be fetched from users table after sign-up -->
+                        <p><?= $program_name ?></p> <!-- FRONTEND NOTE: This should be fetched from users table after sign-up -->
                     </div>
                 </div>
             </div>

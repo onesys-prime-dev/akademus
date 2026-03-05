@@ -1,6 +1,12 @@
 <!-- HOMEPAGE NAVBAR | homepage.php  -->
-<?php $applicant_initials = 'JD' ?>
-<?php $applicant_number = session()->get('applicant_number')?>
+<?php 
+    $firstname = session()->get('firstname') ?? '';
+    $lastname = session()->get('lastname') ?? '';
+    $fullname = $firstname . ' ' . $lastname;
+    $initials = strtoupper(substr($firstname, 0, 1) . substr($lastname, 0, 1) ?? '');
+    $applicant_number = session()->get('applicant_number') ?? '';
+    $role = ucwords(session()->get('role') ?? '');
+?>
 
 <nav>
     <div class="sidebar-top-and-links">
@@ -83,11 +89,11 @@
         <div class="profile-container">
             <div class="profile-picture">
                 <!-- <img src="<?= base_url('assets/images/profile-placeholder.png') ?>" alt="Profile Picture"> -->
-                <span><?= $applicant_initials ?></span>
+                <span><?= $initials ?></span>
             </div>
             <div class="profile-info">
-                <p>John Doe</p>
-                <span>Applicant</span>
+                <p><?= $fullname ?></p>
+                <span><?= $role ?></span>
             </div>
         </div>
 
