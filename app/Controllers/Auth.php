@@ -102,7 +102,7 @@ class Auth extends BaseController
         // verification of provided programs (bs compsci, BSIT, etc.)
         // $program = $programModel->where('program_id', $program)->first();
 
-        if (!$program) {
+        if (!$programId) {
             return redirect()->back()->with('error', 'Invalid program selected');
         }
 
@@ -169,16 +169,16 @@ class Auth extends BaseController
         $email->setTo($this->request->getPost('email'));
         $email->setSubject('Your Akademus Temporary Account');
         $email->setMessage("
-        <h2>Welcome to Akademus Portal</h2>
+        Welcome to Akademus Portal
 
-        <p> Your account has been created successfully. <p>
+        Your account has been created successfully.
         
-        <p><b> Portal:</b> " . base_url('sign_in') . "<p>
+        Portal: " . base_url('sign_in') . "
 
-        <p><b> Email: </b> " .$this->request->getPost('email') . "</p>
-        <p><b> Temporary Password: $tempPassword </p>
+        Email: " .$this->request->getPost('email') . "
+        Temporary Password: $tempPassword 
 
-        <p> Please login </p>
+        Please login
         ");
 
         // if (!$email->send()) {
