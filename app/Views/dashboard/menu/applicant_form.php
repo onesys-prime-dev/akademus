@@ -6,30 +6,30 @@
     <div class="applicant-form-progress-container">
         <h4 id="form-progress-h4-text"></h4>
 
-        <div class="progress-timeline-container">
+        <div id="progress-timeline-container" class="progress-timeline-container">
             <div class="progress-box">
-                <div class="progress-circle">1</div>
+                <div class="progress-circle" data-step="1">1</div>
                 <span>App. Type</span>
             </div>
 
-            <div class="progress-line"></div>
+            <div class="progress-line" data-step="1"></div>
 
             <div class="progress-box">
-                <div class="progress-circle">2</div>
+                <div class="progress-circle" data-step="2">2</div>
                 <span>Personal</span>
             </div>
 
-            <div class="progress-line"></div>
+            <div class="progress-line" data-step="2"></div>
 
             <div class="progress-box">
-                <div class="progress-circle">3</div>
+                <div class="progress-circle" data-step="3">3</div>
                 <span>Family</span>
             </div>
 
-            <div class="progress-line"></div>
+            <div class="progress-line" data-step="3"></div>
 
             <div class="progress-box">
-                <div class="progress-circle">4</div>
+                <div class="progress-circle" data-step="4">4</div>
                 <span>Education</span>
             </div>
         </div>
@@ -79,6 +79,8 @@
             document.title = "Akademus | " + data.title;
             formProgressH4Text.textContent = `Form Progress — Step ${step} of ${maxSteps}`;
             formFillupContainer.innerHTML = data.form;
+
+            updateProgress(step);
 
             // If step 1, load programs first
             if (step === 1) {
@@ -298,6 +300,22 @@
         }
 
         return isValid;
+    }
+
+    function updateProgress(step) {
+        document.querySelectorAll('.progress-circle').forEach(circle => {
+            const num = +circle.dataset.step;
+
+            circle.classList.toggle('progress-circle-done', num < step);
+            circle.classList.toggle('progress-circle-active', num === step);
+        });
+
+        document.querySelectorAll('.progress-line').forEach(line => {
+            const num = +line.dataset.step+1;
+
+            line.classList.toggle('progress-line-done', num < step);
+            line.classList.toggle('progress-line-active', num === step);
+        });
     }
 
     function updateButtons() {
