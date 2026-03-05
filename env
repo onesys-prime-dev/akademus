@@ -67,3 +67,17 @@
 #--------------------------------------------------------------------
 
 # logger.threshold = 4
+
+#--------------------------------------------------------------------
+# EMAIL
+#--------------------------------------------------------------------
+
+# email.fromEmail = 
+# email.fromName  = ''
+
+# email.SMTPHost  = 
+# email.SMTPUser  = 
+# email.SMTPPass  = 
+# email.SMTPPort  = 
+# email.SMTPTimeout = 
+# email.SMTPCrypto = 
