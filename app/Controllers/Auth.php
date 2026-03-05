@@ -128,32 +128,33 @@ class Auth extends BaseController
         $db->transBegin();
 
         // INSERT USER 1st
-        $userModel->insert([
-            'firstname' => $this->request->getPost('firstname'),
-            'lastname'  => $this->request->getPost('lastname'),
-            'email'     => $this->request->getPost('email'),
-            'mobile'    => $this->request->getPost('mobile'),
-            'role'      => 'applicant'
-        ]);
-        
-        $userId = $userModel->getInsertID();
+        if (!$userModel->insert([
+    'firstname' => $this->request->getPost('firstname'),
+    'lastname'  => $this->request->getPost('lastname'),
+    'email'     => $this->request->getPost('email'),
+    'mobile'    => $this->request->getPost('mobile'),
+    'role'      => 'applicant'
+])) {
+    dd($userModel->errors(), $db->error());
+}
+
+$userId = $userModel->getInsertID();
 
         // applicant_num generator
         // e.g. #APP-2026-00001
 
         // INSERT APPLICANT first (without applicant_number)
-        if (!$applicantModel->insert([
-            'user_id' => $userId,
-            'program_id' => $programId,
-            'applicant_number' => null,
-            'password' => $hashedPassword,
-            'temp_password' => 1,
-            'application_status' => 'pending',
-            'application_date' => date('Y-m-d H:i:s')
-        ])) {
-            throw new \Exception('Applicant creation failed');
-        }
-        // {
+if (!$applicantModel->insert([
+    'user_id'            => $userId,
+    'program_id'         => $programId,
+    'applicant_number'   => null,
+    'password'           => $hashedPassword,
+    'temp_password'      => 1,
+    'application_status' => 'pending',
+    'application_date'   => date('Y-m-d H:i:s')
+])) {
+    dd($applicantModel->errors(), $db->error(), $userId, $programId);
+}        // {
         //     dd($applicantModel->errors());
         // };
 
