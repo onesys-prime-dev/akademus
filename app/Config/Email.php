@@ -10,19 +10,24 @@ class Email extends BaseConfig
     {
         parent::__construct();
 
+        $this->protocol = env('email.protocol','smtp');
+
         $this->fromEmail   = env('email.fromEmail');
         $this->fromName    = env('email.fromName');
 
         $this->SMTPHost    = env('email.SMTPHost');
         $this->SMTPUser    = env('email.SMTPUser');
         $this->SMTPPass    = env('email.SMTPPass');
-        $this->SMTPPort    = (int) env('email.SMTPPort');
-        $this->SMTPTimeout = (int) env('email.SMTPTimeout');
-        $this->SMTPCrypto  = env('email.SMTPCrypto');
+
+        $this->SMTPPort    = (int) env('email.SMTPPort', 587);
+        $this->SMTPTimeout = (int) env('email.SMTPTimeout', 60);
+
+        $this->SMTPCrypto  = env('email.SMTPCrypto', 'tls');
     }
     
     public string $fromEmail;
     public string $fromName;
+
     public string $recipients = '';
 
     /**
@@ -59,7 +64,7 @@ class Email extends BaseConfig
      * SMTP Password
      */
     public string $SMTPPass; // gumamit ako app password from gmail, BEFORE E PUSH DELETE NIYO ANG LAMAN NATO :D
-    // juziapbrusyfrrvh
+    
     /**
      * SMTP Port
      */
@@ -97,7 +102,7 @@ class Email extends BaseConfig
     /**
      * Type of mail, either 'text' or 'html'
      */
-    public string $mailType = 'text';
+    public string $mailType = 'html';
 
     /**
      * Character set (utf-8, iso-8859-1, etc.)
