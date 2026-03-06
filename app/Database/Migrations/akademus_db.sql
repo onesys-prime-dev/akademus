@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 05, 2026 at 08:00 AM
+-- Generation Time: Mar 06, 2026 at 08:25 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -63,9 +63,8 @@ CREATE TABLE `applicant` (
 --
 
 INSERT INTO `applicant` (`applicant_id`, `user_id`, `program_id`, `applicant_number`, `password`, `temp_password`, `application_status`, `application_date`, `created_at`) VALUES
-(13, 36, 3, 'APP-2026-00013', '$2y$10$mI64/4A6iMgJDmyFEFTmpOsvpA6RemsFTlLb5RUE77HBbL7I7fDUK', 1, 'pending', '2026-03-05 03:06:59', '2026-03-05 03:06:59'),
-(22, 45, 2, 'APP-2026-00022', '$2y$10$ZYTC/snuDe261U3Io8yjm.GPIkqXjEY0UyW9U9uqstT7MU6Sldjk6', 1, 'pending', '2026-03-05 05:09:52', '2026-03-05 05:09:52'),
-(25, 48, 1, 'APP-2026-00025', '$2y$10$A1Zk90PGgCPgGtiONweIyuYujHVETA2v9p2wn9Kr05WN.SlfgZ2we', 1, 'pending', '2026-03-05 06:56:45', '2026-03-05 06:56:45');
+(36, 59, 1, 'APP-2026-00036', '$2y$10$Y3pT6XXkueAkvFZNFgMr4uHUNj6F1r0Gt5m1j47ibzG0w0/oDrEey', 1, 'pending', '2026-03-05 10:31:40', '2026-03-05 10:31:40'),
+(37, 60, 3, 'APP-2026-00037', '$2y$10$yLEm/f.tiFuJLBBCCS78T.9Lf6rTPNfbM9Kvpb7G5nrTpfjG0i9Ou', 1, 'pending', '2026-03-06 05:54:26', '2026-03-06 05:54:26');
 
 -- --------------------------------------------------------
 
@@ -90,7 +89,8 @@ CREATE TABLE `applications` (
 --
 
 INSERT INTO `applications` (`application_id`, `applicant_id`, `applicant_type`, `program_id`, `school_year`, `semester`, `application_status`, `application_date`, `updated_at`) VALUES
-(17, 22, 'transferee', 3, 'SY 2025-2026', '1st Semester', 'draft', '2026-03-05 05:35:21', '2026-03-05 05:37:45');
+(22, 36, 'freshmen', NULL, '', '', 'draft', '2026-03-05 10:34:11', '2026-03-05 10:34:11'),
+(23, 37, 'freshmen', 1, '', '', 'draft', '2026-03-06 06:11:15', '2026-03-06 06:11:30');
 
 -- --------------------------------------------------------
 
@@ -114,7 +114,7 @@ CREATE TABLE `class_schedules` (
 --
 
 CREATE TABLE `educational_backgrounds` (
-  `id` int(11) NOT NULL,
+  `educational_bg_id` int(11) NOT NULL,
   `application_id` int(11) NOT NULL,
   `school_name` varchar(255) DEFAULT NULL,
   `school_location` varchar(255) DEFAULT NULL,
@@ -131,8 +131,9 @@ CREATE TABLE `educational_backgrounds` (
 -- Dumping data for table `educational_backgrounds`
 --
 
-INSERT INTO `educational_backgrounds` (`id`, `application_id`, `school_name`, `school_location`, `strand`, `school_year_start`, `school_year_end`, `gwa`, `school_type`, `created_at`, `updated_at`) VALUES
-(17, 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-05 05:35:21', '2026-03-05 05:35:21');
+INSERT INTO `educational_backgrounds` (`educational_bg_id`, `application_id`, `school_name`, `school_location`, `strand`, `school_year_start`, `school_year_end`, `gwa`, `school_type`, `created_at`, `updated_at`) VALUES
+(22, 22, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-05 10:34:11', '2026-03-05 10:34:11'),
+(23, 23, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-06 06:11:15', '2026-03-06 06:11:15');
 
 -- --------------------------------------------------------
 
@@ -166,7 +167,8 @@ CREATE TABLE `family_backgrounds` (
 --
 
 INSERT INTO `family_backgrounds` (`id`, `application_id`, `father_firstname`, `father_middlename`, `father_lastname`, `father_occupation`, `father_contact_number`, `mother_firstname`, `mother_middlename`, `mother_lastname`, `mother_occupation`, `mother_contact_number`, `guardian_name`, `guardian_relationship`, `guardian_contact_number`, `annual_family_income`, `created_at`, `updated_at`) VALUES
-(17, 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-05 05:35:21', '2026-03-05 05:35:21');
+(22, 22, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-05 10:34:11', '2026-03-05 10:34:11'),
+(23, 23, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-06 06:11:15', '2026-03-06 06:11:15');
 
 -- --------------------------------------------------------
 
@@ -211,7 +213,8 @@ CREATE TABLE `personal_informations` (
 --
 
 INSERT INTO `personal_informations` (`id`, `application_id`, `firstname`, `middlename`, `lastname`, `suffix`, `gender`, `date_of_birth`, `place_of_birth`, `citizenship`, `home_address`, `contact_number`, `email_address`, `created_at`, `updated_at`) VALUES
-(17, 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-05 05:35:21', '2026-03-05 05:35:21');
+(22, 22, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-05 10:34:11', '2026-03-05 10:34:11'),
+(23, 23, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-06 06:11:15', '2026-03-06 06:11:15');
 
 -- --------------------------------------------------------
 
@@ -256,9 +259,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `firstname`, `lastname`, `email`, `mobile`, `role`, `created_at`) VALUES
-(36, 'Edgar', 'Baquiano', 'jbaqui20@gmail.com', '09888888888', 'applicant', '2026-03-05 03:06:59'),
-(45, 'Josh', 'Baquiano', 'joshbaquiano@gmail.com', '09123456789', 'applicant', '2026-03-05 05:09:52'),
-(48, 'Akademus', 'Mentora', 'testakademusmentora@gmail.com', '09987654321', 'applicant', '2026-03-05 06:56:45');
+(59, 'Onesys', 'Ecovis', 'testakademusmentora@gmail.com', '09123456789', 'applicant', '2026-03-05 10:31:40'),
+(60, 'Josh', 'Baquiano', 'joshbaquiano@gmail.com', '09987654321', 'applicant', '2026-03-06 05:54:26');
 
 -- --------------------------------------------------------
 
@@ -314,7 +316,9 @@ ALTER TABLE `applicant`
 -- Indexes for table `applications`
 --
 ALTER TABLE `applications`
-  ADD PRIMARY KEY (`application_id`);
+  ADD PRIMARY KEY (`application_id`),
+  ADD KEY `fk_application_applicant` (`applicant_id`),
+  ADD KEY `fk_applications_program` (`program_id`);
 
 --
 -- Indexes for table `class_schedules`
@@ -328,13 +332,15 @@ ALTER TABLE `class_schedules`
 -- Indexes for table `educational_backgrounds`
 --
 ALTER TABLE `educational_backgrounds`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`educational_bg_id`),
+  ADD KEY `fk_education_bg_application` (`application_id`);
 
 --
 -- Indexes for table `family_backgrounds`
 --
 ALTER TABLE `family_backgrounds`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_fam_bg_application` (`application_id`);
 
 --
 -- Indexes for table `payment`
@@ -346,7 +352,8 @@ ALTER TABLE `payment`
 -- Indexes for table `personal_informations`
 --
 ALTER TABLE `personal_informations`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_personal_info_application` (`application_id`);
 
 --
 -- Indexes for table `programs`
@@ -375,13 +382,13 @@ ALTER TABLE `academic_years`
 -- AUTO_INCREMENT for table `applicant`
 --
 ALTER TABLE `applicant`
-  MODIFY `applicant_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `applicant_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `class_schedules`
@@ -393,19 +400,19 @@ ALTER TABLE `class_schedules`
 -- AUTO_INCREMENT for table `educational_backgrounds`
 --
 ALTER TABLE `educational_backgrounds`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `educational_bg_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `family_backgrounds`
 --
 ALTER TABLE `family_backgrounds`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `personal_informations`
 --
 ALTER TABLE `personal_informations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `programs`
@@ -417,7 +424,7 @@ ALTER TABLE `programs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- Constraints for dumped tables
@@ -430,11 +437,37 @@ ALTER TABLE `applicant`
   ADD CONSTRAINT `fk_applicant_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `applications`
+--
+ALTER TABLE `applications`
+  ADD CONSTRAINT `fk_application_applicant` FOREIGN KEY (`applicant_id`) REFERENCES `applicant` (`applicant_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_application_program` FOREIGN KEY (`program_id`) REFERENCES `programs` (`program_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_applications_program` FOREIGN KEY (`program_id`) REFERENCES `programs` (`program_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `class_schedules`
 --
 ALTER TABLE `class_schedules`
   ADD CONSTRAINT `fk_schedule_academic_year` FOREIGN KEY (`academic_year_id`) REFERENCES `academic_years` (`year_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_schedule_program` FOREIGN KEY (`program_id`) REFERENCES `programs` (`program_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `educational_backgrounds`
+--
+ALTER TABLE `educational_backgrounds`
+  ADD CONSTRAINT `fk_education_bg_application` FOREIGN KEY (`application_id`) REFERENCES `applications` (`application_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `family_backgrounds`
+--
+ALTER TABLE `family_backgrounds`
+  ADD CONSTRAINT `fk_fam_bg_application` FOREIGN KEY (`application_id`) REFERENCES `applications` (`application_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `personal_informations`
+--
+ALTER TABLE `personal_informations`
+  ADD CONSTRAINT `fk_personal_info_application` FOREIGN KEY (`application_id`) REFERENCES `applications` (`application_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
