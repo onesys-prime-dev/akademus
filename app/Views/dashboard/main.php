@@ -8,9 +8,17 @@
     <title>Akademus | <?= $title ?></title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= base_url('assets/css/dashboardcontainer.css') . '?v=' . time(); ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') . '?v=' . time(); ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/applicantform.css') . '?v=' . time(); ?>">
+
+    <!-- Layouts CSS Styles -->
+    <link rel="stylesheet" href="<?= base_url('assets/css/layout/dashboardcontainer.css') . '?v=' . time(); ?>">
+
+    <!-- Components CSS Styles -->
+    <link rel="stylesheet" href="<?= base_url('assets/css/components/header.css') . '?v=' . time(); ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/components/sidebar.css') . '?v=' . time(); ?>">
+
+    <!-- Pages CSS Styles -->
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/dashboard.css') . '?v=' . time(); ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/applicantform.css') . '?v=' . time(); ?>">
 </head>
 <body>
     <div class="sidebar-container">
@@ -18,14 +26,14 @@
     </div>
 
     <main class="main-content">
-        <div class="header">
+        <div class="dashboard-header">
             <h1><?= $title ?></h1>
-            <div class="application-status">Approve</div>
+            <div class="application-status-badge">Approve</div>
         </div>
 
         <div class="content-container">
             <!-- reusable content goes here -->
-            <?= view($page_content) ?>
+            <?= $this->include($page_content) ?>
         </div>
     </main>
 </body>

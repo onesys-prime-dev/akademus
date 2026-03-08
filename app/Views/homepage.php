@@ -3,8 +3,8 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8"/>
-        <link rel="stylesheet" href="<?= base_url('assets/css/global.css') . '?v=' . time(); ?>">
-        <link rel="stylesheet" href="<?= base_url('assets/css/homepage.css') . '?v=' . time(); ?>">
+        <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css') . '?v=' . time(); ?>">
+        <link rel="stylesheet" href="<?= base_url('assets/css/pages/homepage.css') . '?v=' . time(); ?>">
     </head>
     <body>
         <div class="homepage">
