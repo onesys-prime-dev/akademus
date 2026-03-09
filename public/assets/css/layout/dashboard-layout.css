@@ -1,0 +1,23 @@
+/* assets/css/layout/dashboard-layout.css */
+
+.dashboard-container {
+    display: flex;
+}
+
+.sidebar-container {
+    width: 320px;
+    height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-lg);
+}

@@ -30,7 +30,7 @@
                     <!-- Desktop CTA -->
                     <div class="CREATE-ACCOUNT">
                         <div class="CREATE-ACCOUNT-2"></div>
-                        <a class="text-wrapper-2" href="<?= base_url('sign_in') ?>">Get Started</a>
+                        <a class="text-wrapper-2" href="<?= base_url('sign-in') ?>">Get Started</a>
                     </div>
 
                     <!-- Mobile Hamburger -->

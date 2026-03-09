@@ -130,7 +130,7 @@
 
         </div>
 
-        <a href="<?= base_url('logout') ?>" class="sidebar-logout">
+        <a href="<?= base_url('logout') ?>" class="btn-accent sidebar-logout">
             <span>Logout</span>
         </a>
 

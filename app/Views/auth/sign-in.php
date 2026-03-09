@@ -4,7 +4,7 @@
     <form 
         id="sign-in-form"
         class="form-container"
-        action="<?= base_url('sign_in/login') ?>" 
+        action="<?= base_url('sign-in/login') ?>" 
         method="post"
     >
         <div class="input-container">
@@ -23,10 +23,10 @@
             <a href="#">Forgot Password?</a>
         </div>
 
-        <button type="submit" id="sign-in-button" class="submit-btn">Sign In</button>
+        <button type="submit" id="sign-in-button" class="auth-btn btn-primary">Sign In</button>
 
         <div class="switch-to-sign-up">
-            <span>Don't have an account? <a href="<?= base_url('/sign_up') ?>">Click here</a></span>
+            <span>Don't have an account? <a href="<?= base_url('/sign-up') ?>">Click here</a></span>
         </div>
     </form>
 </div>
