@@ -29,13 +29,21 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/components/form-field.css') . '?v=' . time(); ?>">
 
     <!-- Pages CSS Styles -->
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/dashboard.css') . '?v=' . time(); ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/applicantform.css') . '?v=' . time(); ?>">
+    <?php
+    $pageName = basename($page_content);
+    $cssPath = FCPATH . "assets/css/pages/{$pageName}.css";
+
+    if (file_exists($cssPath)):
+    ?>
+    <link rel="stylesheet" href="<?= base_url("assets/css/pages/{$pageName}.css?v=" . time()) ?>">
+    <?php endif; ?>
+    
 </head>
+
 <body>
     <div class="dashboard-container">
         <div class="sidebar-container">
-            <?= view('partials/sidebar') ?>
+            <?= view('applicant/components/sidebar') ?>
         </div>
 
         <main class="main-content">
