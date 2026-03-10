@@ -6,7 +6,7 @@
     <div class="sidebar-top-and-links">
         <div class="sidebar-top">
             <a href="<?= base_url('/dashboard') ?>" class="brand">
-                <img src="<?= base_url('assets/images/logo_akademus.png') ?>">
+                <img src="<?= !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png') ?>">
                 <div class="header-wrapper">
                     <p>AKADEMUS</p>
                     <span>Admission Portal</span>

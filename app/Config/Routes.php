@@ -35,3 +35,14 @@ $routes->get('requirements/step/(:num)', 'Requirements::getStep/$1');
 
 // get programs
 $routes->get('get-programs', 'Program::getPrograms');
+
+
+// Admin Auth
+$routes->get('admin/login',  'ThemeController::adminLogin');
+$routes->post('admin/login', 'ThemeController::adminLoginPost');
+$routes->get('admin/logout', 'ThemeController::adminLogout');
+
+// Theme Editor
+$routes->get('admin/theme',       'ThemeController::index');
+$routes->post('admin/theme/save', 'ThemeController::save');
+$routes->get('admin/theme/json',  'ThemeController::getThemeJson');  // used by portal views

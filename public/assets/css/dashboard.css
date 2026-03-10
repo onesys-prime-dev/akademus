@@ -1,7 +1,7 @@
 .profile-banner {
     width: 100%;
     height: fit-content;
-    background-color: #0040A6;
+    background-color: var(--primary);
     border-radius: 15px;
     display: flex;
     flex-direction: column;
@@ -21,7 +21,7 @@
     }
 
     .banner-name-header span {
-        color: #FFB200;
+        color: var(--accent);
     }
 
 .banner-header-info {
@@ -45,7 +45,7 @@
 .profile-banner-applicant-id-box {
         width: fit-content;
         padding: 8px 14px 14px;
-        background-color: rgba(28, 82, 169, 1);
+        background-color: var(--primary-light);
         border-radius: 10px;
         border: 1px solid rgba(185, 185, 185, 1);
         display: flex;
@@ -61,7 +61,7 @@
         .profile-banner-applicant-id-box p {
             font-size: 24px;
             font-weight: 700;
-            color: #FFB200;
+            color: var(--accent);
         }
 
     .lower-profile-banner {
@@ -78,19 +78,19 @@
 
     .lower-profile-banner .quick-actions a {
         text-decoration: none;
-        color: #0040A6;
+        color: var(--accent-text);
         font-size: 14px;
         font-weight: 600;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 12px 18px;
-        background-color: #FFB200;
+        background-color: var(--accent);
         border-radius: 8px;
     }
 
     .lower-profile-banner .quick-actions a:hover {
-        background-color: #e2a004;
+        opacity: 0.85;
         transition: 0.2s;
     }
 
@@ -117,7 +117,7 @@
 
         .app-progress-header span {
             font-size: 32px;
-            color: #0040A6;
+            color: var(--primary);
             font-weight: 900;
         }
 
@@ -303,8 +303,13 @@
                     align-items: center;
                     justify-content: center;
                     padding: 6px 24px;
-                    background-color: #0040A6;
+                    background-color: var(--primary);
                     border-radius: 8px;
+                }
+
+                .continue-dashboard-btn:hover {
+                    background-color: var(--primary-dark);
+                    transition: 0.2s;
                 }
 
     .document-checklist-summary {
@@ -335,7 +340,7 @@
                 .documents-current-progress {
                     width: 30%;
                     height: 12px;
-                    background-color: #0040A6;
+                    background-color: var(--primary);
                 }
 
             .documents-progress-legend-container {
@@ -367,14 +372,14 @@
                     color: #000000;
                 }
 
-/* PAYMENT NOTIFICATION *//* PAYMENT NOTIFICATION *//* PAYMENT NOTIFICATION *//* PAYMENT NOTIFICATION *//* PAYMENT NOTIFICATION */
+/* PAYMENT NOTIFICATION *//* PAYMENT NOTIFICATION *//* PAYMENT NOTIFICATION *//* PAYMENT NOTIFICATION */
 .payment-notification-container {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    background-color: #0040A6;
+    background-color: var(--primary);
     border-radius: 15px;
     margin: 20px 0;
 }
@@ -398,13 +403,18 @@
         
     .payment-notification-container .pay-now-btn {
         text-decoration: none;
-        color: #0040A6;
+        color: var(--accent-text);
         font-size: 14px;
         font-weight: 600;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 6px 24px;
-        background-color: #FFB200;
+        background-color: var(--accent);
         border-radius: 8px;
+    }
+
+    .payment-notification-container .pay-now-btn:hover {
+        opacity: 0.85;
+        transition: 0.2s;
     }

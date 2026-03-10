@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\ApplicantModel;
+use App\Models\ThemeModel; // ← ADDED
 
 class Dashboard extends BaseController
 {
@@ -18,15 +19,17 @@ class Dashboard extends BaseController
         // }
 
         $applicantModel = new ApplicantModel();
+        $themeModel     = new ThemeModel(); // ← ADDED
 
         $applicant = $applicantModel
             ->where('user_id', session()->get('user_id'))
             ->first();
 
-        $data['title'] = 'Dashboard';
-        $data['page_content'] = 'dashboard/menu/dashboard';
+        $data['title']            = 'Dashboard';
+        $data['page_content']     = 'dashboard/menu/dashboard';
         $data['applicant_number'] = $applicant['applicant_number'] ?? 'N/A';
-        $data['firstname'] = session()->get('firstname');
+        $data['firstname']        = session()->get('firstname');
+        $data['theme']            = $themeModel->getAllSettings(); // ← ADDED
 
         return view('dashboard/main', $data);
 

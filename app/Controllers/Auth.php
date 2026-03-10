@@ -7,6 +7,7 @@ use App\Models\ProgramModel;
 use App\Models\ApplicantModel;
 use App\Models\ApplicantsViewModel;
 use App\Services\EmailService;
+use App\Models\ThemeModel;
 
 class Auth extends BaseController
 {
@@ -21,16 +22,20 @@ class Auth extends BaseController
             ]);
         }
 
-        $data['title']           = 'Sign In';
-        $data['auth_header']     = 'Welcome Back!';
-        $data['auth_sub_header'] = 'Sign in to continue your application.';
-        $data['auth_field']      = 'auth/sign_in';
+        $themeModel = new ThemeModel();
+$data['theme'] = $themeModel->getAllSettings();
 
-        return view('auth/main', $data);
+$data['title']           = 'Sign In';
+$data['auth_header']     = 'Welcome Back!';
+$data['auth_sub_header'] = 'Sign in to continue your application.';
+$data['auth_field']      = 'auth/sign_in';
+
+return view('auth/main', $data);
     }
 
     public function sign_up()
     {
+        $themeModel   = new ThemeModel();
         $programModel = new ProgramModel();
         $programs = $programModel->findAll();
 
@@ -66,18 +71,19 @@ class Auth extends BaseController
 }
 
         $data = [
-            'title'           => 'Sign Up',
-            'auth_header'     => 'Create Account',
-            'auth_sub_header' => 'Start your admission journey today.',
-            'auth_field'      => 'auth/sign_up',
-            'programs'        => $programs
-        ];
-
+    'title'           => 'Sign Up',
+    'auth_header'     => 'Create Account',
+    'auth_sub_header' => 'Start your admission journey today.',
+    'auth_field'      => 'auth/sign_up',
+    'programs'        => $programs,
+    'theme'           => $themeModel->getAllSettings()
+];
         return view('auth/main', $data);
     }
 
     public function success($applicantNumber = null)
     {
+        $themeModel = new ThemeModel();
         $applicantNumber = session()->getFlashdata('applicant_number');
 
         $data['title'] = 'Success';

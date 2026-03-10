@@ -8,9 +8,9 @@
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font);
     height: 100vh;
-    background: linear-gradient(-20deg, #0D50BB, #0b2f69, #0D50BB, #0e2f6e);
+    background: linear-gradient(-20deg, var(--primary), var(--primary-dark), var(--primary), var(--primary-dark));
     background-size: 400% 400%;
     animation: gradientBG 10s ease infinite;
 }
@@ -42,7 +42,7 @@ body {
     .brand img {
         width: 82px;
         height: 82px;
-        border-radius: 20px;
+        border-radius: var(--radius);
     }
 
 .nav-links {
@@ -59,18 +59,18 @@ body {
         text-decoration: none;
         font-size: 18px;
         padding: 20px 30px;
-        border-radius: 5px;
+        border-radius: var(--radius);
         transition: background-color 0.3s ease;
     }
 
     .nav-links a:hover p {
-        color: #FFB200;
+        color: var(--accent);
     }
 
     .nav-links p {
         color: white;
         font-size: 24px;
-        border-radius: 5px;
+        border-radius: var(--radius);
     }
 
 .external-link-container {
@@ -88,7 +88,7 @@ body {
     .external-link-container a .logo {
         width: 50px;
         height: 50px;
-        border-radius: 10px;
+        border-radius: var(--radius);
         margin-right: 14px;
     }
 
@@ -116,8 +116,8 @@ body {
 .main-card {
     width: 60%;
     height: fit-content;
-    background: linear-gradient(180deg,rgba(255, 255, 255, 0.61),rgba(138, 140, 202, 0.61));
-    border-radius: 30px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.61), rgba(138, 140, 202, 0.61));
+    border-radius: var(--radius);
     display: flex;
     padding: 40px 0;
 }
@@ -143,7 +143,7 @@ body {
 
         .left-content-container a {
             text-decoration: none;
-            color: #0040A6;
+            color: var(--primary);
             display: flex;
             gap: 14px;
             width: fit-content;
@@ -187,7 +187,7 @@ body {
             .left-tagline-container .tagline span {
                 font-size: 48px;
                 font-weight: 900;
-                color: #FFB200;
+                color: var(--accent);
             }
 
             .left-tagline-container span {
@@ -203,14 +203,14 @@ body {
              .steps-container .step {
                 display: flex;
                 align-items: center;
-                gap: 14px;  
+                gap: 14px;
             }
 
             .steps-container .step .step-number {
                 width: 30px;
                 height: 30px;
-                border: 1px solid #FFB200;
-                border-radius: 100px;
+                border: 1px solid var(--accent);
+                border-radius: var(--radius);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -234,7 +234,7 @@ body {
 
             .auth-header-container h2 {
                 font-size: 36px;
-                color: #0040A6;
+                color: var(--primary);
                 font-weight: 600;
                 line-height: 1;
             }
@@ -251,8 +251,8 @@ body {
             flex-direction: row;
             width: 100%;
             height: 48px;
-            background: #F2F4F5;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: var(--radius);
             padding: 4px;
         }
 
@@ -265,7 +265,7 @@ body {
                 font-size: 16px;
                 color: #656070;
                 font-weight: 600;
-                border-radius: 8px;
+                border-radius: var(--radius);
                 transition: background-color 0.3s ease, color 0.3s ease;
             }
 
@@ -274,7 +274,7 @@ body {
             }
 
             .switch-auth-toggle .active {
-                background: #0040A6;
+                background: var(--primary);
                 color: white;
             }
 
@@ -307,9 +307,9 @@ body {
                 width: 100%;
                 height: 45px;
                 border: 1px solid #D9D9D9;
-                background: #D9D9D9;
+                background: rgba(255, 255, 255, 0.6);
                 opacity: 60%;
-                border-radius: 12px;
+                border-radius: var(--radius);
                 padding: 0 16px;
                 color: #000;
                 font-weight: 700;
@@ -322,17 +322,16 @@ body {
 
             .input-field input:focus {
                 outline: none;
-                border-color: #0040A6;
-                background: #D9D9D9;
+                border-color: var(--primary);
+                background: rgba(255, 255, 255, 0.8);
                 opacity: 80%;
             }
-
 
             .input-field select:hover {
                 cursor: pointer;
             }
 
-            /* Edit the select field to change the color of the first option*/
+            /* Edit the select field to change the color of the first option */
             .input-field select {
                 color: #9b9999; /* placeholder color */
             }
@@ -344,7 +343,7 @@ body {
             .two-input-fields {
                 display: flex;
                 width: 100%;
-                gap: 8px;               
+                gap: 8px;
             }
 
             .forgot-pass {
@@ -365,18 +364,18 @@ body {
             .submit-btn {
                 width: 100%;
                 height: 48px;
-                background: #0040A6;
+                background: var(--primary);
                 color: white;
                 font-size: 16px;
                 font-weight: 600;
                 border: none;
-                border-radius: 12px;
+                border-radius: var(--radius);
                 margin-top: 20px;
                 transition: background-color 0.2s ease;
             }
 
             .submit-btn:hover {
-                background: #003080;
+                background: var(--primary-dark);
                 cursor: pointer;
             }
 
@@ -391,22 +390,22 @@ body {
 
             .switch-to-sign-up a {
                 color: #F2F4F5;
-                text-decoration: underline
+                text-decoration: underline;
             }
 
             .note-container {
                 display: flex;
                 flex-direction: column;
                 margin-top: 20px;
-                border: 1px solid rgba(0, 64, 166, 0.4);   /* 40% opacity */
-                background-color: rgba(0, 64, 166, 0.2);   /* 20% opacity */
-                border-radius: 12px;
+                border: 1px solid rgba(from var(--primary) r g b / 0.4);
+                background-color: rgba(from var(--primary) r g b / 0.2);
+                border-radius: var(--radius);
                 padding: 6px 12px;
             }
 
             .note-container span {
                 font-size: 14px;
-                color: #0040A6;
+                color: var(--primary);
                 font-weight: 600;
             }
 
@@ -429,9 +428,9 @@ body {
     .applicant-id-box {
         width: 100%;
         padding: 14px 14px 30px 14px;
-        background-color: rgba(0, 64, 166, 0.2);
-        border-radius: 10px;
-        border: 1px solid rgba(0, 64, 166, 0.4);
+        background-color: rgba(from var(--primary) r g b / 0.2);
+        border-radius: var(--radius);
+        border: 1px solid rgba(from var(--primary) r g b / 0.4);
         display: flex;
         flex-direction: column;
         gap: 4px;
@@ -441,13 +440,13 @@ body {
         .applicant-id-box span {
             font-size: 14px;
             font-weight: 600;
-            color: #0040A6;
+            color: var(--primary);
         }
 
         .applicant-id-box p {
             font-size: 24px;
             font-weight: 700;
-            color: #031D46;
+            color: var(--primary-dark);
         }
 
     .go-back-link-btn {
@@ -456,19 +455,19 @@ body {
         align-items: center;
         width: 100%;
         height: 48px;
-        background: #0040A6;
+        background: var(--primary);
         color: white;
         font-size: 16px;
         font-weight: 600;
         border: none;
-        border-radius: 12px;
+        border-radius: var(--radius);
         margin-top: 20px;
         transition: background-color 0.2s ease;
         text-decoration: none;
     }
 
     .go-back-link-btn:hover {
-        background: #003080;
+        background: var(--primary-dark);
         cursor: pointer;
     }
 

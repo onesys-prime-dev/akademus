@@ -3,17 +3,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akademus | <?= $title ?></title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akademus | <?= $title ?></title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= base_url('assets/css/auth.css') . '?v=' . time(); ?>">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --primary: <?= $theme['primary_color'] ?? '#0040A6' ?>;
+    --primary-dark: <?= $theme['primary_dark'] ?? '#003080' ?>;
+    --accent: <?= $theme['accent_color'] ?? '#FFB200' ?>;
+    --accent-text: <?= $theme['accent_text'] ?? '#002d7a' ?>;
+    --radius: <?= $theme['border_radius'] ?? '12px' ?>;
+    --font: '<?= $theme['font_family'] ?? 'Poppins' ?>', sans-serif;
+}
+</style>
+
+<link rel="stylesheet" href="<?= base_url('assets/css/auth.css') . '?v=' . time(); ?>">
+
 </head>
 <body>
     <div class="header">
         <a href="<?= base_url('/') ?>" class="brand">
-            <img src="<?= base_url('assets/images/logo_akademus.png') ?>">
+            <img src="<?= !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png') ?>">
         </a>
 
         <div class="nav-links">
@@ -47,7 +60,7 @@
             <div class="left">
                 <div class="left-content-container">
                     <a href="<?= base_url('/') ?>" class="brand">
-                        <img src="<?= base_url('assets/images/logo_akademus.png') ?>">
+                        <img src="<?= !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png') ?>">
                         <div class="header-wrapper">
                             <p>AKADEMUS</p>
                             <span>Admission System</span>
