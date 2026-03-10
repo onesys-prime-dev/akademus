@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class ApplicantModel extends Model
 {
-    protected $table = 'applicant';
+    protected $table = 'applicants';
     protected $primaryKey = 'applicant_id';
     
     protected $allowedFields = [
