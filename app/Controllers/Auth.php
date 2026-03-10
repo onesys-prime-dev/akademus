@@ -56,14 +56,14 @@ class Auth extends BaseController
         // }
 
         if ($this->request->isAJAX()) {
-            return $this->response->setJSON([
-                'title'     => 'Sign Up',
-                'header'    => 'Create Account',
-                'subheader' => 'Start your admission journey today.',
-                'form'      => view('auth/sign_up'),
-                'programs'  => $programs 
-            ]);
-        }
+    return $this->response->setJSON([
+        'title'     => 'Sign Up',
+        'header'    => 'Create Account',
+        'subheader' => 'Start your admission journey today.',
+        'form'      => view('auth/sign_up', ['programs' => $programs]),
+        'programs'  => $programs 
+    ]);
+}
 
         $data = [
             'title'           => 'Sign Up',
@@ -90,45 +90,38 @@ class Auth extends BaseController
     }
 
     public function register()
-    {
-        helper(['form']);
+{
+    dd($this->request->getPost());
+    $rules = [
+        'firstname' => 'required',
+        'lastname'  => 'required',
+        'email'     => 'required|valid_email|is_unique[users.email]',
+        'mobile' => 'required|min_length[10]|max_length[13]',
+        'program'   => 'required',
+    ];
 
-        $rules = [
-            'firstname' => 'required',
-            'lastname'  => 'required',
-            'email'     => 'required|valid_email|is_unique[users.email]',
-            'mobile'    => 'required|numeric|min_length[10]|max_length[11]',
-            'program'   => 'required',
-        ];
+    if (!$this->validate($rules)) {
+        return redirect()->back()->withInput()->with('error', 'Validation failed');
+    }
 
-        if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('error', 'Validation failed');
-            // return view('auth/sign_up', [
-            //     'validation' => $this->validator
-            // ]);
-        }
+    $userModel      = new UserModel();
+    $applicantModel = new ApplicantModel();
+    $programModel   = new ProgramModel();
 
-        $userModel = new UserModel();
-        $applicantModel = new ApplicantModel();
-        $programModel = new ProgramModel();
+    $programId = $this->request->getPost('program');
+    $program   = $programModel->find($programId);
 
-        $programId = $this->request->getPost('program');
+    if (!$program) {
+        return redirect()->back()->with('error', 'Invalid program selected');
+    }
 
-        // verification of provided programs (bs compsci, BSIT, etc.)
-        $program = $programModel->find($programId);
+    $tempPassword   = bin2hex(random_bytes(6));
+    $hashedPassword = password_hash($tempPassword, PASSWORD_DEFAULT);
 
-        if (!$program) {
-            return redirect()->back()->with('error', 'Invalid program selected');
-        }
+    $db = \Config\Database::connect();
+    $db->transBegin();
 
-        // auto generate temporary password :D
-        $tempPassword = bin2hex(random_bytes(6));
-        $hashedPassword = password_hash($tempPassword, PASSWORD_DEFAULT);
-
-        $db = \Config\Database::connect();
-        $db->transBegin();
-
-        // INSERT USER 1st
+    try {
         $userModel->insert([
             'firstname' => $this->request->getPost('firstname'),
             'lastname'  => $this->request->getPost('lastname'),
@@ -136,86 +129,56 @@ class Auth extends BaseController
             'mobile'    => $this->request->getPost('mobile'),
             'role'      => 'applicant'
         ]);
-        
+
         $userId = $userModel->getInsertID();
 
-        // applicant_num generator
-        // e.g. #APP-2026-00001
-
-        // INSERT APPLICANT first (without applicant_number)
-        if (!$applicantModel->insert([
-            'user_id' => $userId,
-            'program_id' => $programId,
-            'applicant_number' => null,
-            'password' => $hashedPassword,
-            'temp_password' => 1,
-            'application_status' => 'pending',
-            'application_date' => date('Y-m-d H:i:s')
-        ])) {
-            throw new \Exception('Applicant creation failed');
+        if (!$userId) {
+            throw new \Exception('User insert failed');
         }
-        // {
-        //     dd($applicantModel->errors());
-        // };
+
+        if (!$applicantModel->insert([
+            'user_id'            => $userId,
+            'program_id'         => $programId,
+            'applicant_number'   => null,
+            'password'           => $hashedPassword,
+            'temp_password'      => 1,
+            'application_status' => 'pending',
+            'application_date'   => date('Y-m-d H:i:s')
+        ])) {
+            throw new \Exception('Applicant insert failed: ' . json_encode($applicantModel->errors()));
+        }
 
         $applicantId = $applicantModel->getInsertID();
-
-        if (!$applicantId) {
-            throw new \Exception('Applicant insert failed');
-        }
-
-        // generate applicant number safely using primary key
-        $year = date('Y');
-        $sequence = str_pad($applicantId, 5, '0', STR_PAD_LEFT);
-
+        $year        = date('Y');
+        $sequence    = str_pad($applicantId, 5, '0', STR_PAD_LEFT);
         $applicantNumber = "APP-$year-$sequence";
 
-        // update record with generated applicant number
         $applicantModel->update($applicantId, [
             'applicant_number' => $applicantNumber
         ]);
 
-        $db->transComplete(); // test
+        $db->transComplete();
 
-        EmailService::sendWelcomeEmail(
+        // Send email and dump error if it fails
+        $emailSent = EmailService::sendWelcomeEmail(
             $this->request->getPost('email'),
             $tempPassword
         );
 
-        // $session = session();
-        // $session->set('applicant_id', $applicantNumber);
+        if (!$emailSent) {
+            // Temporary: show why email failed
+            $email = \Config\Services::email();
+            dd($email->printDebugger(['headers', 'subject', 'body']));
+        }
 
-        // function will send the autogenerated pass sa email ni user
-        // $email = \Config\Services::email();
+        return redirect()->to('success')->with('applicant_number', $applicantNumber);
 
-        // $email->setFrom('yourgmail@gmail.com', 'Akademus Portal');
-        // $email->setTo($this->request->getPost('email'));
-        // $email->setSubject('Your Akademus Temporary Account');
-        // $email->setMessage("
-        // Welcome to Akademus Portal
-
-        // Your account has been created successfully.
-        
-        // Portal: " . base_url('sign_in') . "
-
-        // Email: " .$this->request->getPost('email') . "
-        // Temporary Password: $tempPassword 
-
-        // Please login
-        // ");
-
-        // if (!$email->send()) {
-        //     echo $email->printDebugger(['headers','subject','body']);
-        //     exit;
-        // } 
-        // $email->send(); 
-        // if (!$email->send()) {
-        //     log_message('error', $email->printDebugger(['headers']));
-        // }
-        
-        return redirect()->to('/success')->with('applicant_number', $applicantNumber);
-        //return redirect()->to('/sign_in')->with('success', 'Account created successfully.\n Check your email for temporary login credentials');    
+    } catch (\Exception $e) {
+        $db->transRollback();
+        log_message('error', 'Registration failed: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Registration failed: ' . $e->getMessage());
     }
+}
 
     public function login()
     {
