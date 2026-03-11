@@ -50,3 +50,6 @@ $routes->get('admin/theme/json',  'ThemeController::getThemeJson');  // used by 
 
 //faq
 $routes->get('faq', 'Faq::index');
+
+//Calculator
+$routes->get('tuition-fee-calculator', 'Dashboard::tuitionCalculator');

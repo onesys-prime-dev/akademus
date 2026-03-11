@@ -50,4 +50,13 @@ class Dashboard extends BaseController
 
         return view('dashboard/main', $data);
     }
+    public function tuitionCalculator()
+{
+    $themeModel = new \App\Models\ThemeModel();
+    $data['theme']        = $themeModel->getAllSettings();
+    $data['title']        = 'Tuition Fee Calculator';
+    $data['active_menu']  = 'tuition_calculator';
+    $data['page_content'] = 'dashboard/support/tuition_fee_calculator';
+    return view('dashboard/main', $data);
+}
 }
