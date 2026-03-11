@@ -27,6 +27,10 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/components/buttons.css') . '?v=' . time(); ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/components/card.css') . '?v=' . time(); ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/components/form-field.css') . '?v=' . time(); ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/components/form-progress.css') . '?v=' . time(); ?>">
+
+    <!-- Layouts CSS Styles -->
+    <link rel="stylesheet" href="<?= base_url('assets/css/utilities/utilities.css') . '?v=' . time(); ?>">
 
     <!-- Pages CSS Styles -->
     <?php

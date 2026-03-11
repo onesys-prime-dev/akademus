@@ -32,6 +32,7 @@ $routes->post('applicant-form/get-drafts', 'Applicant\ApplicantFormController::g
 // requirement steps routes
 $routes->get('requirements', 'Applicant\RequirementsController::index');
 $routes->get('requirements/step/(:num)', 'Applicant\RequirementsController::getStep/$1');
+$routes->post('requirements/update/(:num)', 'Applicant\RequirementsController::updateDocument/$1');
 
 // get programs
 $routes->get('get-programs', 'Program\ProgramController::getPrograms');

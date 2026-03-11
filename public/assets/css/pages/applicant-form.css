@@ -7,84 +7,6 @@
     gap: 20px;
 }
 
-    /* APPLICANT FORM PROGRESS */
-    .form-progress {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        padding: 20px 40px 30px;
-        gap: 20px;
-    }
-
-        .form-progress__title {
-            font-size: 18px;
-            font-weight: 500;
-        }
-
-        .form-progress__timeline {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-        }
-
-            .form-progress__step {
-                width: fit-content;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                gap: 10px;
-            }
-
-                .form-progress__step span {
-                    width: 60px;
-                    white-space: nowrap;
-                    flex: none;
-                    display: inline-block;
-                    min-width: max-content;
-                    text-align: center;
-                    font-size: 12px;
-                    font-weight: 500;
-                    color: var(--text-muted);
-                }
-
-            .form-progress__circle {
-                width: 30px;
-                height: 30px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 100%;
-                background-color: var(--border-muted);
-                border: var(--border-muted);
-                font-size: 16px;
-                font-weight: 500;
-            }
-
-                .form-progress__circle-active {
-                    background-color: var(--color-accent);
-                }
-
-                .form-progress__circle-done {
-                    background-color: var(--color-primary);
-                    color: var(--text-inverse);
-                }
-                
-            .form-progress__line {
-                width: 100%;
-                height: 2px;
-                margin-top: 13px;
-                background-color: var(--border-muted);
-            }
-
-                .form-progress__line-active {
-                    background-color: var(--color-accent);
-                }
-
-                .form-progress__line-done {
-                    background-color: var(--color-primary);
-                }
-
     /* APPLICANT FORM CONTENT */
     .applicant-form__content {
         width: 100%;
@@ -113,10 +35,6 @@
             display: flex;
             gap: 10px;
         }   
-
-        .form-actions__buttons .hidden {
-            display: none;
-        }
 
         
         /* FORM */

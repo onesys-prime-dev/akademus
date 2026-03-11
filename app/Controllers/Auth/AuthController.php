@@ -222,6 +222,7 @@ class AuthController extends BaseController
             'role'            => $user['role'],
             'applicant_number'=> $user['applicant_number'], 
             'applicant_id'    => $user['applicant_id'],
+            'program_id'    => $user['program_id'],
             'program_name'    => $user['program_name'],
             'logged_in'       => true
         ]);
