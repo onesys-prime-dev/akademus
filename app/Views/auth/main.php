@@ -20,6 +20,7 @@
 </style>
 
 <link rel="stylesheet" href="<?= base_url('assets/css/auth.css') . '?v=' . time(); ?>">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
 </head>
 <body>
 
@@ -31,24 +32,49 @@
         </a>
 
         <div class="nav-links">
-            <!---<a href="<?= base_url('/') ?>"><p>Home</p></a>--->
+            <!--<a href="<?= base_url('/') ?>"><p>Home</p></a>-->
             <a href="<?= base_url('about-us') ?>"><p>About Us</p></a>
             <a href="<?= base_url('features') ?>"><p>Features</p></a>
-
             <div class="nav-dropdown">
                 <p class="nav-dropdown-trigger">Services ▾</p>
                 <div class="nav-dropdown-menu">
-                    <a href="#">Mentora</a>
                     <a href="#">Learnix</a>
+                    <a href="#">Mentora</a>
                     <a href="#">SIS</a>
                 </div>
             </div>
-
             <a href="<?= base_url('contact') ?>"><p>Contact</p></a>
         </div>
 
-        <!--<a href="<?= base_url('sign_in') ?>" class="get-started-btn">Get Started</a> -->
+        <div class="nav-right">
+            <!--<a href="<?= base_url('sign_in') ?>" class="get-started-btn">Get Started</a>-->
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
     </div>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobile-menu">
+        <!--<a href="<?= base_url('/') ?>">Home</a>-->
+        <a href="<?= base_url('about-us') ?>">About Us</a>
+        <a href="<?= base_url('features') ?>">Features</a>
+        <div class="mobile-dropdown">
+            <div class="mobile-dropdown-trigger" id="mobile-services-trigger">Services ▾</div>
+            <div class="mobile-dropdown-items" id="mobile-services-items">
+                <a href="#">Learnix</a>
+                <a href="#">Mentora</a>
+                <a href="#">SIS</a>
+            </div>
+        </div>
+        <a href="<?= base_url('contact') ?>">Contact</a>
+        <a href="<?= base_url('sign_in') ?>" class="mobile-get-started">Get Started</a>
+    </div>
+
+    <!-- OVERLAY -->
+    <div class="mobile-overlay" id="mobile-overlay"></div>
 
     <!-- MAIN CARD -->
     <div class="main-container">
@@ -112,20 +138,21 @@
     </div>
 
 <script>
-    const toggleSignIn = document.getElementById('toggle-sign-in');
-    const toggleSignUp = document.getElementById('toggle-sign-up');
+    // AUTH TOGGLE
+    const toggleSignIn  = document.getElementById('toggle-sign-in');
+    const toggleSignUp  = document.getElementById('toggle-sign-up');
     const formContainer = document.getElementById('auth-form-container');
-    const headerTitle = document.querySelector('#auth-header h2');
+    const headerTitle   = document.querySelector('#auth-header h2');
     const headerSubtitle = document.querySelector('#auth-header span');
 
     function loadAuth(url, activeBtn) {
         fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(r => r.json())
         .then(data => {
-            document.title = "Akademus | " + data.title;
-            headerTitle.textContent = data.header;
+            document.title           = "Akademus | " + data.title;
+            headerTitle.textContent  = data.header;
             headerSubtitle.textContent = data.subheader;
-            formContainer.innerHTML = data.form;
+            formContainer.innerHTML  = data.form;
 
             if (data.programs) {
                 const select = document.getElementById('program');
@@ -165,6 +192,96 @@
     if (window.location.pathname.includes('success')) {
         document.querySelector('.switch-auth-toggle').style.display = 'none';
     }
+
+    // TURNSTILE MODAL
+    let widgetId = null;
+
+    document.addEventListener('click', function(e) {
+
+        // Open modal
+        if (e.target && e.target.id === 'sign-up-button') {
+            const form = document.getElementById('sign-up-form');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const modal = document.getElementById('turnstile-modal');
+            modal.style.display = 'flex';
+
+            if (widgetId !== null) {
+                turnstile.reset(widgetId);
+            } else {
+                widgetId = turnstile.render('#turnstile-widget', {
+                    sitekey: '1x00000000000000000000AA',
+                    theme: 'light',
+                    callback: function(token) {
+                        modal.style.display = 'none';
+                        const form = document.getElementById('sign-up-form');
+                        const formData = new FormData(form);
+
+                        fetch(form.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                window.location.href = data.redirect;
+                            } else {
+                                const existing = document.querySelector('.alert-error');
+                                if (existing) existing.remove();
+                                const err = document.createElement('div');
+                                err.className = 'alert alert-error';
+                                err.textContent = data.message || 'Something went wrong.';
+                                form.prepend(err);
+                            }
+                        });
+                    },
+                    'error-callback': function() {
+                        turnstile.reset(widgetId);
+                    }
+                });
+            }
+        }
+
+        // Cancel button
+        if (e.target && e.target.id === 'turnstile-cancel') {
+            document.getElementById('turnstile-modal').style.display = 'none';
+            if (widgetId !== null) turnstile.reset(widgetId);
+        }
+
+        // Backdrop click
+        if (e.target && e.target.id === 'turnstile-modal') {
+            e.target.style.display = 'none';
+            if (widgetId !== null) turnstile.reset(widgetId);
+        }
+    });
+
+    // HAMBURGER MENU
+    const hamburger      = document.getElementById('hamburger');
+    const mobileMenu     = document.getElementById('mobile-menu');
+    const overlay        = document.getElementById('mobile-overlay');
+    const servicesTrigger = document.getElementById('mobile-services-trigger');
+    const servicesItems  = document.getElementById('mobile-services-items');
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        mobileMenu.classList.toggle('open');
+        overlay.classList.toggle('open');
+    });
+
+    overlay.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        overlay.classList.remove('open');
+    });
+
+    servicesTrigger.addEventListener('click', () => {
+        servicesItems.classList.toggle('open');
+        servicesTrigger.classList.toggle('open');
+    });
 </script>
 </body>
 </html>
