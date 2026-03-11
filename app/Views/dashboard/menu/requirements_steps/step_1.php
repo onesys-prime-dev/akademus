@@ -1,4 +1,4 @@
-<!-- dashboard/menu/requirements_steps/step_1.php -->
+<!-- dashboard/menu/requirements_steps/step_1.php
 
 <form 
     action=""
@@ -79,4 +79,4 @@
             </div>
         </div>
     </div>
-</form>
+</form> -->
