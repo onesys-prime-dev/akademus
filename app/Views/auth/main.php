@@ -8,15 +8,19 @@
 <link href="https://fonts.googleapis.com/css2?family=<?= urlencode($theme['font_family'] ?? 'Poppins') ?>:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-:root {
-    --primary:      <?= $theme['primary_color'] ?? '#0040A6' ?>;
-    --primary-dark: <?= $theme['primary_dark']  ?? '#003080' ?>;
-    --primary-light:<?= $theme['primary_light'] ?? '#1a55c0' ?>;
-    --accent:       <?= $theme['accent_color']  ?? '#FFB200' ?>;
-    --accent-text:  <?= $theme['accent_text']   ?? '#002d7a' ?>;
-    --radius:       <?= $theme['border_radius'] ?? '12px'    ?>;
-    --font:         '<?= $theme['font_family']  ?? 'Poppins' ?>', sans-serif;
-}
+<style>
+    :root {
+        --primary:       <?= esc($theme['primary_color']    ?? '#0040a6') ?>;
+        --primary-dark:  <?= esc($theme['primary_dark']     ?? '#002d7a') ?>;
+        --primary-light: <?= esc($theme['primary_light']    ?? '#1a55c0') ?>;
+        --primary-soft:  <?= esc($theme['primary_soft']     ?? '#e8f0ff') ?>;
+        --sidebar:       <?= esc($theme['sidebar_color']    ?? '#002d7a') ?>;
+        --accent:        <?= esc($theme['accent_color']     ?? '#ffb200') ?>;
+        --accent-text:   <?= esc($theme['accent_text']      ?? '#002d7a') ?>;
+        --radius:        <?= esc($theme['border_radius']    ?? '8px') ?>;
+        --font:          '<?= esc($theme['font_family']     ?? 'Sora') ?>';
+    }
+</style>
 </style>
 
 <link rel="stylesheet" href="<?= base_url('assets/css/auth.css') . '?v=' . time(); ?>">

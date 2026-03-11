@@ -4,7 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akademus | Theme Customizer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800
+&family=Plus+Jakarta+Sans:wght@400;500;600;700;800
+&family=DM+Sans:wght@400;500;600;700
+&family=Outfit:wght@400;500;600;700;800
+&family=Nunito:wght@400;600;700;800
+&family=Inter:wght@400;500;600;700;800
+&family=Poppins:wght@400;500;600;700;800
+&family=Raleway:wght@400;500;600;700;800
+&family=Montserrat:wght@400;500;600;700;800
+&family=Geist:wght@400;500;600;700;800
+&family=Space+Grotesk:wght@400;500;600;700
+&family=Lexend:wght@400;500;600;700
+&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #f0f4f8; font-family: 'Sora', sans-serif; overflow: hidden; }
@@ -113,6 +125,9 @@
             display: flex; align-items: center; gap: 10px; padding: 9px 12px;
             border: 1.5px solid #dde3f0; border-radius: 8px; cursor: pointer;
             transition: all 0.18s; background: #fff; margin-bottom: 6px;
+            max-height: 320px;
+    overflow-y: auto;
+    padding-right: 4px;
         }
         .font-option:hover { border-color: #94a3b8; }
         .font-option.on { border-color: #0040a6; background: #e8eef8; }
@@ -156,7 +171,15 @@
         }
         .preview-topbar-left { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
         .preview-topbar-title { font-size: 13px; font-weight: 700; color: #0d1e38; display: flex; align-items: center; gap: 8px; }
-        .live-badge { padding: 3px 8px; background: #dcfce7; color: #166534; font-size: 9px; font-weight: 700; border-radius: 99px; animation: pulse 2s infinite; }
+        .live-badge {
+    padding: 3px 8px;
+    background: #f0fdf4;
+    color: #15803d;
+    font-size: 9px; font-weight: 700;
+    border-radius: 4px; /* square-ish instead of pill */
+    letter-spacing: 0.5px;
+    animation: pulse 2s infinite;
+}
         @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
 
         /* ── PAGE SELECTOR DROPDOWN ── */
@@ -216,7 +239,13 @@
         .toast.show { display: flex; animation: toastIn 0.3s cubic-bezier(.4,0,.2,1); }
         @keyframes toastIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 
-        .tag-new { font-size: 8px; font-weight: 700; background: #fef3c7; color: #b45309; padding: 1px 5px; border-radius: 4px; vertical-align: middle; margin-left: 4px; }
+        .tag-new {
+    font-size: 8px; font-weight: 700;
+    background: #eff6ff; color: #1d4ed8;
+    padding: 2px 6px; border-radius: 4px;
+    vertical-align: middle; margin-left: 4px;
+    letter-spacing: 0.4px; text-transform: uppercase;
+}
     </style>
 </head>
 <body>
@@ -226,7 +255,7 @@ $csrfToken = csrf_token();
 $csrfHash  = csrf_hash();
 ?>
 
-<div class="toast" id="toast">✓ Theme saved & applied to portal!</div>
+<div class="toast" id="toast">Theme saved & applied to portal</div>
 
 <div class="shell">
 
@@ -239,13 +268,28 @@ $csrfHash  = csrf_hash();
                 <?= esc($theme['logo_text'] ?? 'AK') ?>
             <?php endif; ?>
         </div>
-        <div class="isb-item on"><span>🎨</span><div class="isb-tip">Theme Editor</div></div>
-        <div class="isb-item"><span>👥</span><div class="isb-tip">Applicants</div></div>
-        <div class="isb-item"><span>📋</span><div class="isb-tip">Requirements</div></div>
-        <div class="isb-item"><span>📊</span><div class="isb-tip">Analytics</div></div>
-        <div class="isb-spacer"></div>
-        <a href="<?= base_url('admin/logout') ?>" class="isb-item"><span>🚪</span><div class="isb-tip">Logout</div></a>
-    </div>
+        <div class="isb-item on">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#94a3b8"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/><path d="M2 12h20"/></svg>
+    <div class="isb-tip">Theme Editor</div>
+</div>
+<div class="isb-item">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#94a3b8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <div class="isb-tip">Applicants</div>
+</div>
+<div class="isb-item">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#94a3b8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+    <div class="isb-tip">Requirements</div>
+</div>
+<div class="isb-item">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#94a3b8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    <div class="isb-tip">Analytics</div>
+</div>
+<div class="isb-spacer"></div>
+<a href="<?= base_url('admin/logout') ?>" class="isb-item">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#94a3b8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    <div class="isb-tip">Logout</div>
+</a>
+            </div>
 
     <!-- ── EDITOR PANEL ── -->
     <div class="editor">
@@ -253,10 +297,10 @@ $csrfHash  = csrf_hash();
             <div class="editor-title">Theme Customizer</div>
             <div class="editor-sub">Customize how the applicant portal looks</div>
             <div class="tabs">
-                <button class="tab on" data-tab="branding"><span class="tab-icon">🏷️</span>Branding</button>
-                <button class="tab" data-tab="colors"><span class="tab-icon">🎨</span>Colors</button>
-                <button class="tab" data-tab="typography"><span class="tab-icon">✏️</span>Font</button>
-                <button class="tab" data-tab="layout"><span class="tab-icon">⚡</span>Layout</button>
+                <button class="tab on" data-tab="branding">Branding</button>
+<button class="tab" data-tab="colors">Colors</button>
+<button class="tab" data-tab="typography">Typography</button>
+<button class="tab" data-tab="layout">Layout</button>
             </div>
         </div>
 
@@ -265,7 +309,7 @@ $csrfHash  = csrf_hash();
             <!-- BRANDING TAB -->
             <div class="tab-pane on" id="tab-branding">
                 <div class="sec-head">
-                    <div class="sec-head-row"><span class="sec-icon">🏷️</span><span class="sec-title">Logo & Identity</span></div>
+<div class="sec-head-row"><span class="sec-title">Logo & Identity</span></div>
                     <div class="sec-desc">Set your institution's name and logo mark</div>
                 </div>
                 <div class="form-group">
@@ -469,7 +513,19 @@ const PRESETS = [
     { id:'rose',     name:'Rose Gold',     desc:'Warm and approachable',      primary_color:'#9f1239', primary_dark:'#881337', primary_light:'#be123c', accent_color:'#fda4af', accent_text:'#881337', sidebar_color:'#4c0519' },
 ];
 
-const FONTS = ['Sora','Plus Jakarta Sans','DM Sans','Outfit','Nunito'];
+const FONTS = [
+    'Sora',
+    'Plus Jakarta Sans',
+    'DM Sans',
+    'Outfit',
+    'Nunito',
+    'Inter',
+    'Poppins',
+    'Raleway',
+    'Montserrat',
+    'Space Grotesk',
+    'Lexend',
+];
 const RADII = [{ label:'Sharp', value:'4px' },{ label:'Default', value:'8px' },{ label:'Rounded', value:'14px' },{ label:'Pill', value:'22px' }];
 
 const PAGE_NAMES = {
