@@ -418,3 +418,20 @@
         opacity: 0.85;
         transition: 0.2s;
     }
+    .step-bar-done {
+    background-color: var(--primary);
+}
+
+.step-line-done {
+    background-color: var(--primary);
+}
+
+.step-circle-done {
+    background-color: var(--primary);
+    color: #ffffff;
+}
+
+.step-label-done {
+    color: var(--primary);
+    font-weight: 600;
+}

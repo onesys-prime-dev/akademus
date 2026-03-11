@@ -624,7 +624,7 @@ function renderDashboard(p, pd, acc, at, f, rad, lt) {
                     <div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">Hello, <span style="color:${acc};">Juan.</span></div>
                     <div style="display:flex;gap:6px;">
                         <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:${parseInt(rad)/2}px;padding:4px 8px;">
-                            <div style="font-size:6px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;">ID</div>
+                            <div style="font-size:8px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;">ID</div>
                             <div style="font-size:9px;font-weight:800;color:${acc};">#APP-2026-00001</div>
                         </div>
                         <div style="padding:5px 10px;background:${acc};border-radius:${parseInt(rad)/1.5}px;font-size:8px;font-weight:800;color:${at};align-self:center;">Upload Docs</div>
@@ -663,25 +663,25 @@ function renderSignIn(p, pd, acc, at, f, rad, lt) {
             <span style="font-size:7px;color:#fff;white-space:nowrap;">Proceed to Mentora →</span>
         </div>
         <!-- MAIN CARD AREA -->
-        <div style="flex:1;display:flex;justify-content:center;align-items:center;padding:6px 16px 12px;">
-            <div style="width:88%;height:92%;background:linear-gradient(180deg,rgba(255,255,255,0.61),rgba(138,140,202,0.61));border-radius:${rad};display:flex;overflow:hidden;">
+        <div style="flex:1;display:flex;justify-content:center;align-items:center;padding:2px 12px 6px;">
+            <div style="width:92%;height:88%;background:linear-gradient(180deg,rgba(255,255,255,0.61),rgba(138,140,202,0.61));border-radius:${rad};display:flex;overflow:hidden;">
                 <!-- LEFT -->
                 <div style="width:50%;padding:14px 22px;border-right:1px solid #D9D9D9;display:flex;flex-direction:column;justify-content:center;gap:12px;">
                     <!-- Logo + name -->
                     <div style="display:flex;align-items:center;gap:8px;">
                         <div style="width:26px;height:26px;border-radius:${rad};overflow:hidden;flex-shrink:0;">${logoHtml}</div>
                         <div>
-                            <div style="font-size:13px;font-weight:700;color:${p};line-height:1;">AKADEMUS</div>
-                            <div style="font-size:7px;color:${p};">Admission System</div>
+                            <div style="font-size:13px;font-weight:700;color:${p};line-height:1.2;word-break:break-word;max-width:150px;">${state.app_name || 'AKADEMUS'}</div>
+<div style="font-size:7px;color:${p};">Admission System</div>
                         </div>
                     </div>
                     <!-- Tagline -->
                     <div style="display:flex;flex-direction:column;gap:8px;">
                         <div>
-                            <div style="font-size:16px;font-weight:900;color:#fff;line-height:1.1;">Your Future</div>
-                            <div style="font-size:16px;font-weight:900;color:#fff;line-height:1.1;">Starts <span style="color:${acc};">Here</span></div>
+                            <div style="font-size:18px;font-weight:900;color:#fff;line-height:1.1;">Your Future</div>
+                            <div style="font-size:18px;font-weight:900;color:#fff;line-height:1.1;">Starts <span style="color:${acc};">Here</span></div>
                         </div>
-                        <div style="font-size:7px;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.4;">Complete your admission entirely online — from document submission to enrollment.</div>
+                        <div style="font-size:8px;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.4;">Complete your admission entirely online — from document submission to enrollment.</div>
                         <!-- Steps -->
                         <div style="display:flex;flex-direction:column;gap:6px;">
                             ${[['1','Create your applicant account'],['2','Submit required documents'],['3','Track your application status']].map(([n,l])=>`
@@ -735,23 +735,23 @@ function renderSignUp(p, pd, acc, at, f, rad, lt) {
             <span style="font-size:7px;color:#fff;white-space:nowrap;">Proceed to Mentora →</span>
         </div>
         <!-- MAIN CARD AREA -->
-        <div style="flex:1;display:flex;justify-content:center;align-items:center;padding:6px 16px 12px;">
+        <div style="flex:1;display:flex;justify-content:center;align-items:center;padding:2px 12px 6px;">
             <div style="width:88%;height:94%;background:linear-gradient(180deg,rgba(255,255,255,0.61),rgba(138,140,202,0.61));border-radius:${rad};display:flex;overflow:hidden;">
                 <!-- LEFT -->
                 <div style="width:50%;padding:14px 22px;border-right:1px solid #D9D9D9;display:flex;flex-direction:column;justify-content:center;gap:12px;">
                     <div style="display:flex;align-items:center;gap:8px;">
                         <div style="width:26px;height:26px;border-radius:${rad};overflow:hidden;flex-shrink:0;">${logoHtml}</div>
                         <div>
-                            <div style="font-size:13px;font-weight:700;color:${p};line-height:1;">AKADEMUS</div>
-                            <div style="font-size:7px;color:${p};">Admission System</div>
+                            <div style="font-size:13px;font-weight:700;color:${p};line-height:1.2;word-break:break-word;max-width:150px;">${state.app_name || 'AKADEMUS'}</div>
+<div style="font-size:7px;color:${p};">Admission System</div>
                         </div>
                     </div>
                     <div style="display:flex;flex-direction:column;gap:8px;">
                         <div>
-                            <div style="font-size:16px;font-weight:900;color:#fff;line-height:1.1;">Your Future</div>
-                            <div style="font-size:16px;font-weight:900;color:#fff;line-height:1.1;">Starts <span style="color:${acc};">Here</span></div>
+                            <div style="font-size:12px;font-weight:900;color:#fff;line-height:1.1;">Your Future</div>
+                            <div style="font-size:12px;font-weight:900;color:#fff;line-height:1.1;">Starts <span style="color:${acc};">Here</span></div>
                         </div>
-                        <div style="font-size:7px;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.4;">Complete your admission entirely online — from document submission to enrollment.</div>
+                        <div style="font-size:8px;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.4;">Complete your admission entirely online — from document submission to enrollment.</div>
                         <div style="display:flex;flex-direction:column;gap:6px;">
                             ${[['1','Create your applicant account'],['2','Submit required documents'],['3','Track your application status']].map(([n,l])=>`
                             <div style="display:flex;align-items:center;gap:7px;">
@@ -794,7 +794,7 @@ function renderSignUp(p, pd, acc, at, f, rad, lt) {
                     <!-- Note box -->
                     <div style="border:1px solid rgba(0,64,166,0.4);background:rgba(0,64,166,0.2);border-radius:${rad};padding:4px 8px;">
                         <div style="font-size:7px;font-weight:600;color:${p};">Note:</div>
-                        <div style="font-size:6px;color:#031D46;font-weight:700;opacity:0.8;line-height:1.3;">Your final program will be confirmed in the Applicant Information Form.</div>
+                        <div style="font-size:8px;color:#031D46;font-weight:700;opacity:0.8;line-height:1.3;">Your final program will be confirmed in the Applicant Information Form.</div>
                     </div>
                     <div style="height:20px;background:${p};border-radius:${rad};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;color:#fff;">CREATE ACCOUNT</div>
                 </div>
@@ -935,23 +935,23 @@ function renderSuccess(p, pd, acc, at, f, rad, lt) {
             <span style="font-size:7px;color:#fff;white-space:nowrap;">Proceed to Mentora →</span>
         </div>
         <!-- MAIN CARD AREA -->
-        <div style="flex:1;display:flex;justify-content:center;align-items:center;padding:6px 16px 12px;">
+        <div style="flex:1;display:flex;justify-content:center;align-items:center;padding:2px 12px 6px;">
             <div style="width:88%;height:88%;background:linear-gradient(180deg,rgba(255,255,255,0.61),rgba(138,140,202,0.61));border-radius:${rad};display:flex;overflow:hidden;">
                 <!-- LEFT (same as sign-in) -->
                 <div style="width:50%;padding:14px 22px;border-right:1px solid #D9D9D9;display:flex;flex-direction:column;justify-content:center;gap:12px;">
                     <div style="display:flex;align-items:center;gap:8px;">
                         <div style="width:26px;height:26px;border-radius:${rad};overflow:hidden;flex-shrink:0;">${logoHtml}</div>
                         <div>
-                            <div style="font-size:13px;font-weight:700;color:${p};line-height:1;">AKADEMUS</div>
-                            <div style="font-size:7px;color:${p};">Admission System</div>
+                            <div style="font-size:13px;font-weight:700;color:${p};line-height:1.2;word-break:break-word;max-width:150px;">${state.app_name || 'AKADEMUS'}</div>
+<div style="font-size:7px;color:${p};">Admission System</div>
                         </div>
                     </div>
                     <div style="display:flex;flex-direction:column;gap:8px;">
                         <div>
-                            <div style="font-size:16px;font-weight:900;color:#fff;line-height:1.1;">Your Future</div>
-                            <div style="font-size:16px;font-weight:900;color:#fff;line-height:1.1;">Starts <span style="color:${acc};">Here</span></div>
+                            <div style="font-size:12px;font-weight:900;color:#fff;line-height:1.1;">Your Future</div>
+                            <div style="font-size:12px;font-weight:900;color:#fff;line-height:1.1;">Starts <span style="color:${acc};">Here</span></div>
                         </div>
-                        <div style="font-size:7px;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.4;">Complete your admission entirely online — from document submission to enrollment.</div>
+                        <div style="font-size:8px;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.4;">Complete your admission entirely online — from document submission to enrollment.</div>
                         <div style="display:flex;flex-direction:column;gap:6px;">
                             ${[['1','Create your applicant account'],['2','Submit required documents'],['3','Track your application status']].map(([n,l])=>`
                             <div style="display:flex;align-items:center;gap:7px;">

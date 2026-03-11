@@ -81,23 +81,29 @@ return view('auth/main', $data);
         return view('auth/main', $data);
     }
 
-    public function success($applicantNumber = null)
-    {
-        $themeModel = new ThemeModel();
-        $applicantNumber = session()->getFlashdata('applicant_number');
+    public function success()
+{
+    $themeModel = new ThemeModel();
+    $applicantNumber = session()->getFlashdata('applicant_number');
 
-        $data['title'] = 'Success';
-        $data['auth_header'] = 'Account Created!';
-        $data['auth_sub_header'] = 'Your unique Applicant ID has been assigned.';
-        $data['applicant_number'] = $applicantNumber;
-        $data['auth_field'] = 'auth/success';
-
-        return view('auth/main', $data);
+    if (!$applicantNumber) {
+        return redirect()->to('/sign_in');
     }
+
+    $data['title']            = 'Success';
+    $data['auth_header']      = 'Account Created!';
+    $data['auth_sub_header']  = 'Your unique Applicant ID has been assigned.';
+    $data['applicant_number'] = $applicantNumber;
+    $data['auth_field']       = 'auth/success';
+    $data['theme']            = $themeModel->getAllSettings();
+    $data['programs']         = [];
+
+    return view('auth/main', $data);
+}
 
     public function register()
 {
-    dd($this->request->getPost());
+    //dd($this->request->getPost());
     $rules = [
         'firstname' => 'required',
         'lastname'  => 'required',
@@ -174,7 +180,7 @@ return view('auth/main', $data);
         if (!$emailSent) {
             // Temporary: show why email failed
             $email = \Config\Services::email();
-            dd($email->printDebugger(['headers', 'subject', 'body']));
+            //dd($email->printDebugger(['headers', 'subject', 'body']));
         }
 
         return redirect()->to('success')->with('applicant_number', $applicantNumber);

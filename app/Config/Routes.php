@@ -46,3 +46,7 @@ $routes->get('admin/logout', 'ThemeController::adminLogout');
 $routes->get('admin/theme',       'ThemeController::index');
 $routes->post('admin/theme/save', 'ThemeController::save');
 $routes->get('admin/theme/json',  'ThemeController::getThemeJson');  // used by portal views
+
+
+//faq
+$routes->get('faq', 'Faq::index');

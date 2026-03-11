@@ -1,21 +1,35 @@
 <!-- HOMEPAGE NAVBAR | homepage.php  -->
-<?php $applicant_initials = 'JD' ?>
-<?php $applicant_number = session()->get('applicant_number')?>
+<!-- HOMEPAGE NAVBAR | sidebar.php  -->
+<?php 
+    $firstname = session()->get('firstname') ?? 'Applicant';
+    $lastname  = session()->get('lastname')  ?? '';
+    $fullname  = trim($firstname . ' ' . $lastname);
+
+    // Generate initials from name
+    $initials = strtoupper(substr($firstname, 0, 1) . substr($lastname, 0, 1));
+    if (empty(trim($initials))) $initials = 'AP';
+
+    $applicant_number = session()->get('applicant_number');
+
+    // Theme values
+    $app_name  = $theme['app_name']  ?? 'AKADEMUS';
+    $logo_url  = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png');
+?>
 
 <nav>
     <div class="sidebar-top-and-links">
         <div class="sidebar-top">
             <a href="<?= base_url('/dashboard') ?>" class="brand">
-                <img src="<?= !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png') ?>">
+                <img src="<?= $logo_url ?>">
                 <div class="header-wrapper">
-                    <p>AKADEMUS</p>
+                    <p><?= esc($app_name) ?></p>
                     <span>Admission Portal</span>
                 </div>
             </a>
 
             <div class="applicant-id-box">
                 <span>Applicant ID</span>
-                <p>#<?= $applicant_number ?></p>
+                <p>#<?= esc($applicant_number) ?></p>
             </div>
         </div>
 
@@ -82,11 +96,10 @@
     <div class="sidebar-bottom">
         <div class="profile-container">
             <div class="profile-picture">
-                <!-- <img src="<?= base_url('assets/images/profile-placeholder.png') ?>" alt="Profile Picture"> -->
-                <span><?= $applicant_initials ?></span>
+                <span><?= $initials ?></span>
             </div>
             <div class="profile-info">
-                <p>John Doe</p>
+                <p><?= esc($fullname) ?></p>
                 <span>Applicant</span>
             </div>
         </div>

@@ -18,11 +18,13 @@ class ApplicantForm extends BaseController
     }
 
     private function renderLayout(int $step) {
+         $themeModel = new \App\Models\ThemeModel();
         return view('dashboard/main', [
             'title' => 'Applicant Information Form',
             'page_content' => 'dashboard/menu/applicant_form',
             'initial_step' => $step,  // Pass to JS to load correct step
-            'max_steps' => $this->maxSteps
+            'max_steps' => $this->maxSteps,
+            'theme'         => $themeModel->getAllSettings()
         ]);
     }
 
