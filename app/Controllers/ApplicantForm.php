@@ -1,5 +1,5 @@
 <?php
-// ApplicantForm.php
+// app/Controllers/ApplicantForm.php
 
 namespace App\Controllers;
 
@@ -7,263 +7,235 @@ use App\Models\ApplicationModel;
 use App\Models\PersonalInformationModel;
 use App\Models\FamilyBackgroundModel;
 use App\Models\EducationalBackgroundModel;
+use App\Models\FormPageModel;
 
 class ApplicantForm extends BaseController
 {
-    protected $maxSteps = 4;
+    private function getEnabledPages(): array
+    {
+        return (new FormPageModel())->getEnabledOrdered();
+    }
 
-    public function index() {
-        // Default page load goes to step 1
+    private function getFormDataForPage(int $pageId, $applicationId): array
+    {
+        $application = (new ApplicationModel())->find($applicationId);
+        $personal    = (new PersonalInformationModel())->where('application_id', $applicationId)->first();
+        $family      = (new FamilyBackgroundModel())->where('application_id', $applicationId)->first();
+        $education   = (new EducationalBackgroundModel())->where('application_id', $applicationId)->first();
+
+        // ── Keyed by ACTUAL page_id from your form_pages table ──
+        $map = [
+            1 => array_merge($application ?? [], [  // Application Type
+                'sy_semester' => ($application['school_year'] ?? '') . ', ' . ($application['semester'] ?? '')
+            ]),
+            2 => $personal ?? [],                   // Personal Information
+            3 => $family   ?? [],                   // Family Background
+            4 => array_merge($education ?? [], [    // Educational Background
+                'school_year' => ($education['school_year_start'] ?? '') . '-' . ($education['school_year_end'] ?? '')
+            ]),
+        ];
+
+        return $map[$pageId] ?? [];
+    }
+
+    public function index()
+    {
         return $this->renderLayout(1);
     }
 
-    private function renderLayout(int $step) {
+    private function renderLayout(int $step)
+    {
+        $themeModel = new \App\Models\ThemeModel();
+        $theme      = $themeModel->getAllSettings();
+        $theme['primary_soft'] = $this->lightenHex($theme['primary_color'] ?? '#0040a6', 0.88);
+
+        $pages    = $this->getEnabledPages();
+        $maxSteps = count($pages);
+
         return view('dashboard/main', [
-            'title' => 'Applicant Information Form',
+            'title'        => 'Applicant Information Form',
             'page_content' => 'dashboard/menu/applicant_form',
-            'initial_step' => $step,  // Pass to JS to load correct step
-            'max_steps' => $this->maxSteps
+            'initial_step' => $step,
+            'max_steps'    => $maxSteps,
+            'theme'        => $theme,
         ]);
     }
 
-    public function getStep($step)
+    public function getStep(int $step)
     {
-        $step = (int) $step;
+        $pages    = $this->getEnabledPages();
+        $maxSteps = count($pages);
 
-        if ($step < 1 || $step > $this->maxSteps) {
+        if ($step < 1 || $step > $maxSteps) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        $applicant_id = session()->get('applicant_id'); // replace later with session
+        $page   = $pages[$step - 1];
+        $pageId = (int) $page['id'];
 
-        $applicationModel = new ApplicationModel();
-        $personalModel    = new PersonalInformationModel();
-        $familyModel      = new FamilyBackgroundModel();
-        $educationModel   = new EducationalBackgroundModel();
+        $applicantId = session()->get('applicant_id');
+        $formData    = [];
 
-        $application = $applicationModel
-            ->where('applicant_id', $applicant_id)
+        $application = (new ApplicationModel())
+            ->where('applicant_id', $applicantId)
             ->where('application_status !=', 'pending')
             ->first();
 
-        $formData = [];
-
         if ($application) {
-            $application_id = $application['application_id'];
-            
-            switch ($step) {
-                case 1:
-                    $formData = $application;
+            $formData = $this->getFormDataForPage($pageId, $application['application_id']);
+        }
 
-                    $formData['sy_semester'] = $formData['school_year'] . ', ' . $formData['semester'];
-                    break;
-
-                case 2:
-                    $formData = $personalModel
-                        ->where('application_id', $application_id)
-                        ->first();
-                    break;
-
-                case 3:
-                    $formData = $familyModel
-                        ->where('application_id', $application_id)
-                        ->first();
-                    break;
-
-                case 4:
-                    $formData = $educationModel
-                        ->where('application_id', $application_id)
-                        ->first();
-                        
-                    $formData['school_year'] = $formData['school_year_start'] . '-' . $formData['school_year_end'];
-                    break;
-            }
+        // Load view by page_id — step_1.php = Application Type, step_4.php = Educational Background, etc.
+        $viewFile = "dashboard/menu/applicant_form_steps/step_{$pageId}";
+        if (!file_exists(APPPATH . "Views/{$viewFile}.php")) {
+            $viewFile = 'dashboard/menu/applicant_form_steps/step_generic';
         }
 
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([
-                'title' => 'Applicant Information Form',
+                'title'    => 'Applicant Information Form',
                 'step_num' => $step,
-                'form' => view("dashboard/menu/applicant_form_steps/step_{$step}", [
-                    'step_num' => $step
+                'page_id'  => $pageId,
+                'form'     => view($viewFile, [
+                    'step_num' => $step,    // position: 1,2,3,4 — used for form id
+                    'page_id'  => $pageId,  // actual DB id — used for field configs
                 ]),
-                'formData' => $formData
+                'formData' => $formData,
             ]);
         }
 
         return $this->renderLayout($step);
     }
 
-    public function updateForm($step)
+    public function updateForm(int $step)
     {
-        $data = $this->request->getPost();
+        $data   = $this->request->getPost();
         $action = $data['action'] ?? 'draft';
 
-        // SAMPLE applicant_id
-        $applicant_id = session()->get('applicant_id');
+        $pages  = $this->getEnabledPages();
+        $page   = $pages[$step - 1] ?? null;
+        $pageId = $page ? (int)$page['id'] : null;
 
+        $applicantId      = session()->get('applicant_id');
         $applicationModel = new ApplicationModel();
 
-        // Check if draft application already exists
         $application = $applicationModel
-            ->where('applicant_id', $applicant_id)
+            ->where('applicant_id', $applicantId)
             ->where('application_status !=', 'submitted')
             ->first();
 
-        // If no application yet → create it (only once)
         if (!$application) {
-
-            $application_id = $applicationModel->insert([
-                'applicant_id' => $applicant_id,
-                'applicant_type' => $data['applicant_type'] ?? null,
-                'program_id' => $data['program_id'] ?? null,
-                'sy_semester' => $data['sy_semester'] ?? null,
-                'application_status' => $action === 'submit' ? 'pending' : 'draft'
+            $applicationId = $applicationModel->insert([
+                'applicant_id'       => $applicantId,
+                'applicant_type'     => $data['applicant_type'] ?? null,
+                'program_id'         => $data['program_id']     ?? null,
+                'sy_semester'        => $data['sy_semester']    ?? null,
+                'application_status' => $action === 'submit' ? 'pending' : 'draft',
             ]);
 
-            // Insert child rows immediately
-            (new PersonalInformationModel())->insert([
-                'application_id' => $application_id
-            ]);
-
-            (new FamilyBackgroundModel())->insert([
-                'application_id' => $application_id
-            ]);
-
-            (new EducationalBackgroundModel())->insert([
-                'application_id' => $application_id
-            ]);
-
+            (new PersonalInformationModel())->insert(['application_id' => $applicationId]);
+            (new FamilyBackgroundModel())->insert(['application_id'    => $applicationId]);
+            (new EducationalBackgroundModel())->insert(['application_id'=> $applicationId]);
         } else {
-            $application_id = $application['application_id'];
+            $applicationId = $application['application_id'];
         }
 
-        // Now ALL steps are updates
-        switch ($step) {
-            case 1:
-                $result = $this->updateApplication($data, $application_id, $action);
-                break;
+        // Route to correct model using page_id, NOT step position
+        $result = match($pageId) {
+            1 => $this->updateApplication($data, $applicationId, $action),           // Application Type
+            2 => $this->updatePersonalInformation($data, $applicationId),            // Personal Information
+            3 => $this->updateFamilyBackground($data, $applicationId),               // Family Background
+            4 => $this->updateEducationalBackground($data, $applicationId, $action), // Educational Background
+            default => true,
+        };
 
-            case 2:
-                $result = $this->updatePersonalInformation($data, $application_id);
-                break;
-
-            case 3:
-                $result = $this->updateFamilyBackground($data, $application_id);
-                break;
-
-            case 4:
-                $result = $this->updateEducationalBackground($data, $application_id, $action);
-                break;
-
-            default:
-                return $this->response->setJSON([
-                    'status' => 'error',
-                    'message' => 'Invalid step'
-                ]);
+        $isLastStep = ($step === count($pages));
+        if ($isLastStep && $action === 'submit') {
+            $applicationModel->update($applicationId, ['application_status' => 'pending']);
         }
 
         return $this->response->setJSON([
-            'status' => $result ? 'success' : 'error',
-            'message' => $result ? 'Step saved successfully' : 'Failed to save step'
+            'status'  => $result ? 'success' : 'error',
+            'message' => $result ? 'Step saved successfully' : 'Failed to save step',
         ]);
     }
-    
-    private function updateApplication($data, $application_id, $action)
-    {
-        $model = new ApplicationModel();
 
+    private function updateApplication($data, $applicationId, $action)
+    {
         $sy_and_semester = explode(',', $data['sy_semester'] ?? '', 2);
-
-        $school_year = trim($sy_and_semester[0] ?? null);
-        $semester    = trim($sy_and_semester[1] ?? null);
-
-        return $model->update($application_id, [
-            'applicant_type' => $data['applicant_type'] ?? null,
-            'program_id' => $data['program_id'] ?? null,
-            'school_year' => $school_year,
-            'semester' => $semester,
-            'application_status' => $action === 'submit' ? 'pending' : 'draft'
+        return (new ApplicationModel())->update($applicationId, [
+            'applicant_type'     => $data['applicant_type'] ?? null,
+            'program_id'         => $data['program_id']     ?? null,
+            'school_year'        => trim($sy_and_semester[0] ?? ''),
+            'semester'           => trim($sy_and_semester[1] ?? ''),
+            'application_status' => $action === 'submit' ? 'pending' : 'draft',
         ]);
     }
 
-    private function updatePersonalInformation($data, $application_id)
+    private function updatePersonalInformation($data, $applicationId)
     {
-        $model = new PersonalInformationModel();
-
-        return $model->where('application_id', $application_id)
+        return (new PersonalInformationModel())
+            ->where('application_id', $applicationId)
             ->set([
-                'firstname' => $data['firstname'] ?? null,
-                'middlename' => $data['middlename'] ?? null,
-                'lastname' => $data['lastname'] ?? null,
-                'suffix' => $data['suffix'] ?? null,
-                'gender' => $data['gender'] ?? null,
-                'date_of_birth' => $data['date_of_birth'] ?? null,
+                'firstname'      => $data['firstname']      ?? null,
+                'middlename'     => $data['middlename']     ?? null,
+                'lastname'       => $data['lastname']       ?? null,
+                'suffix'         => $data['suffix']         ?? null,
+                'gender'         => $data['gender']         ?? null,
+                'date_of_birth'  => $data['date_of_birth']  ?? null,
                 'place_of_birth' => $data['place_of_birth'] ?? null,
-                'citizenship' => $data['citizenship'] ?? null,
-                'home_address' => $data['home_address'] ?? null,
-                'phone_code' => $data['phone_code'] ?? null,
+                'citizenship'    => $data['citizenship']    ?? null,
+                'home_address'   => $data['home_address']   ?? null,
                 'contact_number' => $data['contact_number'] ?? null,
-                'email_address' => $data['email_address'] ?? null
-            ])
-            ->update();
+                'email_address'  => $data['email_address']  ?? null,
+            ])->update();
     }
 
-    private function updateFamilyBackground($data, $application_id)
+    private function updateFamilyBackground($data, $applicationId)
     {
-        $model = new FamilyBackgroundModel();
-
-        return $model->where('application_id', $application_id)
+        return (new FamilyBackgroundModel())
+            ->where('application_id', $applicationId)
             ->set([
-                // Father Details
-                'father_firstname' => $data['father_firstname'] ?? null,
-                'father_middlename' => $data['father_middlename'] ?? null,
-                'father_lastname' => $data['father_lastname'] ?? null,
-                'father_occupation' => $data['father_occupation'] ?? null,
-                'father_contact_number' => $data['father_contact_number'] ?? null,
-
-                // Mother Details
-                'mother_firstname' => $data['mother_firstname'] ?? null,
-                'mother_middlename' => $data['mother_middlename'] ?? null,
-                'mother_lastname' => $data['mother_lastname'] ?? null,
-                'mother_occupation' => $data['mother_occupation'] ?? null,
-                'mother_contact_number' => $data['mother_contact_number'] ?? null,
-
-                // Guardian Details
-                'guardian_name' => $data['guardian_name'] ?? null,
-                'guardian_relationship' => $data['guardian_relationship'] ?? null,
+                'father_firstname'        => $data['father_firstname']        ?? null,
+                'father_middlename'       => $data['father_middlename']       ?? null,
+                'father_lastname'         => $data['father_lastname']         ?? null,
+                'father_occupation'       => $data['father_occupation']       ?? null,
+                'father_contact_number'   => $data['father_contact_number']   ?? null,
+                'mother_firstname'        => $data['mother_firstname']        ?? null,
+                'mother_middlename'       => $data['mother_middlename']       ?? null,
+                'mother_lastname'         => $data['mother_lastname']         ?? null,
+                'mother_occupation'       => $data['mother_occupation']       ?? null,
+                'mother_contact_number'   => $data['mother_contact_number']   ?? null,
+                'guardian_name'           => $data['guardian_name']           ?? null,
+                'guardian_relationship'   => $data['guardian_relationship']   ?? null,
                 'guardian_contact_number' => $data['guardian_contact_number'] ?? null,
-
-                // Family Income
-                'annual_family_income' => $data['annual_family_income'] ?? null
-            ])
-            ->update();
+                'annual_family_income'    => $data['annual_family_income']    ?? null,
+            ])->update();
     }
 
-    private function updateEducationalBackground($data, $application_id, $action)
+    private function updateEducationalBackground($data, $applicationId, $action)
     {
-        $model = new EducationalBackgroundModel();
-
         $schoolYear = preg_split('/\s*-\s*/', $data['school_year'] ?? '');
 
-        $educationUpdated = $model->where('application_id', $application_id)
+        return (new EducationalBackgroundModel())
+            ->where('application_id', $applicationId)
             ->set([
-                'school_name' => $data['school_name'] ?? null,
-                'school_location' => $data['school_location'] ?? null,
-                'strand' => $data['strand'] ?? null,
-                'school_year_start' => $schoolYear[0] ?? null,
-                'school_year_end' => $schoolYear[1] ?? null,
-                'gwa' => $data['gwa'] ?? null,
-                'school_type' => $data['school_type'] ?? null
-            ])
-            ->update();
+                'school_name'       => $data['school_name']     ?? null,
+                'school_location'   => $data['school_location'] ?? null,
+                'strand'            => $data['strand']          ?? null,
+                'school_year_start' => $schoolYear[0]           ?? null,
+                'school_year_end'   => $schoolYear[1]           ?? null,
+                'gwa'               => $data['gwa']             ?? null,
+                'school_type'       => $data['school_type']     ?? null,
+            ])->update();
+    }
 
-        if ($action === 'submit' && $educationUpdated) {
-            (new ApplicationModel())->update($application_id, [
-                'application_status' => 'pending'
-            ]);
-        }
-
-        return $educationUpdated;
+    private function lightenHex(string $hex, float $amount = 0.88): string
+    {
+        $hex = ltrim($hex, '#');
+        $r   = (int)round(hexdec(substr($hex, 0, 2)) + (255 - hexdec(substr($hex, 0, 2))) * $amount);
+        $g   = (int)round(hexdec(substr($hex, 2, 2)) + (255 - hexdec(substr($hex, 2, 2))) * $amount);
+        $b   = (int)round(hexdec(substr($hex, 4, 2)) + (255 - hexdec(substr($hex, 4, 2))) * $amount);
+        return sprintf('#%02x%02x%02x', $r, $g, $b);
     }
 }
