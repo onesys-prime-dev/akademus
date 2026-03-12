@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akademus | <?= $title ?></title>
 
+    <?= theme_css_vars() ?>
+
     <!-- Base CSS Styles -->
     <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css') . '?v=' . time(); ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/base/reset.css') . '?v=' . time(); ?>">
@@ -22,8 +24,6 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/layout/dashboard-layout.css') . '?v=' . time(); ?>">
 
     <!-- Components CSS Styles -->
-    <link rel="stylesheet" href="<?= base_url('assets/css/components/header.css') . '?v=' . time(); ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/components/sidebar.css') . '?v=' . time(); ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/components/buttons.css') . '?v=' . time(); ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/components/card.css') . '?v=' . time(); ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/components/form-field.css') . '?v=' . time(); ?>">
@@ -45,19 +45,23 @@
 </head>
 
 <body>
-    <div class="dashboard-container">
-        <div class="sidebar-container">
-            <?= view('applicant/components/sidebar') ?>
+    <div class="sidebar-container">
+        <?= view('applicant/components/sidebar', ['theme' => $theme]) ?>
+    </div>
+
+    <main class="main-content">
+        <div class="header">
+            <h1><?= $title ?></h1>
+            <div class="application-status">Approve</div>
         </div>
 
-        <main class="main-content">
-            <?= $this->include('applicant/components/header') ?>
+        <div class="content-container">
+            <?= view($page_content) ?>
+        </div>
+    </main>
 
-            <div class="content-container">
-                <!-- reusable content goes here -->
-                <?= $this->include($page_content) ?>
-            </div>
-        </main>
-    </div>
+    <?php if (uri_string() !== 'faq'): ?>
+        <?= view('applicant/components/chat_widget', ['theme' => $theme]) ?>
+    <?php endif; ?>
 </body>
 </html>

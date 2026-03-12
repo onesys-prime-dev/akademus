@@ -36,3 +36,20 @@ $routes->post('requirements/update/(:num)', 'Applicant\RequirementsController::u
 
 // get programs
 $routes->get('get-programs', 'Program\ProgramController::getPrograms');
+
+// Admin Auth
+$routes->get('admin/login',  'ThemeController::adminLogin');
+$routes->post('admin/login', 'ThemeController::adminLoginPost');
+$routes->get('admin/logout', 'ThemeController::adminLogout');
+
+// Theme Editor
+$routes->get('admin/theme',       'ThemeController::index');
+$routes->post('admin/theme/save', 'ThemeController::save');
+$routes->get('admin/theme/json',  'ThemeController::getThemeJson');  // used by portal views
+
+
+//faq
+$routes->get('faq', 'Applicant\FaqController::index');
+
+//Calculator
+$routes->get('tuition-fee-calculator', 'Applicant\TuitionFeeCalculatorController::tuitionCalculator');

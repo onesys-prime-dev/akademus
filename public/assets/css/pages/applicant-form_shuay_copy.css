@@ -1,0 +1,224 @@
+/* assets/css/pages/applicantform.css */
+
+.applicant-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+    /* APPLICANT FORM CONTENT */
+    .applicant-form__content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 20px 40px;
+    }
+
+        .form-actions {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-default);
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+
+        .form-actions span {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        .form-actions__buttons {
+            display: flex;
+            gap: 10px;
+        }   
+
+        
+        /* FORM */
+        .applicant-form-step {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+            .form-section__header {
+                display: flex;
+                flex-direction: column;
+                gap: var(--space-sm);
+                margin-bottom: 10px;
+            }
+
+                .form-section__header h3 {
+                    font-size: 20px;
+                    font-weight: 600;
+                }
+
+                .form-section__header p {
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: color-mix(in srgb, var(--text-primary) 30%, transparent);
+                }
+        
+            /* EDUCATION LEVEL */
+            .education-options {
+                width: 100%;
+                display: flex;
+                gap: 80px;
+                padding: 0 40px;
+            }
+
+                .education-option {
+                    width: 350px;
+                    padding: 20px 20px 20px 25px;
+                    display: flex;
+                    gap: 10px;
+                    border: 1px solid color-mix(in srgb, var(--text-primary) 30%, transparent);
+                    border-radius: 10px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+
+                    .education-option input {
+                        align-self: baseline;
+                        margin-top: 4px;
+                        margin-right: 6px;
+                    }
+
+                    .education-option:has(input:checked) {
+                        border: 1px solid var(--border-black);
+                        background-color: color-mix(in srgb, var(--color-primary) 15%, transparent);;
+                    }
+
+                        .large-radio {
+                            transform: scale(1.5);
+                        }
+
+                    .education-option__content {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 2px;
+                    }
+
+                        .education-option__content h5 {
+                            font-size: 20px;
+                            font-weight: 600;
+                            line-height: 1;
+                        }
+
+                        .education-option__content span {
+                            font-size: 15px;
+                            font-weight: 600;
+                            color: color-mix(in srgb, var(--text-primary) 30%, transparent);
+                        }
+
+            /* PROGRAM AND SCHEDULE */
+            .program-section {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                margin-top: 15px;
+                gap: 20px;
+            }
+
+                .program-section__header {
+                    width: 100%;
+                    border-bottom: 1px solid var(--border-default);
+                    padding: 8px 10px;
+                }
+                
+                    .program-section__header h5 {
+                        font-size: 15px;
+                        font-weight: 500;
+                        color: var(--text-secondary);
+                    }
+                
+                .program-note-container {
+                    width: 100%;
+                    padding: 0 10px;
+                }
+
+                    .program-note {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        padding: 10px 20px;
+                        background-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+                        border: 1px solid color-mix(in srgb, var(--color-primary) 40%, transparent);
+                        border-radius: 15px;
+                        gap: var(--space-md);
+                    }
+
+                        .program-note h6 {
+                            font-size: 13px;
+                            font-weight: 500;
+                        }
+
+                        .program-choice {
+                            display: flex;
+                            flex-direction: column;
+                            gap: var(--space-xs);
+                        }
+
+                            .program-choice span {
+                                font-size: 12px;
+                                font-weight: 500;
+                                color: var(--text-muted);
+                            }
+
+                            .program-choice p {
+                                font-size: 14px;
+                                font-weight: 500;
+                                color: var(--text-primary);
+                            }
+            
+                /* FORM INPUT FIELDS */
+                .form-fields {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--space-lg);
+                    padding: 0 10px;
+                }
+
+                    .form-section {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                    }
+
+                        .form-section__title {
+                            width: 100%;
+                            border-bottom: 1px solid var(--border-default);
+                            padding-bottom: 6px;
+                        }
+
+                            .form-section__title h5 {
+                                font-size: 18px;
+                                font-weight: 500;
+                            }
+
+                            .category-text-color {
+                                color: var(--color-primary) !important;
+                            }
+
+                            .category-text-span {
+                                font-size: 14px !important;
+                                color: var(--text-secondary);
+                            }
+
+                        .form-rows {
+                            width: 100%;
+                            display: flex;
+                            flex-direction: column;
+                            padding: 16px;
+                            gap: var(--space-lg);
+                        }
+
+                        .form-row {
+                            display: flex;
+                            gap: 40px;
+                        }

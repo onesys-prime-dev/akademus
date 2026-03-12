@@ -1,139 +1,111 @@
 <!-- HOMEPAGE NAVBAR | homepage.php  -->
+<!-- HOMEPAGE NAVBAR | sidebar.php  -->
 <?php 
-    $firstname = session()->get('firstname') ?? '';
-    $lastname = session()->get('lastname') ?? '';
-    $fullname = $firstname . ' ' . $lastname;
-    $initials = strtoupper(substr($firstname, 0, 1) . substr($lastname, 0, 1) ?? '');
-    $applicant_number = session()->get('applicant_number') ?? '';
-    $role = ucwords(session()->get('role') ?? '');
+    $firstname = session()->get('firstname') ?? 'Applicant';
+    $lastname  = session()->get('lastname')  ?? '';
+    $fullname  = trim($firstname . ' ' . $lastname);
+
+    // Generate initials from name
+    $initials = strtoupper(substr($firstname, 0, 1) . substr($lastname, 0, 1));
+    if (empty(trim($initials))) $initials = 'AP';
+
+    $applicant_number = session()->get('applicant_number');
+
+    // Theme values
+    $app_name  = $theme['app_name']  ?? 'AKADEMUS';
+    $logo_url  = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png');
 ?>
 
-<nav class="sidebar">
-
-    <div class="sidebar-main">
-
-        <div class="sidebar-header">
-
-            <a href="<?= base_url('/dashboard') ?>" class="sidebar-brand">
-                <img src="<?= base_url('assets/images/logo_akademus.png') ?>">
-
-                <div class="sidebar-brand-text">
-                    <p>AKADEMUS</p>
+<nav>
+    <div class="sidebar-top-and-links">
+        <div class="sidebar-top">
+            <a href="<?= base_url('/dashboard') ?>" class="brand">
+                <img src="<?= $logo_url ?>">
+                <div class="header-wrapper">
+                    <p><?= esc($app_name) ?></p>
                     <span>Admission Portal</span>
                 </div>
             </a>
 
-            <div class="sidebar-applicant-id">
+            <div class="applicant-id-box">
                 <span>Applicant ID</span>
-                <p>#<?= $applicant_number ?></p>
+                <p>#<?= esc($applicant_number) ?></p>
             </div>
-
         </div>
 
-
-        <div class="sidebar-menu">
-
-            <div class="sidebar-group">
-
-                <p class="sidebar-group-title">MENU</p>
-
-                <div class="sidebar-group-links">
-
-                    <a href="<?= base_url('/dashboard') ?>" class="sidebar-link">
-                        <div class="sidebar-link-dot"></div>
+        <div class="sidebar-links">
+            <div class="group-container">
+                <p>MENU</p>
+                
+                <div class="grouped-links">
+                    <a href="<?= base_url('/dashboard') ?>" class="sidebar-nav-link">
+                        <div class="dotted-link"></div>
                         <span>Dashboard</span>
                     </a>
-
-                    <a href="<?= base_url('/applicant-form') ?>" class="sidebar-link">
-                        <div class="sidebar-link-dot"></div>
+                    <a href="<?= base_url('/applicant-form') ?>" class="sidebar-nav-link">
+                        <div class="dotted-link"></div>
                         <span>Applicant Form</span>
                     </a>
-
-                    <a href="<?= base_url('/requirements') ?>" class="sidebar-link">
-                        <div class="sidebar-link-dot"></div>
+                    <a href="<?= base_url('/requirements') ?>" class="sidebar-nav-link">
+                        <div class="dotted-link"></div>
                         <span>Requirements</span>
                     </a>
-
-                    <a href="<?= base_url('/tracking-progress') ?>" class="sidebar-link">
-                        <div class="sidebar-link-dot"></div>
+                    <a href="<?= base_url('/tracking-progress') ?>" class="sidebar-nav-link">
+                        <div class="dotted-link"></div>
                         <span>Tracking Progress</span>
                     </a>
-
                 </div>
-
             </div>
 
-
-            <div class="sidebar-group">
-
-                <p class="sidebar-group-title">PAYMENTS</p>
-
-                <div class="sidebar-group-links">
-
-                    <a href="<?= base_url('/admission-processing-fee') ?>" class="sidebar-link">
-                        <div class="sidebar-link-dot"></div>
+            <div class="group-container">
+                <p>PAYMENTS</p>
+                
+                <div class="grouped-links">
+                    <a href="<?= base_url('/admission-processing-fee') ?>" class="sidebar-nav-link">
+                        <div class="dotted-link"></div>
                         <span>Admission Processing Fee</span>
                     </a>
-
-                    <a href="<?= base_url('/reservation-fee') ?>" class="sidebar-link">
-                        <div class="sidebar-link-dot"></div>
+                    <a href="<?= base_url('/reservation-fee') ?>" class="sidebar-nav-link">
+                        <div class="dotted-link"></div>
                         <span>Reservation Fee</span>
                     </a>
-
                 </div>
-
             </div>
 
-
-            <div class="sidebar-group">
-
-                <p class="sidebar-group-title">SUPPORT</p>
-
-                <div class="sidebar-group-links">
-
-                    <a href="<?= base_url('/faq') ?>" class="sidebar-link">
-                        <div class="sidebar-link-dot"></div>
+            <div class="group-container">
+                <p>SUPPORT</p>
+                
+                <div class="grouped-links">
+                    <a href="<?= base_url('/faq') ?>" class="sidebar-nav-link">
+                        <div class="dotted-link"></div>
                         <span>FAQ & Chat Support</span>
                     </a>
-
-                    <a href="<?= base_url('/follow-up-messages') ?>" class="sidebar-link">
-                        <div class="sidebar-link-dot"></div>
+                    <a href="<?= base_url('/follow-up-messages') ?>" class="sidebar-nav-link">
+                        <div class="dotted-link"></div>
                         <span>Follow-Up Messages</span>
                     </a>
-
-                    <a href="<?= base_url('/tuition-fee-calculator') ?>" class="sidebar-link">
-                        <div class="sidebar-link-dot"></div>
+                    <a href="<?= base_url('/tuition-fee-calculator') ?>" class="sidebar-nav-link">
+                        <div class="dotted-link"></div>
                         <span>Tuition Fee Calculator</span>
                     </a>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
-
-    <div class="sidebar-footer">
-
-        <div class="sidebar-profile">
-
-            <div class="sidebar-profile-avatar">
+    <div class="sidebar-bottom">
+        <div class="profile-container">
+            <div class="profile-picture">
                 <span><?= $initials ?></span>
             </div>
-
-            <div class="sidebar-profile-info">
-                <p class="sidebar-profile-name"><?= $fullname ?></p>
-                <span class="sidebar-profile-role"><?= $role ?></span>
+            <div class="profile-info">
+                <p><?= esc($fullname) ?></p>
+                <span>Applicant</span>
             </div>
-
         </div>
 
-        <a href="<?= base_url('logout') ?>" class="btn-accent sidebar-logout">
+        <a href="<?= base_url('logout') ?>" class="logout-link">
             <span>Logout</span>
         </a>
-
     </div>
-
 </nav>

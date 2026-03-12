@@ -73,7 +73,7 @@
 #--------------------------------------------------------------------
 
 # email.fromEmail = 
-# email.fromName  = ''
+# email.fromName  =
 
 # email.SMTPHost  = 
 # email.SMTPUser  = 

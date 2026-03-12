@@ -8,6 +8,8 @@ use App\Controllers\BaseController;
 use App\Services\RequirementService;
 use App\Services\ApplicantDocumentService;
 
+use App\Models\ThemeModel;
+
 class RequirementsController extends BaseController
 {
     protected $requirementService;
@@ -30,6 +32,12 @@ class RequirementsController extends BaseController
             return redirect()->to('/sign-in');
         }
 
+        $themeModel = new ThemeModel();
+        $theme = $themeModel->getAllSettings();
+
+        // Compute primary_soft (lightened tint) from primary_color
+        $theme['primary_soft'] = $this->lightenHex($theme['primary_color'] ?? '#0040a6', 0.88);
+
         $categories = $this->requirementService->getCategories();
         $maxSteps = count($categories) + 1;
 
@@ -38,8 +46,23 @@ class RequirementsController extends BaseController
             'page_content' => 'applicant/requirements/requirements',
             'initial_step' => $step,  // Pass to JS to load correct step
             'max_steps' => $maxSteps,
-            'categories' => $categories
+            'categories' => $categories,
+            'theme'         => $theme
         ]);
+    }
+
+    private function lightenHex(string $hex, float $amount = 0.88): string
+    {
+        $hex = ltrim($hex, '#');
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+
+        $r = (int) round($r + (255 - $r) * $amount);
+        $g = (int) round($g + (255 - $g) * $amount);
+        $b = (int) round($b + (255 - $b) * $amount);
+
+        return sprintf('#%02x%02x%02x', $r, $g, $b);
     }
 
     public function getStep($step)

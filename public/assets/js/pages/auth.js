@@ -2,97 +2,147 @@
 
 const { baseUrl, signInUrl, signUpUrl } = window.authConfig;
 
-const toggleSignIn = document.getElementById('toggle-sign-in');
-const toggleSignUp = document.getElementById('toggle-sign-up');
-const formContainer = document.getElementById('auth-form-container');
-const headerTitle = document.querySelector('#auth-header h2');
-const headerSubtitle = document.querySelector('#auth-header span');
+// AUTH TOGGLE
+    const toggleSignIn  = document.getElementById('toggle-sign-in');
+    const toggleSignUp  = document.getElementById('toggle-sign-up');
+    const formContainer = document.getElementById('auth-form-container');
+    const headerTitle   = document.querySelector('#auth-header h2');
+    const headerSubtitle = document.querySelector('#auth-header span');
 
-function loadAuth(url, activeBtn) {
-    fetch(url, {
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
+    function loadAuth(url, activeBtn) {
+        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(r => r.json())
+        .then(data => {
+            document.title           = "Akademus | " + data.title;
+            headerTitle.textContent  = data.header;
+            headerSubtitle.textContent = data.subheader;
+            formContainer.innerHTML  = data.form;
 
-        // Update page title
-        document.title = "Akademus | " + data.title;
+            if (data.programs) {
+                const select = document.getElementById('program');
+                if (select) {
+                    select.innerHTML = '<option value="" disabled selected hidden>Select a Program</option>';
+                    data.programs.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.id;
+                        opt.textContent = p.name;
+                        select.appendChild(opt);
+                    });
+                }
+            }
 
-        // Update header
-        headerTitle.textContent = data.header;
-        headerSubtitle.textContent = data.subheader;
+            toggleSignIn.classList.remove('active');
+            toggleSignUp.classList.remove('active');
+            activeBtn.classList.add('active');
+            history.pushState(null, '', url);
+        });
+    }
 
-        // Inject form FIRST
-        formContainer.innerHTML = data.form;
+    toggleSignIn.addEventListener('click', () => loadAuth(`${signInUrl}`, toggleSignIn));
+    toggleSignUp.addEventListener('click', () => loadAuth(`${signUpUrl}`, toggleSignUp));
 
-        // ✅ Append programs if they exist (only for sign up)
-        if (data.programs) {
-            const select = document.getElementById('program');
+    window.addEventListener('popstate', () => {
+        const path = window.location.pathname;
+        if (path.includes('sign-up')) loadAuth(`${signUpUrl}`, toggleSignUp);
+        else loadAuth(`${signInUrl}`, toggleSignIn);
+    });
 
-            if (select) {
-                // Reset select (prevent duplicate options)
-                select.innerHTML = '<option value="" disabled selected hidden>Select a Program</option>';
+    document.addEventListener('DOMContentLoaded', () => {
+        const path = window.location.pathname;
+        if (path.includes('sign-up')) loadAuth(`${signUpUrl}`, toggleSignUp);
+        else if (path.includes('sign-in')) loadAuth(`${signInUrl}`, toggleSignIn);
+    });
 
-                data.programs.forEach(program => {
-                    const option = document.createElement('option');
-                    option.value = program.id;
-                    option.textContent = program.name;
-                    select.appendChild(option);
+    if (window.location.pathname.includes('success')) {
+        document.querySelector('.switch-auth-toggle').style.display = 'none';
+    }
+
+    // TURNSTILE MODAL
+    let widgetId = null;
+
+    document.addEventListener('click', function(e) {
+
+        // Open modal
+        if (e.target && e.target.id === 'sign-up-button') {
+            const form = document.getElementById('sign-up-form');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const modal = document.getElementById('turnstile-modal');
+            modal.style.display = 'flex';
+
+            if (widgetId !== null) {
+                turnstile.reset(widgetId);
+            } else {
+                widgetId = turnstile.render('#turnstile-widget', {
+                    sitekey: '1x00000000000000000000AA',
+                    theme: 'light',
+                    callback: function(token) {
+                        modal.style.display = 'none';
+                        const form = document.getElementById('sign-up-form');
+                        const formData = new FormData(form);
+
+                        fetch(form.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                window.location.href = data.redirect;
+                            } else {
+                                const existing = document.querySelector('.alert-error');
+                                if (existing) existing.remove();
+                                const err = document.createElement('div');
+                                err.className = 'alert alert-error';
+                                err.textContent = data.message || 'Something went wrong.';
+                                form.prepend(err);
+                            }
+                        });
+                    },
+                    'error-callback': function() {
+                        turnstile.reset(widgetId);
+                    }
                 });
             }
         }
 
-        // Update active button
-        toggleSignIn.classList.remove('active');
-        toggleSignUp.classList.remove('active');
-        activeBtn.classList.add('active');
-
-        // Update URL without reload
-        history.pushState(null, '', url);
-    });
-}
-
-toggleSignIn.addEventListener('click', () => {
-    loadAuth(`${signInUrl}`, toggleSignIn);
-});
-
-toggleSignUp.addEventListener('click', () => {
-    loadAuth(`${signUpUrl}`, toggleSignUp);
-});
-
-// Handle browser back/forward buttons
-window.addEventListener('popstate', () => {
-    const path = window.location.pathname;
-    if (path.includes('sign-up')) {
-        loadAuth(`${signUpUrl}`, toggleSignUp);
-    } else {
-        loadAuth(`${signInUrl}`, toggleSignIn);
-    }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const path = window.location.pathname;
-
-    /* if (path.includes('sign-up')) {
-    //     loadAuth('<?= base_url('sign-up') ?>', toggleSignUp);
-    // } else if (path.includes('success')) {
-    //     loadAuth('<?= base_url('success') ?>', toggleSignUp);
-    // } else {
-    //     loadAuth('<?= base_url('sign-in') ?>', toggleSignIn);
-    } */
-    if (path.includes('sign-in') || path.includes('sign-up')) {
-        if (path.includes('sign-up')) {
-            loadAuth(`${signUpUrl}`, toggleSignUp);
-        } else {
-            loadAuth(`${signInUrl}`, toggleSignIn);
+        // Cancel button
+        if (e.target && e.target.id === 'turnstile-cancel') {
+            document.getElementById('turnstile-modal').style.display = 'none';
+            if (widgetId !== null) turnstile.reset(widgetId);
         }
 
-    }
-});
+        // Backdrop click
+        if (e.target && e.target.id === 'turnstile-modal') {
+            e.target.style.display = 'none';
+            if (widgetId !== null) turnstile.reset(widgetId);
+        }
+    });
 
-// Handle if path.includes('success') is present (after registration) hide the switch-auth-toggle
-if (window.location.pathname.includes('success')) {
-    document.querySelector('.switch-auth-toggle').style.display = 'none';
-}
+    // HAMBURGER MENU
+    const hamburger      = document.getElementById('hamburger');
+    const mobileMenu     = document.getElementById('mobile-menu');
+    const overlay        = document.getElementById('mobile-overlay');
+    const servicesTrigger = document.getElementById('mobile-services-trigger');
+    const servicesItems  = document.getElementById('mobile-services-items');
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        mobileMenu.classList.toggle('open');
+        overlay.classList.toggle('open');
+    });
+
+    overlay.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        overlay.classList.remove('open');
+    });
+
+    servicesTrigger.addEventListener('click', () => {
+        servicesItems.classList.toggle('open');
+        servicesTrigger.classList.toggle('open');
+    });
