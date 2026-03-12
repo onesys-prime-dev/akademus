@@ -406,3 +406,69 @@
                                 outline: 0;
                                 background-color: #f0f6ff;
                             }
+
+                            /* CONTACT NUMBER */
+                            .contact-error-tooltip {
+                                display: none;
+                                position: absolute;
+                                bottom: calc(100% + 8px);
+                                left: 0;
+                                background-color: #D73333;
+                                color: #ffffff;
+                                font-size: 12px;
+                                font-weight: 500;
+                                padding: 6px 12px;
+                                border-radius: 8px;
+                                white-space: nowrap;
+                                z-index: 10;
+                                pointer-events: none;
+                                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+                            }
+
+                            .contact-error-tooltip::after {
+                                content: '';
+                                position: absolute;
+                                top: 100%;
+                                left: 16px;
+                                border-width: 5px;
+                                border-style: solid;
+                                border-color: #D73333 transparent transparent transparent;
+                            }
+
+                            .contact-error-tooltip.show {
+                                display: block;
+                                animation: fadeInUp 0.15s ease;
+                            }
+
+                            @keyframes fadeInUp {
+                                from { opacity: 0; transform: translateY(4px); }
+                                to   { opacity: 1; transform: translateY(0); }
+                            }
+                            
+                            /* Phone number codes */
+                            .phone-input-wrapper {
+                                display: flex;
+                                gap: 8px;
+                                align-items: center;
+                            }
+
+                            .phone-input-wrapper select {
+                                flex: 0 0 76px;
+                                height: 50px;
+                                background-color: rgba(217, 217, 217, .4);
+                                border: 0;
+                                outline: 0;
+                                border-radius: 12px;
+                                padding: 0 8px;
+                                cursor: pointer;
+                                font-size: 13px;
+                                transition: all 0.2s ease;
+                            }
+
+                            .phone-input-wrapper select:focus {
+                                background-color: #f0f6ff;
+                            }
+
+                            .phone-input-wrapper input {
+                                flex: 1;
+                            }

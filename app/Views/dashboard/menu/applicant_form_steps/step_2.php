@@ -1,6 +1,4 @@
 <!-- dashboard/menu/applicant_form_steps/step_2.php -->
-
-
 <form 
     action=""
     method="post"
@@ -79,9 +77,31 @@
                     <input type="text" name="home_address" placeholder="Street, Barangay, City, Province" value="" required>
                 </div>
                 
-                <div class="application-form-input-field medium-field">
+                <div class="application-form-input-field medium-field" style="position: relative;">
                     <label>Contact Number<span class="required-field">*</span></label>
-                    <input type="text" name="contact_number" placeholder="+63 9XX XXX XXXX" value="" required>
+                    <div class="phone-input-wrapper">
+                        <select id="phone_code" name="phone_code">
+                            <option value="+63" selected>🇵🇭 +63</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+81">🇯🇵 +81</option>
+                            <option value="+65">🇸🇬 +65</option>
+                            <option value="+61">🇦🇺 +61</option>
+                            <option value="+82">🇰🇷 +82</option>
+                            <option value="+86">🇨🇳 +86</option>
+                            <option value="+91">🇮🇳 +91</option>
+                            <option value="+971">🇦🇪 +971</option>
+                        </select>
+                    </div>
+                    <input 
+                        type="tel" 
+                        id="contact_number"
+                        name="contact_number"
+                        placeholder="9XX XXX XXXX" 
+                        maxlength="15"
+                        value="" 
+                        required>
+                    <small id="contact-error" class="contact-error-tooltip"></small>
                 </div>
             </div>
 

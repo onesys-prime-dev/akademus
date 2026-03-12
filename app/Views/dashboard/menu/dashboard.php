@@ -190,7 +190,7 @@
                 </div>
 
                 <div class="continue-dashboard-btn-container">
-                    <a href="" class="continue-dashboard-btn">Continue</a>
+                    <a href="<?= base_url('/applicant-form/step/1') ?>" class="continue-dashboard-btn">Continue</a>
                 </div>
             </div>
         </div>

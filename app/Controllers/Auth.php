@@ -135,7 +135,7 @@ class Auth extends BaseController
             'email'     => $this->request->getPost('email'),
             'mobile'    => $this->request->getPost('mobile'),
             'role'      => 'applicant'
-        ]);
+        ]); 
         
         $userId = $userModel->getInsertID();
 
