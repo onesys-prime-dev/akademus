@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=<?= urlencode($theme['font_family'] ?? 'Poppins') ?>:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-<style>
     :root {
         --primary:       <?= esc($theme['primary_color']    ?? '#0040a6') ?>;
         --primary-dark:  <?= esc($theme['primary_dark']     ?? '#002d7a') ?>;
@@ -20,7 +19,6 @@
         --radius:        <?= esc($theme['border_radius']    ?? '8px') ?>;
         --font:          '<?= esc($theme['font_family']     ?? 'Sora') ?>';
     }
-</style>
 </style>
 
 <link rel="stylesheet" href="<?= base_url('assets/css/auth.css') . '?v=' . time(); ?>">
