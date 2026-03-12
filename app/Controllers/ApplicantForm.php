@@ -49,9 +49,8 @@ class ApplicantForm extends BaseController
         $formData = [];
 
         if ($application) {
-
             $application_id = $application['application_id'];
-
+            
             switch ($step) {
                 case 1:
                     $formData = $application;

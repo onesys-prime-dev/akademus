@@ -1,6 +1,4 @@
 <!-- dashboard/menu/applicant_form_steps/step_2.php -->
-
-
 <form 
     action=""
     method="post"
