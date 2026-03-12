@@ -99,7 +99,7 @@
                         type="tel" 
                         id="contact_number"
                         name="contact_number"
-                        placeholder="+63 9XX XXX XXXX" 
+                        placeholder="9XX XXX XXXX" 
                         maxlength="15"
                         value="" 
                         required>

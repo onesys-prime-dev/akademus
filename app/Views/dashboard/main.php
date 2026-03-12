@@ -28,6 +28,6 @@
             <?= view($page_content) ?>
         </div>
     </main>
-    <script src="<?= base_url('assets/js/contact_number.js') ?>"></script>
+    <script src="<?= base_url('assets/js/contact_number.js') . '?v=' . time();?>"></script>
 </body>
 </html>
