@@ -1,114 +1,122 @@
-<!-- dashboard/menu/applicant_form_steps/step_1.php -->
-
-<?php 
-$program_name = session()->get('program_name');
-$program_name = preg_replace('/^Bachelor of Science\s*/', 'BS ', $program_name);
+<?php
+helper('form_field');
+$fields = get_field_configs(1);
 ?>
 
 <form 
+    action=""
     method="post"
-    id="applicant-form-1"
-    class="applicant-form-step"
+    id="applicant-form-<?= $step_num ?>"
+    class="applicant-form"    
 >
-
-    <!-- SECTION HEADER -->
-    <div class="form-section__header">
+    <div class="form-header-text">
         <h3>Application Type</h3>
         <p>Select the category that best describes your applicant status, then confirm your program.</p>
     </div>
 
-
-    <!-- EDUCATION TYPE -->
-    <div class="education-options">
-        <label class="education-option">
-            <input
+    <?php if (field_visible($fields, 'applicant_type')): ?>
+    <div class="education-level-container">
+        <label class="education-level-box">
+            <input 
                 type="radio"
                 name="applicant_type"
                 value="freshmen"
-                required
+                <?= field_required($fields, 'applicant_type') ? 'required' : '' ?>
             >
-            <div class="education-option__content">
+            <div class="radio-label-container">
                 <h5>Freshmen</h5>
                 <span>Senior high school graduate</span>
             </div>
         </label>
 
-        <label class="education-option">
-            <input
+        <label class="education-level-box">
+            <input 
                 type="radio"
                 name="applicant_type"
                 value="transferee"
-                required
+                <?= field_required($fields, 'applicant_type') ? 'required' : '' ?>
             >
-            <div class="education-option__content">
+            <div class="radio-label-container">
                 <h5>Transferee</h5>
                 <span>From another college or university</span>
             </div>
         </label>
 
-        <label class="education-option">
-            <input
+        <label class="education-level-box">
+            <input 
                 type="radio"
                 name="applicant_type"
                 value="ladderized"
-                required
+                <?= field_required($fields, 'applicant_type') ? 'required' : '' ?>
             >
-            <div class="education-option__content">
+            <div class="radio-label-container">
                 <h5>Ladderized</h5>
                 <span>TESDA or vocational to degree</span>
             </div>
         </label>
     </div>
+    <?php endif; ?>
 
-    <!-- PROGRAM SECTION -->
-    <div class="program-section">
-        <div class="program-section__header">
+    <div class="program-sched-container">
+        <div class="program-sched-header">
             <h5>Program & Schedule</h5>
         </div>
 
-        <!-- USER INITIAL PROGRAM -->
-        <div class="program-note-container">
-            <div class="program-note">
-                <h6>Your Initial Preferences (from sign-up)</h6>
-
-                <div class="program-choice">
-                    <span>1ST CHOICE</span>
-                    <p><?= $program_name ?></p>
+        <div class="note-and-input-container">
+            <div class="program-sched-note">
+                <h6>Your Initial Preferences (from sign-up)</h6>     
+                
+                <div class="program-choice-box">
+                    <div class="program-choice">
+                        <span>1ST CHOICE</span>
+                        <p>BS Computer Science</p>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <div class="application-form-fields-container">
 
-        <!-- FORM FIELDS -->
-        <div class="form-fields">
-            <div class="form-field">
+            <?php if (field_visible($fields, 'program_id')): ?>
+            <div class="application-form-input-field">
                 <label class="category-text-color">
-                    Confirmed Program
+                    <?= esc(field_label($fields, 'program_id', 'Confirmed Program')) ?>
+                    <?php if (field_required($fields, 'program_id')): ?><span class="required-field">*</span><?php endif; ?>
                 </label>
-
-                <select
-                    name="program_id"
-                    id="program"
-                    class="high-select"
-                    required
-                ></select>
-            </div>
-
-
-            <div class="form-field">
-                <label class="category-text-color">
-                    School Year & Semester
-                </label>
-
-                <select name="sy_semester" id="sy-semester" class="high-select" required>
-                    <option value="" disabled selected>Select School Year & Semester</option>
-                    <option value="SY 2025-2026, 1st Semester">SY 2025-2026, 1st Semester</option>
-                    <option value="SY 2025-2026, 2nd Semester">SY 2025-2026, 2nd Semester</option>
-                    <option value="SY 2025-2026, Summer">SY 2025-2026, Summer</option>
+                <select name="program_id" id="program" class="high-select" <?= field_required($fields, 'program_id') ? 'required' : '' ?>>
                 </select>
-
             </div>
+            <?php endif; ?>
+
+            <?php if (field_visible($fields, 'school_year')): ?>
+            <div class="application-form-input-field">
+                <label class="category-text-color">
+                    <?= esc(field_label($fields, 'school_year', 'School Year')) ?>
+                    <?php if (field_required($fields, 'school_year')): ?><span class="required-field">*</span><?php endif; ?>
+                </label>
+                <select name="school_year" id="school-year" class="high-select" <?= field_required($fields, 'school_year') ? 'required' : '' ?>>
+                    <option value="" disabled selected>Select School Year</option>
+                    <option value="2025-2026">2025-2026</option>
+                    <option value="2026-2027">2026-2027</option>
+                </select>
+            </div>
+            <?php endif; ?>
+
+            <?php if (field_visible($fields, 'semester')): ?>
+            <div class="application-form-input-field">
+                <label class="category-text-color">
+                    <?= esc(field_label($fields, 'semester', 'Semester')) ?>
+                    <?php if (field_required($fields, 'semester')): ?><span class="required-field">*</span><?php endif; ?>
+                </label>
+                <select name="semester" id="semester" class="high-select" <?= field_required($fields, 'semester') ? 'required' : '' ?>>
+                    <option value="" disabled selected>Select Semester</option>
+                    <option value="1st Semester">1st Semester</option>
+                    <option value="2nd Semester">2nd Semester</option>
+                    <option value="Summer">Summer</option>
+                </select>
+            </div>
+            <?php endif; ?>
+
         </div>
     </div>
-
 </form>

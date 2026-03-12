@@ -9,7 +9,7 @@
         <span>A welcome email with your ID has been sent to your registered email address. Keep this for your records.</span>
     </div>
 
-    <a href="<?= base_url('/sign-in') ?>" class="go-back-link-btn btn-primary">
+    <a href="<?= base_url('/sign-in') ?>" class="go-back-link-btn">
         GO BACK TO LOGIN
     </a>
 </div>

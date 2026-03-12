@@ -7,25 +7,6 @@
 
 <link href="https://fonts.googleapis.com/css2?family=<?= urlencode($theme['font_family'] ?? 'Poppins') ?>:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css') . '?v=' . time(); ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/base/reset.css') . '?v=' . time(); ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/base/typograpshy.css') . '?v=' . time(); ?>">
-
-    <!-- Tokens CSS Styles -->
-    <link rel="stylesheet" href="<?= base_url('assets/css/tokens/colors.css') . '?v=' . time(); ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/tokens/borders.css') . '?v=' . time(); ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/tokens/shadows.css') . '?v=' . time(); ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/tokens/spacing.css') . '?v=' . time(); ?>">
-
-    <!-- Layouts CSS Styles 
-    <link rel="stylesheet" href="<?= base_url('assets/css/layout/auth-layout.css') . '?v=' . time(); ?>"> -->
-
-    <!-- Components CSS Styles -->
-    <link rel="stylesheet" href="<?= base_url('assets/css/components/buttons.css') . '?v=' . time(); ?>">
-
-    <!-- Pages CSS Styles -->
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/auth.css') . '?v=' . time(); ?>">
-
 <style>
     :root {
         --primary:       <?= esc($theme['primary_color']    ?? '#0040a6') ?>;
@@ -36,10 +17,11 @@
         --accent:        <?= esc($theme['accent_color']     ?? '#ffb200') ?>;
         --accent-text:   <?= esc($theme['accent_text']      ?? '#002d7a') ?>;
         --radius:        <?= esc($theme['border_radius']    ?? '8px') ?>;
-        --font:          '<?= esc($theme['font_family']     ?? 'Poppins') ?>';
+        --font:          '<?= esc($theme['font_family']     ?? 'Sora') ?>';
     }
 </style>
 
+<link rel="stylesheet" href="<?= base_url('assets/css/pages/auth.css') . '?v=' . time(); ?>">
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
 </head>
 <body>
@@ -67,7 +49,7 @@
         </div>
 
         <div class="nav-right">
-            <!--<a href="<?= base_url('sign_in') ?>" class="get-started-btn">Get Started</a>-->
+            <!--<a href="<?= base_url('sign-in') ?>" class="get-started-btn">Get Started</a>-->
             <button class="hamburger" id="hamburger" aria-label="Toggle menu">
                 <span></span>
                 <span></span>
@@ -90,7 +72,7 @@
             </div>
         </div>
         <a href="<?= base_url('contact') ?>">Contact</a>
-        <a href="<?= base_url('sign_in') ?>" class="mobile-get-started">Get Started</a>
+        <a href="<?= base_url('sign-in') ?>" class="mobile-get-started">Get Started</a>
     </div>
 
     <!-- OVERLAY -->
@@ -133,9 +115,7 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
 
             <!-- RIGHT PANEL -->
@@ -159,15 +139,151 @@
         </div>
     </div>
 
-    <script>
-        window.authConfig = <?= json_encode([
-            "baseUrl" => base_url(),
-            "signInUrl" => base_url('sign-in'),
-            "signUpUrl" => base_url('sign-up')
-        ]) ?>;
-    </script>
+<script>
+    // AUTH TOGGLE
+    const toggleSignIn  = document.getElementById('toggle-sign-in');
+    const toggleSignUp  = document.getElementById('toggle-sign-up');
+    const formContainer = document.getElementById('auth-form-container');
+    const headerTitle   = document.querySelector('#auth-header h2');
+    const headerSubtitle = document.querySelector('#auth-header span');
 
-    <script src="<?= base_url('assets/js/pages/auth.js') . '?v=' . time(); ?>"></script>
+    function loadAuth(url, activeBtn) {
+        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(r => r.json())
+        .then(data => {
+            document.title           = "Akademus | " + data.title;
+            headerTitle.textContent  = data.header;
+            headerSubtitle.textContent = data.subheader;
+            formContainer.innerHTML  = data.form;
 
+            if (data.programs) {
+                const select = document.getElementById('program');
+                if (select) {
+                    select.innerHTML = '<option value="" disabled selected hidden>Select a Program</option>';
+                    data.programs.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.id;
+                        opt.textContent = p.name;
+                        select.appendChild(opt);
+                    });
+                }
+            }
+
+            toggleSignIn.classList.remove('active');
+            toggleSignUp.classList.remove('active');
+            activeBtn.classList.add('active');
+            history.pushState(null, '', url);
+        });
+    }
+
+    toggleSignIn.addEventListener('click', () => loadAuth('<?= base_url('sign-in') ?>', toggleSignIn));
+    toggleSignUp.addEventListener('click', () => loadAuth('<?= base_url('sign-up') ?>', toggleSignUp));
+
+    window.addEventListener('popstate', () => {
+        const path = window.location.pathname;
+        if (path.includes('sign-up')) loadAuth('<?= base_url('sign-up') ?>', toggleSignUp);
+        else loadAuth('<?= base_url('sign-in') ?>', toggleSignIn);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const path = window.location.pathname;
+        if (path.includes('sign-up')) loadAuth('<?= base_url('sign-up') ?>', toggleSignUp);
+        else if (path.includes('sign-in')) loadAuth('<?= base_url('sign-in') ?>', toggleSignIn);
+    });
+
+    if (window.location.pathname.includes('success')) {
+        document.querySelector('.switch-auth-toggle').style.display = 'none';
+    }
+
+    // TURNSTILE MODAL
+    let widgetId = null;
+
+    document.addEventListener('click', function(e) {
+
+        // Open modal
+        if (e.target && e.target.id === 'sign-up-button') {
+            const form = document.getElementById('sign-up-form');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const modal = document.getElementById('turnstile-modal');
+            modal.style.display = 'flex';
+
+            if (widgetId !== null) {
+                turnstile.reset(widgetId);
+            } else {
+                widgetId = turnstile.render('#turnstile-widget', {
+                    sitekey: '1x00000000000000000000AA',
+                    theme: 'light',
+                    callback: function(token) {
+                        modal.style.display = 'none';
+                        const form = document.getElementById('sign-up-form');
+                        const formData = new FormData(form);
+
+                        fetch(form.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                window.location.href = data.redirect;
+                            } else {
+                                const existing = document.querySelector('.alert-error');
+                                if (existing) existing.remove();
+                                const err = document.createElement('div');
+                                err.className = 'alert alert-error';
+                                err.textContent = data.message || 'Something went wrong.';
+                                form.prepend(err);
+                            }
+                        });
+                    },
+                    'error-callback': function() {
+                        turnstile.reset(widgetId);
+                    }
+                });
+            }
+        }
+
+        // Cancel button
+        if (e.target && e.target.id === 'turnstile-cancel') {
+            document.getElementById('turnstile-modal').style.display = 'none';
+            if (widgetId !== null) turnstile.reset(widgetId);
+        }
+
+        // Backdrop click
+        if (e.target && e.target.id === 'turnstile-modal') {
+            e.target.style.display = 'none';
+            if (widgetId !== null) turnstile.reset(widgetId);
+        }
+    });
+
+    // HAMBURGER MENU
+    const hamburger      = document.getElementById('hamburger');
+    const mobileMenu     = document.getElementById('mobile-menu');
+    const overlay        = document.getElementById('mobile-overlay');
+    const servicesTrigger = document.getElementById('mobile-services-trigger');
+    const servicesItems  = document.getElementById('mobile-services-items');
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        mobileMenu.classList.toggle('open');
+        overlay.classList.toggle('open');
+    });
+
+    overlay.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        overlay.classList.remove('open');
+    });
+
+    servicesTrigger.addEventListener('click', () => {
+        servicesItems.classList.toggle('open');
+        servicesTrigger.classList.toggle('open');
+    });
+</script>
 </body>
 </html>

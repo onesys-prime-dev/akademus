@@ -23,7 +23,7 @@
             <a href="#">Forgot Password?</a>
         </div>
 
-        <button type="submit" id="sign-in-button" class="auth-btn btn-primary">Sign In</button>
+        <button type="submit" id="sign-in-button" class="submit-btn">Sign In</button>
 
         <div class="switch-to-sign-up">
             <span>Don't have an account? <a href="<?= base_url('/sign-up') ?>">Click here</a></span>

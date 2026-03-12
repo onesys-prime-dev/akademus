@@ -2,7 +2,7 @@
     <form
         id="sign-up-form"
         class="form-container"
-        action="<?= base_url('sign-up/register') ?>" 
+        action="<?= base_url('sign-up/register') ?>"
         method="post"
     >
         <?= csrf_field() ?>
@@ -47,7 +47,7 @@
             <p>Your final program will be confirmed in the Applicant Information Form. These preferences help us process your application.</p>
         </div>
 
-        <button type="submit" id="sign-up-button" class="auth-btn btn-primary">CREATE ACCOUNT</button>
+        <button type="button" id="sign-up-button" class="submit-btn">CREATE ACCOUNT</button>
     </form>
 </div>
 

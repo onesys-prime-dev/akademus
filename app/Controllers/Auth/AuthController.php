@@ -4,12 +4,12 @@ namespace App\Controllers\Auth;
 
 use App\Controllers\BaseController;
 
-use App\Services\EmailService;
-
 use App\Models\User\UserModel;
 use App\Models\Program\ProgramModel;
 use App\Models\Applicant\ApplicantModel;
 use App\Models\Applicant\ApplicantsViewModel;
+use App\Services\EmailService;
+use App\Models\ThemeModel;
 
 class AuthController extends BaseController
 {
@@ -24,6 +24,9 @@ class AuthController extends BaseController
             ]);
         }
 
+        $themeModel = new ThemeModel();
+
+        $data['theme']           = $themeModel->getAllSettings();
         $data['title']           = 'Sign In';
         $data['auth_header']     = 'Welcome Back!';
         $data['auth_sub_header'] = 'Sign in to continue your application.';
@@ -34,29 +37,16 @@ class AuthController extends BaseController
 
     public function sign_up()
     {
+        $themeModel   = new ThemeModel();
         $programModel = new ProgramModel();
-        $programs = $programModel->findAll();
+        $programs     = $programModel->findAll();
 
         $programs = array_map(function($program) {
             return [
-                'id' => $program['program_id'],
-                'name' => preg_replace(
-                    '/^Bachelor of Science in\s*/',
-                    '',
-                    $program['program_name']
-                )
+                'id'   => $program['program_id'],
+                'name' => preg_replace('/^Bachelor of Science in\s*/', '', $program['program_name'])
             ];
         }, $programs);
-
-        // $programId = $this->request->getPost('program');
-
-        // $program = (new ProgramModel())
-        //     ->where('program_id', $programId)
-        //     ->first();
-
-        // if (!$program) {
-        //     return redirect()->back()->with('error', 'Invalid program selected');
-        // }
 
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([
@@ -64,7 +54,7 @@ class AuthController extends BaseController
                 'header'    => 'Create Account',
                 'subheader' => 'Start your admission journey today.',
                 'form'      => view('auth/sign-up', ['programs' => $programs]),
-                'programs'  => $programs 
+                'programs'  => $programs
             ]);
         }
 
@@ -73,38 +63,75 @@ class AuthController extends BaseController
             'auth_header'     => 'Create Account',
             'auth_sub_header' => 'Start your admission journey today.',
             'auth_field'      => 'auth/sign-up',
-            'programs'        => $programs
+            'programs'        => $programs,
+            'theme'           => $themeModel->getAllSettings()
         ];
 
         return view('auth/main', $data);
     }
 
-    public function success($applicantNumber = null)
+    public function success()
     {
+        $themeModel      = new ThemeModel();
         $applicantNumber = session()->getFlashdata('applicant_number');
 
-        $data['title'] = 'Success';
-        $data['auth_header'] = 'Account Created!';
-        $data['auth_sub_header'] = 'Your unique Applicant ID has been assigned.';
+        if (!$applicantNumber) {
+            return redirect()->to('/sign-in');
+        }
+
+        $data['title']            = 'Success';
+        $data['auth_header']      = 'Account Created!';
+        $data['auth_sub_header']  = 'Your unique Applicant ID has been assigned.';
         $data['applicant_number'] = $applicantNumber;
-        $data['auth_field'] = 'auth/success';
+        $data['auth_field']       = 'auth/success';
+        $data['theme']            = $themeModel->getAllSettings();
+        $data['programs']         = [];
 
         return view('auth/main', $data);
     }
 
     public function register()
     {
-        //dd($this->request->getPost());
+        // Verify Cloudflare Turnstile — DISABLED FOR TESTING
+        /*
+        $turnstileSecret = 'YOUR_SECRET_KEY_HERE';
+        $turnstileToken  = $this->request->getPost('cf-turnstile-response');
+
+        $verify = file_get_contents('https://challenges.cloudflare.com/turnstile/v0/siteverify', false, stream_context_create([
+            'http' => [
+                'method'  => 'POST',
+                'header'  => 'Content-Type: application/x-www-form-urlencoded',
+                'content' => http_build_query([
+                    'secret'   => $turnstileSecret,
+                    'response' => $turnstileToken,
+                    'remoteip' => $this->request->getIPAddress(),
+                ])
+            ]
+        ]));
+
+        $result = json_decode($verify);
+
+        if (!$result || !$result->success) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'Please complete the CAPTCHA verification.'
+            ]);
+        }
+        */
+
         $rules = [
             'firstname' => 'required',
             'lastname'  => 'required',
             'email'     => 'required|valid_email|is_unique[users.email]',
-            'mobile' => 'required|min_length[10]|max_length[13]',
+            'mobile'    => 'required|min_length[10]|max_length[13]',
             'program'   => 'required',
         ];
 
         if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('error', 'Validation failed');
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => implode(' ', $this->validator->getErrors())
+            ]);
         }
 
         $userModel      = new UserModel();
@@ -115,7 +142,10 @@ class AuthController extends BaseController
         $program   = $programModel->find($programId);
 
         if (!$program) {
-            return redirect()->back()->with('error', 'Invalid program selected');
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'Invalid program selected'
+            ]);
         }
 
         $tempPassword   = bin2hex(random_bytes(6));
@@ -151,9 +181,9 @@ class AuthController extends BaseController
                 throw new \Exception('Applicant insert failed: ' . json_encode($applicantModel->errors()));
             }
 
-            $applicantId = $applicantModel->getInsertID();
-            $year        = date('Y');
-            $sequence    = str_pad($applicantId, 5, '0', STR_PAD_LEFT);
+            $applicantId     = $applicantModel->getInsertID();
+            $year            = date('Y');
+            $sequence        = str_pad($applicantId, 5, '0', STR_PAD_LEFT);
             $applicantNumber = "APP-$year-$sequence";
 
             $applicantModel->update($applicantId, [
@@ -162,43 +192,39 @@ class AuthController extends BaseController
 
             $db->transComplete();
 
-            // Send email and dump error if it fails
             $emailSent = EmailService::sendWelcomeEmail(
                 $this->request->getPost('email'),
                 $tempPassword
             );
 
             if (!$emailSent) {
-                // Temporary: show why email failed
                 $email = \Config\Services::email();
-                dd($email->printDebugger(['headers', 'subject', 'body']));
+                //dd($email->printDebugger(['headers', 'subject', 'body']));
             }
 
-            return redirect()->to('success')->with('applicant_number', $applicantNumber);
+            session()->setFlashdata('applicant_number', $applicantNumber);
+            return $this->response->setJSON([
+                'status'   => 'success',
+                'redirect' => base_url('success')
+            ]);
 
         } catch (\Exception $e) {
             $db->transRollback();
             log_message('error', 'Registration failed: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Registration failed: ' . $e->getMessage());
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'Registration failed: ' . $e->getMessage()
+            ]);
         }
     }
 
     public function login()
     {
-        //$model = new UserModel();
         $model = new ApplicantsViewModel();
 
         $user = $model
             ->where('email', $this->request->getPost('email'))
             ->first();
-        /*
-        $user = $model
-            ->select('users.*, applicant.password')
-            ->join('applicant', 'applicant.user_id = users.user_id')
-            ->join('programs', 'programs.program_id = applicant.program_id')
-            ->where('users.email', $this->request->getPost('email'))
-            ->first();
-        */
 
         if (!$user) {
             return $this->response->setJSON([
@@ -226,13 +252,8 @@ class AuthController extends BaseController
             'program_name'    => $user['program_name'],
             'logged_in'       => true
         ]);
-        
-        return redirect()->to('/dashboard');
-        // return $this->response->setJSON([
-        //     'status'   => 'success',
-        //     'redirect' => base_url('dashboard')
-        // ]);
 
+        return redirect()->to('/dashboard');
     }
 
     public function logout()
