@@ -186,6 +186,7 @@ class ApplicantForm extends BaseController
                 'place_of_birth' => $data['place_of_birth'] ?? null,
                 'citizenship'    => $data['citizenship']    ?? null,
                 'home_address'   => $data['home_address']   ?? null,
+                'phone_code'     => $data['phone_code']     ?? null,
                 'contact_number' => $data['contact_number'] ?? null,
                 'email_address'  => $data['email_address']  ?? null,
             ])->update();
