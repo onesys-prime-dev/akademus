@@ -95,7 +95,7 @@ $grouped = $grouped ?? [];
         .page-status-badge.disabled { background:#f0f0f0; color:#999; }
 
         /* ── SECTION CARD ── */
-        .ff-section-card { background:#fff; border:1px solid rgba(0,0,0,.09); border-radius:var(--radius,8px); box-shadow:0 1px 6px rgba(0,0,0,.05); overflow:hidden; margin-bottom:16px; }
+       .ff-section-card { background:#fff; border:1px solid rgba(0,0,0,.09); border-radius:var(--radius,8px); box-shadow:0 1px 6px rgba(0,0,0,.05); overflow:visible; margin-bottom:16px; }
         .ff-section-head { display:flex; justify-content:space-between; align-items:center; padding:14px 20px; background:#fafafa; border-bottom:1px solid #eee; }
         .ff-section-head h4 { font-size:14px; font-weight:700; color:#222; display:flex; align-items:center; gap:8px; }
         .ff-section-head h4 span { font-size:11px; font-weight:500; color:#aaa; padding:2px 8px; background:#f0f0f0; border-radius:20px; }

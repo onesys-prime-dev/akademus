@@ -1,14 +1,9 @@
 <?php
 
-
 use App\Models\FormFieldConfigModel;
 use App\Models\FormPageModel;
 
 if (!function_exists('get_field_configs')) {
-    /**
-     * Returns all field configs for a page_id, keyed by field_key.
-     * Cached per request.
-     */
     function get_field_configs(int $pageId): array
     {
         static $cache = [];
@@ -21,11 +16,6 @@ if (!function_exists('get_field_configs')) {
 }
 
 if (!function_exists('get_enabled_pages')) {
-    /**
-     * Returns all enabled form pages ordered by sort_order.
-     * Used by the applicant form to build the step list dynamically.
-     * Cached per request.
-     */
     function get_enabled_pages(): array
     {
         static $pages = null;
@@ -54,13 +44,13 @@ if (!function_exists('field_required')) {
 if (!function_exists('field_label')) {
     function field_label(array $configs, string $key, string $fallback = ''): string
     {
-        return isset($configs[$key]) ? esc($configs[$key]['label']) : esc($fallback);
+        return isset($configs[$key]) ? $configs[$key]['label'] : $fallback;
     }
 }
 
 if (!function_exists('field_placeholder')) {
     function field_placeholder(array $configs, string $key, string $fallback = ''): string
     {
-        return isset($configs[$key]) ? esc($configs[$key]['placeholder']) : esc($fallback);
+        return isset($configs[$key]) ? $configs[$key]['placeholder'] : $fallback;
     }
 }

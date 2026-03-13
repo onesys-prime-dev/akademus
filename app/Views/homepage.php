@@ -3,8 +3,9 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8"/>
-        <link rel="stylesheet" href="<?= base_url('assets/css/global.css') . '?v=' . time(); ?>">
-        <link rel="stylesheet" href="<?= base_url('assets/css/homepage.css') . '?v=' . time(); ?>">
+        <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css') . '?v=' . time(); ?>">
+        <link rel="stylesheet" href="<?= base_url('assets/css/base/reset.css') . '?v=' . time(); ?>">
+        <link rel="stylesheet" href="<?= base_url('assets/css/pages/homepage.css') . '?v=' . time(); ?>">
     </head>
     <body>
         <div class="homepage">
@@ -30,7 +31,7 @@
                     <!-- Desktop CTA -->
                     <div class="CREATE-ACCOUNT">
                         <div class="CREATE-ACCOUNT-2"></div>
-                        <a class="text-wrapper-2" href="<?= base_url('sign_in') ?>">Get Started</a>
+                        <a class="text-wrapper-2" href="<?= base_url('sign-in') ?>">Get Started</a>
                     </div>
 
                     <!-- Mobile Hamburger -->

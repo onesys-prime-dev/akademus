@@ -5,36 +5,37 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
+$routes->get('/', 'HomeController::index');
 $routes->get('applynowpage', 'ApplyNow::index');
 
 // sign and sign up page after clicking the 'Apply Now' Button
-$routes->get('sign_in', 'Auth::sign_in');
-$routes->get('sign_up', 'Auth::sign_up');
+$routes->get('sign-in', 'Auth\AuthController::sign_in');
+$routes->get('sign-up', 'Auth\AuthController::sign_up');
 
 // under sa Auth.php
-$routes->post('sign_up/register', 'Auth::register');
-$routes->post('sign_in/login', 'Auth::login');
+$routes->post('sign-up/register', 'Auth\AuthController::register');
+$routes->post('sign-in/login', 'Auth\AuthController::login');
 
-$routes->get('logout', 'Auth::logout');
+$routes->get('logout', 'Auth\AuthController::logout');
 
-$routes->get('success', 'Auth::success');
+$routes->get('success', 'Auth\AuthController::success');
 
 // dashoard pages for student applicants
-$routes->get('dashboard', 'Dashboard::index');
+$routes->get('dashboard', 'Applicant\DashboardController::index');
 
 // applicant form steps routes
-$routes->get('applicant-form', 'ApplicantForm::index');
-$routes->get('applicant-form/step/(:num)', 'ApplicantForm::getStep/$1');
-$routes->post('applicant-form/update/(:num)', 'ApplicantForm::updateForm/$1');
-$routes->post('applicant-form/get-drafts', 'ApplicantForm::getSavedDraft');
+$routes->get('applicant-form', 'Applicant\ApplicantFormController::index');
+$routes->get('applicant-form/step/(:num)', 'Applicant\ApplicantFormController::getStep/$1');
+$routes->post('applicant-form/update/(:num)', 'Applicant\ApplicantFormController::updateForm/$1');
+$routes->post('applicant-form/get-drafts', 'Applicant\ApplicantFormController::getSavedDraft');
 
 // requirement steps routes
-$routes->get('requirements', 'Requirements::index');
-$routes->get('requirements/step/(:num)', 'Requirements::getStep/$1');
+$routes->get('requirements', 'Applicant\RequirementsController::index');
+$routes->get('requirements/step/(:num)', 'Applicant\RequirementsController::getStep/$1');
+$routes->post('requirements/update/(:num)', 'Applicant\RequirementsController::updateDocument/$1');
 
 // get programs
-$routes->get('get-programs', 'Program::getPrograms');
+$routes->get('get-programs', 'Program\ProgramController::getPrograms');
 
 // Admin Auth
 $routes->get('admin/login',  'ThemeController::adminLogin');
@@ -47,10 +48,10 @@ $routes->post('admin/theme/save', 'ThemeController::save');
 $routes->get('admin/theme/json',  'ThemeController::getThemeJson');
 
 // FAQ
-$routes->get('faq', 'Faq::index');
+$routes->get('faq', 'Applicant\FaqController::index');
 
 // Calculator
-$routes->get('tuition-fee-calculator', 'Dashboard::tuitionCalculator');
+$routes->get('tuition-fee-calculator', 'Applicant\TuitionFeeCalculatorController::tuitionCalculator');
 
 // Admin Form Field Manager
 $routes->get ('admin/form-fields',                     'Admin\FormFields::index');
