@@ -22,6 +22,11 @@ class DashboardController extends BaseController
             ->where('user_id', session()->get('user_id'))
             ->first();
 
+        // Guard: no applicant record for this user
+        if (!$applicant) {
+            return redirect()->to('/sign-in');
+        }
+
         // Get application row
         $db          = \Config\Database::connect();
         $application = $db->table('applications')
