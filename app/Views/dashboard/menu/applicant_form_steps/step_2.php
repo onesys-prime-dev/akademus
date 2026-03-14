@@ -184,43 +184,14 @@ $fields = get_field_configs(2);
             <?php if (field_visible($fields, 'email_address')): ?>
             <div class="application-form-input-field-row">
                 <div class="application-form-input-field large-field">
-                    <label>Home Address<span class="required-field">*</span></label>
-                    <input type="text" name="home_address" placeholder="Street, Barangay, City, Province" value="" required>
-                </div>
-                
-                <div class="application-form-input-field medium-field" style="position: relative;">
-                    <label>Contact Number<span class="required-field">*</span></label>
-                    <div class="phone-input-wrapper">
-                        <select id="phone_code" name="phone_code">
-                            <option value="+63" selected>🇵🇭 +63</option>
-                            <option value="+1">🇺🇸 +1</option>
-                            <option value="+44">🇬🇧 +44</option>
-                            <option value="+81">🇯🇵 +81</option>
-                            <option value="+65">🇸🇬 +65</option>
-                            <option value="+61">🇦🇺 +61</option>
-                            <option value="+82">🇰🇷 +82</option>
-                            <option value="+86">🇨🇳 +86</option>
-                            <option value="+91">🇮🇳 +91</option>
-                            <option value="+971">🇦🇪 +971</option>
-                        </select>
-                    </div>
-                    <input 
-                        type="tel" 
-                        id="contact_number"
-                        name="contact_number"
-                        placeholder="9XX XXX XXXX" 
-                        maxlength="15"
-                        value="" 
-                        required>
-                    <small id="contact-error" class="contact-error-tooltip"></small>
                     <label>
                         <?= esc(field_label($fields, 'email_address', 'Email Address')) ?>
                         <?php if (field_required($fields, 'email_address')): ?><span class="required-field">*</span><?php endif; ?>
                     </label>
                     <input type="email" name="email_address"
-                           placeholder="<?= esc(field_placeholder($fields, 'email_address', 'e.g., sample@email.com')) ?>"
-                           value="<?= esc($data['email_address'] ?? '') ?>"
-                           <?= field_required($fields, 'email_address') ? 'required' : '' ?>>
+                        placeholder="<?= esc(field_placeholder($fields, 'email_address', 'e.g., sample@email.com')) ?>"
+                        value="<?= esc($data['email_address'] ?? '') ?>"
+                        <?= field_required($fields, 'email_address') ? 'required' : '' ?>>
                 </div>
             </div>
             <?php endif; ?>

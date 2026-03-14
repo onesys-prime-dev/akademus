@@ -22,7 +22,7 @@ class PersonalInformationModel extends Model
         'date_of_birth',
         'place_of_birth',
         'citizenship',
-        'phone_code',
+        'phone_code_id',
         'home_address',
         'contact_number',
         'email_address'
