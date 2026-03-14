@@ -51,12 +51,22 @@ class Dashboard extends BaseController
         return view('dashboard/main', $data);
     }
     public function tuitionCalculator()
-{
-    $themeModel = new \App\Models\ThemeModel();
-    $data['theme']        = $themeModel->getAllSettings();
-    $data['title']        = 'Tuition Fee Calculator';
-    $data['active_menu']  = 'tuition_calculator';
-    $data['page_content'] = 'dashboard/support/tuition_fee_calculator';
-    return view('dashboard/main', $data);
-}
+    {
+        $themeModel = new \App\Models\ThemeModel();
+        $data['theme']        = $themeModel->getAllSettings();
+        $data['title']        = 'Tuition Fee Calculator';
+        $data['active_menu']  = 'tuition_calculator';
+        $data['page_content'] = 'dashboard/support/tuition_fee_calculator';
+        return view('dashboard/main', $data);
+    }
+
+    public function admissionProcessingFee()
+    {
+        $themeModel = new \App\Models\ThemeModel();
+        $data['theme']        = $themeModel->getAllSettings();
+        $data['title']        = 'Admission Processing Fee';
+        $data['active_menu']  = 'admission_processing_fee';
+        $data['page_content'] = 'dashboard/payments/admission_processing_fee';
+        return view('dashboard/main', $data);
+    }
 }

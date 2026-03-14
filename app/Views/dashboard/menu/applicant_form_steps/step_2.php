@@ -183,7 +183,7 @@ $fields = get_field_configs(2);
             <!-- ROW: Email Address -->
             <?php if (field_visible($fields, 'email_address')): ?>
             <div class="application-form-input-field-row">
-                <div class="application-form-input-field large-field">
+                <div class="application-form-input-field large-field">`
                     <label>
                         <?= esc(field_label($fields, 'email_address', 'Email Address')) ?>
                         <?php if (field_required($fields, 'email_address')): ?><span class="required-field">*</span><?php endif; ?>
