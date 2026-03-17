@@ -1,0 +1,259 @@
+DEBUG - 2026-03-13 06:42:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-13 06:45:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-13 06:45:38 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: GET, Route: sign-in]
+in SYSTEMPATH\Debug\Exceptions.php on line 197.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+ERROR - 2026-03-13 06:45:38 --> Error connecting to the database: ErrorException: mysqli::real_connect(): Error while reading greeting packet. PID=33228 in C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'mysqli::real_co...', 'C:\\xampp\\htdocs...', 201)
+#1 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'akademus_db', 3306, '', 0)
+#2 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#3 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#4 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#5 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Model.php(254): CodeIgniter\Database\BaseBuilder->get()
+#6 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\BaseModel.php(675): CodeIgniter\Model->doFindAll(0, 0)
+#7 C:\xampp\htdocs\Akademus\akademus\app\Models\thememodel.php(18): CodeIgniter\BaseModel->findAll()
+#8 C:\xampp\htdocs\Akademus\akademus\app\Controllers\Auth\AuthController.php(27): App\Models\ThemeModel->getAllSettings()
+#9 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(951): App\Controllers\Auth\AuthController->sign_in()
+#10 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\AuthController))
+#11 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#12 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#13 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#14 C:\xampp\htdocs\Akademus\akademus\public\index.php(60): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#15 {main}
+
+Next mysqli_sql_exception: MySQL server has gone away in C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'akademus_db', 3306, '', 0)
+#1 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Model.php(254): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\BaseModel.php(675): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\Akademus\akademus\app\Models\thememodel.php(18): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\Akademus\akademus\app\Controllers\Auth\AuthController.php(27): App\Models\ThemeModel->getAllSettings()
+#8 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(951): App\Controllers\Auth\AuthController->sign_in()
+#9 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\AuthController))
+#10 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\Akademus\akademus\public\index.php(60): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: MySQL server has gone away in C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Model.php(254): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\BaseModel.php(675): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp\htdocs\Akademus\akademus\app\Models\thememodel.php(18): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp\htdocs\Akademus\akademus\app\Controllers\Auth\AuthController.php(27): App\Models\ThemeModel->getAllSettings()
+#7 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(951): App\Controllers\Auth\AuthController->sign_in()
+#8 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\AuthController))
+#9 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 C:\xampp\htdocs\Akademus\akademus\public\index.php(60): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 {main}
+ERROR - 2026-03-13 06:45:38 --> Error connecting to the database: ErrorException: mysqli::real_connect(): Error while reading greeting packet. PID=33228 in C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'mysqli::real_co...', 'C:\\xampp\\htdocs...', 201)
+#1 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'akademus_db', 3306, '', 0)
+#2 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#3 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#4 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `u`.*, `...', Array, false)
+#5 C:\xampp\htdocs\Akademus\akademus\app\Controllers\Themecontroller.php(37): CodeIgniter\Database\BaseBuilder->get()
+#6 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(951): App\Controllers\ThemeController->adminLoginPost()
+#7 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ThemeController))
+#8 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\Akademus\akademus\public\index.php(60): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+
+Next mysqli_sql_exception: MySQL server has gone away in C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'akademus_db', 3306, '', 0)
+#1 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `u`.*, `...', Array, false)
+#4 C:\xampp\htdocs\Akademus\akademus\app\Controllers\Themecontroller.php(37): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(951): App\Controllers\ThemeController->adminLoginPost()
+#6 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ThemeController))
+#7 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\Akademus\akademus\public\index.php(60): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: MySQL server has gone away in C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `u`.*, `...', Array, false)
+#3 C:\xampp\htdocs\Akademus\akademus\app\Controllers\Themecontroller.php(37): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(951): App\Controllers\ThemeController->adminLoginPost()
+#5 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ThemeController))
+#6 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\Akademus\akademus\public\index.php(60): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+CRITICAL - 2026-03-13 06:45:38 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: GET, Route: sign-in]
+in SYSTEMPATH\Debug\Exceptions.php on line 197.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-13 06:45:38 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: GET, Route: sign-in]
+in SYSTEMPATH\Debug\Exceptions.php on line 197.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-13 06:45:38 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: GET, Route: sign-in]
+in SYSTEMPATH\Debug\Exceptions.php on line 197.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-13 06:45:38 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: MySQL server has gone away
+[Method: GET, Route: sign-in]
+in SYSTEMPATH\Database\BaseConnection.php on line 465.
+ 1 SYSTEMPATH\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `theme_settings`', [], false)
+ 3 SYSTEMPATH\Model.php(254): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(675): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Models\thememodel.php(18): CodeIgniter\BaseModel->findAll()
+ 6 APPPATH\Controllers\Auth\AuthController.php(27): App\Models\ThemeModel->getAllSettings()
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\AuthController->sign_in()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\AuthController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(60): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-13 06:45:38 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: MySQL server has gone away
+[Method: POST, Route: admin/login]
+in SYSTEMPATH\Database\BaseConnection.php on line 465.
+ 1 SYSTEMPATH\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `u`.*, `ac`.`password` as `admin_password`
+FROM `users` `u`
+JOIN `admin_credentials` `ac` ON `ac`.`user_id` = `u`.`user_id`
+WHERE `u`.`email` = :u.email:
+AND `u`.`role` = :u.role:', [...], false)
+ 3 APPPATH\Controllers\Themecontroller.php(37): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ThemeController->adminLoginPost()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ThemeController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(60): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-13 06:45:38 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: GET, Route: sign-in]
+in SYSTEMPATH\Debug\Exceptions.php on line 197.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-13 06:45:38 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: GET, Route: sign-in]
+in SYSTEMPATH\Debug\Exceptions.php on line 197.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-13 06:45:38 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: GET, Route: sign-in]
+in SYSTEMPATH\Debug\Exceptions.php on line 197.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-13 06:45:38 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: POST, Route: admin/login]
+in SYSTEMPATH\Debug\Exceptions.php on line 197.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-13 06:45:38 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: GET, Route: sign-in]
+in SYSTEMPATH\Debug\Exceptions.php on line 197.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-13 06:45:38 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: GET, Route: sign-in]
+in SYSTEMPATH\Debug\Exceptions.php on line 197.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-13 06:45:38 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: GET, Route: sign-in]
+in SYSTEMPATH\Debug\Exceptions.php on line 197.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-13 06:45:38 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: POST, Route: admin/login]
+in SYSTEMPATH\Debug\Exceptions.php on line 197.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-13 06:45:38 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: GET, Route: sign-in]
+in SYSTEMPATH\Debug\Exceptions.php on line 197.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+ERROR - 2026-03-13 06:48:16 --> Error connecting to the database: ErrorException: mysqli::real_connect(): Error while reading greeting packet. PID=13928 in C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'mysqli::real_co...', 'C:\\xampp\\htdocs...', 201)
+#1 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'akademus_db', 3306, '', 0)
+#2 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#3 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#4 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#5 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Model.php(254): CodeIgniter\Database\BaseBuilder->get()
+#6 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\BaseModel.php(675): CodeIgniter\Model->doFindAll(0, 0)
+#7 C:\xampp\htdocs\Akademus\akademus\app\Models\thememodel.php(18): CodeIgniter\BaseModel->findAll()
+#8 C:\xampp\htdocs\Akademus\akademus\app\Controllers\Auth\AuthController.php(27): App\Models\ThemeModel->getAllSettings()
+#9 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(951): App\Controllers\Auth\AuthController->sign_in()
+#10 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\AuthController))
+#11 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#12 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#13 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#14 C:\xampp\htdocs\Akademus\akademus\public\index.php(60): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#15 {main}
+
+Next mysqli_sql_exception: MySQL server has gone away in C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'akademus_db', 3306, '', 0)
+#1 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Model.php(254): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\BaseModel.php(675): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\Akademus\akademus\app\Models\thememodel.php(18): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\Akademus\akademus\app\Controllers\Auth\AuthController.php(27): App\Models\ThemeModel->getAllSettings()
+#8 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(951): App\Controllers\Auth\AuthController->sign_in()
+#9 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\AuthController))
+#10 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\Akademus\akademus\public\index.php(60): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: MySQL server has gone away in C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Model.php(254): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\BaseModel.php(675): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp\htdocs\Akademus\akademus\app\Models\thememodel.php(18): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp\htdocs\Akademus\akademus\app\Controllers\Auth\AuthController.php(27): App\Models\ThemeModel->getAllSettings()
+#7 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(951): App\Controllers\Auth\AuthController->sign_in()
+#8 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\AuthController))
+#9 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 C:\xampp\htdocs\Akademus\akademus\vendor\codeigniter4\framework\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 C:\xampp\htdocs\Akademus\akademus\public\index.php(60): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 {main}
+CRITICAL - 2026-03-13 06:48:16 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: MySQL server has gone away
+[Method: GET, Route: sign-in]
+in SYSTEMPATH\Database\BaseConnection.php on line 465.
+ 1 SYSTEMPATH\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `theme_settings`', [], false)
+ 3 SYSTEMPATH\Model.php(254): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(675): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Models\thememodel.php(18): CodeIgniter\BaseModel->findAll()
+ 6 APPPATH\Controllers\Auth\AuthController.php(27): App\Models\ThemeModel->getAllSettings()
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\AuthController->sign_in()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\AuthController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(60): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-13 07:07:24 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: GET, Route: sign-in]
+in SYSTEMPATH\Debug\Exceptions.php on line 197.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
