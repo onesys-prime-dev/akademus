@@ -47,7 +47,7 @@ $routes->post('admin/theme/save', 'ThemeController::save');
 $routes->get('admin/theme/json',  'ThemeController::getThemeJson');
 
 // Admission Processing Fee
-$routes->get('admission-processing-fee', 'Dashboard::admissionProcessingFee');
+$routes->get('billing', 'Dashboard::billing');
 
 // FAQ
 $routes->get('faq', 'Faq::index');

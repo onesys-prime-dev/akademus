@@ -61,6 +61,12 @@
                 <p>PAYMENTS</p>
                 
                 <div class="grouped-links">
+                    <a href="<?= base_url('/billing') ?>" class="sidebar-nav-link">
+                        <div class="dotted-link"></div>
+                        <span>Billing</span>
+                    </a>
+                </div>
+                <!-- <div class="grouped-links">
                     <a href="<?= base_url('/admission-processing-fee') ?>" class="sidebar-nav-link">
                         <div class="dotted-link"></div>
                         <span>Admission Processing Fee</span>
@@ -69,7 +75,7 @@
                         <div class="dotted-link"></div>
                         <span>Reservation Fee</span>
                     </a>
-                </div>
+                </div> -->
             </div>
 
             <div class="group-container">

@@ -18,7 +18,7 @@
                         <div class="text-wrapper-3">AKADEMUS</div>
                     </div>
 
-                    <!-- Desktop Nav -->
+                    <!-- Desktop Nav -->    
                     <div class="navbar">
                         <div class="item">Home</div>
                         <div class="text-wrapper">About Us</div>
