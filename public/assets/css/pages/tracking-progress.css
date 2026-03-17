@@ -1,0 +1,132 @@
+.tracking-progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+/* ———————————————————
+        HEADER
+———————————————————— */
+
+.tracking-progress-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 40px 30px;
+}
+
+.tracking-header__section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tracking-header__title {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.tracking-header__description {
+    font-size: 14px;
+    font-weight: 500;
+    color: #828282;
+}
+
+.tracking-header__label {
+    font-size: 12px;
+    font-weight: 500;
+    text-align: end;
+}
+
+.tracking-header__id {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+
+
+/* ———————————————————
+        PROGRESS
+———————————————————— */
+
+.tracking-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 40px 30px;
+}
+
+.tracking-progress__title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.tracking-progress__bar {
+    width: 100%;
+    display: flex;
+    background-color: #e6e6e6;
+    height: 10px;
+}
+
+.tracking-progress__bar-fill {
+    width: 70%;
+    height: 100%;
+    background-color: var(--primary);
+}
+
+.tracking-progress__timeline {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+}
+
+.tracking-progress__item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.tracking-progress_shapes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tracking-progress__circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    background-color: #e6e6e6;
+    border: 1px solid #B9B9B9;
+    border-radius: 100%;
+}
+
+.tracking-progress__connector {
+    height: 25px;
+    width: 1px;
+    background-color: #B9B9B9;
+}
+
+.tracking-progress__content {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+    gap: 5px;
+}
+
+.tracking-progress__step-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.tracking-progress__meta {
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    font-weight: 500;
+    color: #B9B9B9;
+    gap: 5px;
+}

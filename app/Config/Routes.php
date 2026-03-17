@@ -65,3 +65,9 @@ $routes->post('admin/form-fields/pages/reorder',       'Admin\FormFields::pageRe
 $routes->post('admin/form-fields/pages/(:num)/toggle', 'Admin\FormFields::pageToggle/$1');
 $routes->post('admin/form-fields/pages/(:num)/rename', 'Admin\FormFields::pageRename/$1');
 $routes->post('admin/form-fields/pages/(:num)/delete', 'Admin\FormFields::deletePage/$1');
+
+// Tracking Progress
+$routes->get('tracking-progress', 'Applicant\TrackingProgressController::index');
+
+// Processing Fee
+$routes->get('admission-processing-fee', 'Applicant\ProcessingFeeController::index');
