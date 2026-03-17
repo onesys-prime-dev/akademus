@@ -1,3 +1,5 @@
+<!-- this .php view file was never used -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

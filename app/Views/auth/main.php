@@ -21,7 +21,7 @@
     }
 </style>
 
-<link rel="stylesheet" href="<?= base_url('assets/css/auth.css') . '?v=' . time(); ?>">
+<link rel="stylesheet" href="<?= base_url('assets/css/pages/auth.css') . '?v=' . time(); ?>">
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
 </head>
 <body>
@@ -49,7 +49,7 @@
         </div>
 
         <div class="nav-right">
-            <!--<a href="<?= base_url('sign_in') ?>" class="get-started-btn">Get Started</a>-->
+            <!--<a href="<?= base_url('sign-in') ?>" class="get-started-btn">Get Started</a>-->
             <button class="hamburger" id="hamburger" aria-label="Toggle menu">
                 <span></span>
                 <span></span>
@@ -72,7 +72,7 @@
             </div>
         </div>
         <a href="<?= base_url('contact') ?>">Contact</a>
-        <a href="<?= base_url('sign_in') ?>" class="mobile-get-started">Get Started</a>
+        <a href="<?= base_url('sign-in') ?>" class="mobile-get-started">Get Started</a>
     </div>
 
     <!-- OVERLAY -->
@@ -176,19 +176,19 @@
         });
     }
 
-    toggleSignIn.addEventListener('click', () => loadAuth('<?= base_url('sign_in') ?>', toggleSignIn));
-    toggleSignUp.addEventListener('click', () => loadAuth('<?= base_url('sign_up') ?>', toggleSignUp));
+    toggleSignIn.addEventListener('click', () => loadAuth('<?= base_url('sign-in') ?>', toggleSignIn));
+    toggleSignUp.addEventListener('click', () => loadAuth('<?= base_url('sign-up') ?>', toggleSignUp));
 
     window.addEventListener('popstate', () => {
         const path = window.location.pathname;
-        if (path.includes('sign_up')) loadAuth('<?= base_url('sign_up') ?>', toggleSignUp);
-        else loadAuth('<?= base_url('sign_in') ?>', toggleSignIn);
+        if (path.includes('sign-up')) loadAuth('<?= base_url('sign-up') ?>', toggleSignUp);
+        else loadAuth('<?= base_url('sign-in') ?>', toggleSignIn);
     });
 
     document.addEventListener('DOMContentLoaded', () => {
         const path = window.location.pathname;
-        if (path.includes('sign_up')) loadAuth('<?= base_url('sign_up') ?>', toggleSignUp);
-        else if (path.includes('sign_in')) loadAuth('<?= base_url('sign_in') ?>', toggleSignIn);
+        if (path.includes('sign-up')) loadAuth('<?= base_url('sign-up') ?>', toggleSignUp);
+        else if (path.includes('sign-in')) loadAuth('<?= base_url('sign-in') ?>', toggleSignIn);
     });
 
     if (window.location.pathname.includes('success')) {

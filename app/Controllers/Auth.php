@@ -2,12 +2,12 @@
 
 namespace App\Controllers;
 
-use App\Models\UserModel;
-use App\Models\ProgramModel;
-use App\Models\ApplicantModel;
-use App\Models\ApplicantsViewModel;
-use App\Services\EmailService;
+use App\Models\User\UserModel;
+use App\Models\Program\ProgramModel;
+use App\Models\Applicant\ApplicantModel;
+use App\Models\Applicant\ApplicantsViewModel;
 use App\Models\ThemeModel;
+use App\Services\EmailService;
 
 class Auth extends BaseController
 {
@@ -18,7 +18,7 @@ class Auth extends BaseController
                 'title'     => 'Sign In',
                 'header'    => 'Welcome Back!',
                 'subheader' => 'Sign in to continue your application.',
-                'form'      => view('auth/sign_in')
+                'form'      => view('auth/sign-in')
             ]);
         }
 
@@ -28,7 +28,7 @@ class Auth extends BaseController
         $data['title']           = 'Sign In';
         $data['auth_header']     = 'Welcome Back!';
         $data['auth_sub_header'] = 'Sign in to continue your application.';
-        $data['auth_field']      = 'auth/sign_in';
+        $data['auth_field']      = 'auth/sign-in';
 
         return view('auth/main', $data);
     }
@@ -51,7 +51,7 @@ class Auth extends BaseController
                 'title'     => 'Sign Up',
                 'header'    => 'Create Account',
                 'subheader' => 'Start your admission journey today.',
-                'form'      => view('auth/sign_up', ['programs' => $programs]),
+                'form'      => view('auth/sign-in', ['programs' => $programs]),
                 'programs'  => $programs
             ]);
         }
@@ -60,7 +60,7 @@ class Auth extends BaseController
             'title'           => 'Sign Up',
             'auth_header'     => 'Create Account',
             'auth_sub_header' => 'Start your admission journey today.',
-            'auth_field'      => 'auth/sign_up',
+            'auth_field'      => 'auth/sign-in',
             'programs'        => $programs,
             'theme'           => $themeModel->getAllSettings()
         ];
@@ -74,7 +74,7 @@ class Auth extends BaseController
         $applicantNumber = session()->getFlashdata('applicant_number');
 
         if (!$applicantNumber) {
-            return redirect()->to('/sign_in');
+            return redirect()->to('/sign-in');
         }
 
         $data['title']            = 'Success';
@@ -254,6 +254,6 @@ class Auth extends BaseController
     public function logout()
     {
         session()->destroy();
-        return redirect()->to('/sign_in');
+        return redirect()->to('/sign-in');
     }
 }
