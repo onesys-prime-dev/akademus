@@ -38,7 +38,9 @@ class RequirementsController extends BaseController
         // Compute primary_soft (lightened tint) from primary_color
         $theme['primary_soft'] = $this->lightenHex($theme['primary_color'] ?? '#0040a6', 0.88);
 
-        $categories = $this->requirementService->getCategories();
+        $program_id = session()->get('program_id');
+
+        $categories = $this->requirementService->getCategories($program_id);
         $maxSteps = count($categories) + 1;
 
         return view('applicant/main', [
@@ -68,15 +70,15 @@ class RequirementsController extends BaseController
     public function getStep($step)
     {
         $step = (int) $step;
+        
+        $program_id = session()->get('program_id');
 
-        $categories = $this->requirementService->getCategories();
+        $categories = $this->requirementService->getCategories($program_id);
         $maxSteps = count($categories) + 1;
 
         if ($step < 1 || $step > $maxSteps) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
-
-        $program_id = session()->get('program_id');
 
         if ($step == $maxSteps) {
 
@@ -92,7 +94,7 @@ class RequirementsController extends BaseController
             $requirements = $this->requirementService->getStepRequirements($program_id, $step);
 
             $category_name = $category['category_name'];
-            $category_description = $category['description'];
+            $category_description = $category['category_description'];
         }
 
         $applicant_id = session()->get('applicant_id');
