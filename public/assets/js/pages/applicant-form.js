@@ -116,17 +116,17 @@ const formProgressH4Text = document.getElementById('form-progress-text');
 
     async function processForm(step, action = 'draft') {
         const applicantForm = document.getElementById(`applicant-form-${step}`);
-        if (!applicantForm) return;
+        if (!applicantForm) return { success: false };
 
         const formData = new FormData(applicantForm);
         formData.append('action', action);
 
         try {
-            const response = await fetch(`${updateUrl}${step}`, 
+            const response = await fetch(`${updateUrl}${step}`,
                 {
                     method: 'POST',
                     body: formData,
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }    
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 }
             );
 
@@ -135,16 +135,16 @@ const formProgressH4Text = document.getElementById('form-progress-text');
             const data = await response.json();
 
             if (data.status === 'success') {
-                return true;
+                return { success: true, reload: !!data.reload };
             } else {
                 alert(data.message || 'Something went wrong.');
-                return false;
+                return { success: false };
             }
 
         } catch (error) {
             console.error('Form submission error:', error);
             alert('An error occurred while saving.');
-            return false;
+            return { success: false };
         }
     }
 
@@ -171,7 +171,7 @@ const formProgressH4Text = document.getElementById('form-progress-text');
 
         // Wait 1 second after last change before saving
         autoSaveTimeout = setTimeout(async () => {
-            const success = await processForm(currentStep, 'draft');
+            const { success } = await processForm(currentStep, 'draft');
 
             if (success) {
                 autosaveText.textContent = 'Auto-saved changes';
@@ -283,24 +283,33 @@ const formProgressH4Text = document.getElementById('form-progress-text');
         // Show "Saving..." while waiting for debounce
         autosaveText.textContent = 'Saving...';
 
-        const success = await processForm(currentStep, 'continue');
+        const { success, reload } = await processForm(currentStep, 'continue');
 
         if (success && currentStep < maxSteps) {
-            currentStep++;
+            const nextStep = currentStep + 1;
+
+            // If the program preset changed the form layout, do a full page load
+            // so window.applicantFormConfig.maxSteps is recalculated correctly
+            if (reload) {
+                window.location.href = `${stepUrl}${nextStep}`;
+                return;
+            }
+
+            currentStep = nextStep;
             await loadForm(currentStep);
             updateButtons();
-            
+
             autosaveText.textContent = 'Auto-saved changes';
             setTimeout(() => {
-                    autosaveText.textContent = '';
-                }, 3000);
+                autosaveText.textContent = '';
+            }, 3000);
         }
     });
 
     submitFormBtn.addEventListener('click', async () => {
         if (!checkAllFields(currentStep)) return;
 
-        const success = await processForm(currentStep, 'submit');
+        const { success } = await processForm(currentStep, 'submit');
 
         if (success) {
             alert('Application submitted successfully!');

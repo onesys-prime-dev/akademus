@@ -214,6 +214,13 @@ class AuthController extends BaseController
             'logged_in'        => true
         ]);
 
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'status'   => 'success',
+                'redirect' => base_url('dashboard'),
+            ]);
+        }
+
         return redirect()->to('/dashboard');
     }
 

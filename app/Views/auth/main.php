@@ -78,6 +78,16 @@
     <!-- OVERLAY -->
     <div class="mobile-overlay" id="mobile-overlay"></div>
 
+    <!-- LOGIN ERROR MODAL -->
+    <div class="auth-modal-overlay" id="auth-error-modal" style="display:none;">
+        <div class="auth-modal-card">
+            <div class="auth-modal-icon">&#10006;</div>
+            <h3 class="auth-modal-title">Sign In Failed</h3>
+            <p class="auth-modal-message" id="auth-error-message">Invalid email or password.</p>
+            <button class="auth-modal-btn" id="auth-error-close">Try Again</button>
+        </div>
+    </div>
+
     <!-- MAIN CARD -->
     <div class="main-container">
         <div class="main-card">
@@ -258,6 +268,49 @@
         if (e.target && e.target.id === 'turnstile-modal') {
             e.target.style.display = 'none';
             if (widgetId !== null) turnstile.reset(widgetId);
+        }
+    });
+
+    // SIGN-IN AJAX & ERROR MODAL
+    document.addEventListener('submit', function(e) {
+        const form = e.target;
+        if (form.id !== 'sign-in-form') return;
+        e.preventDefault();
+
+        const btn = document.getElementById('sign-in-button');
+        btn.disabled = true;
+        btn.textContent = 'Signing in...';
+
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'success' || data.redirect) {
+                window.location.href = data.redirect || '<?= base_url('dashboard') ?>';
+            } else {
+                document.getElementById('auth-error-message').textContent = data.message || 'Invalid email or password.';
+                document.getElementById('auth-error-modal').style.display = 'flex';
+                btn.disabled = false;
+                btn.textContent = 'Sign In';
+            }
+        })
+        .catch(() => {
+            document.getElementById('auth-error-message').textContent = 'Something went wrong. Please try again.';
+            document.getElementById('auth-error-modal').style.display = 'flex';
+            btn.disabled = false;
+            btn.textContent = 'Sign In';
+        });
+    });
+
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'auth-error-close') {
+            document.getElementById('auth-error-modal').style.display = 'none';
+        }
+        if (e.target && e.target.id === 'auth-error-modal') {
+            e.target.style.display = 'none';
         }
     });
 
