@@ -16,6 +16,13 @@ class ApplicantFormController extends BaseController
 {
     private function getEnabledPages(): array
     {
+        $programId = session()->get('selected_program_id');
+        if ($programId) {
+            $pages = (new \App\Services\PresetService())->getFormPagesForApplicant($programId);
+            if (!empty($pages)) {
+                return array_values($pages);
+            }
+        }
         return (new FormPageModel())->getEnabledOrdered();
     }
 
@@ -43,6 +50,17 @@ class ApplicantFormController extends BaseController
 
     public function index()
     {
+        // Restore program from existing in-progress application
+        $applicantId = session()->get('applicant_id');
+        if ($applicantId && !session()->get('selected_program_id')) {
+            $application = (new ApplicationModel())
+                ->where('applicant_id', $applicantId)
+                ->where('application_status !=', 'submitted')
+                ->first();
+            if ($application && !empty($application['program_id'])) {
+                session()->set('selected_program_id', (int)$application['program_id']);
+            }
+        }
         return $this->renderLayout(1);
     }
 
@@ -157,9 +175,20 @@ class ApplicantFormController extends BaseController
             $applicationModel->update($applicationId, ['application_status' => 'pending']);
         }
 
+        // When program is selected on step 1, store it in session so presets load correctly
+        $reload = false;
+        if ($pageId === 1 && $action !== 'draft') {
+            $programId = $this->request->getPost('program_id');
+            if ($programId && (int)$programId !== (int)session()->get('selected_program_id')) {
+                session()->set('selected_program_id', (int)$programId);
+                $reload = true;
+            }
+        }
+
         return $this->response->setJSON([
             'status'  => $result ? 'success' : 'error',
             'message' => $result ? 'Step saved successfully' : 'Failed to save step',
+            'reload'  => $reload,
         ]);
     }
 

@@ -66,6 +66,14 @@ class FormPageModel extends Model
     }
 
     /**
+     * Alias for getEnabledOrdered — used by presets system.
+     */
+    public function getActivePages(): array
+    {
+        return $this->getEnabledOrdered();
+    }
+
+    /**
      * Get next sort_order value (appends to end).
      */
     public function nextSortOrder(): int

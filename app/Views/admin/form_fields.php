@@ -188,29 +188,7 @@ $grouped = $grouped ?? [];
 <body>
 <div class="shell">
 
-    <!-- ICON SIDEBAR -->
-    <div class="icon-sidebar">
-        <div class="isb-logo">
-            <?php if (!empty($theme['logo_url'])): ?><img src="<?= esc($theme['logo_url']) ?>"><?php else: ?><?= esc($theme['logo_text'] ?? 'AK') ?><?php endif; ?>
-        </div>
-        <a href="<?= base_url('admin/theme') ?>" class="isb-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#94a3b8"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/><path d="M2 12h20"/></svg>
-            <div class="isb-tip">Theme Editor</div>
-        </a>
-        <a href="<?= base_url('admin/form-fields') ?>" class="isb-item on">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#fff"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            <div class="isb-tip">Form Fields</div>
-        </a>
-        <a href="#" class="isb-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#94a3b8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            <div class="isb-tip">Applicants</div>
-        </a>
-        <div class="isb-spacer"></div>
-        <a href="<?= base_url('admin/logout') ?>" class="isb-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#94a3b8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            <div class="isb-tip">Logout</div>
-        </a>
-    </div>
+    <?php echo view('admin/_sidebar', ['theme' => $theme ?? []]); ?>
 
     <!-- MAIN -->
     <div class="main-area">

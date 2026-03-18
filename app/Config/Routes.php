@@ -65,3 +65,20 @@ $routes->post('admin/form-fields/pages/reorder',       'Admin\FormFields::pageRe
 $routes->post('admin/form-fields/pages/(:num)/toggle', 'Admin\FormFields::pageToggle/$1');
 $routes->post('admin/form-fields/pages/(:num)/rename', 'Admin\FormFields::pageRename/$1');
 $routes->post('admin/form-fields/pages/(:num)/delete', 'Admin\FormFields::deletePage/$1');
+
+// Admin Form Presets Manager
+$routes->get('admin/presets',                    'Admin\PresetsController::index');
+$routes->get('admin/presets/create',             'Admin\PresetsController::create');
+$routes->post('admin/presets/store',             'Admin\PresetsController::store');
+$routes->get('admin/presets/(:num)/edit',        'Admin\PresetsController::edit/$1');
+$routes->post('admin/presets/(:num)/update',     'Admin\PresetsController::update/$1');
+$routes->get('admin/presets/(:num)/deactivate',  'Admin\PresetsController::deactivate/$1');
+$routes->get('admin/presets/(:num)/delete',      'Admin\PresetsController::delete/$1');
+$routes->get('admin/presets/(:num)/json',        'Admin\PresetsController::getPresetJson/$1');
+
+// Admin Program-Preset Management
+$routes->get('admin/programs/presets',           'Admin\ProgramPresetsController::index');
+$routes->post('admin/programs/assign-preset',    'Admin\ProgramPresetsController::assignPreset');
+
+// API Endpoints
+$routes->get('api/presets/program/(:num)',       'Admin\PresetsController::getFormPagesForApplicant/$1');

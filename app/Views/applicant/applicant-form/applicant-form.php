@@ -153,7 +153,7 @@ if (document.getElementById('program')) {
             });
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
             const data = await response.json();
-            if (data.status === 'success') return true;
+            if (data.status === 'success') return data;
             alert(data.message || 'Something went wrong.');
             return false;
         } catch (error) {
@@ -265,17 +265,26 @@ if (document.getElementById('program')) {
     const saveTextUI = document.getElementById('save-changes-text-ui');
     saveTextUI.textContent = 'Saving...';
 
-    const success = await processForm(currentStep, 'continue');
-    console.log('processForm result:', success);
+    const result = await processForm(currentStep, 'continue');
+    console.log('processForm result:', result);
 
-    if (success && currentStep < maxSteps) {
-        currentStep++;
-        await loadForm(currentStep);
-        updateButtons();
-        saveTextUI.textContent = 'Auto-saved changes';
-        setTimeout(() => { saveTextUI.textContent = ''; }, 3000);
+    if (result) {
+        // If the server set a new program/preset, reload the page so the
+        // progress bar reflects the correct preset steps.
+        if (result.reload && currentStep < maxSteps) {
+            const base = '<?= base_url() ?>';
+            window.location.href = `${base}applicant-form/step/${currentStep + 1}`;
+            return;
+        }
+        if (currentStep < maxSteps) {
+            currentStep++;
+            await loadForm(currentStep);
+            updateButtons();
+            saveTextUI.textContent = 'Auto-saved changes';
+            setTimeout(() => { saveTextUI.textContent = ''; }, 3000);
+        }
     } else {
-        console.log('Did not advance. success:', success, 'currentStep:', currentStep, 'maxSteps:', maxSteps);
+        console.log('Did not advance. result:', result, 'currentStep:', currentStep, 'maxSteps:', maxSteps);
     }
 });
 
