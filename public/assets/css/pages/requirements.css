@@ -54,6 +54,13 @@
                 margin-bottom: 10px;
             }
 
+                .requirements-section__header-top {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 12px;
+                }
+
                 .requirements-section__header h3 {
                     font-size: 20px;
                     font-weight: 600;
@@ -63,6 +70,21 @@
                     font-size: 14px;
                     font-weight: 500;
                     color: color-mix(in srgb, var(--text-primary) 30%, transparent);
+                }
+
+                .upload-counter {
+                    font-size: 12px;
+                    font-weight: 600;
+                    padding: 4px 10px;
+                    border-radius: 20px;
+                    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+                    color: var(--color-primary);
+                    white-space: nowrap;
+                }
+
+                .upload-counter--done {
+                    background: color-mix(in srgb, var(--color-success) 15%, transparent);
+                    color: var(--color-success);
                 }
 
     .form-uploads {

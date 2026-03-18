@@ -78,6 +78,19 @@ $action   = $action   ?? 'create';
         .btn-ghost:hover { background:#f9fafb; }
 
         svg { width:16px; height:16px; }
+
+        /* Required Documents */
+        #doc-list { display:flex; flex-direction:column; gap:10px; margin-bottom:10px; }
+        .doc-row { display:flex; align-items:flex-start; gap:8px; background:#f9fafb; border:1px solid #e5e7eb; border-radius:6px; padding:10px; }
+        .doc-row-fields { flex:1; display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+        .doc-row-fields input[type="text"] { margin:0; }
+        .doc-required-label { display:flex; align-items:center; gap:6px; font-size:12px; color:#374151; cursor:pointer; grid-column:1/-1; }
+        .doc-required-label input[type="checkbox"] { width:15px; height:15px; accent-color:var(--primary); cursor:pointer; }
+        .btn-remove-doc { background:#fee2e2; color:#dc2626; border:none; border-radius:6px; width:28px; height:28px; cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+        .btn-remove-doc:hover { background:#fecaca; }
+        .btn-add-doc { background:#e8f0ff; color:var(--primary); border:1px dashed var(--primary); border-radius:6px; padding:8px 14px; font-size:12px; font-weight:700; cursor:pointer; transition:all .18s; width:100%; }
+        .btn-add-doc:hover { background:#d0daf5; }
+        .doc-cat-desc { grid-column: 1 / -1; }
     </style>
 </head>
 <body>
@@ -163,6 +176,43 @@ $action   = $action   ?? 'create';
                             <?php endforeach; ?>
                         <?php else: ?>
                             <p style="color:#5a6a85; font-size:13px; padding:12px;">No sections available. Create sections in Form Fields first.</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <!-- ── REQUIREMENT CATEGORIES ── -->
+                <div class="form-group">
+                    <label class="form-label">Requirement Categories *</label>
+                    <p class="form-help" style="margin-bottom:12px;">
+                        Select which document categories apply to this preset. Each selected category becomes a step in the applicant's requirements checklist.
+                        <a href="<?= base_url('admin/requirement-categories') ?>" target="_blank" style="color:var(--primary);">Manage categories →</a>
+                    </p>
+                    <div class="section-list">
+                        <?php if (!empty($requirementCategories)): ?>
+                            <?php foreach ($requirementCategories as $cat):
+                                $isSelected = (!empty($oldInput['requirement_categories']) && in_array($cat['category_id'], (array)$oldInput['requirement_categories']))
+                                           || (!empty($selectedCategoryIds) && in_array($cat['category_id'], $selectedCategoryIds));
+                            ?>
+                                <div class="section-item">
+                                    <input type="checkbox"
+                                           name="requirement_categories[]"
+                                           value="<?= $cat['category_id'] ?>"
+                                           class="section-check"
+                                           id="reqcat_<?= $cat['category_id'] ?>"
+                                           <?= $isSelected ? 'checked' : '' ?>>
+                                    <div class="section-info">
+                                        <div class="section-name"><?= esc($cat['category_name']) ?></div>
+                                        <?php if (!empty($cat['description'])): ?>
+                                            <div class="section-count"><?= esc($cat['description']) ?></div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p style="color:#5a6a85; font-size:13px; padding:12px;">
+                                No requirement categories yet.
+                                <a href="<?= base_url('admin/requirement-categories/create') ?>" style="color:var(--primary);">Create one first</a>.
+                            </p>
                         <?php endif; ?>
                     </div>
                 </div>

@@ -64,17 +64,15 @@ class PresetModel extends Model
     }
 
     /**
-     * Create preset with sections
+     * Create preset with sections and requirement category assignments.
      */
-    public function createPresetWithSections($presetData, $sectionIds)
+    public function createPresetWithSections($presetData, $sectionIds, $categoryIds = [])
     {
         $this->db->transStart();
 
-        // Create preset
         $this->insert($presetData);
         $presetId = $this->getInsertID();
 
-        // Add sections to preset
         $sectionModel = new PresetSectionModel();
         foreach ($sectionIds as $index => $sectionId) {
             $sectionModel->insert([
@@ -85,32 +83,51 @@ class PresetModel extends Model
             ]);
         }
 
+        $prcModel = new \App\Models\PresetRequirementCategoryModel();
+        foreach ($categoryIds as $index => $catId) {
+            if (empty($catId)) continue;
+            $prcModel->insert([
+                'preset_id'               => $presetId,
+                'requirement_category_id' => (int)$catId,
+                'sort_order'              => $index,
+            ]);
+        }
+
         $this->db->transComplete();
 
         return $presetId;
     }
 
     /**
-     * Update preset with new sections
+     * Update preset with new sections and requirement category assignments.
      */
-    public function updatePresetWithSections($presetId, $presetData, $sectionIds)
+    public function updatePresetWithSections($presetId, $presetData, $sectionIds, $categoryIds = [])
     {
         $this->db->transStart();
 
-        // Update preset
         $this->update($presetId, $presetData);
 
-        // Delete old sections
+        // Replace sections
         $sectionModel = new PresetSectionModel();
         $sectionModel->where('preset_id', $presetId)->delete();
-
-        // Add new sections
         foreach ($sectionIds as $index => $sectionId) {
             $sectionModel->insert([
                 'preset_id'    => $presetId,
                 'form_page_id' => $sectionId,
                 'sort_order'   => $index,
                 'is_required'  => 1,
+            ]);
+        }
+
+        // Replace requirement category assignments
+        $prcModel = new \App\Models\PresetRequirementCategoryModel();
+        $prcModel->where('preset_id', $presetId)->delete();
+        foreach ($categoryIds as $index => $catId) {
+            if (empty($catId)) continue;
+            $prcModel->insert([
+                'preset_id'               => $presetId,
+                'requirement_category_id' => (int)$catId,
+                'sort_order'              => $index,
             ]);
         }
 

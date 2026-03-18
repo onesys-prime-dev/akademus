@@ -99,9 +99,9 @@ class PresetService
     }
 
     /**
-     * Create a new preset
+     * Create a new preset with requirement category assignments.
      */
-    public function createPreset($name, $description, $isGlobal, $formPageIds)
+    public function createPreset($name, $description, $isGlobal, $formPageIds, $categoryIds = [])
     {
         $presetData = [
             'name'        => $name,
@@ -110,13 +110,13 @@ class PresetService
             'is_active'   => 1,
         ];
 
-        return $this->presetModel->createPresetWithSections($presetData, $formPageIds);
+        return $this->presetModel->createPresetWithSections($presetData, $formPageIds, $categoryIds);
     }
 
     /**
-     * Update an existing preset
+     * Update an existing preset with requirement category assignments.
      */
-    public function updatePreset($presetId, $name, $description, $isGlobal, $formPageIds)
+    public function updatePreset($presetId, $name, $description, $isGlobal, $formPageIds, $categoryIds = [])
     {
         $presetData = [
             'name'        => $name,
@@ -124,7 +124,20 @@ class PresetService
             'is_global'   => $isGlobal ? 1 : 0,
         ];
 
-        return $this->presetModel->updatePresetWithSections($presetId, $presetData, $formPageIds);
+        return $this->presetModel->updatePresetWithSections($presetId, $presetData, $formPageIds, $categoryIds);
+    }
+
+    /**
+     * Get requirement categories assigned to a program's preset.
+     */
+    public function getPresetRequirementCategories(int $programId): array
+    {
+        $preset = $this->getPresetForProgram($programId);
+        if (!$preset) {
+            return [];
+        }
+
+        return (new \App\Models\PresetRequirementCategoryModel())->getCategoriesForPreset($preset['id']);
     }
 
     /**
@@ -177,8 +190,9 @@ class PresetService
             ->where('preset_id', (int)$presetId)
             ->update(['preset_id' => null]);
 
-        // Delete sections first (foreign key), then the preset
+        // Delete sections, requirement category links, then the preset
         $db->table('preset_sections')->where('preset_id', (int)$presetId)->delete();
+        $db->table('preset_requirement_categories')->where('preset_id', (int)$presetId)->delete();
         $db->table('form_presets')->where('id', (int)$presetId)->delete();
 
         return true;

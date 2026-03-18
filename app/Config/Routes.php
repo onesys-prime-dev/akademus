@@ -76,6 +76,14 @@ $routes->get('admin/presets/(:num)/deactivate',  'Admin\PresetsController::deact
 $routes->get('admin/presets/(:num)/delete',      'Admin\PresetsController::delete/$1');
 $routes->get('admin/presets/(:num)/json',        'Admin\PresetsController::getPresetJson/$1');
 
+// Admin Requirement Categories Manager
+$routes->get ('admin/requirement-categories',                        'Admin\RequirementCategoriesController::index');
+$routes->get ('admin/requirement-categories/create',                 'Admin\RequirementCategoriesController::create');
+$routes->post('admin/requirement-categories/store',                  'Admin\RequirementCategoriesController::store');
+$routes->get ('admin/requirement-categories/(:num)/edit',            'Admin\RequirementCategoriesController::edit/$1');
+$routes->post('admin/requirement-categories/(:num)/update',          'Admin\RequirementCategoriesController::update/$1');
+$routes->get ('admin/requirement-categories/(:num)/delete',          'Admin\RequirementCategoriesController::delete/$1');
+
 // Admin Program-Preset Management
 $routes->get('admin/programs/presets',           'Admin\ProgramPresetsController::index');
 $routes->post('admin/programs/assign-preset',    'Admin\ProgramPresetsController::assignPreset');

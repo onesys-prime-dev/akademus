@@ -32,6 +32,8 @@ async function loadForm(step) {
         // Populate all fields including dynamic selects
         populateForm(`requirements-${step}`, data.formData);
 
+        updateUploadCounter(`requirements-${step}`, data.formData);
+
         setupAutoSave(step);
 
         history.replaceState(null, '', `${stepUrl}${step}`);
@@ -95,6 +97,32 @@ async function processForm(step) {
     }
 }
 
+function updateUploadCounter(formId, formData) {
+    const counter = document.querySelector('.upload-counter');
+    if (!counter) return;
+
+    const form = document.getElementById(formId);
+    if (!form) return;
+
+    const requiredInputs = form.querySelectorAll('input[type="file"][required]');
+    const totalRequired = requiredInputs.length;
+
+    if (totalRequired === 0) {
+        counter.style.display = 'none';
+        return;
+    }
+
+    // Count uploaded required docs from formData
+    let uploadedRequired = 0;
+    requiredInputs.forEach(input => {
+        const reqId = input.id.replace('requirement_', '');
+        if (formData && formData[reqId]) uploadedRequired++;
+    });
+
+    counter.textContent = `${uploadedRequired}/${totalRequired} required uploaded`;
+    counter.classList.toggle('upload-counter--done', uploadedRequired >= totalRequired);
+}
+
 function setupAutoSave(step) {
     const form = document.getElementById(`requirements-${step}`);
     if (!form) return;
@@ -119,6 +147,7 @@ async function autoSaveHandler() {
 
         if (success) {
             autosaveText.textContent = 'Auto-saved changes';
+            // loadForm (called inside processForm) already updates the counter
         } else {
             autosaveText.textContent = 'Auto-save failed';
         }
@@ -184,16 +213,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Buttons
 saveAndContinueBtn.addEventListener('click', async () => {
-    // Show "Saving..." while waiting for debounce
     autosaveText.textContent = 'Saving...';
-    
+
+    // Upload any selected files before advancing
+    const success = await processForm(currentStep);
+    if (!success) return;
+
     if (currentStep < maxSteps) {
         currentStep++;
-        
         await loadForm(currentStep);
         updateButtons();
-        
         autosaveText.textContent = 'Auto-saved changes';
+        setTimeout(() => { autosaveText.textContent = ''; }, 3000);
     }
 });
 /*

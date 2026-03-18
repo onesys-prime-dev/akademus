@@ -38,7 +38,8 @@ class RequirementsController extends BaseController
         // Compute primary_soft (lightened tint) from primary_color
         $theme['primary_soft'] = $this->lightenHex($theme['primary_color'] ?? '#0040a6', 0.88);
 
-        $program_id = session()->get('program_id');
+        // Prefer the program confirmed on the application form (step 1) when available
+        $program_id = session()->get('selected_program_id') ?? session()->get('program_id');
 
         $categories = $this->requirementService->getCategories($program_id);
         $maxSteps = count($categories) + 1;
@@ -71,7 +72,7 @@ class RequirementsController extends BaseController
     {
         $step = (int) $step;
         
-        $program_id = session()->get('program_id');
+        $program_id = session()->get('selected_program_id') ?? session()->get('program_id');
 
         $categories = $this->requirementService->getCategories($program_id);
         $maxSteps = count($categories) + 1;
@@ -98,8 +99,13 @@ class RequirementsController extends BaseController
         }
 
         $applicant_id = session()->get('applicant_id');
-        
+
         $formData = $this->documentService->getStepDocuments($applicant_id, $requirements);
+
+        // Compute upload counts for the counter shown in the step header
+        $totalRequired   = count(array_filter($requirements, fn($r) => $r['is_required']));
+        $uploadedRequired = count(array_filter($requirements, fn($r) => $r['is_required'] && isset($formData[$r['program_requirement_id']])));
+        $totalUploaded   = count($formData);
 
         if ($this->request->isAJAX()) {
 
@@ -107,10 +113,13 @@ class RequirementsController extends BaseController
                 'title' => 'Requirements',
                 'step_num' => $step,
                 'form' => view("applicant/requirements/steps/step", [
-                    'step_num' => $step,
-                    'requirements' => $requirements,
-                    'category_name' => $category_name,
-                    'category_description' => $category_description
+                    'step_num'             => $step,
+                    'requirements'         => $requirements,
+                    'category_name'        => $category_name,
+                    'category_description' => $category_description,
+                    'uploaded_required'    => $uploadedRequired,
+                    'total_required'       => $totalRequired,
+                    'total_uploaded'       => $totalUploaded,
                 ]),
                 'formData' => $formData
             ]);
