@@ -13,7 +13,7 @@
         <!-- SECTION HEADER -->
         <div class="requirements-section__header">
             <div class="requirements-section__header-top">
-                <h3><?= esc($category_name) ?> Documents</h3>
+                <h3><?= esc($category_name) ?></h3>
                 <?php if (($total_required ?? 0) > 0): ?>
                     <span class="upload-counter <?= ($uploaded_required ?? 0) >= ($total_required ?? 0) ? 'upload-counter--done' : '' ?>">
                         <?= (int)($uploaded_required ?? 0) ?>/<?= (int)($total_required ?? 0) ?> required uploaded

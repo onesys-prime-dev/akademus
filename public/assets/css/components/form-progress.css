@@ -75,3 +75,65 @@
 .form-progress__line-done {
     background-color: var(--color-primary);
 }
+
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE — TABLET (≤ 1024 px)
+════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .form-progress {
+        padding: 16px 24px 24px;
+        gap: 14px;
+    }
+
+    .form-progress__title {
+        font-size: 15px;
+    }
+
+    .form-progress__step span {
+        font-size: 11px;
+        width: 52px;
+    }
+}
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤ 768 px)
+════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+    .form-progress {
+        padding: 14px 16px 18px;
+        gap: 12px;
+    }
+
+    .form-progress__title {
+        font-size: 14px;
+    }
+
+    .form-progress__circle {
+        width: 26px;
+        height: 26px;
+        font-size: 13px;
+    }
+
+    .form-progress__line {
+        margin-top: 11px;
+    }
+
+    /* Allow labels to wrap and respect container width */
+    .form-progress__step span {
+        font-size: 10px;
+        width: 48px;
+        min-width: 0;
+        white-space: normal;
+        line-height: 1.3;
+    }
+}
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE — SMALL MOBILE (≤ 480 px)
+════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+    .form-progress__step span {
+        display: none;
+    }
+}

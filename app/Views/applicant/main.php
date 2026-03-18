@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/components/form-field.css') . '?v=' . time(); ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/components/form-progress.css') . '?v=' . time(); ?>">
 
-    <!-- Layouts CSS Styles -->
+    <!-- Utilities CSS Styles -->
     <link rel="stylesheet" href="<?= base_url('assets/css/utilities/utilities.css') . '?v=' . time(); ?>">
 
     <!-- Pages CSS Styles -->
@@ -41,16 +41,35 @@
     ?>
     <link rel="stylesheet" href="<?= base_url("assets/css/pages/{$pageName}.css?v=" . time()) ?>">
     <?php endif; ?>
-    
+
 </head>
 
 <body>
-    <div class="sidebar-container">
+    <!-- Mobile sidebar overlay backdrop -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <div class="sidebar-container" id="sidebar">
+        <!-- Mobile close button inside sidebar -->
+        <button class="sidebar-close" id="sidebar-close" aria-label="Close menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
         <?= view('applicant/components/sidebar', ['theme' => $theme]) ?>
     </div>
 
     <main class="main-content">
         <div class="header">
+            <!-- Hamburger button (hidden on desktop via CSS) -->
+            <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Open menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6"  x2="21" y2="6"/>
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
             <h1><?= $title ?></h1>
             <div class="application-status">Approve</div>
         </div>
@@ -63,5 +82,35 @@
     <?php if (uri_string() !== 'faq'): ?>
         <?= view('applicant/components/chat_widget', ['theme' => $theme]) ?>
     <?php endif; ?>
+
+    <script>
+        (function () {
+            const sidebar  = document.getElementById('sidebar');
+            const overlay  = document.getElementById('sidebar-overlay');
+            const toggleBtn = document.getElementById('sidebar-toggle');
+            const closeBtn  = document.getElementById('sidebar-close');
+
+            function openSidebar() {
+                sidebar.classList.add('sidebar-open');
+                overlay.classList.add('sidebar-open');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('sidebar-open');
+                overlay.classList.remove('sidebar-open');
+                document.body.style.overflow = '';
+            }
+
+            if (toggleBtn) toggleBtn.addEventListener('click', openSidebar);
+            if (closeBtn)  closeBtn.addEventListener('click', closeSidebar);
+            if (overlay)   overlay.addEventListener('click', closeSidebar);
+
+            // Close sidebar on window resize if viewport grows past mobile breakpoint
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 768) closeSidebar();
+            });
+        })();
+    </script>
 </body>
 </html>

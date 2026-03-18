@@ -5,13 +5,20 @@ namespace App\Controllers\Applicant;
 use App\Controllers\BaseController;
 
 use App\Models\Applicant\ApplicantModel;
+use App\Models\Application\ApplicationModel;
+use App\Models\Application\PersonalInformationModel;
+use App\Models\Application\FamilyBackgroundModel;
+use App\Models\Application\EducationalBackgroundModel;
+use App\Models\FormPageModel;
 use App\Models\ThemeModel;
+use App\Services\RequirementService;
+use App\Services\ApplicantDocumentService;
 
 class DashboardController extends BaseController
 {
     public function index()
     {
-        if (!session()->get('logged_in')) { 
+        if (!session()->get('logged_in')) {
             return redirect()->to('/sign-in');
         }
 
@@ -22,38 +29,159 @@ class DashboardController extends BaseController
             ->where('user_id', session()->get('user_id'))
             ->first();
 
-        // Guard: no applicant record for this user
         if (!$applicant) {
             return redirect()->to('/sign-in');
         }
 
-        // Get application row
         $db          = \Config\Database::connect();
         $application = $db->table('applications')
             ->where('applicant_id', $applicant['applicant_id'])
             ->get()->getRowArray();
 
-        // Determine current step
-        $step = 1; // Account always done
+        $appStatus = $application['application_status'] ?? '';
+
+        // ── Form Completion ──────────────────────────────────────────────
+        $formPageModel  = new FormPageModel();
+        $formPages      = $formPageModel->getEnabledOrdered();
+        $formPageCount  = count($formPages);
+        $formCompletion = array_fill_keys(array_column($formPages, 'id'), false);
+
         if ($application) {
-            $step = 2; // Form started
-            if ($application['application_status'] === 'approved') {
-                $step = 4;
+            $appId = $application['application_id'];
+
+            if (isset($formCompletion[1])) {
+                $formCompletion[1] = !empty($application['applicant_type']);
             }
-            if ($application['application_status'] === 'enrolled') {
-                $step = 5;
+            if (isset($formCompletion[2])) {
+                $pi = (new PersonalInformationModel())->where('application_id', $appId)->first();
+                $formCompletion[2] = !empty($pi['firstname']);
+            }
+            if (isset($formCompletion[3])) {
+                $fb = (new FamilyBackgroundModel())->where('application_id', $appId)->first();
+                $formCompletion[3] = !empty($fb['father_lastname']) || !empty($fb['guardian_name']);
+            }
+            if (isset($formCompletion[4])) {
+                $eb = (new EducationalBackgroundModel())->where('application_id', $appId)->first();
+                $formCompletion[4] = !empty($eb['school_name']);
             }
         }
 
-        $progress = ($step / 5) * 100;
+        $formPagesCompleted = count(array_filter($formCompletion));
+        $formProgress = $formPageCount > 0
+            ? (int) round(($formPagesCompleted / $formPageCount) * 100)
+            : 0;
 
-        $data['title']            = 'Dashboard';
-        $data['page_content']     = 'applicant/dashboard/dashboard';
-        $data['applicant_number'] = $applicant['applicant_number'] ?? 'N/A';
-        $data['firstname']        = session()->get('firstname');
-        $data['theme']            = $themeModel->getAllSettings();
-        $data['current_step']     = $step;
-        $data['progress']         = $progress;
+        // ── Document Stats ───────────────────────────────────────────────
+        $programId = $application['program_id']
+            ?? $applicant['program_id']
+            ?? session()->get('selected_program_id');
+
+        $docStats = [
+            'total_required'    => 0,
+            'uploaded_required' => 0,
+            'missing_required'  => 0,
+            'total_optional'    => 0,
+            'uploaded_optional' => 0,
+            'all_requirements'  => [],
+            'uploaded_docs'     => [],
+        ];
+
+        if ($programId) {
+            $reqService = new RequirementService();
+            $allReqs    = $reqService->getRequirements($programId);
+
+            if (!empty($allReqs)) {
+                $docService      = new ApplicantDocumentService();
+                $uploadedDocs    = $docService->getStepDocuments($applicant['applicant_id'], $allReqs);
+
+                $totalRequired    = count(array_filter($allReqs, fn($r) => $r['is_required']));
+                $uploadedRequired = count(array_filter($allReqs, fn($r) => $r['is_required'] && isset($uploadedDocs[$r['program_requirement_id']])));
+                $totalOptional    = count(array_filter($allReqs, fn($r) => !$r['is_required']));
+                $uploadedOptional = count(array_filter($allReqs, fn($r) => !$r['is_required'] && isset($uploadedDocs[$r['program_requirement_id']])));
+
+                $docStats = [
+                    'total_required'    => $totalRequired,
+                    'uploaded_required' => $uploadedRequired,
+                    'missing_required'  => $totalRequired - $uploadedRequired,
+                    'total_optional'    => $totalOptional,
+                    'uploaded_optional' => $uploadedOptional,
+                    'all_requirements'  => $allReqs,
+                    'uploaded_docs'     => $uploadedDocs,
+                ];
+            }
+        }
+
+        $docProgress = $docStats['total_required'] > 0
+            ? (int) round(($docStats['uploaded_required'] / $docStats['total_required']) * 100)
+            : 0;
+
+        // ── Overall Step ─────────────────────────────────────────────────
+        $step = 1;
+        if ($application) {
+            $step = 2;
+            if ($appStatus === 'approved') $step = 4;
+            if ($appStatus === 'enrolled') $step = 5;
+        }
+
+        // Per-step status: 'done', 'inprogress', or '' (not started)
+        $stepStatuses = [
+            1 => 'done',
+            2 => match(true) {
+                $formPagesCompleted <= 0              => '',
+                $formPagesCompleted >= $formPageCount => 'done',
+                default                               => 'inprogress',
+            },
+            3 => match(true) {
+                $docStats['total_required'] === 0                                   => '',
+                $docStats['uploaded_required'] <= 0                                 => '',
+                $docStats['uploaded_required'] >= $docStats['total_required']       => 'done',
+                default                                                             => 'inprogress',
+            },
+            4 => in_array($appStatus, ['approved', 'enrolled']) ? 'done' : '',
+            5 => $appStatus === 'enrolled' ? 'done' : '',
+        ];
+
+        $overallProgress = (int) round(
+            (count(array_filter($stepStatuses, fn($s) => $s === 'done')) / 5) * 100
+        );
+
+        // ── Banner Message ────────────────────────────────────────────────
+        if ($appStatus === 'enrolled') {
+            $bannerMessage = 'You are now officially enrolled. Welcome to the family!';
+        } elseif ($appStatus === 'approved') {
+            $bannerMessage = 'Congratulations! Your application has been approved. Please settle your reservation fee.';
+        } elseif ($docProgress === 100) {
+            $bannerMessage = 'All documents uploaded! Your application is under review.';
+        } elseif ($docProgress > 0) {
+            $bannerMessage = 'Your application is in progress. Upload the remaining documents to move to the verification stage.';
+        } elseif ($formProgress === 100) {
+            $bannerMessage = 'Your form is complete! Proceed to upload the required documents.';
+        } elseif ($formProgress > 0) {
+            $bannerMessage = 'Your application form is in progress. Continue where you left off.';
+        } else {
+            $bannerMessage = 'Welcome! Start your application by filling out the applicant form below.';
+        }
+
+        $data = [
+            'title'            => 'Dashboard',
+            'page_content'     => 'applicant/dashboard/dashboard',
+            'applicant_number' => $applicant['applicant_number'] ?? 'N/A',
+            'firstname'        => session()->get('firstname'),
+            'theme'            => $themeModel->getAllSettings(),
+            'current_step'     => $step,
+            'progress'         => $overallProgress,
+            'step_statuses'    => $stepStatuses,
+            'banner_message'   => $bannerMessage,
+            // Form
+            'form_pages'       => $formPages,
+            'form_completion'  => $formCompletion,
+            'form_completed'   => $formPagesCompleted,
+            'form_total'       => $formPageCount,
+            'form_progress'    => $formProgress,
+            // Documents
+            'doc_stats'        => $docStats,
+            'doc_progress'     => $docProgress,
+        ];
 
         return view('applicant/main', $data);
     }

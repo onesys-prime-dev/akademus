@@ -50,18 +50,34 @@ class ApplicantFormController extends BaseController
 
     public function index()
     {
-        // Restore program from existing in-progress application
         $applicantId = session()->get('applicant_id');
+
+        // Restore program from any existing application (draft or submitted)
         if ($applicantId && !session()->get('selected_program_id')) {
             $application = (new ApplicationModel())
                 ->where('applicant_id', $applicantId)
-                ->where('application_status !=', 'submitted')
                 ->first();
             if ($application && !empty($application['program_id'])) {
                 session()->set('selected_program_id', (int)$application['program_id']);
             }
         }
+
         return $this->renderLayout(1);
+    }
+
+    private function isSubmitted(): bool
+    {
+        $applicantId = session()->get('applicant_id');
+        if (!$applicantId) return false;
+
+        $application = (new ApplicationModel())
+            ->where('applicant_id', $applicantId)
+            ->first();
+
+        // Any status other than 'draft' (or no application) means not yet submitted
+        if (!$application) return false;
+
+        return !in_array($application['application_status'], ['draft']);
     }
 
     private function renderLayout(int $step)
@@ -78,6 +94,7 @@ class ApplicantFormController extends BaseController
             'page_content' => 'applicant/applicant-form/applicant-form',
             'initial_step' => $step,
             'max_steps'    => $maxSteps,
+            'is_submitted' => $this->isSubmitted(),
             'theme'        => $theme,
         ]);
     }
@@ -97,10 +114,13 @@ class ApplicantFormController extends BaseController
         $applicantId = session()->get('applicant_id');
         $formData    = [];
 
+        // Fetch any application (including submitted ones) so the form data
+        // can be populated for read-only viewing after submission.
         $application = (new ApplicationModel())
             ->where('applicant_id', $applicantId)
-            ->where('application_status !=', 'pending')
             ->first();
+
+        $isSubmitted = $application && !in_array($application['application_status'], ['draft']);
 
         if ($application) {
             $formData = $this->getFormDataForPage($pageId, $application['application_id']);
@@ -114,14 +134,15 @@ class ApplicantFormController extends BaseController
 
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([
-                'title'    => 'Applicant Information Form',
-                'step_num' => $step,
-                'page_id'  => $pageId,
-                'form'     => view($viewFile, [
+                'title'        => 'Applicant Information Form',
+                'step_num'     => $step,
+                'page_id'      => $pageId,
+                'is_submitted' => $isSubmitted,
+                'form'         => view($viewFile, [
                     'step_num' => $step,    // position: 1,2,3,4 — used for form id
                     'page_id'  => $pageId,  // actual DB id — used for field configs
                 ]),
-                'formData' => $formData,
+                'formData'     => $formData,
             ]);
         }
 
@@ -140,10 +161,19 @@ class ApplicantFormController extends BaseController
         $applicantId      = session()->get('applicant_id');
         $applicationModel = new ApplicationModel();
 
+        // Block edits on already-submitted applications
         $application = $applicationModel
             ->where('applicant_id', $applicantId)
-            ->where('application_status !=', 'submitted')
+            ->where('application_status', 'draft')
             ->first();
+
+        if (!$application && $applicationModel->where('applicant_id', $applicantId)->first()) {
+            // Application exists but is no longer a draft — reject the save
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'Your application has already been submitted and cannot be edited.',
+            ]);
+        }
 
         if (!$application) {
             $applicationId = $applicationModel->insert([
@@ -194,12 +224,11 @@ class ApplicantFormController extends BaseController
 
     private function updateApplication($data, $applicationId, $action)
     {
-        $sy_and_semester = explode(',', $data['sy_semester'] ?? '', 2);
         return (new ApplicationModel())->update($applicationId, [
             'applicant_type'     => $data['applicant_type'] ?? null,
             'program_id'         => $data['program_id']     ?? null,
-            'school_year'        => trim($sy_and_semester[0] ?? ''),
-            'semester'           => trim($sy_and_semester[1] ?? ''),
+            'school_year'        => $data['school_year']    ?? null,
+            'semester'           => $data['semester']       ?? null,
             'application_status' => $action === 'submit' ? 'pending' : 'draft',
         ]);
     }
