@@ -67,12 +67,14 @@
     display: flex;
     background-color: #e6e6e6;
     height: 10px;
+    border-radius: 10px;
 }
 
 .tracking-progress__bar-fill {
     width: 70%;
     height: 100%;
     background-color: var(--primary);
+    border-radius: 10px;
 }
 
 .tracking-progress__timeline {
