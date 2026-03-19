@@ -5,6 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Akademus</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="#" class="navbar-brand">
+                <img src="<?= base_url('assets/images/logo.png') ?>" alt="Akademus Logo">
+                <span>Akademus University</span>
+            </a>
+            <ul class="navbar-menu">
+                <li><a href="<?= base_url('/') ?>">Home</a></li>
+                <li><a href="<?= base_url('/about') ?>">About Us</a></li>
+                <li><a href="<?= base_url('/admissions') ?>">Admissions</a></li>
+                <li><a href="<?= base_url('/contact') ?>">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    <section class="about-section">
+        <div class="container">
+            <h1>About Akademus University</h1>
+            <p>Akademus University is a prestigious institution dedicated to providing quality education and fostering innovation. Established in 1990, we have been committed to nurturing the minds of future leaders and professionals.</p>
+            <p>Our mission is to empower students with knowledge, skills, and values that will enable them to succeed in their careers and make a positive impact on society. We offer a wide range of undergraduate and postgraduate programs across various disciplines, including science, technology, arts, and humanities.</p>
+            <p>At Akademus University, we pride ourselves on our diverse and inclusive community, state-of-the-art facilities, and a faculty composed of experienced educators and industry experts. We are dedicated to creating an environment that encourages creativity, critical thinking, and lifelong learning.</p>
+        </div>
+    </section>
+</body>
+
     <style>
         *,*::before,*::after { box sizing: border-box;  margin: 0; padding: 0; }
         body { font-family: 'Poppins', Helvetica, sans-serif;; background: #0040a6; overflow-x: hidden;}
