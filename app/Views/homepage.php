@@ -88,7 +88,7 @@
                             to advanced topics, ensuring that learners acquire information in a consistent and goal-oriented
                             manner. For example, a learner studying Data Analysis can follow a sequence of lessons in Akademos,
                             starting with Excel basics and gradually progressing to advanced statistical concepts. In this way,
-                            Akademos forms the foundation of serious learning by combining credibility, structure, and depth.
+                            Akademos forms the foundation of serious learning by combining credibility, structure, and depth. 
                         </p>
                         <div class="feature-btn learn-more-2">
                             <div class="rectangle-3"></div>

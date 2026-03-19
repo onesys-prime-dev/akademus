@@ -8,6 +8,9 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'HomeController::index');
 $routes->get('applynowpage', 'ApplyNow::index');
 
+// about us (about.php)
+$routes->get('about', 'AboutUsController::about_us');
+
 // sign and sign up page after clicking the 'Apply Now' Button
 $routes->get('sign-in', 'Auth\AuthController::sign_in');
 $routes->get('sign-up', 'Auth\AuthController::sign_up');
