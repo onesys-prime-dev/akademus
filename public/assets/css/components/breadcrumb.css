@@ -1,0 +1,15 @@
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.breadcrumb_label {
+    color: #898989;
+}
+
+.breadcrumb_label-current {
+    color: var(--primary);
+    font-weight: 500;
+}

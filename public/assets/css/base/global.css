@@ -36,3 +36,7 @@ a {
 input, select {
   outline: 0;
 }
+
+button {
+  border: 0;
+}

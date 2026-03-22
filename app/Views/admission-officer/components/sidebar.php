@@ -1,0 +1,70 @@
+<?php 
+    $firstname = session()->get('firstname') ?? 'Applicant';
+    $lastname  = session()->get('lastname')  ?? '';
+    $fullname  = trim($firstname . ' ' . $lastname);
+
+    // Generate initials from name
+    $initials = strtoupper(substr($firstname, 0, 1) . substr($lastname, 0, 1));
+    if (empty(trim($initials))) $initials = 'AP';
+
+    $applicant_number = session()->get('applicant_number');
+
+    // Theme values
+    $app_name  = $theme['app_name']  ?? 'AKADEMUS';
+    $logo_url  = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png');
+?>
+
+<nav>
+    <div class="sidebar-top-and-links">
+        <div class="sidebar-top">
+            <a href="<?= base_url('/dashboard') ?>" class="brand">
+                <img src="<?= $logo_url ?>">
+                <div class="header-wrapper">
+                    <p><?= esc($app_name) ?></p>
+                    <span>Admission Portal</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-links">
+            <div class="group-container">
+                <p>GENERAL</p>
+                
+                <div class="grouped-links">
+                    <a href="<?= base_url('/admission-officer/dashboard') ?>" class="sidebar-nav-link">
+                        <div class="dotted-link"></div>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="<?= base_url('/admission-officer/applicants') ?>" class="sidebar-nav-link">
+                        <div class="dotted-link"></div>
+                        <span>Applicants</span>
+                    </a>
+                    <a href="<?= base_url('/admission-officer/exam-schedule') ?>" class="sidebar-nav-link">
+                        <div class="dotted-link"></div>
+                        <span>Exam Schedule</span>
+                    </a>
+                    <a href="<?= base_url('/admission-officer/follow-up') ?>" class="sidebar-nav-link">
+                        <div class="dotted-link"></div>
+                        <span>Follow Up</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-bottom">
+        <div class="profile-container">
+            <div class="profile-picture">
+                <span><?= $initials ?></span>
+            </div>
+            <div class="profile-info">
+                <p><?= esc($fullname) ?></p>
+                <span>Applicant</span>
+            </div>
+        </div>
+
+        <a href="<?= base_url('logout') ?>" class="logout-link">
+            <span>Logout</span>
+        </a>
+    </div>
+</nav>
