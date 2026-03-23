@@ -12,4 +12,4 @@ window.applicantsConfig = <?= json_encode([
 ]) ?>;
 </script>
 
-<script type="module" src="<?= base_url('assets/js/admission-officer/main.js') ?>?v=<?= time() ?>"></script>
+<script type="module" src="<?= base_url('assets/js/admission-officer/dashboard/main.js') ?>?v=<?= time() ?>"></script>

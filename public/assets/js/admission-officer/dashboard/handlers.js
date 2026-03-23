@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { fetchApplicants, bulkUpdateApplicants } from './api.js';
+import { fetchApplicants, bulkUpdateApplicants, goToApplicant } from './api.js';
 import { updateTable, updatePagination, updateFilterCounts, showLoading, hideLoading, resetBulkSelection, updateBulkButtons } from './ui.js';
 
 let debounceTimer;
@@ -165,6 +165,28 @@ function getSelectedIds() {
     return Array.from(document.querySelectorAll('[data-select]:checked'))
         .map(cb => cb.closest('[data-row]')?.dataset.id)
         .filter(Boolean);
+}
+
+// ROW CLICK
+export function initRowClick() {
+    document.addEventListener('click', (e) => {
+
+        const row = e.target.closest('[data-row]');
+        if (!row) return;
+
+        // ❗ prevent trigger when clicking checkbox or actions
+        if (
+            e.target.closest('[data-select]') ||
+            e.target.closest('[data-action]')
+        ) {
+            return;
+        }
+
+        const id = row.dataset.id;
+        if (!id) return;
+
+        goToApplicant(id);
+    });
 }
 
 // INIT

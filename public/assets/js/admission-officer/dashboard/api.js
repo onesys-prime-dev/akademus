@@ -20,3 +20,7 @@ export async function bulkUpdateApplicants(ids, status) {
 
     return await res.json();
 }
+
+export function goToApplicant(id) {
+    window.location.href = `${baseUrl}admission-officer/applicants/${id}`;
+}

@@ -17,8 +17,7 @@ class DashboardController extends BaseController
         $this->applicantService = new ApplicantService();
     }
 
-    public function index()
-    {
+    public function index() {
         helper('theme');
         
         $themeModel = new ThemeModel();
@@ -41,8 +40,7 @@ class DashboardController extends BaseController
         ]);
     }
 
-    public function fetchApplicants()
-    {
+    public function fetchApplicants() {
         $filters = [
             'status'  => $this->request->getGet('status'),
             'program' => $this->request->getGet('program'),
@@ -66,8 +64,7 @@ class DashboardController extends BaseController
         ]);
     }
 
-    public function bulkUpdate()
-    {
+    public function bulkUpdate() {
         $data = $this->request->getJSON(true);
 
         $ids = $data['ids'] ?? [];
@@ -85,5 +82,9 @@ class DashboardController extends BaseController
             ->update(['application_status' => $status]);
 
         return $this->response->setJSON(['success' => true]);
+    }
+
+    public function fetchApplicant($id) {
+        
     }
 }

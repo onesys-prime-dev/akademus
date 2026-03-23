@@ -95,3 +95,7 @@ $routes->get('api/presets/program/(:num)',       'Admin\PresetsController::getFo
 $routes->get('admission-officer/dashboard',                     'AdmissionOfficer\DashboardController::index');
 $routes->get('admission-officer/dashboard/fetch-applicants',    'AdmissionOfficer\DashboardController::fetchApplicants');
 $routes->post('admission-officer/dashboard/bulk-update',        'AdmissionOfficer\DashboardController::bulkUpdate');
+
+// Admission Officer Applicants
+$routes->get('admission-officer/applicants/(:num)',         'AdmissionOfficer\ApplicantsController::index/$1');
+$routes->get('admission-officer/applicants/fetch-content',  'AdmissionOfficer\ApplicantsController::fetchContent');

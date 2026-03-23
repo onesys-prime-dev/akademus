@@ -1,4 +1,4 @@
-import { initFilters, initProgram, initSearch, initPagination, initBulkSelect, initBulkActions, init } from './handlers.js';
+import { initFilters, initProgram, initSearch, initPagination, initBulkSelect, initBulkActions, initRowClick, init } from './handlers.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initFilters();
@@ -7,5 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initPagination();
     initBulkSelect();
     initBulkActions();
+    initRowClick();
     init();
 });
