@@ -139,4 +139,47 @@ class RequirementsController extends BaseController
             'status' => 'success'
         ]);
     }
+
+    public function viewDocument($requirementId)
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/sign-in');
+        }
+
+        $applicant_id = session()->get('applicant_id');
+        $doc = $this->documentService->getDocument($applicant_id, (int) $requirementId);
+
+        if (!$doc) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $filePath = WRITEPATH . "uploads/applicants/{$applicant_id}/" . $doc['document_name'];
+
+        if (!file_exists($filePath)) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $mime = mime_content_type($filePath);
+
+        return $this->response
+            ->setHeader('Content-Type', $mime)
+            ->setHeader('Content-Disposition', 'inline; filename="' . $doc['document_name'] . '"')
+            ->setBody(file_get_contents($filePath));
+    }
+
+    public function submitApplication()
+    {
+        if (!session()->get('logged_in')) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized']);
+        }
+
+        $applicant_id = session()->get('applicant_id');
+        $db = \Config\Database::connect();
+
+        $db->table('applications')
+            ->where('applicant_id', $applicant_id)
+            ->update(['application_status' => 'pending']);
+
+        return $this->response->setJSON(['status' => 'success']);
+    }
 }

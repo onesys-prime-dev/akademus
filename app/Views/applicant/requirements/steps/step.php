@@ -40,7 +40,7 @@
                 <label for="requirement_<?= $program_requirement_id ?>" class="upload-field">
                     <div class="requirement-upload-info">
                         <p class="requirement-title">
-                            <?= esc($requirement_name) ?> 
+                            <?= esc($requirement_name) ?>
 
                             <?php if ($is_required): ?>
                                 <span class="required">REQUIRED</span>
@@ -48,15 +48,23 @@
                         </p>
                         <p class="requirement-description"><?= esc($requirement_description) ?></p>
                     </div>
-                    
-                    <div id="upload-btn" class="requirement-upload-action btn-primary">Upload</div>
+
+                    <div class="requirement-upload-actions">
+                        <a href="#"
+                           class="requirement-view-action hidden"
+                           data-req-id="<?= $program_requirement_id ?>"
+                           data-doc-name=""
+                           onclick="event.preventDefault(); event.stopPropagation(); openDocumentModal(this.dataset.reqId, this.dataset.docName)">View</a>
+                        <div class="requirement-upload-action btn-primary">Upload</div>
+                    </div>
                 </label>
 
-                <input 
-                    type="file" 
-                    id="requirement_<?= $program_requirement_id ?>" 
-                    name="documents[<?= $program_requirement_id ?>]" 
-                    hidden 
+                <input
+                    type="file"
+                    id="requirement_<?= $program_requirement_id ?>"
+                    name="documents[<?= $program_requirement_id ?>]"
+                    accept=".pdf,.png,.jpg,.jpeg,.doc,.docx"
+                    hidden
                     <?= $is_required ? 'required' : '' ?>>
             </div>
         <?php endforeach; ?>

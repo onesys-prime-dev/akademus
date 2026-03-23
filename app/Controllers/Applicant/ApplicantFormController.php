@@ -139,8 +139,9 @@ class ApplicantFormController extends BaseController
                 'page_id'      => $pageId,
                 'is_submitted' => $isSubmitted,
                 'form'         => view($viewFile, [
-                    'step_num' => $step,    // position: 1,2,3,4 — used for form id
-                    'page_id'  => $pageId,  // actual DB id — used for field configs
+                    'step_num' => $step,      // position: 1,2,3,4 — used for form id
+                    'page_id'  => $pageId,    // actual DB id — used for field configs
+                    'data'     => $formData,  // pre-populate fields server-side
                 ]),
                 'formData'     => $formData,
             ]);

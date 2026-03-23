@@ -39,6 +39,15 @@ class ApplicantDocumentService
         }
     }
 
+    public function getDocument($applicant_id, $program_requirement_id)
+    {
+        return $this->applicantDocumentModel
+            ->select('document_name')
+            ->where('applicant_id', $applicant_id)
+            ->where('program_requirement_id', $program_requirement_id)
+            ->first();
+    }
+
     public function getStepDocuments($applicant_id, $requirements) {
         if (empty($requirements)) {
             return [];

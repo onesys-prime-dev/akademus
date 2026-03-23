@@ -102,119 +102,24 @@ elseif ($form_progress >= 100)                       $formBarClass = 'progress-d
     <!-- ── Checklist Cards ── -->
     <div class="checklist-summary-container">
 
-        <!-- Applicant Form Card -->
-        <div class="dashboard-checklist-summary">
-            <div class="top-dashboard-container">
+        <?= view('applicant/dashboard/components/checklist-form', [
+            'form_pages'      => $form_pages,
+            'form_completion' => $form_completion,
+            'form_completed'  => $form_completed,
+            'form_total'      => $form_total,
+            'form_progress'   => $form_progress,
+            'formBarClass'    => $formBarClass,
+        ]) ?>
 
-                <div class="top-dashboard-header">
-                    <h4>Applicant Form</h4>
-                    <p><?= $form_total ?> section<?= $form_total !== 1 ? 's' : '' ?> to complete</p>
-                </div>
-
-                <?php if ($form_total > 0): ?>
-                <div class="documents-progress-container">
-                    <div class="documents-progress-bar">
-                        <div class="documents-current-progress <?= $formBarClass ?>"
-                             style="width:<?= $form_progress ?>%"></div>
-                    </div>
-                </div>
-                <?php endif; ?>
-
-                <div class="dashboard-checklist-row-container">
-                    <?php foreach ($form_pages as $page):
-                        $done = !empty($form_completion[$page['id']]);
-                    ?>
-                        <div class="dashboard-checklist-row <?= $done ? 'checklist-row-done' : '' ?>">
-                            <div class="dashboard-checklist-box <?= $done ? 'checklist-box-done' : '' ?>">
-                                <?= $done ? '✓' : '' ?>
-                            </div>
-                            <p><?= esc($page['title']) ?></p>
-                        </div>
-                    <?php endforeach; ?>
-
-                    <?php if (empty($form_pages)): ?>
-                        <div class="dashboard-checklist-row">
-                            <span>No form sections configured.</span>
-                        </div>
-                    <?php endif; ?>
-                </div>
-
-            </div><!-- /.top-dashboard-container -->
-
-            <div class="bottom-dashboard-container">
-                <span class="checklist-completed-container"><?= $form_completed ?> of <?= $form_total ?> completed</span>
-                <a href="<?= base_url('applicant-form') ?>" class="continue-dashboard-btn">
-                    <?= $form_completed >= $form_total && $form_total > 0 ? 'Review' : 'Continue' ?>
-                </a>
-            </div>
-        </div><!-- /.dashboard-checklist-summary -->
-
-        <!-- Documents Card -->
-        <div class="document-checklist-summary">
-            <div class="top-dashboard-container">
-
-                <div class="top-dashboard-header">
-                    <h4>Documents</h4>
-                    <p><?= $doc_stats['uploaded_required'] ?> of <?= $doc_stats['total_required'] ?> required uploaded</p>
-                </div>
-
-                <div class="documents-progress-container">
-                    <div class="documents-progress-bar">
-                        <div class="documents-current-progress <?= $docBarClass ?>"
-                             style="width:<?= $doc_progress ?>%"></div>
-                    </div>
-                    <div class="documents-progress-legend-container">
-                        <div class="document-progress-legend">
-                            <div class="documents-progress-legend-circle legend-uploaded"></div>
-                            <p>Uploaded <span><?= $doc_stats['uploaded_required'] ?></span></p>
-                        </div>
-                        <div class="document-progress-legend">
-                            <div class="documents-progress-legend-circle legend-missing"></div>
-                            <p>Missing <span><?= $doc_stats['missing_required'] ?></span></p>
-                        </div>
-                        <?php if ($doc_stats['total_optional'] > 0): ?>
-                        <div class="document-progress-legend">
-                            <div class="documents-progress-legend-circle legend-optional"></div>
-                            <p>Optional <span><?= $doc_stats['total_optional'] ?></span></p>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
-                <div class="dashboard-checklist-row-container">
-                    <?php foreach ($previewReqs as $req):
-                        $uploaded = isset($uploadedDoc[$req['program_requirement_id']]);
-                    ?>
-                        <div class="dashboard-checklist-row <?= $uploaded ? 'checklist-row-done' : '' ?>">
-                            <div class="dashboard-checklist-box <?= $uploaded ? 'checklist-box-done' : '' ?>">
-                                <?= $uploaded ? '✓' : '' ?>
-                            </div>
-                            <p><?= esc($req['requirement_name']) ?></p>
-                        </div>
-                    <?php endforeach; ?>
-
-                    <?php if ($moreCount > 0): ?>
-                        <div class="dashboard-checklist-row">
-                            <span>+<?= $moreCount ?> more document<?= $moreCount > 1 ? 's' : '' ?>…</span>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if (empty($allReqs)): ?>
-                        <div class="dashboard-checklist-row">
-                            <span>No documents required for your program yet.</span>
-                        </div>
-                    <?php endif; ?>
-                </div>
-
-            </div><!-- /.top-dashboard-container -->
-
-            <div class="bottom-dashboard-container">
-                <span class="checklist-completed-container"><?= $doc_progress ?>% Completed</span>
-                <a href="<?= base_url('requirements') ?>" class="continue-dashboard-btn">
-                    <?= $doc_progress >= 100 ? 'Review' : 'Upload' ?>
-                </a>
-            </div>
-        </div><!-- /.document-checklist-summary -->
+        <?= view('applicant/dashboard/components/checklist-documents', [
+            'doc_stats'   => $doc_stats,
+            'doc_progress'=> $doc_progress,
+            'docBarClass' => $docBarClass,
+            'previewReqs' => $previewReqs,
+            'uploadedDoc' => $uploadedDoc,
+            'moreCount'   => $moreCount,
+            'allReqs'     => $allReqs,
+        ]) ?>
 
     </div><!-- /.checklist-summary-container -->
 
