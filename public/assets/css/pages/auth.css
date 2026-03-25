@@ -2,6 +2,84 @@
 /* ************* SIGN_IN & SIGN_UP ************* */
 /* --------------------------------------------- */
 
+/* ── ERROR MODAL ── */
+.auth-error-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.auth-error-modal--show {
+    opacity: 1;
+}
+
+.auth-error-modal-box {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+    padding: 40px 36px 32px;
+    max-width: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    transform: translateY(16px) scale(0.97);
+    transition: transform 0.25s ease;
+}
+
+.auth-error-modal--show .auth-error-modal-box {
+    transform: translateY(0) scale(1);
+}
+
+.auth-error-modal-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #fff1f1;
+    color: #e74c3c;
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.auth-error-modal-box h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e1e1e;
+    margin: 0;
+}
+
+.auth-error-modal-box p {
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+    line-height: 1.6;
+    margin: 0 0 8px;
+}
+
+.auth-error-modal-close {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
 /* AUTH ERROR MODAL */
 .auth-modal-overlay {
     position: fixed;

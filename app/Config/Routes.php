@@ -8,6 +8,12 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'HomeController::index');
 $routes->get('applynowpage', 'ApplyNow::index');
 
+
+
+//About us
+
+$routes->get('about', 'AboutController::index');
+
 // sign and sign up page after clicking the 'Apply Now' Button
 $routes->get('sign-in', 'Auth\AuthController::sign_in');
 $routes->get('sign-up', 'Auth\AuthController::sign_up');
@@ -33,6 +39,8 @@ $routes->post('applicant-form/get-drafts', 'Applicant\ApplicantFormController::g
 $routes->get('requirements', 'Applicant\RequirementsController::index');
 $routes->get('requirements/step/(:num)', 'Applicant\RequirementsController::getStep/$1');
 $routes->post('requirements/update/(:num)', 'Applicant\RequirementsController::updateDocument/$1');
+$routes->get('requirements/document/(:num)', 'Applicant\RequirementsController::viewDocument/$1');
+$routes->post('requirements/submit', 'Applicant\RequirementsController::submitApplication');
 
 // get programs
 $routes->get('get-programs', 'Program\ProgramController::getPrograms');

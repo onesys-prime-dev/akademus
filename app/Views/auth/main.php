@@ -242,12 +242,9 @@
                             if (data.status === 'success') {
                                 window.location.href = data.redirect;
                             } else {
-                                const existing = document.querySelector('.alert-error');
-                                if (existing) existing.remove();
-                                const err = document.createElement('div');
-                                err.className = 'alert alert-error';
-                                err.textContent = data.message || 'Something went wrong.';
-                                form.prepend(err);
+                                document.querySelector('.auth-modal-title').textContent    = 'Registration Failed';
+                                document.getElementById('auth-error-message').textContent = data.message || 'Something went wrong.';
+                                document.getElementById('auth-error-modal').style.display = 'flex';
                             }
                         });
                     },
