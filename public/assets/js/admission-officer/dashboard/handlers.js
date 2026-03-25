@@ -133,10 +133,13 @@ export function initBulkActions() {
 
         // ❌ CANCEL
         if (e.target.closest('.bulk-actions__btn--cancel')) {
-            document.querySelectorAll('[data-select]').forEach(cb => cb.checked = false);
+            resetBulkSelection();
 
-            const selectAll = document.querySelector('.bulk-actions__btn--select-all input');
-            if (selectAll) selectAll.checked = false;
+            document.querySelectorAll('[data-select]').forEach(cb => {
+                cb.checked = false;
+            });
+
+            updateBulkButtons();
 
             return;
         }

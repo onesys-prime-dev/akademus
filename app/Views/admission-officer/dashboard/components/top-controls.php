@@ -33,6 +33,9 @@
     <div class="top-controls_right">
         <?= $this->include('admission-officer/components/program-dropdown') ?>
 
-        <button class="btn-primary">+ Add Applicant</button>
+        <button class="btn-primary">
+            <img src="<?= base_url('assets/images/icons/plus.svg') ?>" alt="">
+             Add Applicant
+        </button>
     </div>
 </div>
