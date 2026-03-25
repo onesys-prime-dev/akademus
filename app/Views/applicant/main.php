@@ -287,7 +287,10 @@
         }
 
         empty.style.display = 'none';
-        list.innerHTML = notifications.map(n => `
+        list.innerHTML = notifications.map(n => {
+            const safeMsg = String(n.message).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+            const preview = safeMsg.length > 60 ? safeMsg.slice(0, 60) + '…' : safeMsg;
+            return `
             <a href="${MESSAGES_URL}" style="
                 display:flex;align-items:flex-start;gap:10px;
                 padding:12px 16px;text-decoration:none;
@@ -307,7 +310,7 @@
                     <p style="
                         margin:3px 0 0;font-size:12px;color:#4a5568;
                         white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-                    ">"${n.message.length > 60 ? n.message.slice(0, 60) + '…' : n.message}"</p>
+                    ">"${preview}"</p>
                     <span style="font-size:10.5px;color:#a0aec0;margin-top:3px;display:block;">
                         ${timeAgo(n.created_at)}
                     </span>
@@ -316,8 +319,8 @@
                     width:8px;height:8px;border-radius:50%;background:#e53e3e;
                     flex-shrink:0;margin-top:4px;
                 "></div>
-            </a>
-        `).join('');
+            </a>`;
+        }).join('');
     }
 
     async function pollUnread() {
@@ -354,7 +357,7 @@
     });
 
     pollUnread();
-    setInterval(pollUnread, 2000);
+    setInterval(pollUnread, 30000);
     </script>
 
     <script>

@@ -131,7 +131,7 @@
         }
 
         pollUnread();
-        setInterval(pollUnread, 2000);
+        setInterval(pollUnread, 30000);
     })();
     </script>
 

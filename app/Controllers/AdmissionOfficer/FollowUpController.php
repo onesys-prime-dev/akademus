@@ -85,7 +85,7 @@ class FollowUpController extends BaseController
             return $this->response->setJSON(['success' => false, 'message' => 'Applicant not found']);
         }
 
-        $this->messageModel->insert([
+        $messageId = $this->messageModel->insert([
             'applicant_id' => $applicantId,
             'sender_role'  => 'officer',
             'message'      => $message,
@@ -93,9 +93,13 @@ class FollowUpController extends BaseController
             'created_at'   => date('Y-m-d H:i:s'),
         ]);
 
-        return $this->response->setJSON(['success' => true]);
+        return $this->response->setJSON(['success' => true, 'message_id' => (int) $messageId]);
     }
 
+    /**
+     * Polling endpoint — accepts since_id to return only new messages,
+     * avoiding a full table fetch on every poll.
+     */
     public function fetchMessages()
     {
         $applicantId = (int) ($this->request->getGet('applicant_id') ?? 0);
@@ -104,9 +108,15 @@ class FollowUpController extends BaseController
             return $this->response->setJSON(['success' => false]);
         }
 
-        $this->messageModel->markAsRead($applicantId, 'applicant');
+        $sinceId  = (int) ($this->request->getGet('since_id') ?? 0);
+        $messages = $sinceId > 0
+            ? $this->messageModel->getMessagesSince($applicantId, $sinceId)
+            : $this->messageModel->getMessagesForApplicant($applicantId);
 
-        $messages = $this->messageModel->getMessagesForApplicant($applicantId);
+        // Mark applicant messages as read while officer is viewing the conversation
+        if (!empty($messages)) {
+            $this->messageModel->markAsRead($applicantId, 'applicant');
+        }
 
         return $this->response->setJSON([
             'success'  => true,

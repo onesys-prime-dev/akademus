@@ -50,6 +50,41 @@ class FollowUpController extends BaseController
         ]);
     }
 
+    /**
+     * Polling endpoint — only returns messages newer than since_id.
+     * Also marks any new officer messages as read while the applicant is on the page.
+     */
+    public function fetchMessages()
+    {
+        if (!session()->get('logged_in')) {
+            return $this->response->setJSON(['success' => false]);
+        }
+
+        $applicantModel = new ApplicantModel();
+        $applicant      = $applicantModel->where('user_id', session()->get('user_id'))->first();
+
+        if (!$applicant) {
+            return $this->response->setJSON(['success' => false]);
+        }
+
+        $applicantId = (int) $applicant['applicant_id'];
+        $sinceId     = (int) ($this->request->getGet('since_id') ?? 0);
+
+        $messages = $sinceId > 0
+            ? $this->messageModel->getMessagesSince($applicantId, $sinceId)
+            : $this->messageModel->getMessagesForApplicant($applicantId);
+
+        // Mark new officer messages as read while the applicant is actively viewing
+        if (!empty($messages)) {
+            $this->messageModel->markAsRead($applicantId, 'officer');
+        }
+
+        return $this->response->setJSON([
+            'success'  => true,
+            'messages' => $messages,
+        ]);
+    }
+
     public function unreadCount()
     {
         if (!session()->get('logged_in')) {
@@ -57,30 +92,18 @@ class FollowUpController extends BaseController
         }
 
         $applicantModel = new ApplicantModel();
-        $applicant = $applicantModel->where('user_id', session()->get('user_id'))->first();
+        $applicant      = $applicantModel->where('user_id', session()->get('user_id'))->first();
 
         if (!$applicant) {
             return $this->response->setJSON(['success' => false, 'count' => 0, 'notifications' => []]);
         }
 
-        $applicantId = (int) $applicant['applicant_id'];
-
-        $count = $this->messageModel->getUnreadCountForApplicant($applicantId);
-
-        // Fetch latest 5 unread officer messages for the dropdown
-        $db = \Config\Database::connect();
-        $notifications = $db->table('follow_up_messages')
-            ->where('applicant_id', $applicantId)
-            ->where('sender_role', 'officer')
-            ->where('is_read', 0)
-            ->orderBy('created_at', 'DESC')
-            ->limit(5)
-            ->get()->getResultArray();
+        $summary = $this->messageModel->getUnreadSummaryForApplicant((int) $applicant['applicant_id']);
 
         return $this->response->setJSON([
             'success'       => true,
-            'count'         => $count,
-            'notifications' => $notifications,
+            'count'         => $summary['count'],
+            'notifications' => $summary['notifications'],
         ]);
     }
 
@@ -91,7 +114,7 @@ class FollowUpController extends BaseController
         }
 
         $applicantModel = new ApplicantModel();
-        $applicant = $applicantModel->where('user_id', session()->get('user_id'))->first();
+        $applicant      = $applicantModel->where('user_id', session()->get('user_id'))->first();
 
         if (!$applicant) {
             return $this->response->setJSON(['success' => false, 'message' => 'Applicant not found']);
@@ -103,7 +126,7 @@ class FollowUpController extends BaseController
             return $this->response->setJSON(['success' => false, 'message' => 'Message cannot be empty']);
         }
 
-        $this->messageModel->insert([
+        $messageId = $this->messageModel->insert([
             'applicant_id' => $applicant['applicant_id'],
             'sender_role'  => 'applicant',
             'message'      => $message,
@@ -111,7 +134,6 @@ class FollowUpController extends BaseController
             'created_at'   => date('Y-m-d H:i:s'),
         ]);
 
-        return $this->response->setJSON(['success' => true]);
+        return $this->response->setJSON(['success' => true, 'message_id' => (int) $messageId]);
     }
-
 }

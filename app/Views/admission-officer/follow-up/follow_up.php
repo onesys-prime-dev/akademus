@@ -362,7 +362,16 @@ window.foConfig = {
     applicantInit: '<?= esc($aInitials) ?>',
 };
 
-let foLastCount = <?= count($messages ?? []) ?>;
+// Track last known message_id — poll only fetches new rows, not all messages.
+let foLastId = <?= !empty($messages) ? (int) end($messages)['message_id'] : 0 ?>;
+
+function foEsc(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
 
 function foFormatTime(dateStr) {
     const d = new Date(dateStr.replace(' ', 'T'));
@@ -380,7 +389,7 @@ function foAppend(msg) {
     div.innerHTML = `
         <div class="fo-msg-avatar">${avatar}</div>
         <div>
-            <div class="fo-msg-bubble">${msg.message.replace(/\n/g, '<br>')}</div>
+            <div class="fo-msg-bubble">${foEsc(msg.message).replace(/\n/g, '<br>')}</div>
             <div class="fo-msg-time">${foFormatTime(msg.created_at)}</div>
         </div>`;
     wrap.appendChild(div);
@@ -408,7 +417,7 @@ async function foSend() {
 
         if (data.success) {
             foAppend({ sender_role: 'officer', message: msg, created_at: new Date().toISOString().replace('T', ' ').slice(0, 19) });
-            foLastCount++;
+            foLastId = data.message_id; // Advance pointer so poll won't re-fetch our own message
         }
     } catch (e) {
         input.value = msg;
@@ -421,12 +430,12 @@ async function foSend() {
 
 async function foPoll() {
     try {
-        const res  = await fetch(window.foConfig.fetchUrl + '?applicant_id=' + window.foConfig.applicantId);
+        const res  = await fetch(`${window.foConfig.fetchUrl}?applicant_id=${window.foConfig.applicantId}&since_id=${foLastId}`);
         const data = await res.json();
 
-        if (data.success && data.messages.length > foLastCount) {
-            data.messages.slice(foLastCount).forEach(foAppend);
-            foLastCount = data.messages.length;
+        if (data.success && data.messages.length > 0) {
+            data.messages.forEach(foAppend);
+            foLastId = data.messages[data.messages.length - 1].message_id;
         }
     } catch (e) { /* silent */ }
 }
@@ -441,6 +450,6 @@ function foAutoResize(el) {
 }
 
 document.getElementById('foMessages').scrollTop = 9999;
-setInterval(foPoll, 2000);
+setInterval(foPoll, 8000);
 <?php endif; ?>
 </script>

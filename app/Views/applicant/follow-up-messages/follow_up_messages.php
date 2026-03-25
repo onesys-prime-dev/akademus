@@ -206,7 +206,17 @@ window.fuConfig = {
     userInit: '<?= esc(strtoupper(substr(session()->get('firstname') ?? 'A', 0, 1))) ?>',
 };
 
-let fuLastCount = <?= count($messages) ?>;
+// Track last known message_id instead of count — prevents double-rendering
+// and avoids fetching all messages on every poll.
+let fuLastId = <?= !empty($messages) ? (int) end($messages)['message_id'] : 0 ?>;
+
+function fuEsc(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
 
 function fuFormatTime(dateStr) {
     const d = new Date(dateStr.replace(' ', 'T'));
@@ -226,7 +236,7 @@ function fuAppend(msg) {
     div.innerHTML = `
         <div class="fu-msg-avatar">${avatar}</div>
         <div>
-            <div class="fu-msg-bubble">${msg.message.replace(/\n/g, '<br>')}</div>
+            <div class="fu-msg-bubble">${fuEsc(msg.message).replace(/\n/g, '<br>')}</div>
             <div class="fu-msg-time">${fuFormatTime(msg.created_at)}</div>
         </div>`;
     wrap.appendChild(div);
@@ -252,7 +262,7 @@ async function fuSend() {
 
         if (data.success) {
             fuAppend({ sender_role: 'applicant', message: msg, created_at: new Date().toISOString().replace('T', ' ').slice(0, 19) });
-            fuLastCount++;
+            fuLastId = data.message_id; // Advance pointer so poll won't re-fetch our own message
         }
     } catch (e) {
         input.value = msg;
@@ -264,12 +274,12 @@ async function fuSend() {
 
 async function fuPoll() {
     try {
-        const res  = await fetch(window.fuConfig.fetchUrl);
+        const res  = await fetch(`${window.fuConfig.fetchUrl}?since_id=${fuLastId}`);
         const data = await res.json();
 
-        if (data.success && data.messages.length > fuLastCount) {
-            data.messages.slice(fuLastCount).forEach(fuAppend);
-            fuLastCount = data.messages.length;
+        if (data.success && data.messages.length > 0) {
+            data.messages.forEach(fuAppend);
+            fuLastId = data.messages[data.messages.length - 1].message_id;
         }
     } catch (e) { /* silent */ }
 }
@@ -284,5 +294,5 @@ function fuAutoResize(el) {
 }
 
 document.getElementById('fuMessages').scrollTop = 9999;
-setInterval(fuPoll, 2000);
+setInterval(fuPoll, 8000);
 </script>
