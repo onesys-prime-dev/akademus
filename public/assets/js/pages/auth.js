@@ -1,5 +1,33 @@
 // assets/js/pages/auth.js
 
+function showErrorModal(message) {
+    const existing = document.getElementById('auth-error-modal');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.id = 'auth-error-modal';
+    overlay.className = 'auth-error-modal-overlay';
+    overlay.innerHTML = `
+        <div class="auth-error-modal-box">
+            <div class="auth-error-modal-icon">✕</div>
+            <h3>Registration Failed</h3>
+            <p>${message}</p>
+            <button class="auth-error-modal-close btn-primary">OK</button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => overlay.classList.add('auth-error-modal--show'));
+
+    const close = () => {
+        overlay.classList.remove('auth-error-modal--show');
+        setTimeout(() => overlay.remove(), 250);
+    };
+
+    overlay.querySelector('.auth-error-modal-close').addEventListener('click', close);
+    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+}
+
 const { baseUrl, signInUrl, signUpUrl } = window.authConfig;
 
 // AUTH TOGGLE
@@ -94,12 +122,7 @@ const { baseUrl, signInUrl, signUpUrl } = window.authConfig;
                             if (data.status === 'success') {
                                 window.location.href = data.redirect;
                             } else {
-                                const existing = document.querySelector('.alert-error');
-                                if (existing) existing.remove();
-                                const err = document.createElement('div');
-                                err.className = 'alert alert-error';
-                                err.textContent = data.message || 'Something went wrong.';
-                                form.prepend(err);
+                                showErrorModal(data.message || 'Something went wrong.');
                             }
                         });
                     },

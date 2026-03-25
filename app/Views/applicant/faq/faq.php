@@ -392,7 +392,7 @@ const SCHOOL_YEAR      = '<?= esc($theme['school_year']      ?? '') ?>';
 const ADMISSION_STATUS = '<?= esc($theme['admission_status'] ?? 'Open for Applications') ?>';
 
 // ── Groq config — paste your key from console.groq.com ──
-const FAQ_GROQ_KEY = 'secret';
+const FAQ_GROQ_KEY = 'Secret';
 const FAQ_GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 // ── Strict admission-only system prompt ──

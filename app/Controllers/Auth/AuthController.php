@@ -98,10 +98,17 @@ class AuthController extends BaseController
             'program'   => 'required',
         ];
 
-        if (!$this->validate($rules)) {
+        $messages = [
+            'email' => [
+                'is_unique' => 'This email is already registered. Please use a different email or sign in instead.',
+            ],
+        ];
+
+        if (!$this->validate($rules, $messages)) {
+            $errors = $this->validator->getErrors();
             return $this->response->setJSON([
                 'status'  => 'error',
-                'message' => implode(' ', $this->validator->getErrors())
+                'message' => array_values($errors)[0],
             ]);
         }
 
