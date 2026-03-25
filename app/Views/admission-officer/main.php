@@ -164,5 +164,7 @@
             });
         })();
     </script>
+
+    <?= view('admission-officer/components/ai_assistant', ['theme' => $theme]) ?>
 </body>
 </html>
