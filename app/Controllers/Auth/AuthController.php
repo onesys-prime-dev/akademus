@@ -218,6 +218,7 @@ class AuthController extends BaseController
             'applicant_id'     => $user['applicant_id'],
             'program_id'       => $user['program_id'],
             'program_name'     => $user['program_name'],
+            'temp_password'    => (bool) $user['temp_password'],
             'logged_in'        => true
         ]);
 
@@ -229,6 +230,139 @@ class AuthController extends BaseController
         }
 
         return redirect()->to('/dashboard');
+    }
+
+    public function forgotPassword()
+    {
+        $email = trim($this->request->getPost('email') ?? '');
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Please enter a valid email address.']);
+        }
+
+        $db   = \Config\Database::connect();
+        $user = $db->table('users')->where('email', $email)->where('role', 'applicant')->get()->getRowArray();
+
+        // Always return success so we don't reveal if an email is registered
+        if ($user) {
+            $token = bin2hex(random_bytes(32));
+
+            $db->table('password_resets')->insert([
+                'email'      => $email,
+                'token'      => $token,
+                'created_at' => date('Y-m-d H:i:s'),
+                'used'       => 0,
+            ]);
+
+            $resetUrl = base_url('reset-password/' . $token);
+            EmailService::sendPasswordReset($email, $resetUrl);
+        }
+
+        return $this->response->setJSON([
+            'success' => true,
+            'message' => 'If that email is registered, a reset link has been sent.',
+        ]);
+    }
+
+    public function showResetForm(string $token)
+    {
+        $themeModel = new ThemeModel();
+        $db         = \Config\Database::connect();
+
+        $reset = $db->table('password_resets')
+            ->where('token', $token)
+            ->where('used', 0)
+            ->where('created_at >=', date('Y-m-d H:i:s', strtotime('-1 hour')))
+            ->get()->getRowArray();
+
+        return view('auth/reset-password', [
+            'theme'   => $themeModel->getAllSettings(),
+            'token'   => $token,
+            'valid'   => !empty($reset),
+        ]);
+    }
+
+    public function processReset()
+    {
+        $token           = $this->request->getPost('token') ?? '';
+        $newPassword     = $this->request->getPost('new_password') ?? '';
+        $confirmPassword = $this->request->getPost('confirm_password') ?? '';
+
+        $db = \Config\Database::connect();
+
+        $reset = $db->table('password_resets')
+            ->where('token', $token)
+            ->where('used', 0)
+            ->where('created_at >=', date('Y-m-d H:i:s', strtotime('-1 hour')))
+            ->get()->getRowArray();
+
+        if (!$reset) {
+            return $this->response->setJSON(['success' => false, 'message' => 'This link is invalid or has expired.']);
+        }
+
+        if (strlen($newPassword) < 8) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Password must be at least 8 characters.']);
+        }
+
+        if ($newPassword !== $confirmPassword) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Passwords do not match.']);
+        }
+
+        // Look up the applicant by email
+        $user = $db->table('users')->where('email', $reset['email'])->get()->getRowArray();
+
+        if (!$user) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Account not found.']);
+        }
+
+        $applicant = $db->table('applicants')->where('user_id', $user['user_id'])->get()->getRowArray();
+
+        if (!$applicant) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Account not found.']);
+        }
+
+        // Update password
+        $db->table('applicants')
+            ->where('applicant_id', $applicant['applicant_id'])
+            ->update([
+                'password'      => password_hash($newPassword, PASSWORD_DEFAULT),
+                'temp_password' => 0,
+            ]);
+
+        // Invalidate token
+        $db->table('password_resets')->where('token', $token)->update(['used' => 1]);
+
+        return $this->response->setJSON(['success' => true]);
+    }
+
+    public function changePassword()
+    {
+        if (!session()->get('logged_in')) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Unauthorized']);
+        }
+
+        $newPassword     = $this->request->getPost('new_password') ?? '';
+        $confirmPassword = $this->request->getPost('confirm_password') ?? '';
+
+        if (strlen($newPassword) < 8) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Password must be at least 8 characters.']);
+        }
+
+        if ($newPassword !== $confirmPassword) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Passwords do not match.']);
+        }
+
+        $db = \Config\Database::connect();
+        $db->table('applicants')
+            ->where('applicant_id', session()->get('applicant_id'))
+            ->update([
+                'password'      => password_hash($newPassword, PASSWORD_DEFAULT),
+                'temp_password' => 0,
+            ]);
+
+        session()->set('temp_password', false);
+
+        return $this->response->setJSON(['success' => true]);
     }
 
     public function logout()

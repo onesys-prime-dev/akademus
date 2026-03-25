@@ -43,9 +43,20 @@
                         <div class="dotted-link"></div>
                         <span>Exam Schedule</span>
                     </a>
-                    <a href="<?= base_url('/admission-officer/follow-up') ?>" class="sidebar-nav-link">
-                        <div class="dotted-link"></div>
-                        <span>Follow Up</span>
+                    <a href="<?= base_url('/admission-officer/follow-up') ?>" class="sidebar-nav-link" style="justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <div class="dotted-link"></div>
+                            <span>Follow Up</span>
+                        </div>
+                        <span id="sidebarMsgBadge" style="
+                            display:none;
+                            min-width:18px;height:18px;padding:0 5px;
+                            background:var(--primary);
+                            color:#fff;font-size:10px;font-weight:800;
+                            border-radius:999px;
+                            align-items:center;justify-content:center;
+                            line-height:1;
+                        "></span>
                     </a>
                 </div>
             </div>

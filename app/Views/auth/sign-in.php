@@ -1,10 +1,10 @@
 <!-- auth/sign_in.php -->
 
 <div>
-    <form 
+    <form
         id="sign-in-form"
         class="form-container"
-        action="<?= base_url('sign-in/login') ?>" 
+        action="<?= base_url('sign-in/login') ?>"
         method="post"
     >
         <div class="input-container">
@@ -20,7 +20,7 @@
         </div>
 
         <div class="forgot-pass">
-            <a href="#">Forgot Password?</a>
+            <a href="#" onclick="openForgotModal(); return false;">Forgot Password?</a>
         </div>
 
         <button type="submit" id="sign-in-button" class="submit-btn">Sign In</button>
