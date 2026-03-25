@@ -31,19 +31,20 @@
                 <p>GENERAL</p>
                 
                 <div class="grouped-links">
-                    <a href="<?= base_url('/admission-officer/dashboard') ?>" class="sidebar-nav-link">
+                    <?php $uri = uri_string(); ?>
+                    <a href="<?= base_url('/admission-officer/dashboard') ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-officer/dashboard') ? 'active' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Dashboard</span>
                     </a>
-                    <a href="<?= base_url('/admission-officer/applicants') ?>" class="sidebar-nav-link">
+                    <a href="<?= base_url('/admission-officer/applicants') ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-officer/applicants') ? 'active' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Applicants</span>
                     </a>
-                    <a href="<?= base_url('/admission-officer/exam-schedule') ?>" class="sidebar-nav-link">
+                    <a href="<?= base_url('/admission-officer/exam-schedule') ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-officer/exam-schedule') ? 'active' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Exam Schedule</span>
                     </a>
-                    <a href="<?= base_url('/admission-officer/follow-up') ?>" class="sidebar-nav-link" style="justify-content:space-between;">
+                    <a href="<?= base_url('/admission-officer/follow-up') ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-officer/follow-up') ? 'active' : '' ?>" style="justify-content:space-between;">
                         <div style="display:flex;align-items:center;gap:8px;">
                             <div class="dotted-link"></div>
                             <span>Follow Up</span>

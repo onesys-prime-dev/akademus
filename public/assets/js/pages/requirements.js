@@ -278,8 +278,29 @@ saveAndContinueBtn.addEventListener('click', async () => {
         setTimeout(() => { autosaveText.textContent = ''; }, 3000);
     }
 });
-submitFormBtn.addEventListener('click', async () => {
-    if (!checkAllFields(currentStep)) return;
+// ── Submit confirmation modal ─────────────────────────────────────────────
+const reqConfirmModal  = document.getElementById('req-confirm-modal');
+const reqModalCancel   = document.getElementById('req-modal-cancel');
+const reqModalConfirm  = document.getElementById('req-modal-confirm');
+
+function openReqModal() {
+    reqConfirmModal.removeAttribute('hidden');
+    document.body.style.overflow = 'hidden';
+    reqModalConfirm.focus();
+}
+
+function closeReqModal() {
+    reqConfirmModal.setAttribute('hidden', '');
+    document.body.style.overflow = '';
+}
+
+reqConfirmModal.addEventListener('click', e => { if (e.target === reqConfirmModal) closeReqModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !reqConfirmModal.hasAttribute('hidden')) closeReqModal(); });
+reqModalCancel.addEventListener('click', closeReqModal);
+
+reqModalConfirm.addEventListener('click', async () => {
+    reqModalConfirm.disabled = true;
+    reqModalConfirm.textContent = 'Submitting…';
 
     try {
         const response = await fetch(submitUrl, {
@@ -293,11 +314,20 @@ submitFormBtn.addEventListener('click', async () => {
         const data = await response.json();
 
         if (data.status === 'success') {
+            closeReqModal();
             document.getElementById('submit-modal').classList.remove('hidden');
         }
     } catch (error) {
         console.error('Submit error:', error);
+    } finally {
+        reqModalConfirm.disabled = false;
+        reqModalConfirm.textContent = 'Yes, Submit Now';
     }
+});
+
+submitFormBtn.addEventListener('click', () => {
+    if (!checkAllFields(currentStep)) return;
+    openReqModal();
 });
 backBtn.addEventListener('click', async () => {
     autosaveText.textContent = 'Saving...';
