@@ -1,6 +1,6 @@
 import { state } from './state.js';
 import { fetchApplicationContent } from './api.js';
-import { setActiveTab, renderContent, showLoading, updatePagination, updateFilterCounts, resetFilters, updateTableOnly, showTableLoading } from './ui.js';
+import { setActiveTab, renderContent, showLoading, showError, updatePagination, updateFilterCounts, resetFilters, updateTableOnly, showTableLoading, openDocModal, closeDocModal } from './ui.js';
 
 let debounceTimer;
 
@@ -12,9 +12,19 @@ async function update({ fullRender = false } = {}) {
         showTableLoading();
     }
 
-    const res = await fetchApplicationContent();
+    let res;
+    try {
+        res = await fetchApplicationContent();
+    } catch (err) {
+        console.error('fetchApplicationContent error:', err);
+        showError('Failed to load content. Please refresh the page.');
+        return;
+    }
 
-    if (!res.success) return;
+    if (!res.success) {
+        showError(res.message || 'Failed to load content.');
+        return;
+    }
 
     state.totalPages = Math.max(1, Math.ceil((res.total || 0) / res.limit));
 
@@ -109,6 +119,26 @@ export function initPagination() {
         }
 
         update();
+    });
+}
+
+export function initDocModal() {
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.ao-view-doc-btn');
+        if (btn) {
+            openDocModal(btn.dataset.docUrl, btn.dataset.docName);
+            return;
+        }
+
+        const closeBtn = e.target.closest('#ao-doc-modal-close');
+        if (closeBtn) { closeDocModal(); return; }
+
+        const modal = document.getElementById('ao-doc-modal');
+        if (modal && e.target === modal) { closeDocModal(); }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeDocModal();
     });
 }
 

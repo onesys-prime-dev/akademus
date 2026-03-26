@@ -57,9 +57,12 @@
                         <!-- SOFT COPY -->
                         <td class="application-table__cell">
                             <?php if (!empty($row['soft_copy'])): ?>
-                                <a href="<?= base_url('uploads/' . $row['soft_copy']) ?>" target="_blank">
+                                <button class="ao-view-doc-btn"
+                                    data-doc-url="<?= esc(base_url('admission-officer/applicants/document/' . $applicantId . '/' . $row['program_requirement_id'])) ?>"
+                                    data-doc-name="<?= esc($row['soft_copy']) ?>"
+                                    style="background:none; border:none; cursor:pointer; color:#1a6fdb; font-size:13px; padding:0; text-decoration:underline;">
                                     View
-                                </a>
+                                </button>
                             <?php else: ?>
                                 <span class="text-muted">Not uploaded</span>
                             <?php endif; ?>
@@ -82,11 +85,12 @@
                         <!-- ACTION -->
                         <td class="application-table__cell application-table__cell--actions">
                             <?php if (!empty($row['soft_copy'])): ?>
-                                <img class="application-table__cell--actions-img" src="<?= base_url('assets/images/icons/view.svg') ?>">
-                                <img class="application-table__cell--actions-img" src="<?= base_url('assets/images/icons/pen-edit.svg') ?>">
-                                <img class="application-table__cell--actions-img" src="<?= base_url('assets/images/icons/trash.svg') ?>">
-                            <?php else: ?>
-                                
+                                <button class="ao-view-doc-btn"
+                                    data-doc-url="<?= esc(base_url('admission-officer/applicants/document/' . $applicantId . '/' . $row['program_requirement_id'])) ?>"
+                                    data-doc-name="<?= esc($row['soft_copy']) ?>"
+                                    style="background:none; border:none; cursor:pointer; padding:0;">
+                                    <img class="application-table__cell--actions-img" src="<?= base_url('assets/images/icons/view.svg') ?>">
+                                </button>
                             <?php endif; ?>
                         </td>
 

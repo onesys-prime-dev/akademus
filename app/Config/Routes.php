@@ -109,8 +109,9 @@ $routes->get('admission-officer/dashboard/fetch-applicants',    'AdmissionOffice
 $routes->post('admission-officer/dashboard/bulk-update',        'AdmissionOfficer\DashboardController::bulkUpdate');
 
 // Admission Officer Applicants
-$routes->get('admission-officer/applicants/(:num)',         'AdmissionOfficer\ApplicantsController::index/$1');
-$routes->get('admission-officer/applicants/fetch-content',  'AdmissionOfficer\ApplicantsController::fetchContent');
+$routes->get('admission-officer/applicants/(:num)',                          'AdmissionOfficer\ApplicantsController::index/$1');
+$routes->get('admission-officer/applicants/fetch-content',                   'AdmissionOfficer\ApplicantsController::fetchContent');
+$routes->get('admission-officer/applicants/document/(:num)/(:num)',          'AdmissionOfficer\ApplicantsController::viewDocument/$1/$2');
 
 // Admission Officer Follow-Up Messages
 $routes->get ('admission-officer/follow-up',                        'AdmissionOfficer\FollowUpController::index');
