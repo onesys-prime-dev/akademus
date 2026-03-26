@@ -4,25 +4,99 @@ namespace App\Controllers\AdmissionOfficer;
 
 use App\Controllers\BaseController;
 use App\Models\ThemeModel;
+use App\Models\ProgramModel;
+use App\Services\ApplicantService;
 use App\Services\ApplicantProfileService;
 
 class ApplicantsController extends BaseController
 {
+    protected ApplicantService $applicantService;
     protected ApplicantProfileService $applicantProfileService;
+
+    private const DEFAULT_TAB = 'requirements';
 
     public function __construct()
     {
+        $this->applicantService = new ApplicantService();
         $this->applicantProfileService = new ApplicantProfileService();
     }
 
-    public function index($applicantId = null)
+    public function index()
+    {
+        helper('theme');
+
+        $themeModel = new ThemeModel();
+        $programModel = new ProgramModel();
+
+        return view('admission-officer/main', [
+            'title'        => 'Applicants',
+            'page_content' => 'admission-officer/applicants/applicants',
+            'breadcrumb'   => [
+                [
+                    'label' => 'Applicants',
+                    'url'   => base_url('/admission-officer/applicants')
+                ],
+                [
+                    'label' => 'List of Applicants'
+                ]
+            ],
+            'theme'    => $themeModel->getAllSettings(),
+            'programs' => $programModel->getAllPrograms()
+        ]);
+    }
+
+    public function fetchApplicants()
+    {
+        $filters = [
+            'status'  => $this->request->getGet('status'),
+            'program' => $this->request->getGet('program'),
+            'search'  => $this->request->getGet('search'),
+        ];
+
+        $page  = max(1, (int) ($this->request->getGet('page') ?? 1));
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+
+        $applicants = $this->applicantService->getApplicants($filters, $limit, $offset);
+        $totalCounts = $this->applicantService->countApplicants($filters);
+        $statusCounts = $this->applicantService->getStatusCounts($filters);
+
+        return $this->response->setJSON([
+            'data'   => $applicants,
+            'page'   => $page,
+            'total'  => $totalCounts,
+            'limit'  => $limit,
+            'counts' => $statusCounts
+        ]);
+    }
+
+    public function bulkUpdate()
+    {
+        $data = $this->request->getJSON(true);
+
+        $ids    = $data['ids'] ?? [];
+        $status = $data['status'] ?? null;
+
+        if (empty($ids) || !$status) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Invalid payload'
+            ]);
+        }
+
+        $this->applicantService->bulkUpdateStatus($ids, $status);
+
+        return $this->response->setJSON(['success' => true]);
+    }
+
+    public function profile($applicantId)
     {
         helper('theme');
 
         $applicantId = (int) $applicantId;
 
         if (!$applicantId) {
-            return redirect()->to(base_url('/admission-officer/dashboard'));
+            return redirect()->to(base_url('/admission-officer/applicants'));
         }
 
         $themeModel = new ThemeModel();
@@ -30,10 +104,10 @@ class ApplicantsController extends BaseController
         $profile = $this->applicantProfileService->getApplicantProfile($applicantId);
 
         if (empty($profile)) {
-            return redirect()->to(base_url('/admission-officer/dashboard'));
+            return redirect()->to(base_url('/admission-officer/applicants'));
         }
 
-        $activeTab = 'requirements';
+        $activeTab = self::DEFAULT_TAB;
 
         $filters = [
             'status' => 'all',
@@ -44,7 +118,7 @@ class ApplicantsController extends BaseController
         $page   = 1;
         $offset = 0;
 
-        $tabPayload = $this->applicantProfileService->getTabPayload(
+        $payload = $this->applicantProfileService->getTabPayload(
             $applicantId,
             $activeTab,
             $filters,
@@ -53,40 +127,37 @@ class ApplicantsController extends BaseController
         );
 
         $initialContent = view(
-            'admission-officer/applicants/components/content/' . $activeTab,
-            array_merge($tabPayload, [
+            'admission-officer/applicants/detailed-applicant/components/content/' . $activeTab,
+            array_merge($payload, [
                 'applicantId' => $applicantId,
                 'activeTab'   => $activeTab,
             ])
         );
 
         return view('admission-officer/main', [
-            'title'          => 'Applicants',
-            'page_content'    => 'admission-officer/applicants/applicants',
-            'breadcrumb'     => [
+            'title'         => 'Applicants',
+            'page_content'  => 'admission-officer/applicants/detailed-applicant/detailed-applicant',
+            'breadcrumb'    => [
                 [
                     'label' => 'Applicants',
                     'url'   => base_url('/admission-officer/applicants')
                 ],
                 [
                     'label' => 'Applicant Profile'
-                ],
-                [
-                    'label' => 'Applicant Form'
                 ]
             ],
-            'theme'           => $themeModel->getAllSettings(),
-            'applicantId'     => $applicantId,
-            'profile'         => $profile,
-            'activeTab'       => $activeTab,
-            'initialContent'  => $initialContent,
+            'theme'          => $themeModel->getAllSettings(),
+            'applicantId'    => $applicantId,
+            'profile'        => $profile,
+            'activeTab'      => $activeTab,
+            'initialContent' => $initialContent,
         ]);
     }
 
     public function fetchContent()
     {
         $applicantId = (int) ($this->request->getGet('applicant_id') ?? 0);
-        $tab         = (string) ($this->request->getGet('tab') ?? 'requirements');
+        $tab         = (string) ($this->request->getGet('tab') ?? self::DEFAULT_TAB);
         $status      = (string) ($this->request->getGet('status') ?? 'all');
         $search      = (string) ($this->request->getGet('search') ?? '');
         $page        = max(1, (int) ($this->request->getGet('page') ?? 1));
@@ -98,13 +169,10 @@ class ApplicantsController extends BaseController
             ]);
         }
 
-        $limit  = 3;
+        $limit  = 10;
         $offset = ($page - 1) * $limit;
 
-        $filters = [
-            'status' => $status,
-            'search' => $search,
-        ];
+        $filters = compact('status', 'search');
 
         $payload = $this->applicantProfileService->getTabPayload(
             $applicantId,
@@ -114,15 +182,11 @@ class ApplicantsController extends BaseController
             $offset
         );
 
-        $viewMap = [
-            'applicant_form'    => 'admission-officer/applicants/components/content/applicant-form',
-            'requirements'      => 'admission-officer/applicants/components/content/requirements',
-            'exam'              => 'admission-officer/applicants/components/content/exam',
-            'reservation_fee'   => 'admission-officer/applicants/components/content/reservation-fee',
-            'clearance'         => 'admission-officer/applicants/components/content/clearance',
-        ];
+        $viewMap = $this->applicantProfileService->getViewMap();
 
-        $tab = array_key_exists($tab, $viewMap) ? $tab : 'requirements';
+        if (!isset($viewMap[$tab])) {
+            $tab = self::DEFAULT_TAB;
+        }
 
         $html = view($viewMap[$tab], array_merge($payload, [
             'applicantId' => $applicantId,
