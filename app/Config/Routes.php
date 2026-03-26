@@ -22,7 +22,11 @@ $routes->get('sign-up', 'Auth\AuthController::sign_up');
 $routes->post('sign-up/register', 'Auth\AuthController::register');
 $routes->post('sign-in/login', 'Auth\AuthController::login');
 
-$routes->get('logout', 'Auth\AuthController::logout');
+$routes->get ('logout',                  'Auth\AuthController::logout');
+$routes->post('change-password',         'Auth\AuthController::changePassword');
+$routes->post('forgot-password',         'Auth\AuthController::forgotPassword');
+$routes->get ('reset-password/(:segment)','Auth\AuthController::showResetForm/$1');
+$routes->post('reset-password',          'Auth\AuthController::processReset');
 
 $routes->get('success', 'Auth\AuthController::success');
 
@@ -117,3 +121,16 @@ $routes->post('admission-officer/exam-schedule/update/(:num)',          'Admissi
 $routes->post('admission-officer/exam-schedule/delete/(:num)',          'AdmissionOfficer\ExamScheduleController::delete/$1');
 $routes->post('admission-officer/exam-schedule/bookings/check-in/(:num)', 'AdmissionOfficer\ExamScheduleController::checkIn/$1');
 $routes->post('admission-officer/exam-schedule/bookings/cancel/(:num)', 'AdmissionOfficer\ExamScheduleController::cancelBooking/$1');
+// Admission Officer Follow-Up Messages
+$routes->get ('admission-officer/follow-up',                        'AdmissionOfficer\FollowUpController::index');
+$routes->get ('admission-officer/follow-up/(:num)',                  'AdmissionOfficer\FollowUpController::conversation/$1');
+$routes->post('admission-officer/follow-up/send',                    'AdmissionOfficer\FollowUpController::send');
+$routes->get ('admission-officer/follow-up/messages',                'AdmissionOfficer\FollowUpController::fetchMessages');
+$routes->get ('admission-officer/follow-up/conversations',           'AdmissionOfficer\FollowUpController::fetchConversations');
+$routes->get ('admission-officer/follow-up/unread-count',            'AdmissionOfficer\FollowUpController::unreadCount');
+
+// Applicant Follow-Up Messages
+$routes->get ('follow-up-messages',             'Applicant\FollowUpController::index');
+$routes->post('follow-up-messages/send',        'Applicant\FollowUpController::send');
+$routes->get ('follow-up-messages/fetch',       'Applicant\FollowUpController::fetchMessages');
+$routes->get ('follow-up-messages/unread-count','Applicant\FollowUpController::unreadCount');

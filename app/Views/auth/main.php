@@ -78,6 +78,66 @@
     <!-- OVERLAY -->
     <div class="mobile-overlay" id="mobile-overlay"></div>
 
+    <!-- FORGOT PASSWORD MODAL -->
+    <div id="forgotModal" style="
+        display:none;position:fixed;inset:0;z-index:99999;
+        align-items:center;justify-content:center;
+        background:rgba(0,0,0,0.5);backdrop-filter:blur(3px);
+    ">
+        <div style="
+            background:#fff;border-radius:16px;width:100%;max-width:400px;
+            margin:16px;box-shadow:0 24px 60px rgba(0,0,0,0.2);overflow:hidden;
+        ">
+            <div style="background:var(--primary);padding:22px 24px 18px;">
+                <h2 style="margin:0;font-size:17px;font-weight:700;color:#fff;">Forgot Password</h2>
+                <p style="margin:4px 0 0;font-size:12.5px;color:rgba(255,255,255,0.75);">
+                    Enter your email and we'll send you a reset link.
+                </p>
+            </div>
+            <div style="padding:22px 24px;">
+                <div id="fpError" style="
+                    display:none;margin-bottom:14px;padding:10px 14px;
+                    background:#fff5f5;border:1.5px solid #fed7d7;
+                    border-radius:8px;font-size:13px;color:#c53030;
+                "></div>
+                <div id="fpSuccess" style="
+                    display:none;margin-bottom:14px;padding:12px 14px;
+                    background:#f0fff4;border:1.5px solid #c6f6d5;
+                    border-radius:8px;font-size:13px;color:#276749;
+                    align-items:flex-start;gap:8px;
+                ">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#276749" stroke-width="2.5" style="flex-shrink:0;margin-top:1px;"><path d="M20 6L9 17l-5-5"/></svg>
+                    <span id="fpSuccessMsg"></span>
+                </div>
+                <div id="fpForm">
+                    <label style="display:block;font-size:12px;font-weight:600;color:#4a5568;margin-bottom:6px;">
+                        EMAIL ADDRESS
+                    </label>
+                    <input type="email" id="fpEmail" placeholder="yourname@email.com"
+                        onkeydown="if(event.key==='Enter') fpSubmit()"
+                        style="
+                            width:100%;padding:10px 12px;box-sizing:border-box;
+                            border:1.5px solid #e2e8f0;border-radius:8px;
+                            font-size:13.5px;outline:none;
+                            transition:border-color 0.2s;margin-bottom:18px;
+                        "
+                        onfocus="this.style.borderColor='var(--primary)'"
+                        onblur="this.style.borderColor='#e2e8f0'">
+                    <button onclick="fpSubmit()" id="fpBtn" style="
+                        width:100%;padding:11px;background:var(--primary);color:#fff;
+                        border:none;border-radius:8px;font-size:14px;font-weight:600;
+                        cursor:pointer;transition:opacity 0.2s;margin-bottom:10px;
+                    ">Send Reset Link</button>
+                    <button onclick="closeForgotModal()" style="
+                        width:100%;padding:10px;background:#f7fafc;color:#4a5568;
+                        border:1.5px solid #e2e8f0;border-radius:8px;
+                        font-size:13.5px;font-weight:500;cursor:pointer;
+                    ">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- LOGIN ERROR MODAL -->
     <div class="auth-modal-overlay" id="auth-error-modal" style="display:none;">
         <div class="auth-modal-card">
@@ -310,6 +370,68 @@
             e.target.style.display = 'none';
         }
     });
+
+    // FORGOT PASSWORD MODAL
+    function openForgotModal() {
+        document.getElementById('forgotModal').style.display = 'flex';
+        document.getElementById('fpEmail').focus();
+    }
+
+    function closeForgotModal() {
+        document.getElementById('forgotModal').style.display = 'none';
+        document.getElementById('fpError').style.display     = 'none';
+        document.getElementById('fpSuccess').style.display   = 'none';
+        document.getElementById('fpForm').style.display      = 'block';
+        document.getElementById('fpEmail').value             = '';
+        const btn = document.getElementById('fpBtn');
+        btn.disabled    = false;
+        btn.textContent = 'Send Reset Link';
+    }
+
+    document.getElementById('forgotModal').addEventListener('click', function (e) {
+        if (e.target === this) closeForgotModal();
+    });
+
+    async function fpSubmit() {
+        const btn   = document.getElementById('fpBtn');
+        const errEl = document.getElementById('fpError');
+        const email = document.getElementById('fpEmail').value.trim();
+
+        errEl.style.display = 'none';
+
+        if (!email) {
+            errEl.textContent   = 'Please enter your email address.';
+            errEl.style.display = 'block';
+            return;
+        }
+
+        btn.disabled    = true;
+        btn.textContent = 'Sending...';
+
+        const form = new FormData();
+        form.append('email', email);
+
+        try {
+            const res  = await fetch('<?= base_url('/forgot-password') ?>', { method: 'POST', body: form });
+            const data = await res.json();
+
+            if (data.success) {
+                document.getElementById('fpForm').style.display    = 'none';
+                document.getElementById('fpSuccessMsg').textContent = data.message;
+                document.getElementById('fpSuccess').style.display  = 'flex';
+            } else {
+                errEl.textContent   = data.message;
+                errEl.style.display = 'block';
+                btn.disabled        = false;
+                btn.textContent     = 'Send Reset Link';
+            }
+        } catch (e) {
+            errEl.textContent   = 'Something went wrong. Please try again.';
+            errEl.style.display = 'block';
+            btn.disabled        = false;
+            btn.textContent     = 'Send Reset Link';
+        }
+    }
 
     // HAMBURGER MENU
     const hamburger      = document.getElementById('hamburger');

@@ -79,9 +79,20 @@
                         <img src="<?= base_url('assets/images/icons/mail.svg') ?>" alt="">
                     </div>
 
-                    <div class="header-links_icon">
-                        <img src="<?= base_url('assets/images/icons/notification-bell.svg') ?>" alt="">
-                    </div>
+                    <a href="<?= base_url('/admission-officer/follow-up') ?>" class="header-links_icon" style="position:relative;text-decoration:none;">
+                        <img src="<?= base_url('assets/images/icons/notification-bell.svg') ?>" alt="Messages">
+                        <span id="msgBadge" style="
+                            display:none;
+                            position:absolute;top:-5px;right:-5px;
+                            min-width:16px;height:16px;padding:0 4px;
+                            background:var(--accent-color,#e53e3e);
+                            color:#fff;font-size:9px;font-weight:800;
+                            border-radius:999px;
+                            align-items:center;justify-content:center;
+                            border:2px solid #fff;
+                            line-height:1;
+                        "></span>
+                    </a>
                 </div>
             </div>
 
@@ -92,6 +103,38 @@
             </div>
         </main>
     </div>
+
+    <script>
+    // ── Unread message badge polling ──────────────────────────────────────
+    (function () {
+        const UNREAD_URL = '<?= base_url('/admission-officer/follow-up/unread-count') ?>';
+
+        function updateBadges(count) {
+            const headerBadge  = document.getElementById('msgBadge');
+            const sidebarBadge = document.getElementById('sidebarMsgBadge');
+            const label        = count > 99 ? '99+' : count;
+
+            if (count > 0) {
+                if (headerBadge)  { headerBadge.textContent = label;  headerBadge.style.display  = 'flex'; }
+                if (sidebarBadge) { sidebarBadge.textContent = label; sidebarBadge.style.display = 'flex'; }
+            } else {
+                if (headerBadge)  headerBadge.style.display  = 'none';
+                if (sidebarBadge) sidebarBadge.style.display = 'none';
+            }
+        }
+
+        async function pollUnread() {
+            try {
+                const res  = await fetch(UNREAD_URL);
+                const data = await res.json();
+                if (data.success) updateBadges(data.count);
+            } catch (e) { /* silent */ }
+        }
+
+        pollUnread();
+        setInterval(pollUnread, 30000);
+    })();
+    </script>
 
     <script>
         (function () {
@@ -122,5 +165,7 @@
             });
         })();
     </script>
+
+    <?= view('admission-officer/components/ai_assistant', ['theme' => $theme]) ?>
 </body>
 </html>

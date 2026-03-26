@@ -71,6 +71,25 @@ class EmailService
         return self::send($to, 'Application Status Update - Akademus', $message);
     }
 
+    public static function sendPasswordReset(string $to, string $resetUrl): bool
+    {
+        $message = "
+            <h2>Password Reset Request</h2>
+            <p>We received a request to reset your Akademus Portal password.</p>
+            <p>Click the button below to set a new password. This link expires in <strong>1 hour</strong>.</p>
+            <p style='margin:24px 0;'>
+                <a href='{$resetUrl}' style='
+                    background:#0040a6;color:#fff;padding:12px 24px;
+                    border-radius:8px;text-decoration:none;font-weight:600;
+                '>Reset My Password</a>
+            </p>
+            <p>If you didn't request this, you can safely ignore this email.</p>
+            <p style='color:#718096;font-size:12px;'>Link: {$resetUrl}</p>
+        ";
+
+        return self::send($to, 'Reset Your Password - Akademus', $message);
+    }
+
     public static function sendChatReplyNotification(string $to): bool
     {
         $dashboardUrl = base_url('dashboard');
