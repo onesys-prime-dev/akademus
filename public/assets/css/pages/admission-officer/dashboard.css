@@ -4,29 +4,603 @@
     gap: 20px;
 }
 
-/* Container */
-.applicants-table {
+.dashboard__section--middle {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+}
+
+
+/* ---------------------
+     STATS OVERVIEW
+--------------------- */
+.stats-overview {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+}
+
+.stats-overview__row {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+}
+
+
+/* ---------------------
+      KEY METRICS
+--------------------- */
+.key-metrics {
+    display: flex;
+    gap: 20px;
+}
+
+.metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    height: 100px;
+    flex: 1;
+}
+
+.metric__details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.metric__details--title {
+    font-size: 13px;
+    color: #7B7B7B;
+    font-weight: 500;
+}
+
+.metric__details--value {
+    font-size: 24px;
+    color: #1e1e1e;
+    font-weight: 600;
+}
+
+.metric__icon {
+    width: 45px;
+    height: 45px;
+    align-content: center;
+    text-align: center;
+    background-color: #d1d1d1;
+    border-radius: 100%;
+}
+
+.metric__icon--applicant {
+    background-color: var(--primary);
+}
+
+.metric__icon--pending {
+    background-color: #FFB200;
+}
+
+.metric__icon--application {
+    background-color: #707FDD;
+}
+
+.metric__icon--approved {
+    background-color: #31A646;
+}
+
+
+/* ---------------------
+     PASSING RATE
+--------------------- */
+.passing-rate {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.passing-rate__header {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+.passing-rate__body {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.passing-rate__chart {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.passing-rate__pie {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+
+    /* ✅ Placeholder split (75% passed / 25% failed) */
+    background: conic-gradient(
+        var(--primary) 0% 75%,   /* passed */
+        #bdbdbd 75% 100% /* failed */
+    );
+}
+
+/* donut hole */
+.passing-rate__center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 700;
+    font-size: 30px;
+    color: #1e1e1e;
+}
+
+.passing-rate__legends {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.passing-rate__legend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.legend__box--passed {
+    background: var(--primary);
+}
+
+.legend__box--failed {
+    background: #bdbdbd;
+}
+
+.passing-rate__legend--box {
+    width: 10px;
+    height: 10px;
+}
+
+.passing-rate__legend--title {
+    font-size: 12px;
+}
+
+
+/* ---------------------
+ APPLICANTS PER PROGRAM
+--------------------- */
+.applicants-per-program {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+}
+
+.applicants-per-program__header {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+.applicants-per-program__body {
+    width: 100%;
+}
+
+/* SVG */
+.applicants-per-program__svg {
+    width: 100%;
+    height: 320px;
+    display: block;
+}
+
+/* legends */
+.applicants-per-program__legends {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.applicants-per-program__legend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.legend-box {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+
+/* ---------------------
+  APPLICANTS PER STATUS
+--------------------- */
+.applicants-per-status {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    flex: 1;
+}
+
+.applicants-per-status__header {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+.applicants-per-status__body {
+    width: 100%;
+}
+
+/* SVG chart */
+.applicants-per-status__svg {
+    display: block;
+    width: 100%;
+    height: 280px;
+    overflow: visible;
+}
+
+.applicants-per-status__grid line {
+    stroke: #eee;
+    stroke-width: 1;
+}
+
+.applicants-per-status__y-axis text,
+.applicants-per-status__x-axis text {
+    fill: #333;
+    font-size: 12px;
+}
+
+.applicants-per-status__y-axis text {
+    text-anchor: end;
+}
+
+.applicants-per-status__bars rect {
+    fill: #3b82f6;
+}
+
+.applicants-per-status__bars rect:nth-child(2) {
+    fill: #8b5cf6;
+}
+
+.applicants-per-status__bars rect:nth-child(3) {
+    fill: #10b981;
+}
+
+.applicants-per-status__bars rect:nth-child(4) {
+    fill: #ef4444;
+}
+
+/* legends */
+.applicants-per-status__legends {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.applicants-per-status__legend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.applicants-per-status__legend--box {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.applicants-per-status__legend--box-submitted { background: #3b82f6; }
+.applicants-per-status__legend--box-pending   { background: #8b5cf6; }
+.applicants-per-status__legend--box-approved  { background: #10b981; }
+.applicants-per-status__legend--box-rejected  { background: #ef4444; }
+
+.applicants-per-status__legend--title {
+    font-size: 12px;
+    color: #333;
+}
+
+
+/* ---------------------
+       TO DO LIST
+--------------------- */
+.to-do-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.to-do-list__header {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+.to-do-list__body {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #eee;
+}
+
+.to-do-list__row {
+    display: flex;
+    gap: 20px;
+    align-items: baseline;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.to-do-list__details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.to-do-list__details--task {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+/* progress container */
+.to-do-list__progress {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* top text row */
+.to-do-list__progress-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #7B7B7B;
+}
+
+/* stronger count */
+.to-do-list__progress-count {
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+/* progress bar background */
+.to-do-list__progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #eee;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+/* progress fill */
+.to-do-list__progress-fill {
+    height: 100%;
+    width: var(--progress);
+    background: #3b82f6;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+}
+
+
+
+/* ---------------------
+    CALENDAR OVERVIEW
+--------------------- */
+.calendar-overview {
+    width: 400px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: var(--primary);
+    border-radius: 15px;
+}
+
+.calendar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 35px 15px;
+}
+
+.calendar__months {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.calendar__months--current {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.calendar__current--month {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e1e1e;
+}
+
+.calendar__current--year {
+    font-size: 24px;
+    font-weight: 600;
+    color: #7B7B7B;
+}
+
+.calendar__months--prev--img {
+    width: 13px;
+    cursor: pointer;
+}
+
+.calendar__months--next--img {
+    width: 13px;
+    transform: rotate(180deg);
+    cursor: pointer;
+}
+
+.calendar__grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar__row {
+    display: flex;
+    padding: 2px 0;
+}
+
+.calendar__day {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    flex: 1;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.calendar__day--label {
+    font-weight: 900;
+    color: #1e1e1e;
+}
+
+.calendar__day--inactive { 
+    color: #e5e7eb;
+    cursor: default;
+}
+
+.calendar__day--active {
+    color: var(--primary);
+    background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+    border-radius: 100%;
+}
+
+.calendar-overview__exam-schedule {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 20px 40px 20px;
+}
+
+.calendar-overview__exam-schedule--header {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.exam-schedule__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+.exam-schedule__card {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.exam-schedule__card--row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.exam-schedule__card--date {
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: var(--accent);
+    text-wrap: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+.exam-schedule__card--time {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1e1e1e;
+}
+
+.exam-schedule__card--location {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+
+/* ---------------------
+     TABLE OVERVIEW
+--------------------- */
+.table-overview {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.table-overview__header {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+.table-overview__footer {
+    display: flex;
+    justify-content: end;
+}
+
+.recent-applicants-table__card {
     width: 100%;
     overflow: hidden;
 }
 
 /* Table */
-.applicants-table__table {
+.recent-applicants-table__table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
 }
 
 /* Header */
-.applicants-table__head {
+.recent-applicants-table__head {
     background-color: #F8F8F8;
 }
 
-.applicants-table__row--head {
+.recent-applicants-table__row--head {
     border-bottom: 1px solid #e5e7eb;
 }
 
-.applicants-table__head .applicants-table__cell {
+.recent-applicants-table__head .recent-applicants-table__cell {
     font-weight: 600;
     font-size: 13px;
     color: #6b7280;
@@ -36,17 +610,17 @@
 }
 
 /* Body rows */
-.applicants-table__body .applicants-table__row {
+.recent-applicants-table__body .recent-applicants-table__row {
     border-bottom: 1px solid #f1f5f9;
     transition: background 0.15s ease;
 }
 
-.applicants-table__body .applicants-table__row:hover {
+.recent-applicants-table__body .recent-applicants-table__row:hover {
     background-color: #f9fafb;
 }
 
 /* Cells */
-.applicants-table__cell {
+.recent-applicants-table__cell {
     padding: 14px 16px;
     color: #111827;
     vertical-align: middle;
@@ -56,50 +630,22 @@
     -ms-user-select: none;     /* IE/Edge */
 }
 
-/* Checkbox column */
-.applicants-table__cell--checkbox {
-    width: 70px;
-    text-align: center;
-}
-
-.applicants-table__cell--checkbox input[type="checkbox"] {
-    width: 15px;
-    height: 15px;
-    cursor: pointer;
-}
-
 /* Actions column */
-.applicants-table__cell--actions-header {
+.recent-applicants-table__cell--actions-header {
     display: flex;
     justify-content: center;
 }
 
-.applicants-table__cell--actions {
+.recent-applicants-table__cell--actions {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 16px;
 }
 
-.applicants-table__cell--actions-img {
+.recent-applicants-table__cell--actions-img {
     height: 18px;
     cursor: pointer;
-}
-
-/* Email styling */
-.applicants-table__cell:nth-child(3) {
-    color: #6b7280;
-}
-
-/* Status alignment */
-.applicants-table__cell:nth-child(7) {
-    font-weight: 500;
-}
-
-/* Date styling */
-.applicants-table__cell:nth-child(8) {
-    color: #6b7280;
-    font-size: 13px;
 }
 
 /* Loading state */
@@ -108,12 +654,4 @@
     text-align: center;
     font-weight: 500;
     color: #6b7280;
-}
-
-.bulk-actions__btn--select-all {
-    font-size: 13.3333px;
-    user-select: none;        /* Standard */
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none;    /* Firefox */
-    -ms-user-select: none;     /* IE/Edge */
 }

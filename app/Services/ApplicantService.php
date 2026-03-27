@@ -115,4 +115,13 @@ class ApplicantService
 
         return $counts;
     }
+
+    public function bulkUpdateStatus(array $ids, string $status): bool
+    {
+        $db = \Config\Database::connect();
+
+        return $db->table('applicants')
+            ->whereIn('applicant_id', $ids)
+            ->update(['application_status' => $status]);
+    }
 }

@@ -6,33 +6,11 @@
             <input type="text" placeholder="Search..." data-search>
         </div>
 
-        <div class="top-controls_filters">
-            <button data-filter="all" class="filter-active">
-                All
-                <span class="filters-button_count">0</span>
-            </button>
-            <button data-filter="in_progress">
-                In-Progress
-                <span class="filters-button_count">0</span>
-            </button>
-            <button data-filter="pending">
-                Pending
-                <span class="filters-button_count">0</span>
-            </button>
-            <button data-filter="approved">
-                Approved
-                <span class="filters-button_count">0</span>
-            </button>
-            <button data-filter="rejected">
-                Rejected
-                <span class="filters-button_count">0</span>
-            </button>
-        </div>
+        <?= $this->include('admission-officer/components/program-dropdown') ?>
     </div>
 
     <div class="top-controls_right">
-        <?= $this->include('admission-officer/components/program-dropdown') ?>
-
-        <button class="btn-primary">+ Add Applicant</button>
+        <?= $this->include('admission-officer/dashboard/components/academic-year-dropdown') ?>
+        <?= $this->include('admission-officer/dashboard/components/semester-dropdown') ?>
     </div>
 </div>

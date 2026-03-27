@@ -112,14 +112,26 @@ $routes->get('api/presets/program/(:num)',       'Admin\PresetsController::getFo
 
 // Admission Officer Dashboard
 $routes->get('admission-officer/dashboard',                     'AdmissionOfficer\DashboardController::index');
-$routes->get('admission-officer/dashboard/fetch-applicants',    'AdmissionOfficer\DashboardController::fetchApplicants');
-$routes->post('admission-officer/dashboard/bulk-update',        'AdmissionOfficer\DashboardController::bulkUpdate');
 
 // Admission Officer Applicants
 $routes->get('admission-officer/applicants/(:num)',                          'AdmissionOfficer\ApplicantsController::index/$1');
 $routes->get('admission-officer/applicants/fetch-content',                   'AdmissionOfficer\ApplicantsController::fetchContent');
 $routes->get('admission-officer/applicants/document/(:num)/(:num)',          'AdmissionOfficer\ApplicantsController::viewDocument/$1/$2');
+$routes->get('admission-officer/applicants',                     'AdmissionOfficer\ApplicantsController::index');
+$routes->get('admission-officer/applicants/fetch-applicants',    'AdmissionOfficer\ApplicantsController::fetchApplicants');
+$routes->post('admission-officer/applicants/bulk-update',        'AdmissionOfficer\ApplicantsController::bulkUpdate');
+$routes->get('admission-officer/detailed-applicant/(:num)',         'AdmissionOfficer\ApplicantsController::profile/$1');
+$routes->get('admission-officer/detailed-applicant/fetch-content',  'AdmissionOfficer\ApplicantsController::fetchContent');
 
+// Admission Officer Exam Schedule
+$routes->get('admission-officer/exam-schedule',                         'AdmissionOfficer\ExamScheduleController::index');
+$routes->get('admission-officer/exam-schedule/content',                 'AdmissionOfficer\ExamScheduleController::content');
+$routes->get('admission-officer/exam-schedule/show/(:num)',             'AdmissionOfficer\ExamScheduleController::show/$1');
+$routes->post('admission-officer/exam-schedule/create',                 'AdmissionOfficer\ExamScheduleController::create');
+$routes->post('admission-officer/exam-schedule/update/(:num)',          'AdmissionOfficer\ExamScheduleController::update/$1');
+$routes->post('admission-officer/exam-schedule/delete/(:num)',          'AdmissionOfficer\ExamScheduleController::delete/$1');
+$routes->post('admission-officer/exam-schedule/bookings/check-in/(:num)', 'AdmissionOfficer\ExamScheduleController::checkIn/$1');
+$routes->post('admission-officer/exam-schedule/bookings/cancel/(:num)', 'AdmissionOfficer\ExamScheduleController::cancelBooking/$1');
 // Admission Officer Follow-Up Messages
 $routes->get ('admission-officer/follow-up',                        'AdmissionOfficer\FollowUpController::index');
 $routes->get ('admission-officer/follow-up/(:num)',                  'AdmissionOfficer\FollowUpController::conversation/$1');

@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/components/status-badge.css') . '?v=' . time(); ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/components/pagination.css') . '?v=' . time(); ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/components/bulk-actions.css') . '?v=' . time(); ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/components/modals.css') . '?v=' . time(); ?>">
 
     <!-- Layouts CSS Styles -->
     <link rel="stylesheet" href="<?= base_url('assets/css/layout/dashboard-layout.css') . '?v=' . time(); ?>">

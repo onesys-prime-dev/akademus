@@ -4,6 +4,17 @@ namespace App\Services;
 
 class ApplicantProfileService
 {
+    public function getViewMap(): array
+    {
+        return [
+            'applicant_form'  => 'admission-officer/applicants/detailed-applicant/components/content/applicant-form',
+            'requirements'    => 'admission-officer/applicants/detailed-applicant/components/content/requirements',
+            'exam'            => 'admission-officer/applicants/detailed-applicant/components/content/exam',
+            'reservation_fee' => 'admission-officer/applicants/detailed-applicant/components/content/reservation-fee',
+            'clearance'       => 'admission-officer/applicants/detailed-applicant/components/content/clearance',
+        ];
+    }
+
     public function getApplicantProfile(int $applicantId): array
     {
         $db = \Config\Database::connect();
