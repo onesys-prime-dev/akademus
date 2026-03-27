@@ -28,15 +28,7 @@ $action   = $action   ?? 'create';
         body { background: #f0f4f8; font-family: var(--font), 'Sora', sans-serif; }
         .shell { display: flex; height: 100vh; overflow: hidden; }
 
-        .icon-sidebar { width:64px; background:#0d1e38; display:flex; flex-direction:column; align-items:center; padding:14px 0; gap:4px; flex-shrink:0; }
-        .isb-logo { width:36px; height:36px; background:var(--accent); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:var(--accent-text); margin-bottom:14px; overflow:hidden; }
-        .isb-logo img { width:100%; height:100%; object-fit:cover; }
-        .isb-item { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .18s; position:relative; text-decoration:none; }
-        .isb-item:hover { background:rgba(255,255,255,.08); }
-        .isb-item.on { background:rgba(0,64,166,.5); }
-        .isb-tip { position:absolute; left:52px; top:50%; transform:translateY(-50%); background:#1e293b; color:#fff; font-size:10px; padding:4px 9px; border-radius:6px; white-space:nowrap; pointer-events:none; opacity:0; z-index:100; }
-        .isb-item:hover .isb-tip { opacity:1; }
-        .isb-spacer { flex:1; }
+        /* sidebar styles are in admin/_sidebar.php */
 
         .main-area { flex:1; display:flex; flex-direction:column; overflow:hidden; }
         .topbar { height:52px; background:#fff; border-bottom:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; padding:0 28px; flex-shrink:0; }

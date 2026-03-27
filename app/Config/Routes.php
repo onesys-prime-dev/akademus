@@ -54,6 +54,13 @@ $routes->get('admin/login',  'ThemeController::adminLogin');
 $routes->post('admin/login', 'ThemeController::adminLoginPost');
 $routes->get('admin/logout', 'ThemeController::adminLogout');
 
+// Admin User Management
+$routes->get ('admin/users',                          'Admin\UsersController::index');
+$routes->post('admin/users/store',                    'Admin\UsersController::store');
+$routes->post('admin/users/(:num)/update',            'Admin\UsersController::update/$1');
+$routes->post('admin/users/(:num)/reset-password',    'Admin\UsersController::resetPassword/$1');
+$routes->post('admin/users/(:num)/delete',            'Admin\UsersController::delete/$1');
+
 // Theme Editor
 $routes->get('admin/theme',       'ThemeController::index');
 $routes->post('admin/theme/save', 'ThemeController::save');

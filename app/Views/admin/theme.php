@@ -22,35 +22,7 @@
         body { background: #f0f4f8; font-family: 'Sora', sans-serif; overflow: hidden; }
         .shell { display: flex; height: 100vh; overflow: hidden; }
 
-        /* ── ICON SIDEBAR ── */
-        .icon-sidebar {
-            width: 64px; background: #0d1e38; display: flex;
-            flex-direction: column; align-items: center;
-            padding: 14px 0; gap: 4px; flex-shrink: 0; z-index: 10;
-        }
-        .isb-logo {
-            width: 36px; height: 36px; background: #ffb200; border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 13px; font-weight: 800; color: #002d7a; margin-bottom: 14px;
-            overflow: hidden;
-        }
-        .isb-logo img { width: 100%; height: 100%; object-fit: cover; }
-        .isb-item {
-            width: 40px; height: 40px; border-radius: 10px; display: flex;
-            align-items: center; justify-content: center; cursor: pointer;
-            font-size: 18px; transition: all 0.18s; border: 1px solid transparent;
-            position: relative; text-decoration: none;
-        }
-        .isb-item:hover { background: rgba(255,255,255,0.08); }
-        .isb-item.on { background: rgba(0,64,166,0.5); border-color: rgba(0,64,166,0.6); }
-        .isb-tip {
-            position: absolute; left: 52px; top: 50%; transform: translateY(-50%);
-            background: #1e293b; color: #fff; font-size: 10px; font-weight: 600;
-            padding: 4px 9px; border-radius: 6px; white-space: nowrap;
-            pointer-events: none; opacity: 0; transition: opacity 0.18s; z-index: 100;
-        }
-        .isb-item:hover .isb-tip { opacity: 1; }
-        .isb-spacer { flex: 1; }
+        /* sidebar styles are in admin/_sidebar.php */
 
         /* ── EDITOR PANEL ── */
         .editor {
