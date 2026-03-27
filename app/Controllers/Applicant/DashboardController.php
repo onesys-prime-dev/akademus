@@ -58,13 +58,4 @@ class DashboardController extends BaseController
         return view('applicant/main', $data);
     }
     
-    // public function billing()
-    // {
-    //     $themeModel = new \App\Models\ThemeModel();
-    //     $data['theme']        = $themeModel->getAllSettings();
-    //     $data['title']        = 'Admission Processing Fee';
-    //     $data['active_menu']  = 'admission_processing_fee';
-    //     $data['page_content'] = 'dashboard/payments/billing';
-    //     return view('dashboard/payments/billing', $data);
-    // }
 }

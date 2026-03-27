@@ -25,7 +25,9 @@
   background-color: #ffffff;
   border-bottom: 1.5px solid #eef0f3;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .homepage .header {

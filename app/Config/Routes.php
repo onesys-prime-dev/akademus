@@ -18,9 +18,7 @@ $routes->get('sign-up', 'Auth\AuthController::sign_up');
 // under sa Auth.php
 $routes->post('sign-up/register', 'Auth\AuthController::register');
 $routes->post('sign-in/login', 'Auth\AuthController::login');
-
 $routes->get('logout', 'Auth\AuthController::logout');
-
 $routes->get('success', 'Auth\AuthController::success');
 
 // dashoard pages for student applicants
@@ -51,7 +49,7 @@ $routes->post('admin/theme/save', 'ThemeController::save');
 $routes->get('admin/theme/json',  'ThemeController::getThemeJson');
 
 // Admission Processing Fee
-$routes->get('billing', 'Payment\BillingController::billing');
+$routes->get('admission-processing-fee', 'Payment\AdmissionProcessingFeeController::admissionProcessingFee');
 
 // FAQ
 $routes->get('faq', 'Applicant\FaqController::index');
