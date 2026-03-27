@@ -8,9 +8,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Akademus &#8212; About Us</title>
   <!-- Same CSS files as homepage -->
-  <link rel="stylesheet" href="assets/css/base/global.css">
-  <link rel="stylesheet" href="assets/css/base/reset.css">
-  <link rel="stylesheet" href="assets/css/pages/homepage.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css') . '?v=' . time(); ?>">
+  <link rel="stylesheet" href="<?= base_url('assets/css/base/reset.css') . '?v=' . time(); ?>">
+  <link rel="stylesheet" href="<?= base_url('assets/css/pages/homepage.css') . '?v=' . time(); ?>">
   <style>
     /* ── About Us page-specific styles only ── */
     body { background: #0040a6; overflow-x: hidden; }
@@ -420,52 +422,41 @@
 </head>
 <body>
 
-<!-- ==================== NAVBAR (matches homepage) ==================== -->
-<div class="homepage">
-<div class="header-navigation">
-  <div class="header">
-    <!-- Logo + Brand -->
-    <a href="<?= base_url('/') ?>" style="text-decoration:none; color:inherit; display:contents;">
-      <div class="left-content" style="cursor:pointer;">
-        <img class="image" src="assets/images/logo_akademus.png" alt="Logo"/>
-        <div class="text-wrapper-3">AKADEMUS</div>
-      </div>
-    </a>
-
-    <!-- Desktop Nav -->
-    <div class="navbar">
-      <a href="<?= base_url('/') ?>" style="text-decoration:none; color:inherit;"><div class="item">Home</div></a>
-      <div class="text-wrapper">About Us</div>
-      <div class="div">Features</div>
-      <div class="item-2">Services</div>
-      <div class="item-3">Contact</div>
+<!-- ==================== MOBILE OVERLAY ==================== -->
+<div class="hp-overlay" id="hpOverlay">
+    <div class="hp-overlay__panel">
+        <button class="hp-overlay__close" id="hpOverlayClose">&#10005;</button>
+        <nav class="hp-overlay__nav">
+            <a href="<?= base_url('/') ?>"      class="hp-overlay__link">Home</a>
+            <a href="<?= base_url('about') ?>"  class="hp-overlay__link">About Us</a>
+            <a href="<?= base_url('/') ?>#featured" class="hp-overlay__link">Features</a>
+            <a href="<?= base_url('/') ?>#services" class="hp-overlay__link">Services</a>
+            <a href="<?= base_url('/') ?>#contact"  class="hp-overlay__link">Contact</a>
+        </nav>
+        <a href="<?= base_url('sign-in') ?>" class="hp-overlay__cta">Get Started</a>
     </div>
-
-    <!-- Desktop CTA -->
-    <div class="CREATE-ACCOUNT">
-      <div class="CREATE-ACCOUNT-2"></div>
-      <a class="text-wrapper-2" href="<?= base_url('sign-in') ?>">Get Started</a>
-    </div>
-
-    <!-- Mobile Hamburger -->
-    <div class="hamburger" onclick="toggleMobileNav(this)">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </div>
-
-  <!-- Mobile Nav Dropdown -->
-  <div class="mobile-nav" id="mobileNav">
-    <div class="nav-item">Home</div>
-    <div class="nav-item">About Us</div>
-    <div class="nav-item">Features</div>
-    <div class="nav-item">Services</div>
-    <div class="nav-item">Contact</div>
-    <a class="nav-cta" href="<?= base_url('sign-in') ?>">Get Started</a>
-  </div>
 </div>
-</div>
+
+<!-- ==================== NAVBAR ==================== -->
+<header class="hp-header">
+    <div class="hp-header__inner">
+        <a href="<?= base_url('/') ?>" class="hp-header__logo">
+            <img src="<?= base_url('assets/images/logo_akademus.png') ?>" alt="Akademus Logo" class="hp-header__logo-img" />
+            <span class="hp-header__brand">AKADEMUS</span>
+        </a>
+        <nav class="hp-header__nav">
+            <a href="<?= base_url('/') ?>"          class="hp-header__link">Home</a>
+            <a href="<?= base_url('about') ?>"       class="hp-header__link hp-header__link--active">About Us</a>
+            <a href="<?= base_url('/') ?>#featured"  class="hp-header__link">Features</a>
+            <a href="<?= base_url('/') ?>#services"  class="hp-header__link">Services</a>
+            <a href="<?= base_url('/') ?>#contact"   class="hp-header__link">Contact</a>
+        </nav>
+        <a href="<?= base_url('sign-in') ?>" class="hp-header__cta">Get Started</a>
+        <button class="hp-hamburger" id="hpHamburger" aria-label="Open menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
 
 <!-- ==================== HERO ==================== -->
 <div id="hero" class="hero-wrapper" style="position:relative;width:100%;">
@@ -669,21 +660,19 @@
 
 <!-- ==================== SCRIPTS ==================== -->
 <script>
-  function toggleMobileNav(btn) {
-    const nav = document.getElementById('mobileNav');
-    nav.classList.toggle('open');
-    const spans = btn.querySelectorAll('span');
-    btn.classList.toggle('active');
-    if (btn.classList.contains('active')) {
-      spans[0].style.transform = 'translateY(7px) rotate(45deg)';
-      spans[1].style.opacity = '0';
-      spans[2].style.transform = 'translateY(-7px) rotate(-45deg)';
-    } else {
-      spans[0].style.transform = '';
-      spans[1].style.opacity = '';
-      spans[2].style.transform = '';
+    function hpOpenMenu() {
+        document.getElementById('hpOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
     }
-  }
+    function hpCloseMenu() {
+        document.getElementById('hpOverlay').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    document.getElementById('hpHamburger').addEventListener('click', hpOpenMenu);
+    document.getElementById('hpOverlayClose').addEventListener('click', hpCloseMenu);
+    document.getElementById('hpOverlay').addEventListener('click', function(e) {
+        if (e.target === this) hpCloseMenu();
+    });
 </script>
 
 </body>
