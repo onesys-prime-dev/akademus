@@ -573,18 +573,6 @@
        "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
       ["title" => "LOREM IPSUM", "deco" => "dark",
        "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
-      ["title" => "LOREM IPSUM", "deco" => "dark",
-       "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
-      ["title" => "LOREM IPSUM", "deco" => "light",
-       "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
-      ["title" => "LOREM IPSUM", "deco" => "light",
-       "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
-      ["title" => "LOREM IPSUM", "deco" => "light",
-       "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
-      ["title" => "LOREM IPSUM", "deco" => "light",
-       "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
-      ["title" => "LOREM IPSUM", "deco" => "light",
-       "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
     ];
     foreach ($coreValues as $card):
     ?>
