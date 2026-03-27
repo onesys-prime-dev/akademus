@@ -51,6 +51,12 @@ $routes->get('admin/theme/json',  'ThemeController::getThemeJson');
 // Admission Processing Fee
 $routes->get('admission-processing-fee', 'Payment\AdmissionProcessingFeeController::admissionProcessingFee');
 
+$routes->get('/payment', 'PaymentController::create');
+$routes->post('/payment/store', 'PaymentController::store');
+
+$routes->get('/payment/approve/(:num)', 'PaymentController::approve/$1');
+$routes->get('/payment/reject/(:num)', 'PaymentController::reject/$1');
+
 // FAQ
 $routes->get('faq', 'Applicant\FaqController::index');
 
