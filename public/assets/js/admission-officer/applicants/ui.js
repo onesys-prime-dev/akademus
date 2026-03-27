@@ -53,7 +53,7 @@ export function updateApplicantsTable(applicants) {
     if (!applicants.length) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="9" style="text-align:center;">No applicants found</td>
+                <td class="applicants-table__cell" colspan="9" style="text-align:center;">No applicants found</td>
             </tr>
         `;
         return;
@@ -115,7 +115,7 @@ export function showTableLoading() {
 
     tbody.innerHTML = `
         <tr>
-            <td colspan="10" style="text-align:center;">Loading...</td>
+            <td class="applicants-table__cell" colspan="10" style="text-align:center;">Loading...</td>
         </tr>
     `;
 }
