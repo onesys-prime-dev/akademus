@@ -135,16 +135,45 @@
     </div>
 </div>
 
+<!-- Passed / Approved Modal -->
+<div id="req-passed-modal" class="req-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="req-passed-title" hidden>
+    <div class="req-modal">
+        <div class="req-modal__icon req-modal__icon--success">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+                <path d="m9 12 2 2 4-4"/>
+            </svg>
+        </div>
+        <h3 id="req-passed-title" class="req-modal__title">Application Approved!</h3>
+        <p class="req-modal__body">
+            Congratulations! You have successfully passed all the required steps.
+            Your application has been reviewed and <strong>approved</strong> by the admissions office.
+        </p>
+        <div class="req-modal__actions">
+            <button type="button" id="req-passed-close" class="req-modal__btn req-modal__btn--confirm">Got it, thanks!</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.req-modal__icon--success {
+    background: color-mix(in srgb, #16a34a 12%, transparent);
+    color: #16a34a;
+}
+</style>
+
 <script>
 window.requirementsConfig = <?= json_encode([
-    "initialStep"  => $initial_step ?? 1,
-    "maxSteps"     => $max_steps ?? 5,
-    "baseUrl"      => base_url(),
-    "stepUrl"      => base_url('requirements/step/'),
-    "updateUrl"    => base_url('requirements/update/'),
-    "submitUrl"    => base_url('requirements/submit'),
-    "documentUrl"  => base_url('requirements/document/'),
-    "dashboardUrl" => base_url('dashboard'),
+    "initialStep"         => $initial_step ?? 1,
+    "maxSteps"            => $max_steps ?? 5,
+    "baseUrl"             => base_url(),
+    "stepUrl"             => base_url('requirements/step/'),
+    "updateUrl"           => base_url('requirements/update/'),
+    "submitUrl"           => base_url('requirements/submit'),
+    "documentUrl"         => base_url('requirements/document/'),
+    "dashboardUrl"        => base_url('dashboard'),
+    "applicationStatus"   => $application_status ?? '',
 ]) ?>;
 </script>
 

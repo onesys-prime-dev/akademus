@@ -28,7 +28,7 @@ class RequirementsController extends BaseController
 
     private function renderLayout(int $step) {
         // Check user if logged in
-        if (!session()->get('logged_in')) { 
+        if (!session()->get('logged_in')) {
             return redirect()->to('/sign-in');
         }
 
@@ -44,13 +44,20 @@ class RequirementsController extends BaseController
         $categories = $this->requirementService->getCategories($program_id);
         $maxSteps = count($categories) + 1;
 
+        // Application status for "passed" modal
+        $applicant_id = session()->get('applicant_id');
+        $db = \Config\Database::connect();
+        $application = $db->table('applications')->where('applicant_id', $applicant_id)->get()->getRowArray();
+        $application_status = $application['application_status'] ?? '';
+
         return view('applicant/main', [
-            'title' => 'Requirements',
-            'page_content' => 'applicant/requirements/requirements',
-            'initial_step' => $step,  // Pass to JS to load correct step
-            'max_steps' => $maxSteps,
-            'categories' => $categories,
-            'theme'         => $theme
+            'title'              => 'Requirements',
+            'page_content'       => 'applicant/requirements/requirements',
+            'initial_step'       => $step,
+            'max_steps'          => $maxSteps,
+            'categories'         => $categories,
+            'theme'              => $theme,
+            'application_status' => $application_status,
         ]);
     }
 
@@ -110,9 +117,9 @@ class RequirementsController extends BaseController
         if ($this->request->isAJAX()) {
 
             return $this->response->setJSON([
-                'title' => 'Requirements',
-                'step_num' => $step,
-                'form' => view("applicant/requirements/steps/step", [
+                'title'              => 'Requirements',
+                'step_num'           => $step,
+                'form'               => view("applicant/requirements/steps/step", [
                     'step_num'             => $step,
                     'requirements'         => $requirements,
                     'category_name'        => $category_name,
@@ -121,7 +128,8 @@ class RequirementsController extends BaseController
                     'total_required'       => $totalRequired,
                     'total_uploaded'       => $totalUploaded,
                 ]),
-                'formData' => $formData
+                'formData'           => $formData,
+                'allRequiredComplete' => $totalRequired > 0 && $uploadedRequired >= $totalRequired,
             ]);
         }
 
