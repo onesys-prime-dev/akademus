@@ -466,16 +466,16 @@
    ════════════════════════════════════════════════ */
 .hp-footer {
     background: #000d5e;
-    padding: clamp(40px, 5vw, 86px) clamp(20px, 5vw, 97px) 0;
+    padding: 40px 70px 0;
 }
 /* 4-column: brand (wider) + Resources + Product + Company */
 .hp-footer__inner {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: clamp(24px, 4vw, 60px);
+    gap: 40px;
     max-width: 1920px;
     margin: 0 auto;
-    padding-bottom: clamp(24px, 3vw, 60px);
+    padding-bottom: 32px;
 }
 
 /* Brand column */
@@ -483,62 +483,59 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: clamp(12px, 1.5vw, 20px);
+    margin-bottom: 14px;
 }
-/* Figma: logo 90×90px, rounded-20px */
 .hp-footer__logo-img {
-    width: clamp(50px, 4.7vw, 90px);
-    height: clamp(50px, 4.7vw, 90px);
-    object-fit: cover;
-    border-radius: 20px;
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 12px;
 }
-/* Figma: "Akademus" — #ffb200, 40px, Poppins 500 */
 .hp-footer__logo-name {
-    font-size: clamp(20px, 2.1vw, 40px);
-    font-weight: 500;
+    font-size: 28px;
+    font-weight: 600;
     color: #ffb200;
     font-family: 'Poppins', sans-serif;
 }
-/* Figma: description — white, 25px */
 .hp-footer__desc {
-    font-size: clamp(14px, 1.3vw, 25px);
+    font-size: 16px;
     color: #fff;
-    line-height: 1.5;
+    line-height: 1.6;
     margin: 0;
     font-family: 'Poppins', sans-serif;
+    opacity: 0.85;
 }
 
 /* Link columns */
 .hp-footer__col {
     display: flex;
     flex-direction: column;
-    gap: clamp(6px, 0.8vw, 12px);
+    gap: 8px;
 }
-/* Figma: column headings — #ffb200, 30px, Poppins 500 */
 .hp-footer__col-title {
-    font-size: clamp(16px, 1.6vw, 30px);
-    font-weight: 500;
+    font-size: 20px;
+    font-weight: 600;
     color: #ffb200;
-    margin: 0 0 clamp(4px, 0.5vw, 8px);
+    margin: 0 0 6px;
     font-family: 'Poppins', sans-serif;
 }
-/* Figma: links — white, 25px, Poppins 400 */
 .hp-footer__col-link {
-    font-size: clamp(14px, 1.3vw, 25px);
+    font-size: 16px;
     font-weight: 400;
     color: #fff;
     text-decoration: none;
     font-family: 'Poppins', sans-serif;
+    opacity: 0.85;
     transition: opacity 0.2s;
 }
-.hp-footer__col-link:hover { opacity: 0.7; }
+.hp-footer__col-link:hover { opacity: 1; }
 
-/* Divider — Figma: white line */
+/* Divider */
 .hp-footer__divider {
     height: 1px;
-    background: rgba(255, 255, 255, 0.3);
-    max-width: 1778px;
-    margin: 0 auto clamp(16px, 2vw, 28px);
+    background: rgba(255, 255, 255, 0.2);
+    max-width: 1920px;
+    margin: 0 auto 16px;
 }
 
 /* Bottom bar */
@@ -546,33 +543,31 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: clamp(24px, 3vw, 40px);
+    padding-bottom: 24px;
     max-width: 1920px;
     margin: 0 auto;
     flex-wrap: wrap;
     gap: 1rem;
 }
-/* Figma: white, 25px */
 .hp-footer__copy {
-    font-size: clamp(13px, 1.3vw, 25px);
-    color: #fff;
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
     margin: 0;
     font-family: 'Poppins', sans-serif;
 }
 .hp-footer__legal {
     display: flex;
-    gap: clamp(16px, 2vw, 40px);
+    gap: 24px;
     flex-wrap: wrap;
 }
-/* Figma: white, 25px, underlined */
 .hp-footer__legal-link {
-    font-size: clamp(13px, 1.3vw, 25px);
-    color: #fff;
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
     text-decoration: underline;
     font-family: 'Poppins', sans-serif;
     transition: opacity 0.2s;
 }
-.hp-footer__legal-link:hover { opacity: 0.7; }
+.hp-footer__legal-link:hover { opacity: 1; }
 
 /* ════════════════════════════════════════════════
    RESPONSIVE

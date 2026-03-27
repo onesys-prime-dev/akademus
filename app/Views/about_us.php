@@ -294,78 +294,6 @@
       line-height: normal;
     }
 
-    /* ---- FOOTER ---- */
-    footer {
-      width: 100%;
-      background: #000c5d;
-      box-shadow: 0 4px 4px rgba(0,0,0,.25);
-      padding: 40px 70px;
-    }
-    .footer-main {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      gap: 32px;
-    }
-    .footer-brand { display: flex; flex-direction: column; max-width: 400px; }
-    .footer-brand-top { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
-    /* [IMAGE-LABEL: footer-logo] — Akademus logo in footer */
-    .footer-brand-top img { width: 60px; height: 60px; border-radius: 14px; object-fit: cover; }
-    .footer-brand-top span {
-      font-weight: 500;
-      font-size: 28px;
-      color: #ffb200;
-      line-height: normal;
-    }
-    .footer-brand p {
-      font-weight: 400;
-      font-size: 16px;
-      color: #fff;
-      text-align: justify;
-      line-height: normal;
-    }
-    .footer-nav-cols { display: flex; flex-direction: row; gap: 80px; flex-wrap: wrap; }
-    .footer-nav-col { display: flex; flex-direction: column; min-width: 80px; }
-    .footer-nav-col .col-title {
-      font-weight: 500;
-      font-size: 20px;
-      color: #ffb200;
-      margin-bottom: 16px;
-    }
-    .footer-nav-col a {
-      font-weight: 400;
-      font-size: 16px;
-      color: #fff;
-      margin-top: 12px;
-    }
-    .footer-nav-col a:hover { text-decoration: underline; }
-    .footer-separator {
-      width: 100%;
-      height: 1px;
-      background: rgba(255,255,255,.3);
-      margin: 24px 0;
-    }
-    .footer-bottom {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-    }
-    .footer-bottom span {
-      font-weight: 400;
-      font-size: 16px;
-      color: #fff;
-    }
-    .footer-bottom .legal-links { display: flex; flex-direction: row; gap: 32px; flex-wrap: wrap; }
-    .footer-bottom .legal-links a {
-      font-weight: 400;
-      font-size: 16px;
-      color: #fff;
-      text-decoration: underline;
-    }
-    .footer-bottom .legal-links a:hover { color: #ffb200; }
-
     /* ---- RESPONSIVE ---- */
     @media (max-width: 1024px) {
       .header { padding: 0 16px; }
@@ -406,17 +334,12 @@
       .history-block.img-right .history-text { margin-right: 0; }
       .history-text p { font-size: 17px; }
 
-      footer { padding: 40px 16px; }
-      .footer-main { flex-direction: column; }
-      .footer-nav-cols { gap: 32px; }
-      .footer-bottom { flex-direction: column; align-items: flex-start; }
     }
 
     @media (max-width: 640px) {
       .hero-headings span { font-size: 40px; }
       .hero-desc { display: none; }
       .cards-grid { grid-template-columns: 1fr; }
-      .footer-nav-cols { gap: 24px; }
     }
   </style>
 </head>
@@ -614,46 +537,49 @@
 </section>
 
 <!-- ==================== FOOTER ==================== -->
-<footer>
-  <div class="footer-main">
-    <!-- Brand -->
-    <div class="footer-brand">
-      <div class="footer-brand-top">
-        <!-- [IMAGE-LABEL: footer-logo] — Akademus logo in footer -->
-        <img class="image" src="assets/images/logo_akademus.png" alt="Akademus Logo" />
-        <span>Akademus</span>
+<footer class="hp-footer" id="contact">
+  <div class="hp-footer__inner">
+    <div class="hp-footer__brand">
+      <div class="hp-footer__logo-wrap">
+        <img class="hp-footer__logo-img" src="<?= base_url('assets/images/logo_akademus.png') ?>" alt="Akademus Logo" />
+        <span class="hp-footer__logo-name">Akademus</span>
       </div>
-      <p>Akademos is a modern learning platform that provides structured and reliable access to courses and academic resources.</p>
+      <p class="hp-footer__desc">Akademos is a modern learning platform that provides structured and reliable access to courses and academic resources.</p>
     </div>
 
-    <!-- Nav columns -->
-    <div class="footer-nav-cols">
-      <?php
-      $footerCols = [
-        "Product"   => ["OTIS", "Learnix", "Mentora", "Akademos"],
-        "Resources" => ["About", "Career", "Contact", "Partners"],
-        "Company"   => ["About", "Career", "Contact", "Partners"],
-      ];
-      foreach ($footerCols as $colTitle => $links):
-      ?>
-      <nav class="footer-nav-col">
-        <span class="col-title"><?= htmlspecialchars($colTitle) ?></span>
-        <?php foreach ($links as $link): ?>
-          <a href="#"><?= htmlspecialchars($link) ?></a>
-        <?php endforeach; ?>
-      </nav>
-      <?php endforeach; ?>
+    <div class="hp-footer__col">
+      <h4 class="hp-footer__col-title">Product</h4>
+      <a href="#" class="hp-footer__col-link">OTIS</a>
+      <a href="#" class="hp-footer__col-link">Learnix</a>
+      <a href="#" class="hp-footer__col-link">Mentora</a>
+      <a href="#" class="hp-footer__col-link">Akademos</a>
+    </div>
+
+    <div class="hp-footer__col">
+      <h4 class="hp-footer__col-title">Resources</h4>
+      <a href="#" class="hp-footer__col-link">About</a>
+      <a href="#" class="hp-footer__col-link">Career</a>
+      <a href="#" class="hp-footer__col-link">Contact</a>
+      <a href="#" class="hp-footer__col-link">Partners</a>
+    </div>
+
+    <div class="hp-footer__col">
+      <h4 class="hp-footer__col-title">Company</h4>
+      <a href="#" class="hp-footer__col-link">About</a>
+      <a href="#" class="hp-footer__col-link">Career</a>
+      <a href="#" class="hp-footer__col-link">Contact</a>
+      <a href="#" class="hp-footer__col-link">Partners</a>
     </div>
   </div>
 
-  <div class="footer-separator"></div>
+  <div class="hp-footer__divider"></div>
 
-  <div class="footer-bottom">
-    <span>&copy; 2026 Akademus. All rights reserved.</span>
-    <div class="legal-links">
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Service</a>
-      <a href="#">Cookie Settings</a>
+  <div class="hp-footer__bottom">
+    <p class="hp-footer__copy">&copy; 2026 Akademus. All rights reserved.</p>
+    <div class="hp-footer__legal">
+      <a href="#" class="hp-footer__legal-link">Privacy Policy</a>
+      <a href="#" class="hp-footer__legal-link">Terms of Service</a>
+      <a href="#" class="hp-footer__legal-link">Cookie Settings</a>
     </div>
   </div>
 </footer>
