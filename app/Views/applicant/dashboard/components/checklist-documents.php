@@ -48,7 +48,9 @@
 
             <?php if ($moreCount > 0): ?>
                 <div class="dashboard-checklist-row">
-                    <span>+<?= $moreCount ?> more document<?= $moreCount > 1 ? 's' : '' ?>…</span>
+                    <button class="doc-see-all-btn" onclick="document.getElementById('docListModal').classList.add('active')">
+                        +<?= $moreCount ?> more — <span>See all</span>
+                    </button>
                 </div>
             <?php endif; ?>
 
@@ -59,6 +61,39 @@
             <?php endif; ?>
         </div>
 
+    </div>
+
+    <!-- Documents Modal -->
+    <div id="docListModal" class="doc-modal-overlay" onclick="if(event.target===this)this.classList.remove('active')">
+        <div class="doc-modal">
+            <div class="doc-modal-header">
+                <h4>All Required Documents</h4>
+                <button class="doc-modal-close" onclick="document.getElementById('docListModal').classList.remove('active')">&times;</button>
+            </div>
+            <div class="doc-modal-body">
+                <?php foreach ($allReqs as $req):
+                    $uploaded = isset($uploadedDoc[$req['program_requirement_id']]);
+                ?>
+                    <div class="doc-modal-row <?= $uploaded ? 'doc-modal-row-done' : '' ?>">
+                        <div class="dashboard-checklist-box <?= $uploaded ? 'checklist-box-done' : '' ?>">
+                            <?= $uploaded ? '✓' : '' ?>
+                        </div>
+                        <div class="doc-modal-row-info">
+                            <p><?= esc($req['requirement_name']) ?></p>
+                            <?php if (!empty($req['requirement_description'])): ?>
+                                <span><?= esc($req['requirement_description']) ?></span>
+                            <?php endif; ?>
+                        </div>
+                        <?php if (!$req['is_required']): ?>
+                            <span class="doc-modal-optional-tag">Optional</span>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <div class="doc-modal-footer">
+                <a href="<?= base_url('requirements') ?>" class="continue-dashboard-btn">Go to Upload</a>
+            </div>
+        </div>
     </div>
 
     <div class="bottom-dashboard-container">

@@ -13,7 +13,12 @@ $steps = [
 $allReqs     = $doc_stats['all_requirements'];
 $uploadedDoc = $doc_stats['uploaded_docs'];
 $previewReqs = array_slice($allReqs, 0, 4);
-$moreCount   = max(0, count($allReqs) - 4);
+
+// Only count missing (not yet uploaded) docs beyond the preview
+$moreCount = count(array_filter(
+    array_slice($allReqs, 4),
+    fn($r) => !isset($uploadedDoc[$r['program_requirement_id']])
+));
 
 // Document progress bar CSS class
 $docBarClass = '';

@@ -71,7 +71,7 @@ async function loadForm(step) {
         formProgressH4Text.textContent = `Form Progress — Step ${step} of ${maxSteps}`;
         formFillupContainer.innerHTML = data.form;
 
-        if (step === maxSteps && data.allRequiredComplete) {
+        if (data.allRequiredComplete) {
             markAllComplete();
         } else {
             updateProgress(step);

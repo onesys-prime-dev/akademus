@@ -114,6 +114,12 @@ class RequirementsController extends BaseController
         $uploadedRequired = count(array_filter($requirements, fn($r) => $r['is_required'] && isset($formData[$r['program_requirement_id']])));
         $totalUploaded   = count($formData);
 
+        // Check ALL requirements across every step (not just the current one)
+        $allReqs          = $this->requirementService->getRequirements($program_id);
+        $allUploaded      = $this->documentService->getStepDocuments($applicant_id, $allReqs);
+        $allTotalRequired = count(array_filter($allReqs, fn($r) => $r['is_required']));
+        $allUploadedReq   = count(array_filter($allReqs, fn($r) => $r['is_required'] && isset($allUploaded[$r['program_requirement_id']])));
+
         if ($this->request->isAJAX()) {
 
             return $this->response->setJSON([
@@ -128,8 +134,8 @@ class RequirementsController extends BaseController
                     'total_required'       => $totalRequired,
                     'total_uploaded'       => $totalUploaded,
                 ]),
-                'formData'           => $formData,
-                'allRequiredComplete' => $totalRequired > 0 && $uploadedRequired >= $totalRequired,
+                'formData'            => $formData,
+                'allRequiredComplete' => $allTotalRequired > 0 && $allUploadedReq >= $allTotalRequired,
             ]);
         }
 
