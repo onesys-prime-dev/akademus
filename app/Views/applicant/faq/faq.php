@@ -60,6 +60,9 @@
     font-weight: 600;
     color: #1a2e22;
     line-height: 1.4;
+    flex: 1;
+    min-width: 0;
+    word-break: break-word;
 }
 
 .faq-chevron {
@@ -254,9 +257,81 @@
     padding: 10px 13px; margin-top: 4px;
     font-size: 12.5px; color: #92400e;
 }
+
+/* ── Mobile tabs ── */
+.faq-mobile-tabs {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .faq-page {
+        flex-direction: column;
+        height: auto;
+        min-height: 0;
+        gap: 0;
+    }
+
+    .faq-mobile-tabs {
+        display: flex;
+        flex-shrink: 0;
+        background: #fff;
+        border-radius: 10px;
+        padding: 4px;
+        margin-bottom: 12px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        gap: 4px;
+    }
+
+    .faq-tab-btn {
+        flex: 1;
+        padding: 9px;
+        font-size: 13px;
+        font-weight: 600;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #718096;
+        border-radius: 8px;
+        font-family: var(--font-family, inherit);
+        transition: background 0.15s, color 0.15s;
+    }
+
+    .faq-tab-btn.active {
+        background: var(--primary);
+        color: #fff;
+    }
+
+    /* FAQ panel — natural height, scrolled by the page */
+    .faq-left {
+        flex: none;
+        overflow: visible;
+        padding-right: 0;
+    }
+
+    /* Chat panel — fixed height so it fills screen, hidden by default */
+    .faq-right {
+        display: none;
+        height: calc(100vh - 190px);
+        min-height: 400px;
+    }
+
+    .faq-right.faq-visible {
+        display: flex;
+    }
+
+    .faq-left.faq-hidden {
+        display: none;
+    }
+}
 </style>
 
 <div class="faq-page">
+
+    <!-- Mobile tab switcher -->
+    <div class="faq-mobile-tabs">
+        <button class="faq-tab-btn active" onclick="switchTab('faq')">📋 FAQ</button>
+        <button class="faq-tab-btn"        onclick="switchTab('chat')">💬 Chat</button>
+    </div>
 
     <!-- LEFT: FAQ Accordion -->
     <div class="faq-left">
@@ -556,5 +631,23 @@ function handleChatKey(e) {
 function autoResize(el) {
     el.style.height = 'auto';
     el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+function switchTab(tab) {
+    const faqLeft  = document.querySelector('.faq-left');
+    const faqRight = document.querySelector('.faq-right');
+    const btns     = document.querySelectorAll('.faq-tab-btn');
+
+    if (tab === 'faq') {
+        faqLeft.classList.remove('faq-hidden');
+        faqRight.classList.remove('faq-visible');
+        btns[0].classList.add('active');
+        btns[1].classList.remove('active');
+    } else {
+        faqLeft.classList.add('faq-hidden');
+        faqRight.classList.add('faq-visible');
+        btns[0].classList.remove('active');
+        btns[1].classList.add('active');
+    }
 }
 </script>
