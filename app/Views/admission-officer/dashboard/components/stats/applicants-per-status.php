@@ -1,3 +1,37 @@
+<?php
+// Status bar data: label, count, CSS class
+$statusBars = [
+    ['label' => 'In Progress', 'count' => $statusCounts['in_progress'], 'class' => 'applicants-per-status__legend--box-submitted'],
+    ['label' => 'Pending',     'count' => $statusCounts['pending'],     'class' => 'applicants-per-status__legend--box-pending'],
+    ['label' => 'Approved',    'count' => $statusCounts['approved'] + $statusCounts['completed'], 'class' => 'applicants-per-status__legend--box-approved'],
+    ['label' => 'Rejected',    'count' => $statusCounts['rejected'],    'class' => 'applicants-per-status__legend--box-rejected'],
+];
+
+$maxCount = max(1, ...array_column($statusBars, 'count'));
+
+// Chart geometry
+$chartTop    = 20;
+$chartBottom = 260;
+$chartH      = $chartBottom - $chartTop; // 240
+$barWidth    = 140;
+$barXPositions = [150, 365, 580, 795];
+
+// Y-axis: round maxCount up to a nice multiple
+$step = 1;
+foreach ([1000, 500, 200, 100, 50, 20, 10, 5, 2, 1] as $s) {
+    if ($maxCount / $s >= 3) { $step = $s; break; }
+}
+$axisMax  = ceil($maxCount / $step) * $step;
+$axisMax  = max($axisMax, 1);
+$gridSteps = 5;
+$gridStep  = $axisMax / $gridSteps;
+
+// Grid y positions (top to bottom = max to 0)
+$gridYs = [];
+for ($g = 0; $g <= $gridSteps; $g++) {
+    $gridYs[] = $chartTop + ($g / $gridSteps) * $chartH;
+}
+?>
 <div class="applicants-per-status card">
     <span class="applicants-per-status__header">Applicants Per Status</span>
 
@@ -11,57 +45,54 @@
         >
             <!-- grid lines -->
             <g class="applicants-per-status__grid">
-                <line x1="90" y1="20"  x2="980" y2="20"  />
-                <line x1="90" y1="68"  x2="980" y2="68"  />
-                <line x1="90" y1="116" x2="980" y2="116" />
-                <line x1="90" y1="164" x2="980" y2="164" />
-                <line x1="90" y1="212" x2="980" y2="212" />
-                <line x1="90" y1="260" x2="980" y2="260" />
+                <?php foreach ($gridYs as $gy): ?>
+                <line x1="90" y1="<?= $gy ?>" x2="980" y2="<?= $gy ?>" />
+                <?php endforeach; ?>
             </g>
 
             <!-- y-axis labels -->
             <g class="applicants-per-status__y-axis">
-                <text x="80" y="24">900</text>
-                <text x="80" y="72">800</text>
-                <text x="80" y="120">600</text>
-                <text x="80" y="168">400</text>
-                <text x="80" y="216">200</text>
-                <text x="80" y="264">0</text>
+                <?php foreach ($gridYs as $gi => $gy): ?>
+                <text x="80" y="<?= $gy + 4 ?>"><?= number_format($axisMax - $gi * $gridStep) ?></text>
+                <?php endforeach; ?>
             </g>
 
             <!-- bars -->
             <g class="applicants-per-status__bars">
-                <!-- Submitted -->
-                <rect x="150" y="45" width="140" height="215" rx="8" />
-                <!-- Pending -->
-                <rect x="365" y="112" width="140" height="148" rx="8" />
-                <!-- Approved -->
-                <rect x="580" y="82" width="140" height="178" rx="8" />
-                <!-- Rejected -->
-                <rect x="795" y="165" width="140" height="95" rx="8" />
+                <?php foreach ($statusBars as $i => $bar): ?>
+                <?php
+                    $barH = $bar['count'] > 0
+                        ? round(($bar['count'] / $axisMax) * $chartH)
+                        : 0;
+                    $barY = $chartBottom - $barH;
+                    $bx   = $barXPositions[$i];
+                ?>
+                <rect x="<?= $bx ?>" y="<?= $barY ?>" width="<?= $barWidth ?>" height="<?= max(0, $barH) ?>" rx="8" />
+                <?php if ($bar['count'] > 0): ?>
+                <text x="<?= $bx + $barWidth / 2 ?>" y="<?= $barY - 6 ?>"
+                      text-anchor="middle" fill="#555" font-size="13">
+                    <?= number_format($bar['count']) ?>
+                </text>
+                <?php endif; ?>
+                <?php endforeach; ?>
+            </g>
+
+            <!-- x-axis labels -->
+            <g fill="#555" font-size="13">
+                <?php foreach ($statusBars as $i => $bar): ?>
+                <text x="<?= $barXPositions[$i] + $barWidth / 2 ?>" y="278"
+                      text-anchor="middle"><?= esc($bar['label']) ?></text>
+                <?php endforeach; ?>
             </g>
         </svg>
     </div>
 
     <div class="applicants-per-status__legends">
+        <?php foreach ($statusBars as $bar): ?>
         <div class="applicants-per-status__legend">
-            <div class="applicants-per-status__legend--box applicants-per-status__legend--box-submitted"></div>
-            <div class="applicants-per-status__legend--title">Submitted</div>
+            <div class="applicants-per-status__legend--box <?= $bar['class'] ?>"></div>
+            <div class="applicants-per-status__legend--title"><?= esc($bar['label']) ?></div>
         </div>
-
-        <div class="applicants-per-status__legend">
-            <div class="applicants-per-status__legend--box applicants-per-status__legend--box-pending"></div>
-            <div class="applicants-per-status__legend--title">Pending</div>
-        </div>
-
-        <div class="applicants-per-status__legend">
-            <div class="applicants-per-status__legend--box applicants-per-status__legend--box-approved"></div>
-            <div class="applicants-per-status__legend--title">Approved</div>
-        </div>
-
-        <div class="applicants-per-status__legend">
-            <div class="applicants-per-status__legend--box applicants-per-status__legend--box-rejected"></div>
-            <div class="applicants-per-status__legend--title">Rejected</div>
-        </div>
+        <?php endforeach; ?>
     </div>
 </div>

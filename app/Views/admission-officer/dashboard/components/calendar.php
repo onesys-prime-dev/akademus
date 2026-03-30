@@ -1,3 +1,20 @@
+<?php
+$monthName     = date('F', mktime(0, 0, 0, $calMonth, 1, $calYear));
+$daysInMonth   = cal_days_in_month(CAL_GREGORIAN, $calMonth, $calYear);
+$firstDayOfWeek = (int) date('w', mktime(0, 0, 0, $calMonth, 1, $calYear)); // 0=Sun
+$today         = (int) date('j');
+$isCurrentMY   = ((int) date('n') === $calMonth && (int) date('Y') === $calYear);
+
+// Build grid cells: null = empty, int = day number
+$cells = array_fill(0, $firstDayOfWeek, null);
+for ($d = 1; $d <= $daysInMonth; $d++) {
+    $cells[] = $d;
+}
+while (count($cells) % 7 !== 0) {
+    $cells[] = null;
+}
+$weeks = array_chunk($cells, 7);
+?>
 <div class="calendar card">
     <div class="calendar__months">
         <div class="calendar__months--prev">
@@ -5,8 +22,8 @@
         </div>
 
         <div class="calendar__months--current">
-            <span class="calendar__current--month">November</span>
-            <span class="calendar__current--year">2024</span>
+            <span class="calendar__current--month"><?= $monthName ?></span>
+            <span class="calendar__current--year"><?= $calYear ?></span>
         </div>
 
         <div class="calendar__months--next">
@@ -25,54 +42,43 @@
             <div class="calendar__day calendar__day--label">Sat</div>
         </div>
 
+        <?php foreach ($weeks as $week): ?>
         <div class="calendar__row">
-            <div class="calendar__day calendar__day--inactive">27</div>
-            <div class="calendar__day calendar__day--inactive">28</div>
-            <div class="calendar__day calendar__day--inactive">29</div>
-            <div class="calendar__day calendar__day--inactive">30</div>
-            <div class="calendar__day calendar__day--inactive">31</div>
-            <div class="calendar__day">1</div>
-            <div class="calendar__day">2</div>
+            <?php foreach ($week as $day): ?>
+                <?php if ($day === null): ?>
+                    <div class="calendar__day calendar__day--inactive"></div>
+                <?php else: ?>
+                    <?php
+                    $hasExam = isset($calendarSummary[$day]);
+                    $isToday = $isCurrentMY && ($day === $today);
+                    $cls = 'calendar__day';
+                    if ($isToday)  $cls .= ' calendar__day--active';
+                    if ($hasExam)  $cls .= ' calendar__day--has-exam';
+                    ?>
+                    <div class="<?= $cls ?>" title="<?= $hasExam ? $calendarSummary[$day]['total_schedules'] . ' exam(s)' : '' ?>">
+                        <?= $day ?>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </div>
-        
-        <div class="calendar__row">
-            <div class="calendar__day">3</div>
-            <div class="calendar__day">4</div>
-            <div class="calendar__day">5</div>
-            <div class="calendar__day">6</div>
-            <div class="calendar__day">7</div>
-            <div class="calendar__day">8</div>
-            <div class="calendar__day">9</div>
-        </div>
-
-        <div class="calendar__row">
-            <div class="calendar__day">10</div>
-            <div class="calendar__day">11</div>
-            <div class="calendar__day">12</div>
-            <div class="calendar__day">13</div>
-            <div class="calendar__day">14</div>
-            <div class="calendar__day">15</div>
-            <div class="calendar__day">16</div>
-        </div>
-
-        <div class="calendar__row">
-            <div class="calendar__day">17</div>
-            <div class="calendar__day">18</div>
-            <div class="calendar__day">19</div>
-            <div class="calendar__day">20</div>
-            <div class="calendar__day">21</div>
-            <div class="calendar__day">22</div>
-            <div class="calendar__day">23</div>
-        </div>
-
-        <div class="calendar__row">
-            <div class="calendar__day calendar__day--active">24</div>
-            <div class="calendar__day">25</div>
-            <div class="calendar__day">26</div>
-            <div class="calendar__day">27</div>
-            <div class="calendar__day">28</div>
-            <div class="calendar__day">29</div>
-            <div class="calendar__day">30</div>
-        </div>
+        <?php endforeach; ?>
     </div>
 </div>
+
+<style>
+.calendar__day--has-exam {
+    position: relative;
+}
+.calendar__day--has-exam::after {
+    content: '';
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent, #ffb200);
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+</style>

@@ -1,71 +1,50 @@
+<?php
+$colors  = ['#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#10b981', '#f97316', '#06b6d4', '#ec4899'];
+$maxVal  = max(1, ...array_column($perProgram ?: [['total' => 0]], 'total'));
+$barH    = 36;
+$barGap  = 58;
+$labelX  = 140;
+$barX    = 150;
+$maxBarW = 820; // 150 to 970
+$count   = count($perProgram);
+$svgH    = max(80, $count * $barGap + 30);
+?>
 <div class="applicants-per-program card">
     <span class="applicants-per-program__header">Applicants Per Program</span>
 
     <div class="applicants-per-program__body">
+        <?php if (empty($perProgram)): ?>
+            <p style="text-align:center;color:#718096;padding:24px 0;">No applicant data yet.</p>
+        <?php else: ?>
         <svg
             class="applicants-per-program__svg"
-            viewBox="0 0 1000 350"
+            viewBox="0 0 1000 <?= $svgH ?>"
             preserveAspectRatio="none"
         >
-
-            <!-- X AXIS LABELS -->
-            <g fill="#888" font-size="12">
-                <text x="230" y="20" text-anchor="middle">10</text>
-                <text x="565" y="20" text-anchor="middle">100</text>
-                <text x="980" y="20" text-anchor="end">1000</text>
-            </g>
-
-            <!-- PROGRAM LABELS -->
-            <g fill="#333" font-size="12">
-                <text x="130" y="70"  text-anchor="end">Engineering</text>
-                <text x="130" y="130" text-anchor="end">Arts & Sciences</text>
-                <text x="130" y="190" text-anchor="end">Business</text>
-                <text x="130" y="250" text-anchor="end">Medicine</text>
-                <text x="130" y="310" text-anchor="end">Law</text>
-            </g>
-
-            <!-- BARS -->
-            <g>
-                <!-- Engineering -->
-                <rect x="150" y="50" width="750" height="40" rx="6" fill="#3b82f6"/>
-
-                <!-- Arts -->
-                <rect x="150" y="110" width="580" height="40" rx="6" fill="#8b5cf6"/>
-
-                <!-- Business -->
-                <rect x="150" y="170" width="500" height="40" rx="6" fill="#f59e0b"/>
-
-                <!-- Medicine -->
-                <rect x="150" y="230" width="420" height="40" rx="6" fill="#ef4444"/>
-
-                <!-- Law -->
-                <rect x="150" y="290" width="350" height="40" rx="6" fill="#10b981"/>
-            </g>
-
+            <!-- PROGRAM LABELS & BARS -->
+            <?php foreach ($perProgram as $i => $prog): ?>
+            <?php
+                $y      = 20 + $i * $barGap;
+                $barW   = max(4, round(($prog['total'] / $maxVal) * $maxBarW));
+                $color  = $colors[$i % count($colors)];
+                $label  = esc($prog['program_name'] ?? $prog['program_code'] ?? 'Program ' . ($i + 1));
+                $midY   = $y + $barH / 2 + 4;
+            ?>
+            <text x="<?= $labelX ?>" y="<?= $midY ?>" text-anchor="end" fill="#333" font-size="12"><?= $label ?></text>
+            <rect x="<?= $barX ?>" y="<?= $y ?>" width="<?= $barW ?>" height="<?= $barH ?>" rx="6" fill="<?= $color ?>"/>
+            <text x="<?= $barX + $barW + 8 ?>" y="<?= $midY ?>" fill="#555" font-size="11"><?= number_format($prog['total']) ?></text>
+            <?php endforeach; ?>
         </svg>
-    </div>
 
-    <!-- LEGENDS -->
-    <div class="applicants-per-program__legends">
-        <div class="applicants-per-program__legend">
-            <div class="legend-box" style="background:#3b82f6"></div>
-            <span>Engineering</span>
+        <!-- LEGENDS -->
+        <div class="applicants-per-program__legends">
+            <?php foreach ($perProgram as $i => $prog): ?>
+            <div class="applicants-per-program__legend">
+                <div class="legend-box" style="background:<?= $colors[$i % count($colors)] ?>"></div>
+                <span><?= esc($prog['program_name'] ?? $prog['program_code']) ?></span>
+            </div>
+            <?php endforeach; ?>
         </div>
-        <div class="applicants-per-program__legend">
-            <div class="legend-box" style="background:#8b5cf6"></div>
-            <span>Arts & Sciences</span>
-        </div>
-        <div class="applicants-per-program__legend">
-            <div class="legend-box" style="background:#f59e0b"></div>
-            <span>Business</span>
-        </div>
-        <div class="applicants-per-program__legend">
-            <div class="legend-box" style="background:#ef4444"></div>
-            <span>Medicine</span>
-        </div>
-        <div class="applicants-per-program__legend">
-            <div class="legend-box" style="background:#10b981"></div>
-            <span>Law</span>
-        </div>
+        <?php endif; ?>
     </div>
 </div>

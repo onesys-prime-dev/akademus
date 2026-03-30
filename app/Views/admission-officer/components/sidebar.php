@@ -71,7 +71,7 @@
             </div>
             <div class="profile-info">
                 <p><?= esc($fullname) ?></p>
-                <span>Applicant</span>
+                <span>Admission Officer</span>
             </div>
         </div>
 
