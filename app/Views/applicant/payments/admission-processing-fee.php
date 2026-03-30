@@ -1,12 +1,11 @@
 <?php
-// app/Views/applicant/payments/admission-processing-fee.php
 $applicantNumber = session()->get('applicant_number');
 $referenceCode   = 'ADMFEE-' . esc($applicantNumber);
 ?>
 
 <div class="payment-page">
 
-    <!-- ── HERO CARD ── -->
+    <!-- HERO CARD -->
     <div class="payment-hero-card">
         <span class="payment-label">Admission Processing Fee</span>
         <h2 class="payment-title">Pay to Submit Your Application</h2>
@@ -24,9 +23,10 @@ $referenceCode   = 'ADMFEE-' . esc($applicantNumber);
         </div>
     </div>
 
-
     <form action="<?= base_url('payment/admission-processing-fee/store') ?>" method="post" enctype="multipart/form-data">
         <?= csrf_field() ?>
+
+        <input type="hidden" name="payment_method_id" id="paymentMethodId" value="">
 
         <!-- ── STEP 1 ── -->
         <div class="payment-step-card">

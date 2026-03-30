@@ -56,6 +56,11 @@ $routes->post('/payment/store', 'PaymentController::store');
 
 $routes->get('/payment/approve/(:num)', 'PaymentController::approve/$1');
 $routes->get('/payment/reject/(:num)', 'PaymentController::reject/$1');
+// Payment method accounts (for dynamic display on payment instructions)
+$routes->get('/payment/method-accounts', 'PaymentController::methodAccounts');
+
+// Reservation Fee
+$routes->get('reservation-fee', 'Payment\ReservationFeeController::reservationFee');
 
 // FAQ
 $routes->get('faq', 'Applicant\FaqController::index');

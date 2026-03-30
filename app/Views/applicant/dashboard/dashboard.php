@@ -41,7 +41,7 @@ $steps = [
 
             <div class="quick-actions">
                 <a href="" class="upload-documents-btn">Upload Documents</a>
-                <a href="" class="pay-reservation-fee-btn">Pay Reservation Fee</a>
+                <a href="<?= base_url('/reservation-fee') ?>" class="pay-reservation-fee-btn">Pay Reservation Fee</a>
             </div>
         </div>
     </div>

@@ -18,7 +18,7 @@ class AdmissionProcessingFeeController extends BaseController
     protected $feeModel;
 
     public function __construct()
-    {
+    {    
         $this->paymentModel = new PaymentModel();
         $this->methodModel = new PaymentMethodModel();
         $this->accountModel = new PaymentMethodAccountModel();
@@ -98,6 +98,10 @@ class AdmissionProcessingFeeController extends BaseController
 
     public function admissionProcessingFee()
     {
+        helper('theme');
+
+        $themeModel = new ThemeModel();
+        
         return $this->renderApplicant('applicant/payments/admission-processing-fee', ['title' => 'Admission Processing Fee']);
     }
 }

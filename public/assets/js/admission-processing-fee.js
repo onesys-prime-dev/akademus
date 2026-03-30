@@ -2,9 +2,9 @@
 
 'use strict';
 
-// ── Account details per payment method ───────────────────────────────────────
+// Account details per payment method 
 // TODO: Replace with an API call to /payment/method-accounts if you want
-//       these to be admin-configurable without a redeploy.
+//             to be admin-configurable without a redeploy.
 const METHOD_ACCOUNTS = {
     GCASH: {
         label:   'Send payment via GCash',
@@ -32,7 +32,7 @@ const METHOD_ACCOUNTS = {
     },
 };
 
-// ── DOM refs ─────────────────────────────────────────────────────────────────
+// ── DOM refs 
 const methodBtns      = document.querySelectorAll('.method-btn');
 const accountBoxLabel = document.getElementById('accountBoxLabel');
 const accountNumber   = document.getElementById('accountNumber');
@@ -45,18 +45,19 @@ const preview         = document.getElementById('uploadPreview');
 const fileNameEl      = document.getElementById('uploadedFileName');
 const removeBtn       = document.getElementById('removeFile');
 
-// ── Switch payment method ─────────────────────────────────────────────────────
+// switch payment method 
 function switchMethod(code) {
     const details = METHOD_ACCOUNTS[code];
     if (!details) return;
 
-    // Update account info box
+    // update account info box
     accountBoxLabel.textContent = details.label;
     accountNumber.textContent   = details.number;
     accountName.textContent     = details.name;
 
-    // Update transaction input placeholder
-    if (txInput) txInput.placeholder = details.placeholder;
+    // update transaction input placeholder
+    const hidden = document.getElementById('selectedMethodId');
+    if (hidden) hidden.value = code;
 }
 
 methodBtns.forEach(btn => {
@@ -67,7 +68,7 @@ methodBtns.forEach(btn => {
     });
 });
 
-// ── File upload ───────────────────────────────────────────────────────────────
+// ── file upload 
 function showPreview(file) {
     fileNameEl.textContent = file.name;
     placeholder.style.display = 'none';
@@ -88,7 +89,7 @@ fileInput.addEventListener('change', () => {
 
 removeBtn.addEventListener('click', clearPreview);
 
-// Drag & drop
+// drag & drop for file upload
 uploadBox.addEventListener('dragover', e => {
     e.preventDefault();
     uploadBox.classList.add('drag-over');
@@ -104,7 +105,7 @@ uploadBox.addEventListener('drop', e => {
     const file = e.dataTransfer.files[0];
     if (!file) return;
 
-    // Assign to file input
+    // assign to file input
     const dt = new DataTransfer();
     dt.items.add(file);
     fileInput.files = dt.files;
@@ -112,7 +113,7 @@ uploadBox.addEventListener('drop', e => {
     showPreview(file);
 });
 
-// ── Copy buttons ──────────────────────────────────────────────────────────────
+// "copy" buttons 
 document.querySelectorAll('.copy-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         const targetId = btn.dataset.target;
@@ -130,5 +131,5 @@ document.querySelectorAll('.copy-btn').forEach(btn => {
     });
 });
 
-// ── Init ──────────────────────────────────────────────────────────────────────
+// Init 
 switchMethod('GCASH');
