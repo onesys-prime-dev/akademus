@@ -1,0 +1,243 @@
+/* pages/tracking_progress.css */
+
+.tp-page {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* Status Header Card */
+.tp-status-card {
+    background: #fff;
+    border: 0.3px solid rgba(0, 0, 0, 0.4);
+    border-radius: 15px;
+    padding: 28px 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.tp-status-left {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tp-status-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #111;
+    margin: 0;
+}
+
+.tp-status-desc {
+    font-size: 13px;
+    font-weight: 600;
+    color: #828282;
+    margin: 0;
+}
+
+.tp-status-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.tp-applicant-id-label {
+    font-size: 11px;
+    color: #b9b9b9;
+}
+
+.tp-applicant-id-number {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--primary, #0040a6);
+}
+
+/* Card */
+.tp-card {
+    background: #fff;
+    border: 0.3px solid rgba(0, 0, 0, 0.4);
+    border-radius: 15px;
+    padding: 36px 44px;
+}
+
+.tp-card-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #111;
+    margin: 0 0 24px;
+}
+
+/* Progress Bar */
+.tp-progress-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 44px;
+}
+
+.tp-progress-bar {
+    flex: 1;
+    height: 10px;
+    background: #e0e0e0;
+    border-radius: 64px;
+    overflow: hidden;
+    position: relative;
+}
+
+.tp-progress-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: var(--primary, #0040a6);
+    border-radius: 64px;
+    transition: width 0.4s ease;
+}
+
+.tp-progress-pct {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary, #0040a6);
+    white-space: nowrap;
+    min-width: 36px;
+    text-align: right;
+}
+
+/* Timeline */
+.tp-timeline {
+    display: flex;
+    flex-direction: column;
+    padding-left: 4px;
+}
+
+.tp-step {
+    display: flex;
+    gap: 20px;
+}
+
+/* Left column: icon + connector line */
+.tp-step-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Step icons */
+.tp-icon {
+    width: 37px;
+    height: 37px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.tp-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.tp-icon--done {
+    background: rgba(49, 166, 70, 0.2);
+    border: 1.5px solid #31a646;
+}
+
+.tp-icon--active {
+    background: rgba(255, 178, 0, 0.2);
+    border: 1.5px solid #ffb200;
+}
+
+.tp-icon--pending {
+    background: rgba(185, 185, 185, 0.2);
+    border: 1.5px solid #b9b9b9;
+}
+
+/* Connector line */
+.tp-line {
+    width: 2px;
+    flex: 1;
+    min-height: 40px;
+    margin: 4px 0;
+}
+
+.tp-line--done {
+    background: #31a646;
+}
+
+.tp-line--pending {
+    background: #d4d4d4;
+}
+
+/* Step content */
+.tp-step-content {
+    flex: 1;
+    padding-top: 6px;
+    padding-bottom: 32px;
+}
+
+.tp-step:last-child .tp-step-content {
+    padding-bottom: 0;
+}
+
+.tp-step-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #111;
+    margin-bottom: 4px;
+}
+
+.tp-step--pending .tp-step-title {
+    color: #828282;
+}
+
+.tp-step-subtitle {
+    font-size: 11px;
+    color: #828282;
+    margin-bottom: 2px;
+}
+
+.tp-step-date {
+    font-size: 11px;
+    color: #b9b9b9;
+}
+
+.tp-step-date--active {
+    color: #ffb200;
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tp-status-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px 20px;
+    }
+
+    .tp-status-right {
+        align-items: flex-start;
+    }
+
+    .tp-applicant-id-number {
+        font-size: 20px;
+    }
+
+    .tp-card {
+        padding: 24px 20px;
+    }
+
+    .tp-card-title {
+        font-size: 16px;
+    }
+
+    .tp-status-title {
+        font-size: 18px;
+    }
+}

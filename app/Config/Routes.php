@@ -39,6 +39,9 @@ $routes->get('applicant-form/step/(:num)', 'Applicant\ApplicantFormController::g
 $routes->post('applicant-form/update/(:num)', 'Applicant\ApplicantFormController::updateForm/$1');
 $routes->post('applicant-form/get-drafts', 'Applicant\ApplicantFormController::getSavedDraft');
 
+// tracking progress
+$routes->get('tracking-progress', 'Applicant\TrackingProgressController::index');
+
 // requirement steps routes
 $routes->get('requirements', 'Applicant\RequirementsController::index');
 $routes->get('requirements/step/(:num)', 'Applicant\RequirementsController::getStep/$1');
