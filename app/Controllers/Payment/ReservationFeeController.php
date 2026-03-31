@@ -22,8 +22,8 @@ class ReservationFeeController extends BaseController
             'page_content' => 'applicant/payments/reservation-fee',
             'theme'        => $themeModel->getAllSettings(),
             // 'paymentMethods' => getPaymentMethods()
-        ]);
-
-        
+        ]);   
     }
+
+    
 }

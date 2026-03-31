@@ -24,16 +24,40 @@ $referenceCode   = 'RESFEE-' . esc($applicantNumber);
         </div>
     </div>
 
-    <!-- PAYMENT INSTRUCTIONS -->
-    <div class="payment-instructions">
-        <h3>How to Pay:</h3>
+    <form action="<?= base_url('payment/reservation-fee/store') ?>" method="post" enctype="multipart/form-data">
+        <?= csrf_field() ?>
 
-        <ol class="instruction-list">
-            <li>Choose your preferred payment method.</li>
-            <li>Send the exact amount of ₱200.00 to the account details shown above.</li>
-            <li>Use the reference code <strong><?= $referenceCode ?></strong> as your payment reference or note.</li>
-            <li>After sending your payment, click the "I Have Paid" button below to submit your payment details for verification.</li>
-        </ol>
+        <input type="hidden" name="payment_method_id" id="paymentMethodId" value="">
 
-        <a href="<?= base_url('applicant-form/step/1') ?>" class="paid-btn">I Have Paid</a>
-    </div>
+        <!-- ── STEP 1 ── -->
+        <div class="payment-step-card">
+            <div class="step-heading">
+                <span class="step-num">1</span>
+                <h3>Send Your Payment</h3>
+            </div>
+
+            <div class="account-box">
+                <p class="account-box-label" id="accountBoxLabel">Send payment via GCash</p>
+
+                <div class="account-row">
+                    <span>Account / Number</span>
+                    <div class="account-value-group">
+                        <p id="accountNumber">—</p>
+                        <button type="button" class="copy-btn" data-target="accountNumber">Copy</button>
+                    </div>
+                </div>
+
+                <div class="account-row">
+                    <span>Account Name</span>
+                    <p id="accountName">—</p>
+                </div>
+
+                <div class="account-row">
+                    <span>Amount</span>
+                    <p>₱1500.00</p>
+                </div>
+
+                <div class="account-row last">
+                    <span>Reference / Note</span>
+
+</div>
