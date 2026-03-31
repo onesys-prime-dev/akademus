@@ -13,6 +13,10 @@ class ApplicantDocumentService
     }
 
     public function insertDocuments($applicant_id, $files) {
+        if (empty($files['documents'])) {
+            return;
+        }
+
         $uploadPath = WRITEPATH . "uploads/applicants/{$applicant_id}/";
 
         if (!is_dir($uploadPath)) {

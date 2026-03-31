@@ -19,7 +19,7 @@ class ProgramModel extends Model
         if (!$program) return null;
 
         // Get the merged form fields for this program
-        $program['form_fields'] = model('FormFieldService')
+        $program['form_fields'] = (new \App\Services\FormFieldService())
             ->getMergedFormFields($programId);
 
         return $program;

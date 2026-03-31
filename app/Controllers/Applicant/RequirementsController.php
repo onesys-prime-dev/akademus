@@ -143,6 +143,10 @@ class RequirementsController extends BaseController
     }
 
     public function updateDocument($step) {
+        if (!session()->get('logged_in')) {
+            return $this->response->setStatusCode(401)->setJSON(['status' => 'error', 'message' => 'Unauthorized']);
+        }
+
         $applicant_id = session()->get('applicant_id');
 
         $files = $this->request->getFiles();
@@ -167,7 +171,7 @@ class RequirementsController extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        $filePath = WRITEPATH . "uploads/applicants/{$applicant_id}/" . $doc['document_name'];
+        $filePath = WRITEPATH . "uploads/applicants/{$applicant_id}/" . basename($doc['document_name']);
 
         if (!file_exists($filePath)) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();

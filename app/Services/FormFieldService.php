@@ -19,6 +19,8 @@ class FormFieldService
      */
     public function getMergedFormFields($programId)
     {
+        $programId = (int) $programId;
+
         $query = $this->db->table('form_field_configs ffc')
             ->select(
                 'ffc.id',

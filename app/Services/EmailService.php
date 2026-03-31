@@ -24,7 +24,7 @@ class EmailService
 }
     public static function sendWelcomeEmail(string $to, string $tempPassword): bool
     {
-        $loginUrl = base_url('sign_in');
+        $loginUrl = base_url('sign-in');
         $message  = "
             <h2>Welcome to Akademus Portal</h2>
             <p>Your account has been successfully created.</p>

@@ -102,7 +102,9 @@ class ApplicantsController extends BaseController
         $ids    = $data['ids'] ?? [];
         $status = $data['status'] ?? null;
 
-        if (empty($ids) || !$status) {
+        $allowed = ['approved', 'rejected', 'pending', 'in_progress'];
+
+        if (empty($ids) || !$status || !in_array($status, $allowed, true)) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Invalid payload'
@@ -191,7 +193,7 @@ class ApplicantsController extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        $filePath = WRITEPATH . "uploads/applicants/{$applicantId}/" . $doc['document_name'];
+        $filePath = WRITEPATH . "uploads/applicants/{$applicantId}/" . basename($doc['document_name']);
 
         if (!file_exists($filePath)) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
