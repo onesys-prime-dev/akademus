@@ -145,13 +145,13 @@
 }
 
 .tp-icon--done {
-    background: rgba(49, 166, 70, 0.2);
-    border: 1.5px solid #31a646;
+    background: rgba(49, 166, 70, 0.15);
+    border: 2px solid #31a646;
 }
 
 .tp-icon--active {
-    background: rgba(255, 178, 0, 0.2);
-    border: 1.5px solid #ffb200;
+    background: rgba(255, 178, 0, 0.15);
+    border: 2px solid #ffb200;
 }
 
 .tp-icon--pending {
@@ -211,6 +211,99 @@
 .tp-step-date--active {
     color: #ffb200;
     font-weight: 600;
+}
+
+/* Status card modifiers */
+.tp-status-card--success {
+    background: #f0fdf4;
+    border-color: #86efac;
+}
+
+.tp-status-card--success .tp-status-title {
+    color: #15803d;
+}
+
+.tp-status-card--rejected {
+    background: #fff5f5;
+    border-color: #fca5a5;
+}
+
+.tp-status-card--rejected .tp-status-title {
+    color: #dc2626;
+}
+
+/* Rejected icon */
+.tp-icon--rejected {
+    background: rgba(220, 38, 38, 0.15);
+    border: 2px solid #dc2626;
+}
+
+/* Connector line - rejected */
+.tp-line--rejected {
+    background: #dc2626;
+}
+
+/* Rejected step */
+.tp-step--rejected .tp-step-title {
+    color: #dc2626;
+}
+
+/* Rejected date label */
+.tp-step-date--rejected {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+/* Progress bar - rejected state */
+.tp-progress-fill--rejected {
+    background: #dc2626;
+}
+
+.tp-progress-pct--rejected {
+    color: #dc2626;
+}
+
+/* Remarks card */
+.tp-remarks-card {
+    border-radius: 10px;
+    padding: 16px 20px;
+    border: 1px solid;
+}
+
+.tp-remarks-card--approved {
+    background: #f0fdf4;
+    border-color: #86efac;
+}
+
+.tp-remarks-card--rejected {
+    background: #fff5f5;
+    border-color: #fca5a5;
+}
+
+.tp-remarks-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.tp-remarks-card--approved .tp-remarks-header {
+    color: #15803d;
+}
+
+.tp-remarks-card--rejected .tp-remarks-header {
+    color: #dc2626;
+}
+
+.tp-remarks-body {
+    font-size: 13px;
+    color: #374151;
+    margin: 0;
+    line-height: 1.6;
 }
 
 /* Responsive */

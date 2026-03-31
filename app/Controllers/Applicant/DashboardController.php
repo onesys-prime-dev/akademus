@@ -147,7 +147,14 @@ class DashboardController extends BaseController
                 $docStats['uploaded_required'] >= $docStats['total_required']       => 'done',
                 default                                                             => 'inprogress',
             },
-            4 => in_array($appStatus, ['approved', 'enrolled']) ? 'done' : '',
+            4 => match(true) {
+                in_array($appStatus, ['approved', 'enrolled'])
+                    => 'done',
+                $docStats['total_required'] > 0
+                    && $docStats['uploaded_required'] >= $docStats['total_required']
+                    => 'inprogress',
+                default => '',
+            },
             5 => $appStatus === 'enrolled' ? 'done' : '',
         ];
 

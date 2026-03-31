@@ -70,6 +70,31 @@ class ApplicantsController extends BaseController
         ]);
     }
 
+    public function decide(int $applicantId)
+    {
+        $allowed = ['approved', 'rejected'];
+        $status  = $this->request->getPost('status');
+        $remarks = trim($this->request->getPost('remarks') ?? '');
+
+        if (!in_array($status, $allowed) || !$applicantId) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Invalid request.']);
+        }
+
+        $db = \Config\Database::connect();
+        $db->table('applicants')
+            ->where('applicant_id', $applicantId)
+            ->update([
+                'application_status' => $status,
+                'decision_remarks'   => $remarks,
+            ]);
+
+        return $this->response->setJSON([
+            'success' => true,
+            'status'  => $status,
+            'message' => 'Decision saved successfully.',
+        ]);
+    }
+
     public function bulkUpdate()
     {
         $data = $this->request->getJSON(true);

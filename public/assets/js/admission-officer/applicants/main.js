@@ -1,4 +1,3 @@
-import { initTabs, initFilters, initSearch, initPagination, init, initDocModal } from './handlers.js';
 import {
     initFilters,
     initSearch,
@@ -8,6 +7,7 @@ import {
     initBulkSelect,
     initBulkActions,
     initRowClick,
+    initDocModal,
     init
 } from './handlers.js';
 

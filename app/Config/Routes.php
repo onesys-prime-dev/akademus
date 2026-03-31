@@ -125,6 +125,7 @@ $routes->get('admission-officer/applicants/fetch-applicants',    'AdmissionOffic
 $routes->post('admission-officer/applicants/bulk-update',        'AdmissionOfficer\ApplicantsController::bulkUpdate');
 $routes->get('admission-officer/detailed-applicant/(:num)',         'AdmissionOfficer\ApplicantsController::profile/$1');
 $routes->get('admission-officer/detailed-applicant/fetch-content',  'AdmissionOfficer\ApplicantsController::fetchContent');
+$routes->post('admission-officer/applicants/(:num)/decide',         'AdmissionOfficer\ApplicantsController::decide/$1');
 
 // Admission Officer Exam Schedule
 $routes->get('admission-officer/exam-schedule',                         'AdmissionOfficer\ExamScheduleController::index');

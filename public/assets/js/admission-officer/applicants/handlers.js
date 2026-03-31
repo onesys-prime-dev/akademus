@@ -10,6 +10,7 @@ import {
     // profile
     setActiveTab,
     renderContent,
+    showError,
     showContentLoading,
     updateTableOnly,
 
@@ -22,7 +23,11 @@ import {
     showTableLoading,
     updatePagination,
     updateFilterCounts,
-    resetFilters
+    resetFilters,
+
+    // doc modal
+    openDocModal,
+    closeDocModal
 } from './ui.js';
 
 let debounceTimer;
@@ -35,24 +40,21 @@ async function update({ fullRender = false } = {}) {
 
     // ================= PROFILE =================
     if (state.mode === 'profile') {
-
-    let res;
-    try {
-        res = await fetchApplicationContent();
-    } catch (err) {
-        console.error('fetchApplicationContent error:', err);
-        showError('Failed to load content. Please refresh the page.');
-        return;
-    }
-
-    if (!res.success) {
-        showError(res.message || 'Failed to load content.');
-        return;
-    }
         fullRender ? showContentLoading() : showTableLoading();
 
-        const res = await fetchApplicationContent();
-        if (!res.success) return;
+        let res;
+        try {
+            res = await fetchApplicationContent();
+        } catch (err) {
+            console.error('fetchApplicationContent error:', err);
+            showError('Failed to load content. Please refresh the page.');
+            return;
+        }
+
+        if (!res.success) {
+            showError(res.message || 'Failed to load content.');
+            return;
+        }
 
         state.totalPages = Math.max(1, Math.ceil((res.total || 0) / res.limit));
 
@@ -69,7 +71,6 @@ async function update({ fullRender = false } = {}) {
             if (!ok) renderContent(res.html);
         }
 
-        // sync filters UI
         document.querySelectorAll('[data-filter]').forEach(btn => {
             btn.classList.toggle('filter-active', btn.dataset.filter === state.status);
         });

@@ -40,10 +40,10 @@ export function updateTableOnly(html) {
     temp.innerHTML = html;
 
     const newTbody = temp.querySelector('#application-table-body');
-    const current = document.querySelector('#application-table-body');
+    const current  = document.querySelector('#application-table-body');
 
     if (!newTbody || !current) {
-        console.warn('Table not found, fallback to full render');
+        console.warn('Table body not found, fallback to full render');
         return false;
     }
 
@@ -117,8 +117,8 @@ export function updateApplicantsTable(applicants) {
 // ==============================
 export function showTableLoading() {
     const tbody =
-        document.getElementById('application-table-body') ||
-        document.getElementById('applicants-table-body');
+        document.getElementById('applicants-table-body') ||
+        document.getElementById('application-table-body');
 
     if (!tbody) return;
 

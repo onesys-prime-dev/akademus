@@ -35,8 +35,15 @@ class TrackingProgressController extends BaseController
         $db          = \Config\Database::connect();
         $application = $db->table('applications')
             ->where('applicant_id', $applicant['applicant_id'])
+            ->orderBy('application_date', 'DESC')
+            ->limit(1)
             ->get()->getRowArray();
 
+        // Officer decision status lives on the applicants row
+        $applicantStatus = $applicant['application_status'] ?? 'pending';
+        $decisionRemarks = $applicant['decision_remarks']   ?? null;
+
+        // Form-level status (draft / pending) lives on the applications row
         $appStatus = $application['application_status'] ?? '';
 
         // ── Program ID ───────────────────────────────────────────────────
@@ -105,18 +112,25 @@ class TrackingProgressController extends BaseController
         // done | active | pending
         $formSubmitted = $application && !in_array($appStatus, ['draft', '']);
 
+        $decisionMade = in_array($applicantStatus, ['approved', 'rejected', 'enrolled']);
+        $isApproved   = in_array($applicantStatus, ['approved', 'enrolled']);
+        $isRejected   = $applicantStatus === 'rejected';
+        $isEnrolled   = $applicantStatus === 'enrolled';
+
         $steps = [
             [
                 'title'    => 'Account Created',
                 'subtitle' => 'Account and Applicant ID issued.',
                 'date'     => $applicant['application_date'] ?? null,
                 'status'   => 'done',
+                'remarks'  => null,
             ],
             [
                 'title'    => 'Applicant Form Submitted',
                 'subtitle' => 'All basic details successfully submitted.',
                 'date'     => $formSubmitted ? ($application['application_date'] ?? null) : null,
                 'status'   => $formComplete ? 'done' : ($formPagesCompleted > 0 ? 'active' : 'pending'),
+                'remarks'  => null,
             ],
             [
                 'title'    => 'Documents Submitted',
@@ -124,25 +138,31 @@ class TrackingProgressController extends BaseController
                 'date'     => $docsComplete ? ($application['updated_at'] ?? null) : null,
                 'status'   => $docsComplete ? 'done'
                     : ($docStats['uploaded_required'] > 0 ? 'active' : 'pending'),
+                'remarks'  => null,
             ],
             [
                 'title'    => 'Document Verification',
-                'subtitle' => 'Admissions staff reviewing documents.',
-                'date'     => null,
-                'status'   => in_array($appStatus, ['approved', 'enrolled']) ? 'done'
+                'subtitle' => 'Admissions staff reviewing your documents.',
+                'date'     => $decisionMade ? ($applicant['application_date'] ?? null) : null,
+                'status'   => $decisionMade ? 'done'
                     : ($docsComplete ? 'active' : 'pending'),
+                'remarks'  => null,
             ],
             [
-                'title'    => 'Admission Decision',
-                'subtitle' => 'Final review; decision released via email.',
-                'date'     => in_array($appStatus, ['approved', 'enrolled']) ? ($application['updated_at'] ?? null) : null,
-                'status'   => in_array($appStatus, ['approved', 'enrolled']) ? 'done' : 'pending',
+                'title'    => $isRejected ? 'Application Declined' : 'Admission Decision',
+                'subtitle' => $isApproved
+                    ? 'Your application has been approved.'
+                    : ($isRejected ? 'Your application was not approved at this time.' : 'Final review; decision released via email.'),
+                'date'     => $decisionMade ? ($applicant['application_date'] ?? null) : null,
+                'status'   => $decisionMade ? ($isRejected ? 'rejected' : 'done') : 'pending',
+                'remarks'  => $decisionMade ? $decisionRemarks : null,
             ],
             [
                 'title'    => 'Enrollment & Payment',
                 'subtitle' => 'Accept offer; complete enrollment.',
-                'date'     => $appStatus === 'enrolled' ? ($application['updated_at'] ?? null) : null,
-                'status'   => $appStatus === 'enrolled' ? 'done' : 'pending',
+                'date'     => $isEnrolled ? ($applicant['application_date'] ?? null) : null,
+                'status'   => $isEnrolled ? 'done' : 'pending',
+                'remarks'  => null,
             ],
         ];
 
@@ -152,11 +172,12 @@ class TrackingProgressController extends BaseController
             'page_content'     => 'applicant/tracking-progress/tracking_progress',
             'theme'            => $themeModel->getAllSettings(),
             'applicant_number' => $applicant['applicant_number'] ?? 'N/A',
-            'app_status'       => $appStatus,
+            'app_status'       => $applicantStatus,
             'steps'            => $steps,
             'form_complete'    => $formComplete,
             'form_submitted'   => $formSubmitted,
             'docs_complete'    => $docsComplete,
+            'decision_remarks' => $decisionRemarks,
         ];
 
         return view('applicant/main', $data);
