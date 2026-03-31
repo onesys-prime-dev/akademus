@@ -113,6 +113,11 @@ $routes->post('admin/programs/assign-preset',    'Admin\ProgramPresetsController
 // API Endpoints
 $routes->get('api/presets/program/(:num)',       'Admin\PresetsController::getFormPagesForApplicant/$1');
 
+// Admission Officer Auth
+$routes->get ('admission-officer/login',  'AdmissionOfficer\AuthController::login');
+$routes->post('admission-officer/login',  'AdmissionOfficer\AuthController::loginPost');
+$routes->get ('admission-officer/logout', 'AdmissionOfficer\AuthController::logout');
+
 // Admission Officer Dashboard
 $routes->get('admission-officer/dashboard',                     'AdmissionOfficer\DashboardController::index');
 

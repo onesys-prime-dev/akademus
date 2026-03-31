@@ -40,52 +40,66 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    height: 100px;
+    padding: 20px 24px;
+    min-height: 96px;
     flex: 1;
+    gap: 12px;
 }
 
 .metric__details {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 6px;
 }
 
 .metric__details--title {
-    font-size: 13px;
-    color: #7B7B7B;
+    font-size: 12px;
+    color: #6b7280;
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
 }
 
 .metric__details--value {
-    font-size: 24px;
-    color: #1e1e1e;
-    font-weight: 600;
+    font-size: 28px;
+    color: #111827;
+    font-weight: 700;
+    line-height: 1;
 }
 
 .metric__icon {
-    width: 45px;
-    height: 45px;
-    align-content: center;
-    text-align: center;
-    background-color: #d1d1d1;
-    border-radius: 100%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.metric__icon--img {
+    width: 22px;
+    height: 22px;
 }
 
 .metric__icon--applicant {
-    background-color: var(--primary);
+    background-color: color-mix(in srgb, var(--primary) 15%, transparent);
+}
+
+.metric__icon--applicant .metric__icon--img {
+    filter: invert(19%) sepia(80%) saturate(2000%) hue-rotate(210deg) brightness(90%);
 }
 
 .metric__icon--pending {
-    background-color: #FFB200;
+    background-color: rgba(255, 178, 0, 0.15);
 }
 
 .metric__icon--application {
-    background-color: #707FDD;
+    background-color: rgba(112, 127, 221, 0.15);
 }
 
 .metric__icon--approved {
-    background-color: #31A646;
+    background-color: rgba(49, 166, 70, 0.15);
 }
 
 
@@ -95,14 +109,15 @@
 .passing-rate {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 20px;
+    gap: 16px;
+    padding: 20px 24px;
 }
 
 .passing-rate__header {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1e1e1e;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.2px;
 }
 
 .passing-rate__body {
@@ -186,15 +201,16 @@
 .applicants-per-program {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 20px;
+    gap: 16px;
+    padding: 20px 24px;
     width: 100%;
 }
 
 .applicants-per-program__header {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1e1e1e;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.2px;
 }
 
 .applicants-per-program__body {
@@ -236,15 +252,16 @@
 .applicants-per-status {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 20px;
+    gap: 16px;
+    padding: 20px 24px;
     flex: 1;
 }
 
 .applicants-per-status__header {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1e1e1e;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.2px;
 }
 
 .applicants-per-status__body {
@@ -327,14 +344,15 @@
 .to-do-list {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 20px;
+    gap: 16px;
+    padding: 20px 24px;
 }
 
 .to-do-list__header {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1e1e1e;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.2px;
 }
 
 .to-do-list__body {
@@ -508,8 +526,8 @@
 }
 
 .calendar-overview__exam-schedule--header {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 700;
     color: #ffffff;
 }
 
@@ -564,14 +582,15 @@
 .table-overview {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 20px;
+    gap: 16px;
+    padding: 20px 24px;
 }
 
 .table-overview__header {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1e1e1e;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.2px;
 }
 
 .table-overview__footer {

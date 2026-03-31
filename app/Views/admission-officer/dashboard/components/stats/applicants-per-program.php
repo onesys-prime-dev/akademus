@@ -1,11 +1,11 @@
 <?php
 $colors  = ['#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#10b981', '#f97316', '#06b6d4', '#ec4899'];
 $maxVal  = max(1, ...array_column($perProgram ?: [['total' => 0]], 'total'));
-$barH    = 36;
-$barGap  = 58;
-$labelX  = 140;
-$barX    = 150;
-$maxBarW = 820; // 150 to 970
+$barH    = 32;
+$barGap  = 56;
+$labelX  = 290;
+$barX    = 300;
+$maxBarW = 650;
 $count   = count($perProgram);
 $svgH    = max(80, $count * $barGap + 30);
 ?>
@@ -19,7 +19,7 @@ $svgH    = max(80, $count * $barGap + 30);
         <svg
             class="applicants-per-program__svg"
             viewBox="0 0 1000 <?= $svgH ?>"
-            preserveAspectRatio="none"
+            preserveAspectRatio="xMidYMid meet"
         >
             <!-- PROGRAM LABELS & BARS -->
             <?php foreach ($perProgram as $i => $prog): ?>

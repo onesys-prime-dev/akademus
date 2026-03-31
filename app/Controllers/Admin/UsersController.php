@@ -65,23 +65,20 @@ class UsersController extends BaseController
 
         $db->transBegin();
         try {
+            $hashed = password_hash($password, PASSWORD_DEFAULT);
+
             $db->table('users')->insert([
                 'firstname' => $firstname,
                 'lastname'  => $lastname,
                 'email'     => $email,
                 'role'      => $role,
+                'password'  => $role === 'admission_officer' ? $hashed : null,
             ]);
             $userId = $db->insertID();
-
-            $hashed = password_hash($password, PASSWORD_DEFAULT);
 
             if ($role === 'admin') {
                 $db->table('admin_credentials')->insert([
                     'user_id'  => $userId,
-                    'password' => $hashed,
-                ]);
-            } else {
-                $db->table('users')->where('user_id', $userId)->update([
                     'password' => $hashed,
                 ]);
             }
