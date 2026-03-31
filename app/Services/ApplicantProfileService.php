@@ -24,9 +24,11 @@ class ApplicantProfileService
                 a.applicant_id,
                 a.applicant_number,
                 a.application_status,
+                a.decision_remarks,
                 a.application_date,
                 ap.applicant_type,
                 CONCAT(u.lastname, ", ", u.firstname) as applicant_name,
+                u.user_id,
                 u.email,
                 p.program_name
             ')

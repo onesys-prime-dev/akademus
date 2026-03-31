@@ -67,6 +67,99 @@
     background: #fff5f5;
 }
 
+.decision-btn--message {
+    background: #fff;
+    color: #4f46e5;
+    border-color: #c7d2fe;
+}
+
+.decision-btn--message:hover {
+    background: #eef2ff;
+}
+
+/* ── Decision badge (shown after decision is made) ── */
+.decision-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.decision-badge--approved {
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1.5px solid #86efac;
+}
+
+.decision-badge--rejected {
+    background: #fff5f5;
+    color: #dc2626;
+    border: 1.5px solid #fca5a5;
+}
+
+/* ── Remarks banner (below top actions) ── */
+.decision-remarks-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    border: 1px solid;
+}
+
+.decision-remarks-banner--approved {
+    background: #f0fdf4;
+    border-color: #86efac;
+    color: #15803d;
+}
+
+.decision-remarks-banner--rejected {
+    background: #fff5f5;
+    border-color: #fca5a5;
+    color: #dc2626;
+}
+
+.decision-remarks-banner__icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.decision-remarks-banner__content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.decision-remarks-banner__label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.decision-remarks-banner__text {
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.5;
+}
+
+/* ── Message modal header ── */
+.decision-modal__header--message {
+    background: #f5f3ff;
+    border-bottom: 1px solid #ddd6fe;
+}
+
+.decision-modal__submit--message {
+    background: #4f46e5;
+}
+
+.decision-modal__submit--message:hover {
+    opacity: 0.88;
+}
+
 
 /* -----------------
       PROFILE
