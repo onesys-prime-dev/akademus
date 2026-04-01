@@ -8,12 +8,15 @@ use App\Models\ThemeModel;
 use App\Models\ProgramModel;
 
 use App\Services\OfficerDashboardService;
+use App\Services\ApplicantService;
 
 class DashboardController extends BaseController
 {
+    protected $applicantService;
     protected OfficerDashboardService $officerDashboardService;
 
     public function __construct() {
+        $this->applicantService = new ApplicantService();
         $this->officerDashboardService = new OfficerDashboardService();
     }
 
@@ -32,7 +35,7 @@ class DashboardController extends BaseController
                     'url'   => base_url('/admission-officer/dashboard')
                 ],
                 [
-                    'label' => 'Overview'
+                    'label' => 'List of Applicants'
                 ]
             ],
             'theme'               => $themeModel->getAllSettings(),
@@ -40,5 +43,53 @@ class DashboardController extends BaseController
             'key_metrics'         => $this->officerDashboardService->getKeyMetrics(),
             'recent_applicants'   => $this->officerDashboardService->getApplicants($limit = 5),
         ]);
+    }
+
+    public function fetchApplicants() {
+        $filters = [
+            'status'  => $this->request->getGet('status'),
+            'program' => $this->request->getGet('program'),
+            'search'  => $this->request->getGet('search'),
+        ];
+
+        $page  = (int) ($this->request->getGet('page') ?? 1);
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+
+        $applicants = $this->applicantService->getApplicants($filters, $limit, $offset);
+        $totalCounts = $this->applicantService->countApplicants($filters);
+        $statusCounts = $this->applicantService->getStatusCounts($filters);
+
+        return $this->response->setJSON([
+            'data' => $applicants,
+            'page' => $page,
+            'total' => $totalCounts,
+            'limit' => $limit,
+            'counts' => $statusCounts
+        ]);
+    }
+
+    public function bulkUpdate() {
+        $data = $this->request->getJSON(true);
+
+        $ids = $data['ids'] ?? [];
+        $status = $data['status'] ?? null;
+
+        if (empty($ids) || !$status) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Invalid payload']);
+        }
+
+        $db = \Config\Database::connect();
+
+        // IMPORTANT: must match data-id from the table rows
+        $db->table('applicants')
+            ->whereIn('applicant_id', $ids)
+            ->update(['application_status' => $status]);
+
+        return $this->response->setJSON(['success' => true]);
+    }
+
+    public function fetchApplicant($id) {
+        
     }
 }

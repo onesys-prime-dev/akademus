@@ -36,7 +36,7 @@
                         <div class="dotted-link"></div>
                         <span>Dashboard</span>
                     </a>
-                    <a href="<?= base_url('/admission-officer/applicants') ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-officer/applicants') || str_contains($uri, 'admission-officer/detailed-applicant') ? 'active' : '' ?>">
+                    <a href="<?= base_url('/admission-officer/applicants') ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-officer/applicants') ? 'active' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Applicants</span>
                     </a>

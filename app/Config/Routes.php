@@ -104,7 +104,7 @@ $routes->post('admin/programs/assign-preset',    'Admin\ProgramPresetsController
 $routes->get('api/presets/program/(:num)',       'Admin\PresetsController::getFormPagesForApplicant/$1');
 
 // Admission Officer Dashboard
-$routes->get('admission-officer/dashboard',                     'AdmissionOfficer\DashboardController::index');
+
 
 // Admission Officer Applicants
 $routes->get('admission-officer/applicants',                     'AdmissionOfficer\ApplicantsController::index');
