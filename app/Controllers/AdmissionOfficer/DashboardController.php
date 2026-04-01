@@ -7,8 +7,16 @@ use App\Controllers\BaseController;
 use App\Models\ThemeModel;
 use App\Models\ProgramModel;
 
+use App\Services\OfficerDashboardService;
+
 class DashboardController extends BaseController
 {
+    protected OfficerDashboardService $officerDashboardService;
+
+    public function __construct() {
+        $this->officerDashboardService = new OfficerDashboardService();
+    }
+
     public function index() {
         helper('theme');
         
@@ -27,8 +35,10 @@ class DashboardController extends BaseController
                     'label' => 'Overview'
                 ]
             ],
-            'theme'        => $themeModel->getAllSettings(),
-            'programs'     => $programModel->getAllPrograms()
+            'theme'               => $themeModel->getAllSettings(),
+            'programs'            => $programModel->getAllPrograms(),
+            'key_metrics'         => $this->officerDashboardService->getKeyMetrics(),
+            'recent_applicants'   => $this->officerDashboardService->getApplicants($limit = 5),
         ]);
     }
 }

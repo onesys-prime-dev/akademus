@@ -18,14 +18,15 @@
         </thead>
 
         <tbody class="recent-applicants-table__body" id="recent-applicants-table-body">
-            <?php if (empty($rows)): ?>
+            <?php if (empty($recent_applicants)): ?>
                 <tr class="recent-applicants-table__row">
                     <td class="recent-applicants-table__cell" colspan="8" style="text-align:center;">
                         No requirements found
                     </td>
                 </tr>
             <?php else: ?>
-                <?php foreach ($rows as $row): ?>
+                <?php foreach ($recent_applicants as $row): ?>
+
                     <tr class="recent-applicants-table__row">
 
                         <!-- APPLICANT NAME -->
@@ -55,8 +56,8 @@
 
                         <!-- STATUS -->
                         <td class="recent-applicants-table__cell">
-                            <span class="status-badge status-badge--<?= esc($status) ?? '' ?>">
-                                <?= esc(ucwords(str_replace('_', ' ', $status))) ?>
+                            <span class="status-badge status-badge--<?= esc($row['status']) ?? '' ?>">
+                                <?= esc(ucwords(str_replace('_', ' ', $row['status']))) ?>
                             </span>
                         </td>
 

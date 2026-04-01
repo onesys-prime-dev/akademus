@@ -17,7 +17,7 @@
 <nav>
     <div class="sidebar-top-and-links">
         <div class="sidebar-top">
-            <a href="<?= base_url('/dashboard') ?>" class="brand">
+            <a href="<?= base_url('/admission-officer/dashboard') ?>" class="brand">
                 <img src="<?= $logo_url ?>">
                 <div class="header-wrapper">
                     <p><?= esc($app_name) ?></p>
