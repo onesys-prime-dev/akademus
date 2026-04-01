@@ -540,19 +540,19 @@
     border-radius: 8px;
     background-color: var(--accent);
     text-wrap: nowrap;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
     color: #1e1e1e;
 }
 
 .exam-schedule__card--time {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
     color: #1e1e1e;
 }
 
 .exam-schedule__card--location {
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 600;
     color: #1e1e1e;
 }

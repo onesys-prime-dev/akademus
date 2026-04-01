@@ -17,7 +17,7 @@
 <nav>
     <div class="sidebar-top-and-links">
         <div class="sidebar-top">
-            <a href="<?= base_url('/admission-officer/dashboard') ?>" class="brand">
+            <a href="<?= base_url('/dashboard') ?>" class="brand">
                 <img src="<?= $logo_url ?>">
                 <div class="header-wrapper">
                     <p><?= esc($app_name) ?></p>
@@ -36,7 +36,7 @@
                         <div class="dotted-link"></div>
                         <span>Dashboard</span>
                     </a>
-                    <a href="<?= base_url('/admission-officer/applicants') ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-officer/applicants') ? 'active' : '' ?>">
+                    <a href="<?= base_url('/admission-officer/applicants') ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-officer/applicants') || str_contains($uri, 'admission-officer/detailed-applicant') ? 'active' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Applicants</span>
                     </a>
