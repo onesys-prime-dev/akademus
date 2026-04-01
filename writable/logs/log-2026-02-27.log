@@ -1,0 +1,38 @@
+CRITICAL - 2026-02-27 03:31:10 --> ErrorException: Undefined variable $applicant_id
+[Method: GET, Route: success]
+in APPPATH\Views\auth\success.php on line 6.
+ 1 APPPATH\Views\auth\success.php(6): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $applicant_id', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\success.php', 6)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\success.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/success', [], true)
+ 5 APPPATH\Views\auth\main.php(109): view('auth/success')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(157): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->success()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-27 03:31:11 --> ErrorException: Undefined variable $applicant_id
+[Method: GET, Route: success]
+in APPPATH\Views\auth\success.php on line 6.
+ 1 APPPATH\Views\auth\success.php(6): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $applicant_id', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\success.php', 6)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\success.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/success', [], true)
+ 5 APPPATH\Views\auth\main.php(109): view('auth/success')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(157): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->success()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-02-27 04:01:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-27 06:17:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

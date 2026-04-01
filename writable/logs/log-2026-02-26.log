@@ -1,0 +1,1203 @@
+CRITICAL - 2026-02-26 03:16:16 --> ErrorException: unlink(C:\xampp\htdocs\akademus\writable\debugbar/debugbar_1772075696.805055.json): No such file or directory
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar\Collectors\History.php on line 82.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'unlink(C:\\xampp\\htdocs\\akademus\\writable\\debugbar/debugbar_1772075696.805055.json): No such file or directory', 'C:\\xampp\\htdocs\\akademus\\vendor\\codeigniter4\\framework\\system\\Debug\\Toolbar\\Collectors\\History.php', 82)
+ 2 SYSTEMPATH\Debug\Toolbar\Collectors\History.php(82): unlink('C:\\xampp\\htdocs\\akademus\\writable\\debugbar/debugbar_1772075696.805055.json')
+ 3 SYSTEMPATH\Debug\Toolbar.php(517): CodeIgniter\Debug\Toolbar\Collectors\History->setFiles('1772075776.390440', 20)
+ 4 SYSTEMPATH\Debug\Toolbar.php(496): CodeIgniter\Debug\Toolbar->format([...], 'html')
+ 5 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 6 SYSTEMPATH\Events\Events.php(152): CodeIgniter\Events\Events::Config\{closure}()
+ 7 SYSTEMPATH\CodeIgniter.php(325): CodeIgniter\Events\Events::trigger('pre_system')
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:20:51 --> ErrorException: Undefined variable $title
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\main.php on line 8.
+ 1 APPPATH\Views\auth\main.php(8): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $title', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 8)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(33): view('auth/main')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:20:52 --> ErrorException: Undefined variable $title
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\main.php on line 8.
+ 1 APPPATH\Views\auth\main.php(8): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $title', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 8)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(33): view('auth/main')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:21:09 --> ErrorException: Undefined variable $title
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\main.php on line 8.
+ 1 APPPATH\Views\auth\main.php(8): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $title', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 8)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(33): view('auth/main')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:21:09 --> ErrorException: Undefined variable $title
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\main.php on line 8.
+ 1 APPPATH\Views\auth\main.php(8): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $title', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 8)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(33): view('auth/main')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:22:16 --> ErrorException: Undefined variable $title
+[Method: GET, Route: sign_in]
+in APPPATH\Views\auth\main.php on line 8.
+ 1 APPPATH\Views\auth\main.php(8): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $title', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 8)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(22): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_in()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:22:17 --> ErrorException: Undefined variable $title
+[Method: GET, Route: sign_in]
+in APPPATH\Views\auth\main.php on line 8.
+ 1 APPPATH\Views\auth\main.php(8): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $title', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 8)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(22): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_in()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:22:37 --> ErrorException: Undefined variable $auth_header
+[Method: GET, Route: sign_in]
+in APPPATH\Views\auth\main.php on line 88.
+ 1 APPPATH\Views\auth\main.php(88): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $auth_header', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 88)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(22): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_in()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:22:37 --> ErrorException: Undefined variable $auth_header
+[Method: GET, Route: sign_in]
+in APPPATH\Views\auth\main.php on line 88.
+ 1 APPPATH\Views\auth\main.php(88): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $auth_header', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 88)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(22): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_in()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:22:37 --> ErrorException: Undefined variable $auth_header
+[Method: GET, Route: sign_in]
+in APPPATH\Views\auth\main.php on line 88.
+ 1 APPPATH\Views\auth\main.php(88): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $auth_header', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 88)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(22): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_in()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:22:38 --> ErrorException: Undefined variable $auth_header
+[Method: GET, Route: sign_in]
+in APPPATH\Views\auth\main.php on line 88.
+ 1 APPPATH\Views\auth\main.php(88): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $auth_header', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 88)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(22): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_in()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:22:38 --> ErrorException: Undefined variable $auth_header
+[Method: GET, Route: sign_in]
+in APPPATH\Views\auth\main.php on line 88.
+ 1 APPPATH\Views\auth\main.php(88): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $auth_header', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 88)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(22): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_in()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:22:40 --> ErrorException: Undefined variable $auth_header
+[Method: GET, Route: sign_in]
+in APPPATH\Views\auth\main.php on line 88.
+ 1 APPPATH\Views\auth\main.php(88): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $auth_header', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 88)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(22): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_in()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:22:40 --> ErrorException: Undefined variable $auth_header
+[Method: GET, Route: sign_in]
+in APPPATH\Views\auth\main.php on line 88.
+ 1 APPPATH\Views\auth\main.php(88): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $auth_header', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 88)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(22): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_in()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:22:40 --> ErrorException: Undefined variable $auth_header
+[Method: GET, Route: sign_in]
+in APPPATH\Views\auth\main.php on line 88.
+ 1 APPPATH\Views\auth\main.php(88): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $auth_header', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 88)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(22): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_in()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 03:22:41 --> ErrorException: Undefined variable $auth_header
+[Method: GET, Route: sign_in]
+in APPPATH\Views\auth\main.php on line 88.
+ 1 APPPATH\Views\auth\main.php(88): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $auth_header', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 88)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(22): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_in()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-02-26 07:41:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-02-26 07:41:58 --> Email: sendWithSmtp throwed ErrorException: stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed in C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\Email\Email.php:1930
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'stream_socket_e...', 'C:\\xampp\\htdocs...', 1930)
+#1 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\Email\Email.php(1930): stream_socket_enable_crypto(Resource id #172, true, 121)
+#2 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\Email\Email.php(1823): CodeIgniter\Email\Email->SMTPConnect()
+#3 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\Email\Email.php(1708): CodeIgniter\Email\Email->sendWithSmtp()
+#4 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\Email\Email.php(1602): CodeIgniter\Email\Email->spoolEmail()
+#5 C:\xampp\htdocs\akademus\app\Controllers\Auth.php(102): CodeIgniter\Email\Email->send()
+#6 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(951): App\Controllers\Auth->register()
+#7 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#8 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\akademus\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+ERROR - 2026-02-26 07:41:58 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-02-26 07:41:58 --> 220 smtp.gmail.com ESMTP 98e67ed59e1d1-359034bd11fsm4978884a91.9 - gsmtp
+
+hello: 250-smtp.gmail.com at your service, [122.55.57.82]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250 SMTPUTF8
+
+starttls: 220 2.0.0 Ready to start TLS
+
+ERROR - 2026-02-26 07:45:46 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-02-26 07:45:46 --> 220 smtp.gmail.com ESMTP 41be03b00d2f7-c70fa801963sm1084389a12.21 - gsmtp
+
+hello: 250-smtp.gmail.com at your service, [122.55.57.82]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+
+starttls: 220 2.0.0 Ready to start TLS
+
+hello: 250-smtp.gmail.com at your service, [122.55.57.82]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+
+from: 530-5.7.0 Authentication Required. For more information, go to
+530 5.7.0  https://support.google.com/accounts/troubleshooter/2402620. 41be03b00d2f7-c70fa801963sm1084389a12.21 - gsmtp
+
+The following SMTP error was encountered: 530-5.7.0 Authentication Required. For more information, go to
+530 5.7.0  https://support.google.com/accounts/troubleshooter/2402620. 41be03b00d2f7-c70fa801963sm1084389a12.21 - gsmtp
+
+quit: 221 2.0.0 closing connection 41be03b00d2f7-c70fa801963sm1084389a12.21 - gsmtp
+
+DEBUG - 2026-02-26 07:47:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-26 07:47:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-26 07:48:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-02-26 08:13:04 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:13:05 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:13:05 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:13:11 --> ParseError: syntax error, unexpected token "echo"
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 7 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:13:12 --> ParseError: syntax error, unexpected token "echo"
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 7 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:13:12 --> ParseError: syntax error, unexpected token "echo"
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 7 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:13:39 --> ParseError: syntax error, unexpected token "echo"
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 7 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:13:40 --> ParseError: syntax error, unexpected token "echo"
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 7 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:13:40 --> ParseError: syntax error, unexpected token "echo"
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 7 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:13:40 --> ParseError: syntax error, unexpected token "echo"
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 7 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:14:05 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:14:06 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:14:06 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:14:06 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:14:15 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:14:16 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:14:16 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:14:26 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:14:27 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:14:27 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:14:32 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:14:32 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:14:32 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:14:33 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:15:03 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:15:04 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:15:08 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 34.
+ 1 APPPATH\Views\auth\sign_up.php(34): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 34)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:15:23 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\main.php on line 82.
+ 1 APPPATH\Views\auth\main.php(82): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 82)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:15:23 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\main.php on line 82.
+ 1 APPPATH\Views\auth\main.php(82): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 82)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:15:24 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\main.php on line 82.
+ 1 APPPATH\Views\auth\main.php(82): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 82)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:15:24 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\main.php on line 82.
+ 1 APPPATH\Views\auth\main.php(82): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 82)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:18:11 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 32.
+ 1 APPPATH\Views\auth\sign_up.php(32): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 32)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(36): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:18:12 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 32.
+ 1 APPPATH\Views\auth\sign_up.php(32): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 32)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(36): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:18:14 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 32.
+ 1 APPPATH\Views\auth\sign_up.php(32): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 32)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(36): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:18:21 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 33.
+ 1 APPPATH\Views\auth\sign_up.php(33): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 33)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:18:23 --> ErrorException: Array to string conversion
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 33.
+ 1 APPPATH\Views\auth\sign_up.php(33): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string conversion', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 33)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Views\auth\main.php(105): view('auth/sign_up')
+ 6 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 7 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 9 APPPATH\Controllers\Auth.php(64): view('auth/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:18:29 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 32.
+ 1 APPPATH\Views\auth\sign_up.php(32): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 32)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(36): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:18:30 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 32.
+ 1 APPPATH\Views\auth\sign_up.php(32): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 32)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(36): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:20:16 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 52.
+ 1 APPPATH\Views\auth\sign_up.php(52): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 52)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(36): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:20:17 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 52.
+ 1 APPPATH\Views\auth\sign_up.php(52): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 52)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(36): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:20:29 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 52.
+ 1 APPPATH\Views\auth\sign_up.php(52): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 52)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(36): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:20:30 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 52.
+ 1 APPPATH\Views\auth\sign_up.php(52): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 52)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(36): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:20:33 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 52.
+ 1 APPPATH\Views\auth\sign_up.php(52): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 52)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(36): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:20:40 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 52.
+ 1 APPPATH\Views\auth\sign_up.php(52): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 52)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(36): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:24:28 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 52.
+ 1 APPPATH\Views\auth\sign_up.php(52): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 52)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(50): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:24:29 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 52.
+ 1 APPPATH\Views\auth\sign_up.php(52): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 52)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(50): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:26:01 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 52.
+ 1 APPPATH\Views\auth\sign_up.php(52): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 52)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(50): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:26:02 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 52.
+ 1 APPPATH\Views\auth\sign_up.php(52): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 52)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(50): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 08:26:03 --> ErrorException: Undefined variable $programs
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\sign_up.php on line 52.
+ 1 APPPATH\Views\auth\sign_up.php(52): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $programs', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php', 52)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\sign_up.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 5 APPPATH\Controllers\Auth.php(50): view('auth/sign_up')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-02-26 09:08:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-02-26 09:16:15 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/sidebar.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/sidebar.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/sidebar', [], true)
+ 3 APPPATH\Views\dashboard\main.php(15): view('dashboard/sidebar')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Dashboard.php(16): view('dashboard/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Dashboard->index()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 09:16:15 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/sidebar.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/sidebar.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/sidebar', [], true)
+ 3 APPPATH\Views\dashboard\main.php(15): view('dashboard/sidebar')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Dashboard.php(16): view('dashboard/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Dashboard->index()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 09:16:16 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/sidebar.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/sidebar.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/sidebar', [], true)
+ 3 APPPATH\Views\dashboard\main.php(15): view('dashboard/sidebar')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Dashboard.php(16): view('dashboard/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Dashboard->index()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 09:16:16 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/sidebar.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/sidebar.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/sidebar', [], true)
+ 3 APPPATH\Views\dashboard\main.php(15): view('dashboard/sidebar')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Dashboard.php(16): view('dashboard/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Dashboard->index()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 09:16:17 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/sidebar.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/sidebar.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/sidebar', [], true)
+ 3 APPPATH\Views\dashboard\main.php(15): view('dashboard/sidebar')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Dashboard.php(16): view('dashboard/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Dashboard->index()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 09:16:17 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/sidebar.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/sidebar.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/sidebar', [], true)
+ 3 APPPATH\Views\dashboard\main.php(15): view('dashboard/sidebar')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Dashboard.php(16): view('dashboard/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Dashboard->index()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 09:16:17 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/sidebar.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/sidebar.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/sidebar', [], true)
+ 3 APPPATH\Views\dashboard\main.php(15): view('dashboard/sidebar')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Dashboard.php(16): view('dashboard/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Dashboard->index()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-26 09:17:07 --> ErrorException: unlink(C:\xampp\htdocs\akademus\writable\debugbar/debugbar_1772095788.861647.json): No such file or directory
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar\Collectors\History.php on line 82.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'unlink(C:\\xampp\\htdocs\\akademus\\writable\\debugbar/debugbar_1772095788.861647.json): No such file or directory', 'C:\\xampp\\htdocs\\akademus\\vendor\\codeigniter4\\framework\\system\\Debug\\Toolbar\\Collectors\\History.php', 82)
+ 2 SYSTEMPATH\Debug\Toolbar\Collectors\History.php(82): unlink('C:\\xampp\\htdocs\\akademus\\writable\\debugbar/debugbar_1772095788.861647.json')
+ 3 SYSTEMPATH\Debug\Toolbar.php(517): CodeIgniter\Debug\Toolbar\Collectors\History->setFiles('1772097426.970097', 20)
+ 4 SYSTEMPATH\Debug\Toolbar.php(496): CodeIgniter\Debug\Toolbar->format([...], 'html')
+ 5 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 6 SYSTEMPATH\Events\Events.php(152): CodeIgniter\Events\Events::Config\{closure}()
+ 7 SYSTEMPATH\CodeIgniter.php(325): CodeIgniter\Events\Events::trigger('pre_system')
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-02-26 10:39:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-26 11:09:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

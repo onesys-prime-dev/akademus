@@ -1,0 +1,220 @@
+DEBUG - 2026-02-25 07:59:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-25 07:59:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-25 07:59:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-25 07:59:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-25 08:01:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-25 08:02:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-25 08:03:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-25 08:03:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-25 08:03:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-25 08:03:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-02-25 08:34:29 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:34:30 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:34:30 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:34:30 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:34:31 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:34:31 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:34:31 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:35:34 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:35:35 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:35:35 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:35:35 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:35:35 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:35:36 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:35:36 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:35:36 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Controllers\Auth.php(16): view('auth/sign_up')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 08:45:45 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth/sign_up.php"
+[Method: GET, Route: sign_up]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth/sign_up.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/sign_up', [], true)
+ 3 APPPATH\Views\auth\main.php(28): view('auth/sign_up')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 7 APPPATH\Controllers\Auth.php(20): view('auth/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-25 15:45:47 --> ErrorException: Undefined variable $auth_field
+[Method: GET, Route: sign_up]
+in APPPATH\Views\auth\main.php on line 102.
+ 1 APPPATH\Views\auth\main.php(102): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $auth_field', 'C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php', 102)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\auth\\main.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/main', [], true)
+ 5 APPPATH\Controllers\Auth.php(24): view('auth/main', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->sign_up()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

@@ -1,0 +1,1687 @@
+DEBUG - 2026-03-08 08:05:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 08:05:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 08:05:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 08:05:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 08:05:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 08:05:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 08:51:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 08:51:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 08:51:57 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/main.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/main.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 3 APPPATH\Controllers\Dashboard\DashboardController.php(33): view('dashboard/main', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Dashboard\DashboardController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard\DashboardController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 08:54:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 08:54:08 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/main.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/main.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 3 APPPATH\Controllers\Dashboard\DashboardController.php(33): view('dashboard/main', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Dashboard\DashboardController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard\DashboardController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-08 09:05:06 --> ErrorException: Cannot declare class App\Controllers\Dashboard\DashboardController, because the name is already in use
+[Method: GET, Route: dashboard]
+in APPPATH\Controllers\Applicant\DashboardController.php on line 9.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-08 09:05:06 --> ErrorException: Cannot declare class App\Controllers\Dashboard\DashboardController, because the name is already in use
+[Method: GET, Route: dashboard]
+in APPPATH\Controllers\Applicant\DashboardController.php on line 9.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-08 09:05:07 --> ErrorException: Cannot declare class App\Controllers\Dashboard\DashboardController, because the name is already in use
+[Method: GET, Route: dashboard]
+in APPPATH\Controllers\Applicant\DashboardController.php on line 9.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-08 09:05:07 --> ErrorException: Cannot declare class App\Controllers\Dashboard\DashboardController, because the name is already in use
+[Method: GET, Route: dashboard]
+in APPPATH\Controllers\Applicant\DashboardController.php on line 9.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-08 09:05:08 --> ErrorException: Cannot declare class App\Controllers\Dashboard\DashboardController, because the name is already in use
+[Method: GET, Route: dashboard]
+in APPPATH\Controllers\Applicant\DashboardController.php on line 9.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+DEBUG - 2026-03-08 09:05:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:05:20 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/main.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/main.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 3 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:05:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:05:21 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/main.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/main.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 3 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:05:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:05:21 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/main.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/main.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 3 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:10:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:10:05 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('applicant/dashboard', [], true)
+ 3 APPPATH\Controllers\Applicant\DashboardController.php(33): view('applicant/dashboard', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:10:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:10:06 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('applicant/dashboard', [], true)
+ 3 APPPATH\Controllers\Applicant\DashboardController.php(33): view('applicant/dashboard', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:10:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:10:15 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/pages/dashboard.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/pages/dashboard.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/pages/dashboard', null, true)
+ 3 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('dashboard/pages/dashboard')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:10:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:10:16 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/pages/dashboard.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/pages/dashboard.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/pages/dashboard', null, true)
+ 3 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('dashboard/pages/dashboard')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:10:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:10:18 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/pages/dashboard.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/pages/dashboard.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/pages/dashboard', null, true)
+ 3 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('dashboard/pages/dashboard')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:11:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:11:04 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('dashboard/components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:11:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:11:23 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:11:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:11:45 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "../components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('../components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('../components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('../components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:11:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:11:46 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "../components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('../components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('../components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('../components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:11:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:11:46 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "../components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('../components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('../components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('../components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:11:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:11:50 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:11:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:11:50 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:11:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:11:51 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:11:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:11:51 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:11:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:11:52 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:12:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:12:02 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner.php', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner.php')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:12:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:12:03 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner.php', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner.php')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:12:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:12:03 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner.php', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner.php')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:12:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:12:05 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:12:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:12:05 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:12:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:12:46 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:12:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:12:48 --> ParseError: syntax error, unexpected token ";"
+[Method: GET, Route: dashboard]
+in APPPATH\Views\applicant\dashboard\dashboard.php on line 9.
+ 1 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 3 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:12:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:12:50 --> ParseError: syntax error, unexpected token ";"
+[Method: GET, Route: dashboard]
+in APPPATH\Views\applicant\dashboard\dashboard.php on line 9.
+ 1 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 3 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:12:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:12:51 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:12:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:12:51 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:12:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:12:52 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:12:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:12:52 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:12:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:12:52 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/banner.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/banner.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/banner', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(9): CodeIgniter\View\View->include('components/banner')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:14:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:14:21 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:14:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:14:21 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:14:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:14:22 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:14:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:14:35 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:14:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:14:35 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:14:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:14:35 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:14:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:14:46 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:01 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:01 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:02 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:02 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:02 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:02 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:03 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:03 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:03 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:03 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:04 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:04 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:04 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:04 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:04 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:06 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:06 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:06 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:07 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:18 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:18 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:18 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/dashboard/components/progress.php"
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\dashboard\dashboard.php(11): CodeIgniter\View\View->include('applicant/dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\dashboard\\dashboard.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/dashboard/dashboard', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/dashboard/dashboard')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\DashboardController.php(33): view('dashboard/main', [...])
+12 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\DashboardController->index()
+13 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\DashboardController))
+14 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+16 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+17 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:15:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:15:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:15:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:15:56 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/pages/applicant_form.php"
+[Method: GET, Route: applicant-form]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/pages/applicant_form.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/pages/applicant_form', null, true)
+ 3 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('dashboard/pages/applicant_form')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Applicant\ApplicantFormController.php(23): view('dashboard/main', [...])
+ 8 APPPATH\Controllers\Applicant\ApplicantFormController.php(19): App\Controllers\Applicant\ApplicantFormController->renderLayout(1)
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->index()
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:16:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:16:22 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "applicant/applicant-form/applicant_form.php"
+[Method: GET, Route: applicant-form]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('applicant/applicant-form/applicant_form.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/applicant-form/applicant_form', null, true)
+ 3 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/applicant-form/applicant_form')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Applicant\ApplicantFormController.php(23): view('dashboard/main', [...])
+ 8 APPPATH\Controllers\Applicant\ApplicantFormController.php(19): App\Controllers\Applicant\ApplicantFormController->renderLayout(1)
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->index()
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:16:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:16:23 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/components/progress.php"
+[Method: GET, Route: applicant-form]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\applicant-form\applicant-form.php(5): CodeIgniter\View\View->include('dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\applicant-form\\applicant-form.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/applicant-form/applicant-form', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/applicant-form/applicant-form')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\ApplicantFormController.php(23): view('dashboard/main', [...])
+12 APPPATH\Controllers\Applicant\ApplicantFormController.php(19): App\Controllers\Applicant\ApplicantFormController->renderLayout(1)
+13 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->index()
+14 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+15 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+16 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+17 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+18 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:16:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:16:23 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/components/progress.php"
+[Method: GET, Route: applicant-form]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\applicant-form\applicant-form.php(5): CodeIgniter\View\View->include('dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\applicant-form\\applicant-form.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/applicant-form/applicant-form', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/applicant-form/applicant-form')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\ApplicantFormController.php(23): view('dashboard/main', [...])
+12 APPPATH\Controllers\Applicant\ApplicantFormController.php(19): App\Controllers\Applicant\ApplicantFormController->renderLayout(1)
+13 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->index()
+14 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+15 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+16 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+17 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+18 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:16:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:16:23 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/components/progress.php"
+[Method: GET, Route: applicant-form]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\applicant-form\applicant-form.php(5): CodeIgniter\View\View->include('dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\applicant-form\\applicant-form.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/applicant-form/applicant-form', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/applicant-form/applicant-form')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\ApplicantFormController.php(23): view('dashboard/main', [...])
+12 APPPATH\Controllers\Applicant\ApplicantFormController.php(19): App\Controllers\Applicant\ApplicantFormController->renderLayout(1)
+13 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->index()
+14 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+15 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+16 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+17 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+18 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:16:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:16:24 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/components/progress.php"
+[Method: GET, Route: applicant-form]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\applicant-form\applicant-form.php(5): CodeIgniter\View\View->include('dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\applicant-form\\applicant-form.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/applicant-form/applicant-form', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/applicant-form/applicant-form')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\ApplicantFormController.php(23): view('dashboard/main', [...])
+12 APPPATH\Controllers\Applicant\ApplicantFormController.php(19): App\Controllers\Applicant\ApplicantFormController->renderLayout(1)
+13 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->index()
+14 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+15 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+16 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+17 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+18 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:16:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:16:27 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/components/progress.php"
+[Method: GET, Route: applicant-form]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\applicant-form\applicant-form.php(5): CodeIgniter\View\View->include('dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\applicant-form\\applicant-form.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/applicant-form/applicant-form', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/applicant-form/applicant-form')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\ApplicantFormController.php(23): view('dashboard/main', [...])
+12 APPPATH\Controllers\Applicant\ApplicantFormController.php(19): App\Controllers\Applicant\ApplicantFormController->renderLayout(1)
+13 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->index()
+14 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+15 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+16 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+17 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+18 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:16:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:16:35 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/components/progress.php"
+[Method: GET, Route: applicant-form]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\applicant-form\applicant-form.php(5): CodeIgniter\View\View->include('dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\applicant-form\\applicant-form.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/applicant-form/applicant-form', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/applicant-form/applicant-form')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\ApplicantFormController.php(23): view('dashboard/main', [...])
+12 APPPATH\Controllers\Applicant\ApplicantFormController.php(19): App\Controllers\Applicant\ApplicantFormController->renderLayout(1)
+13 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->index()
+14 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+15 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+16 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+17 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+18 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:16:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:16:36 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/components/progress.php"
+[Method: GET, Route: applicant-form]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\applicant-form\applicant-form.php(5): CodeIgniter\View\View->include('dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\applicant-form\\applicant-form.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/applicant-form/applicant-form', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/applicant-form/applicant-form')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\ApplicantFormController.php(23): view('dashboard/main', [...])
+12 APPPATH\Controllers\Applicant\ApplicantFormController.php(19): App\Controllers\Applicant\ApplicantFormController->renderLayout(1)
+13 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->index()
+14 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+15 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+16 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+17 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+18 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:16:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:16:36 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/components/progress.php"
+[Method: GET, Route: applicant-form]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\applicant-form\applicant-form.php(5): CodeIgniter\View\View->include('dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\applicant-form\\applicant-form.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/applicant-form/applicant-form', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/applicant-form/applicant-form')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\ApplicantFormController.php(23): view('dashboard/main', [...])
+12 APPPATH\Controllers\Applicant\ApplicantFormController.php(19): App\Controllers\Applicant\ApplicantFormController->renderLayout(1)
+13 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->index()
+14 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+15 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+16 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+17 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+18 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:16:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:16:36 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/components/progress.php"
+[Method: GET, Route: applicant-form]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\applicant-form\applicant-form.php(5): CodeIgniter\View\View->include('dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\applicant-form\\applicant-form.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/applicant-form/applicant-form', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/applicant-form/applicant-form')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\ApplicantFormController.php(23): view('dashboard/main', [...])
+12 APPPATH\Controllers\Applicant\ApplicantFormController.php(19): App\Controllers\Applicant\ApplicantFormController->renderLayout(1)
+13 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->index()
+14 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+15 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+16 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+17 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+18 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:16:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:16:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:16:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:16:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:16:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:16:48 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/components/progress.php"
+[Method: GET, Route: applicant-form]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/components/progress.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/components/progress', null, true)
+ 3 APPPATH\Views\applicant\applicant-form\applicant-form.php(5): CodeIgniter\View\View->include('dashboard/components/progress')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\applicant-form\\applicant-form.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('applicant/applicant-form/applicant-form', null, true)
+ 7 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('applicant/applicant-form/applicant-form')
+ 8 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 9 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+10 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+11 APPPATH\Controllers\Applicant\ApplicantFormController.php(23): view('dashboard/main', [...])
+12 APPPATH\Controllers\Applicant\ApplicantFormController.php(19): App\Controllers\Applicant\ApplicantFormController->renderLayout(1)
+13 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->index()
+14 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+15 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+16 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+17 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+18 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:17:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:17:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:17:27 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/steps/applicant_form/step_1.php"
+[Method: GET, Route: applicant-form/step/1]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/steps/applicant_form/step_1.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/steps/applicant_form/step_1', [], true)
+ 3 APPPATH\Controllers\Applicant\ApplicantFormController.php(90): view('dashboard/steps/applicant_form/step_1', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->getStep(1)
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:17:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:17:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:17:28 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/steps/applicant_form/step_1.php"
+[Method: GET, Route: applicant-form/step/1]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/steps/applicant_form/step_1.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/steps/applicant_form/step_1', [], true)
+ 3 APPPATH\Controllers\Applicant\ApplicantFormController.php(90): view('dashboard/steps/applicant_form/step_1', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->getStep(1)
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:18:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:18:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:18:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:18:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:18:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:18:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:18:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:18:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-08 09:18:10 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "dashboard/pages/requirements.php"
+[Method: GET, Route: requirements]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(226): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('dashboard/pages/requirements.php')
+ 2 SYSTEMPATH\View\View.php(487): CodeIgniter\View\View->render('dashboard/pages/requirements', null, true)
+ 3 APPPATH\Views\dashboard\main.php(36): CodeIgniter\View\View->include('dashboard/pages/requirements')
+ 4 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\dashboard\\main.php')
+ 5 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('dashboard/main', [], true)
+ 7 APPPATH\Controllers\Applicant\RequirementsController.php(40): view('dashboard/main', [...])
+ 8 APPPATH\Controllers\Applicant\RequirementsController.php(14): App\Controllers\Applicant\RequirementsController->renderLayout(1)
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\RequirementsController->index()
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\RequirementsController))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:18:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:18:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:19:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:19:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:19:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:19:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:19:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:19:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:19:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:19:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:20:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:20:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:20:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:20:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:20:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:20:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:20:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:21:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:21:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-03-08 09:21:52 --> [DEPRECATED] preg_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in APPPATH\Views\applicant\applicant-form\steps\step-1.php on line 5.
+ 1 APPPATH\Views\applicant\applicant-form\steps\step-1.php(5): preg_replace('/^Bachelor of Science\\s*/', 'BS ', null)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\applicant-form\\steps\\step-1.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('applicant/applicant-form/steps/step-1', [], true)
+ 5 APPPATH\Controllers\Applicant\ApplicantFormController.php(90): view('applicant/applicant-form/steps/step-1', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->getStep(1)
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:21:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:23:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:23:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-03-08 09:23:03 --> [DEPRECATED] preg_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in APPPATH\Views\applicant\applicant-form\steps\step-1.php on line 5.
+ 1 APPPATH\Views\applicant\applicant-form\steps\step-1.php(5): preg_replace('/^Bachelor of Science\\s*/', 'BS ', null)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\applicant-form\\steps\\step-1.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('applicant/applicant-form/steps/step-1', [], true)
+ 5 APPPATH\Controllers\Applicant\ApplicantFormController.php(90): view('applicant/applicant-form/steps/step-1', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->getStep(1)
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:23:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:23:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-03-08 09:23:04 --> [DEPRECATED] preg_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in APPPATH\Views\applicant\applicant-form\steps\step-1.php on line 5.
+ 1 APPPATH\Views\applicant\applicant-form\steps\step-1.php(5): preg_replace('/^Bachelor of Science\\s*/', 'BS ', null)
+ 2 SYSTEMPATH\View\View.php(238): include('C:\\xampp\\htdocs\\akademus\\app\\Views\\applicant\\applicant-form\\steps\\step-1.php')
+ 3 SYSTEMPATH\View\View.php(241): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('applicant/applicant-form/steps/step-1', [], true)
+ 5 APPPATH\Controllers\Applicant\ApplicantFormController.php(90): view('applicant/applicant-form/steps/step-1', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Applicant\ApplicantFormController->getStep(1)
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Applicant\ApplicantFormController))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-08 09:23:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:27:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:27:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:27:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:27:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-03-08 09:29:43 --> Email: sendWithSmtp throwed ErrorException: stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed in C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\Email\Email.php:1930
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'stream_socket_e...', 'C:\\xampp\\htdocs...', 1930)
+#1 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\Email\Email.php(1930): stream_socket_enable_crypto(Resource id #174, true, 121)
+#2 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\Email\Email.php(1823): CodeIgniter\Email\Email->SMTPConnect()
+#3 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\Email\Email.php(1708): CodeIgniter\Email\Email->sendWithSmtp()
+#4 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\Email\Email.php(1602): CodeIgniter\Email\Email->spoolEmail()
+#5 C:\xampp\htdocs\akademus\app\Controllers\Auth\AuthController.php(208): CodeIgniter\Email\Email->send()
+#6 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(951): App\Controllers\Auth\AuthController->register()
+#7 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\AuthController))
+#8 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\akademus\vendor\codeigniter4\framework\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\akademus\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+ERROR - 2026-03-08 09:29:43 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-03-08 09:29:43 --> 220 smtp.gmail.com ESMTP d2e1a72fcca58-829a4636968sm6575997b3a.9 - gsmtp
+
+hello: 250-smtp.gmail.com at your service, [122.55.57.82]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250 SMTPUTF8
+
+starttls: 220 2.0.0 Ready to start TLS
+
+ERROR - 2026-03-08 09:29:43 --> 220 smtp.gmail.com ESMTP d2e1a72fcca58-829a4636968sm6575997b3a.9 - gsmtp
+<br><pre>hello: 250-smtp.gmail.com at your service, [122.55.57.82]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250 SMTPUTF8
+</pre><pre>starttls: 220 2.0.0 Ready to start TLS
+</pre>Unable to send email using SMTP. Your server might not be configured to send mail using this method.<br><pre>Date: Sun, 8 Mar 2026 09:29:41 +0000
+From: &quot;Akademus Portal&quot; &lt;yourgmail@gmail.com&gt;
+Return-Path: &lt;yourgmail@gmail.com&gt;
+To: 2022-02519@sanbeda.edu.ph
+Subject: =?UTF-8?Q?Your=20Akademus=20Temporary=20Account?=
+Reply-To: &lt;yourgmail@gmail.com&gt;
+User-Agent: CodeIgniter
+X-Sender: yourgmail@gmail.com
+X-Mailer: CodeIgniter
+X-Priority: 3 (Normal)
+Message-ID: &lt;69ad4185dc7e62.22503997@gmail.com&gt;
+Mime-Version: 1.0
+
+</pre>
+DEBUG - 2026-03-08 09:29:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-08 09:29:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

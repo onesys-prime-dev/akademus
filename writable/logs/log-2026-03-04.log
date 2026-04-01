@@ -1,0 +1,1106 @@
+CRITICAL - 2026-03-04 01:52:40 --> ErrorException: Undefined variable $application_id
+[Method: POST, Route: applicant-form/update/3]
+in APPPATH\Controllers\ApplicantForm.php on line 68.
+ 1 APPPATH\Controllers\ApplicantForm.php(68): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $application_id', 'C:\\xampp\\htdocs\\akademus\\app\\Controllers\\ApplicantForm.php', 68)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('3')
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 01:53:16 --> ErrorException: Undefined variable $application_id
+[Method: POST, Route: applicant-form/update/2]
+in APPPATH\Controllers\ApplicantForm.php on line 64.
+ 1 APPPATH\Controllers\ApplicantForm.php(64): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $application_id', 'C:\\xampp\\htdocs\\akademus\\app\\Controllers\\ApplicantForm.php', 64)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('2')
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 01:53:20 --> ErrorException: Undefined variable $application_id
+[Method: POST, Route: applicant-form/update/2]
+in APPPATH\Controllers\ApplicantForm.php on line 64.
+ 1 APPPATH\Controllers\ApplicantForm.php(64): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $application_id', 'C:\\xampp\\htdocs\\akademus\\app\\Controllers\\ApplicantForm.php', 64)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('2')
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-04 02:03:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-04 02:03:24 --> ErrorException: Undefined array key "program_id"
+[Method: POST, Route: applicant-form/update/1]
+in APPPATH\Controllers\ApplicantForm.php on line 106.
+ 1 APPPATH\Controllers\ApplicantForm.php(106): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "program_id"', 'C:\\xampp\\htdocs\\akademus\\app\\Controllers\\ApplicantForm.php', 106)
+ 2 APPPATH\Controllers\ApplicantForm.php(60): App\Controllers\ApplicantForm->updateApplication([...])
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-04 02:04:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-04 02:04:25 --> ErrorException: Undefined array key "program_id"
+[Method: POST, Route: applicant-form/update/1]
+in APPPATH\Controllers\ApplicantForm.php on line 106.
+ 1 APPPATH\Controllers\ApplicantForm.php(106): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "program_id"', 'C:\\xampp\\htdocs\\akademus\\app\\Controllers\\ApplicantForm.php', 106)
+ 2 APPPATH\Controllers\ApplicantForm.php(60): App\Controllers\ApplicantForm->updateApplication([...])
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-04 02:04:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-04 02:04:32 --> ErrorException: Undefined array key "program_id"
+[Method: POST, Route: applicant-form/update/1]
+in APPPATH\Controllers\ApplicantForm.php on line 106.
+ 1 APPPATH\Controllers\ApplicantForm.php(106): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "program_id"', 'C:\\xampp\\htdocs\\akademus\\app\\Controllers\\ApplicantForm.php', 106)
+ 2 APPPATH\Controllers\ApplicantForm.php(60): App\Controllers\ApplicantForm->updateApplication([...])
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-04 02:07:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-03-04 02:07:31 --> ErrorException: Undefined array key "program_id"
+[Method: POST, Route: applicant-form/update/1]
+in APPPATH\Controllers\ApplicantForm.php on line 106.
+ 1 APPPATH\Controllers\ApplicantForm.php(106): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "program_id"', 'C:\\xampp\\htdocs\\akademus\\app\\Controllers\\ApplicantForm.php', 106)
+ 2 APPPATH\Controllers\ApplicantForm.php(60): App\Controllers\ApplicantForm->updateApplication([...])
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 02:08:15 --> ErrorException: Undefined array key "program_id"
+[Method: POST, Route: applicant-form/update/1]
+in APPPATH\Controllers\ApplicantForm.php on line 132.
+ 1 APPPATH\Controllers\ApplicantForm.php(132): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "program_id"', 'C:\\xampp\\htdocs\\akademus\\app\\Controllers\\ApplicantForm.php', 132)
+ 2 APPPATH\Controllers\ApplicantForm.php(60): App\Controllers\ApplicantForm->updateApplication([...])
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 02:47:13 --> ParseError: syntax error, unexpected token "return"
+[Method: GET, Route: applicant-form/step/4]
+in APPPATH\Controllers\ApplicantForm.php on line 205.
+ 1 VENDORPATH\composer\ClassLoader.php(427): Composer\Autoload\{closure}('C:\\xampp\\htdocs\\akademus\\vendor\\composer/../../app\\Controllers\\ApplicantForm.php')
+ 2 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\ApplicantForm')
+ 3 SYSTEMPATH\Router\Router.php(792): class_exists('\\App\\Controllers\\ApplicantForm')
+ 4 SYSTEMPATH\Router\Router.php(230): CodeIgniter\Router\Router->processRouteAttributes()
+ 5 SYSTEMPATH\CodeIgniter.php(829): CodeIgniter\Router\Router->handle('applicant-form/step/4')
+ 6 SYSTEMPATH\CodeIgniter.php(441): CodeIgniter\CodeIgniter->tryToRouteIt(Object(CodeIgniter\Router\RouteCollection))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-03-04 02:51:25 --> Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:51:25\'
+WHERE `application_id` = \'3\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:51:25\'
+WHERE `application_id` = \'3\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:51:25\'
+WHERE `application_id` = \'3\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 9 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 02:51:25 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'last_school_name' in 'field list'
+[Method: POST, Route: applicant-form/update/4]
+in SYSTEMPATH\Database\BaseConnection.php on line 724.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 2 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 4 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 5 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 6 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 02:51:25 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:51:25\'
+WHERE `application_id` = \'3\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:51:25\'
+WHERE `application_id` = \'3\'')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 4 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 5 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 6 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 7 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 8 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3')
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 02:51:25 --> [Caused by] mysqli_sql_exception: Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:51:25\'
+WHERE `application_id` = \'3\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:51:25\'
+WHERE `application_id` = \'3\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:51:25\'
+WHERE `application_id` = \'3\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 9 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-03-04 02:52:17 --> Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:52:17\'
+WHERE `application_id` = \'3\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:52:17\'
+WHERE `application_id` = \'3\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:52:17\'
+WHERE `application_id` = \'3\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 9 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 02:52:17 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'last_school_name' in 'field list'
+[Method: POST, Route: applicant-form/update/4]
+in SYSTEMPATH\Database\BaseConnection.php on line 724.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 2 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 4 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 5 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 6 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 02:52:17 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:52:17\'
+WHERE `application_id` = \'3\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:52:17\'
+WHERE `application_id` = \'3\'')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 4 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 5 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 6 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 7 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 8 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3')
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 02:52:17 --> [Caused by] mysqli_sql_exception: Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:52:17\'
+WHERE `application_id` = \'3\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:52:17\'
+WHERE `application_id` = \'3\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 02:52:17\'
+WHERE `application_id` = \'3\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 9 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-03-04 03:09:40 --> Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:09:40\'
+WHERE `application_id` = \'3\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:09:40\'
+WHERE `application_id` = \'3\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:09:40\'
+WHERE `application_id` = \'3\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 9 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3', 'submit')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:09:40 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'last_school_name' in 'field list'
+[Method: POST, Route: applicant-form/update/4]
+in SYSTEMPATH\Database\BaseConnection.php on line 724.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 2 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 4 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 5 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 6 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3', 'submit')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:09:40 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:09:40\'
+WHERE `application_id` = \'3\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:09:40\'
+WHERE `application_id` = \'3\'')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 4 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 5 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 6 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 7 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 8 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3', 'submit')
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:09:40 --> [Caused by] mysqli_sql_exception: Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:09:40\'
+WHERE `application_id` = \'3\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:09:40\'
+WHERE `application_id` = \'3\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:09:40\'
+WHERE `application_id` = \'3\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 9 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3', 'submit')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-03-04 03:11:26 --> Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:11:26\'
+WHERE `application_id` = \'3\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:11:26\'
+WHERE `application_id` = \'3\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:11:26\'
+WHERE `application_id` = \'3\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 9 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3', 'submit')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:11:26 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'last_school_name' in 'field list'
+[Method: POST, Route: applicant-form/update/4]
+in SYSTEMPATH\Database\BaseConnection.php on line 724.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 2 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 4 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 5 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 6 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3', 'submit')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:11:26 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:11:26\'
+WHERE `application_id` = \'3\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:11:26\'
+WHERE `application_id` = \'3\'')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 4 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 5 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 6 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 7 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 8 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3', 'submit')
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:11:26 --> [Caused by] mysqli_sql_exception: Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:11:26\'
+WHERE `application_id` = \'3\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:11:26\'
+WHERE `application_id` = \'3\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:11:26\'
+WHERE `application_id` = \'3\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(217): CodeIgniter\Model->update()
+ 9 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '3', 'submit')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-04 03:21:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-03-04 03:23:43 --> Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:23:43\'
+WHERE `application_id` = \'4\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:23:43\'
+WHERE `application_id` = \'4\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:23:43\'
+WHERE `application_id` = \'4\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(214): CodeIgniter\Model->update()
+ 9 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '4', 'submit')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:23:43 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'last_school_name' in 'field list'
+[Method: POST, Route: applicant-form/update/4]
+in SYSTEMPATH\Database\BaseConnection.php on line 724.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 2 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 4 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 5 APPPATH\Controllers\ApplicantForm.php(214): CodeIgniter\Model->update()
+ 6 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '4', 'submit')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:23:43 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:23:43\'
+WHERE `application_id` = \'4\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:23:43\'
+WHERE `application_id` = \'4\'')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 4 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 5 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 6 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 7 APPPATH\Controllers\ApplicantForm.php(214): CodeIgniter\Model->update()
+ 8 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '4', 'submit')
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:23:43 --> [Caused by] mysqli_sql_exception: Unknown column 'last_school_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:23:43\'
+WHERE `application_id` = \'4\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:23:43\'
+WHERE `application_id` = \'4\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `educational_backgrounds` SET `last_school_name` = \'San Beda University, Manila\', `school_location` = \'Manila, Philippines\', `strand` = \'STEM\', `school_year_start` = \'2025\', `school_year_end` = \'2026\', `gwa` = \'92.3\', `school_type` = \'Public\', `updated_at` = \'2026-03-04 03:23:43\'
+WHERE `application_id` = \'4\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `educational_backgrounds` SET `last_school_name` = :last_school_name:, `school_location` = :school_location:, `strand` = :strand:, `school_year_start` = :school_year_start:, `school_year_end` = :school_year_end:, `gwa` = :gwa:, `school_type` = :school_type:, `updated_at` = :updated_at:
+WHERE `application_id` = :application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate(null, [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update(null, [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(214): CodeIgniter\Model->update()
+ 9 APPPATH\Controllers\ApplicantForm.php(110): App\Controllers\ApplicantForm->updateEducationalBackground([...], '4', 'submit')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('4')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-04 03:25:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-04 03:26:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-03-04 03:36:51 --> Unknown column 'school_year' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:36:51\'
+WHERE `applications`.`application_id` IN (5)', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:36:51\'
+WHERE `applications`.`application_id` IN (5)')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:36:51\'
+WHERE `applications`.`application_id` IN (5)')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `applications` SET `applicant_type` = :applicant_type:, `program_id` = :program_id:, `school_year` = :school_year:, `semester` = :semester:, `application_status` = :application_status:, `updated_at` = :updated_at:
+WHERE `applications`.`application_id` IN :applications.application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate([...], [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update([...], [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(132): CodeIgniter\Model->update(5, [...])
+ 9 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], 5, 'continue')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:36:51 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'school_year' in 'field list'
+[Method: POST, Route: applicant-form/update/1]
+in SYSTEMPATH\Database\BaseConnection.php on line 724.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `applications` SET `applicant_type` = :applicant_type:, `program_id` = :program_id:, `school_year` = :school_year:, `semester` = :semester:, `application_status` = :application_status:, `updated_at` = :updated_at:
+WHERE `applications`.`application_id` IN :applications.application_id:', [...], false)
+ 2 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\ApplicantForm.php(132): CodeIgniter\Model->update(5, [...])
+ 6 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], 5, 'continue')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:36:51 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'school_year' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:36:51\'
+WHERE `applications`.`application_id` IN (5)')
+ 2 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:36:51\'
+WHERE `applications`.`application_id` IN (5)')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `applications` SET `applicant_type` = :applicant_type:, `program_id` = :program_id:, `school_year` = :school_year:, `semester` = :semester:, `application_status` = :application_status:, `updated_at` = :updated_at:
+WHERE `applications`.`application_id` IN :applications.application_id:', [...], false)
+ 4 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 5 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate([...], [...])
+ 6 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update([...], [...])
+ 7 APPPATH\Controllers\ApplicantForm.php(132): CodeIgniter\Model->update(5, [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], 5, 'continue')
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:36:51 --> [Caused by] mysqli_sql_exception: Unknown column 'school_year' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:36:51\'
+WHERE `applications`.`application_id` IN (5)', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:36:51\'
+WHERE `applications`.`application_id` IN (5)')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:36:51\'
+WHERE `applications`.`application_id` IN (5)')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `applications` SET `applicant_type` = :applicant_type:, `program_id` = :program_id:, `school_year` = :school_year:, `semester` = :semester:, `application_status` = :application_status:, `updated_at` = :updated_at:
+WHERE `applications`.`application_id` IN :applications.application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate([...], [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update([...], [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(132): CodeIgniter\Model->update(5, [...])
+ 9 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], 5, 'continue')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-03-04 03:37:02 --> Unknown column 'school_year' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:37:02\'
+WHERE `applications`.`application_id` IN (\'5\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:37:02\'
+WHERE `applications`.`application_id` IN (\'5\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:37:02\'
+WHERE `applications`.`application_id` IN (\'5\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `applications` SET `applicant_type` = :applicant_type:, `program_id` = :program_id:, `school_year` = :school_year:, `semester` = :semester:, `application_status` = :application_status:, `updated_at` = :updated_at:
+WHERE `applications`.`application_id` IN :applications.application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate([...], [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update([...], [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(132): CodeIgniter\Model->update('5', [...])
+ 9 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '5', 'continue')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:37:02 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'school_year' in 'field list'
+[Method: POST, Route: applicant-form/update/1]
+in SYSTEMPATH\Database\BaseConnection.php on line 724.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `applications` SET `applicant_type` = :applicant_type:, `program_id` = :program_id:, `school_year` = :school_year:, `semester` = :semester:, `application_status` = :application_status:, `updated_at` = :updated_at:
+WHERE `applications`.`application_id` IN :applications.application_id:', [...], false)
+ 2 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\ApplicantForm.php(132): CodeIgniter\Model->update('5', [...])
+ 6 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '5', 'continue')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:37:02 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'school_year' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:37:02\'
+WHERE `applications`.`application_id` IN (\'5\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:37:02\'
+WHERE `applications`.`application_id` IN (\'5\')')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `applications` SET `applicant_type` = :applicant_type:, `program_id` = :program_id:, `school_year` = :school_year:, `semester` = :semester:, `application_status` = :application_status:, `updated_at` = :updated_at:
+WHERE `applications`.`application_id` IN :applications.application_id:', [...], false)
+ 4 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 5 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate([...], [...])
+ 6 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update([...], [...])
+ 7 APPPATH\Controllers\ApplicantForm.php(132): CodeIgniter\Model->update('5', [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '5', 'continue')
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:37:02 --> [Caused by] mysqli_sql_exception: Unknown column 'school_year' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:37:02\'
+WHERE `applications`.`application_id` IN (\'5\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:37:02\'
+WHERE `applications`.`application_id` IN (\'5\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'1st Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:37:02\'
+WHERE `applications`.`application_id` IN (\'5\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `applications` SET `applicant_type` = :applicant_type:, `program_id` = :program_id:, `school_year` = :school_year:, `semester` = :semester:, `application_status` = :application_status:, `updated_at` = :updated_at:
+WHERE `applications`.`application_id` IN :applications.application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate([...], [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update([...], [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(132): CodeIgniter\Model->update('5', [...])
+ 9 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '5', 'continue')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-03-04 03:40:24 --> Unknown column 'school_year' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'2nd Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:40:24\'
+WHERE `applications`.`application_id` IN (\'5\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'2nd Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:40:24\'
+WHERE `applications`.`application_id` IN (\'5\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'2nd Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:40:24\'
+WHERE `applications`.`application_id` IN (\'5\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `applications` SET `applicant_type` = :applicant_type:, `program_id` = :program_id:, `school_year` = :school_year:, `semester` = :semester:, `application_status` = :application_status:, `updated_at` = :updated_at:
+WHERE `applications`.`application_id` IN :applications.application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate([...], [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update([...], [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(135): CodeIgniter\Model->update('5', [...])
+ 9 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '5', 'continue')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:40:24 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'school_year' in 'field list'
+[Method: POST, Route: applicant-form/update/1]
+in SYSTEMPATH\Database\BaseConnection.php on line 724.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `applications` SET `applicant_type` = :applicant_type:, `program_id` = :program_id:, `school_year` = :school_year:, `semester` = :semester:, `application_status` = :application_status:, `updated_at` = :updated_at:
+WHERE `applications`.`application_id` IN :applications.application_id:', [...], false)
+ 2 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\ApplicantForm.php(135): CodeIgniter\Model->update('5', [...])
+ 6 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '5', 'continue')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:40:24 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'school_year' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'2nd Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:40:24\'
+WHERE `applications`.`application_id` IN (\'5\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'2nd Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:40:24\'
+WHERE `applications`.`application_id` IN (\'5\')')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `applications` SET `applicant_type` = :applicant_type:, `program_id` = :program_id:, `school_year` = :school_year:, `semester` = :semester:, `application_status` = :application_status:, `updated_at` = :updated_at:
+WHERE `applications`.`application_id` IN :applications.application_id:', [...], false)
+ 4 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 5 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate([...], [...])
+ 6 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update([...], [...])
+ 7 APPPATH\Controllers\ApplicantForm.php(135): CodeIgniter\Model->update('5', [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '5', 'continue')
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 03:40:24 --> [Caused by] mysqli_sql_exception: Unknown column 'school_year' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'2nd Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:40:24\'
+WHERE `applications`.`application_id` IN (\'5\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(769): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'2nd Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:40:24\'
+WHERE `applications`.`application_id` IN (\'5\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(686): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `applications` SET `applicant_type` = \'freshmen\', `program_id` = \'1\', `school_year` = \'SY 2025-2026\', `semester` = \'2nd Semester\', `application_status` = \'draft\', `updated_at` = \'2026-03-04 03:40:24\'
+WHERE `applications`.`application_id` IN (\'5\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `applications` SET `applicant_type` = :applicant_type:, `program_id` = :program_id:, `school_year` = :school_year:, `semester` = :semester:, `application_status` = :application_status:, `updated_at` = :updated_at:
+WHERE `applications`.`application_id` IN :applications.application_id:', [...], false)
+ 5 SYSTEMPATH\Model.php(407): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH\BaseModel.php(1073): CodeIgniter\Model->doUpdate([...], [...])
+ 7 SYSTEMPATH\Model.php(706): CodeIgniter\BaseModel->update([...], [...])
+ 8 APPPATH\Controllers\ApplicantForm.php(135): CodeIgniter\Model->update('5', [...])
+ 9 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '5', 'continue')
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-04 03:47:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-04 03:57:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-03-04 05:16:27 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 133.
+ 1 APPPATH\Controllers\ApplicantForm.php(133): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '6', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 05:59:47 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 133.
+ 1 APPPATH\Controllers\ApplicantForm.php(133): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '6', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 06:00:08 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 133.
+ 1 APPPATH\Controllers\ApplicantForm.php(133): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '6', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 06:00:11 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 133.
+ 1 APPPATH\Controllers\ApplicantForm.php(133): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '6', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 06:18:01 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 133.
+ 1 APPPATH\Controllers\ApplicantForm.php(133): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '6', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 06:19:58 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 133.
+ 1 APPPATH\Controllers\ApplicantForm.php(133): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '6', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 06:25:17 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 133.
+ 1 APPPATH\Controllers\ApplicantForm.php(133): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '6', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 06:25:20 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 133.
+ 1 APPPATH\Controllers\ApplicantForm.php(133): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(98): App\Controllers\ApplicantForm->updateApplication([...], '6', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:21:05 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 176.
+ 1 APPPATH\Controllers\ApplicantForm.php(176): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(141): App\Controllers\ApplicantForm->updateApplication([...], '6', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:23:20 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 176.
+ 1 APPPATH\Controllers\ApplicantForm.php(176): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(141): App\Controllers\ApplicantForm->updateApplication([...], '6', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:34:25 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 176.
+ 1 APPPATH\Controllers\ApplicantForm.php(176): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(141): App\Controllers\ApplicantForm->updateApplication([...], '6', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:40:09 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 176.
+ 1 APPPATH\Controllers\ApplicantForm.php(176): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(141): App\Controllers\ApplicantForm->updateApplication([...], '6', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:26 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 73.
+ 1 APPPATH\Controllers\ApplicantForm.php(73): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:26 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 74.
+ 1 APPPATH\Controllers\ApplicantForm.php(74): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:26 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 78.
+ 1 APPPATH\Controllers\ApplicantForm.php(78): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:26 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 79.
+ 1 APPPATH\Controllers\ApplicantForm.php(79): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:28 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 73.
+ 1 APPPATH\Controllers\ApplicantForm.php(73): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:28 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 74.
+ 1 APPPATH\Controllers\ApplicantForm.php(74): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:28 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 78.
+ 1 APPPATH\Controllers\ApplicantForm.php(78): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:28 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 79.
+ 1 APPPATH\Controllers\ApplicantForm.php(79): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:28 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 73.
+ 1 APPPATH\Controllers\ApplicantForm.php(73): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:28 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 74.
+ 1 APPPATH\Controllers\ApplicantForm.php(74): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:28 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 78.
+ 1 APPPATH\Controllers\ApplicantForm.php(78): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:28 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 79.
+ 1 APPPATH\Controllers\ApplicantForm.php(79): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:36 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 73.
+ 1 APPPATH\Controllers\ApplicantForm.php(73): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:36 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 74.
+ 1 APPPATH\Controllers\ApplicantForm.php(74): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:36 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 78.
+ 1 APPPATH\Controllers\ApplicantForm.php(78): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:36 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 79.
+ 1 APPPATH\Controllers\ApplicantForm.php(79): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:36 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 73.
+ 1 APPPATH\Controllers\ApplicantForm.php(73): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:36 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 74.
+ 1 APPPATH\Controllers\ApplicantForm.php(74): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:36 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 78.
+ 1 APPPATH\Controllers\ApplicantForm.php(78): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:36 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 79.
+ 1 APPPATH\Controllers\ApplicantForm.php(79): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:49 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 78.
+ 1 APPPATH\Controllers\ApplicantForm.php(78): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:49 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 79.
+ 1 APPPATH\Controllers\ApplicantForm.php(79): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:49 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 78.
+ 1 APPPATH\Controllers\ApplicantForm.php(78): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 07:46:49 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 79.
+ 1 APPPATH\Controllers\ApplicantForm.php(79): trim(null)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->getStep(3)
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-04 08:03:32 --> ParseError: syntax error, unexpected token "break"
+[Method: POST, Route: applicant-form/update/1]
+in APPPATH\Controllers\ApplicantForm.php on line 66.
+ 1 VENDORPATH\composer\ClassLoader.php(427): Composer\Autoload\{closure}('C:\\xampp\\htdocs\\akademus\\vendor\\composer/../../app\\Controllers\\ApplicantForm.php')
+ 2 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\ApplicantForm')
+ 3 SYSTEMPATH\Router\Router.php(792): class_exists('\\App\\Controllers\\ApplicantForm')
+ 4 SYSTEMPATH\Router\Router.php(230): CodeIgniter\Router\Router->processRouteAttributes()
+ 5 SYSTEMPATH\CodeIgniter.php(829): CodeIgniter\Router\Router->handle('applicant-form/update/1')
+ 6 SYSTEMPATH\CodeIgniter.php(441): CodeIgniter\CodeIgniter->tryToRouteIt(Object(CodeIgniter\Router\RouteCollection))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-04 08:26:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-04 08:56:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-03-04 09:17:00 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 180.
+ 1 APPPATH\Controllers\ApplicantForm.php(180): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(145): App\Controllers\ApplicantForm->updateApplication([...], 11, 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-04 09:39:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-04 09:41:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-03-04 09:43:09 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 180.
+ 1 APPPATH\Controllers\ApplicantForm.php(180): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(145): App\Controllers\ApplicantForm->updateApplication([...], '11', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 09:43:27 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 180.
+ 1 APPPATH\Controllers\ApplicantForm.php(180): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(145): App\Controllers\ApplicantForm->updateApplication([...], '11', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 09:44:07 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 180.
+ 1 APPPATH\Controllers\ApplicantForm.php(180): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(145): App\Controllers\ApplicantForm->updateApplication([...], '11', 'continue')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-03-04 09:44:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-04 09:44:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-03-04 09:46:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-03-04 10:29:10 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 180.
+ 1 APPPATH\Controllers\ApplicantForm.php(180): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(145): App\Controllers\ApplicantForm->updateApplication([...], 15, 'draft')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 10:29:26 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 180.
+ 1 APPPATH\Controllers\ApplicantForm.php(180): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(145): App\Controllers\ApplicantForm->updateApplication([...], '15', 'draft')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+WARNING - 2026-03-04 10:29:30 --> [DEPRECATED] trim(): Passing null to parameter #1 ($string) of type string is deprecated in APPPATH\Controllers\ApplicantForm.php on line 180.
+ 1 APPPATH\Controllers\ApplicantForm.php(180): trim(null)
+ 2 APPPATH\Controllers\ApplicantForm.php(145): App\Controllers\ApplicantForm->updateApplication([...], '15', 'draft')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApplicantForm->updateForm('1')
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApplicantForm))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
