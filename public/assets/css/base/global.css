@@ -1,0 +1,43 @@
+/* assets/css/base/global.css */
+
+/* =========================
+   BASE STYLES
+   ========================= */
+
+* {
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+/* Focus accessibility */
+
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
+/* Links */
+
+a {
+  text-decoration: none;
+}
+
+input, select {
+  outline: 0;
+}
+
+button {
+  border: 0;
+  background: none;
+}

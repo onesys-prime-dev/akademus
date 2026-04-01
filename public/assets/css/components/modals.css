@@ -1,0 +1,125 @@
+/* =========================
+   MODAL LAYER
+========================= */
+.modal-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+/* =========================
+   MODAL BACKDROP
+========================= */
+.modal {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(0,0,0,0.25);
+    backdrop-filter: blur(10px);
+
+    opacity: 1;
+    transition: opacity 0.2s ease;
+
+    pointer-events: auto;
+}
+
+.modal[hidden] {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* =========================
+   DIALOG
+========================= */
+.modal__dialog {
+    background: #fff;
+    border-radius: 16px;
+
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.modal__dialog--lg {
+    max-width: 900px;
+}
+
+/* =========================
+   HEADER
+========================= */
+.modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 16px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal__title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* =========================
+   BODY
+========================= */
+.modal__body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* =========================
+   FOOTER
+========================= */
+.modal__footer {
+    padding: 16px 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+.modal__close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+.modal__dialog {
+    transform: scale(1);
+    animation: modalPop 0.2s ease;
+}
+
+@keyframes modalPop {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

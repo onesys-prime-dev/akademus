@@ -1,0 +1,456 @@
+/* assets/css/pages/requirements.css */
+
+/* assets/css/pages/applicantrequirements.css */
+
+.requirements {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+    /* APPLICANT requirements CONTENT */
+    .requirements__content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 20px 40px;
+    }
+
+        .requirements-actions {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-default);
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+
+        .requirements-actions span {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        .requirements-actions__buttons {
+            display: flex;
+            gap: 10px;
+        }   
+
+        
+        /* requirements */
+        .requirements-step {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+            .requirements-section__header {
+                display: flex;
+                flex-direction: column;
+                gap: var(--space-sm);
+                margin-bottom: 10px;
+            }
+
+                .requirements-section__header-top {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 12px;
+                }
+
+                .requirements-section__header h3 {
+                    font-size: 20px;
+                    font-weight: 600;
+                }
+
+                .requirements-section__header p {
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: color-mix(in srgb, var(--text-primary) 30%, transparent);
+                }
+
+                .upload-counter {
+                    font-size: 12px;
+                    font-weight: 600;
+                    padding: 4px 10px;
+                    border-radius: 20px;
+                    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+                    color: var(--color-primary);
+                    white-space: nowrap;
+                }
+
+                .upload-counter--done {
+                    background: color-mix(in srgb, var(--color-success) 15%, transparent);
+                    color: var(--color-success);
+                }
+
+    .form-uploads {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+
+    .upload-field {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 20px;
+        background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+        color: var(--text-primary);
+        cursor: pointer;
+        border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+        border-radius: var(--radius-md);
+    }
+
+    .upload-field:hover {
+        background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+        transition: 0.3s;
+    }
+
+        .uploaded {
+            background: color-mix(in srgb, var(--color-success) 20%, transparent);
+            border: 1px solid color-mix(in srgb, var(--color-success) 60%, transparent);
+        }
+
+        .uploaded:hover {
+            background: color-mix(in srgb, var(--color-success) 30%, transparent);
+        }
+
+    .requirement-upload-info {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .requirement-title {
+        font-size: 16px;
+        color: var(--text-primary); 
+    }
+
+        .requirement-title .required {
+            font-size: 12px;
+            bottom: 2px;
+            position: relative;
+        }
+
+    .requirement-description {
+        font-size: 12px;
+        color: var(--text-secondary);
+    }
+
+    .requirement-upload-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    .requirement-upload-action {
+        opacity: 60%;
+    }
+
+        .uploaded-btn {
+            background: color-mix(in srgb, var(--color-success) 60%, transparent);
+        }
+
+        .uploaded-btn:hover {
+            background: color-mix(in srgb, var(--color-success) 80%, transparent);
+        }
+
+    .requirement-view-action {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--color-primary);
+        text-decoration: none;
+        padding: 8px 14px;
+        border-radius: var(--radius-md);
+        border: 1px solid color-mix(in srgb, var(--color-primary) 40%, transparent);
+        background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+        transition: background 0.2s;
+        white-space: nowrap;
+    }
+
+    .requirement-view-action:hover {
+        background: color-mix(in srgb, var(--color-primary) 16%, transparent);
+    }
+
+/* ════════════════════════════════════════════════
+   SUBMIT SUCCESS MODAL
+════════════════════════════════════════════════ */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: modal-fade-in 0.2s ease;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+@keyframes modal-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.modal-box {
+    background: var(--color-card);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+    padding: 40px 36px 32px;
+    max-width: 420px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    animation: modal-slide-in 0.2s ease;
+}
+
+@keyframes modal-slide-in {
+    from { opacity: 0; transform: translateY(12px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+.modal-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--color-success) 15%, transparent);
+    color: var(--color-success);
+    font-size: 28px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.modal-box h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.modal-box p {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+.modal-dashboard-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* ════════════════════════════════════════════════
+   DOCUMENT VIEWER MODAL
+════════════════════════════════════════════════ */
+.doc-modal-box {
+    max-width: 860px;
+    width: 100%;
+    height: 90vh;
+    padding: 0;
+    gap: 0;
+    align-items: stretch;
+    text-align: left;
+    overflow: hidden;
+}
+
+.doc-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-default);
+    flex-shrink: 0;
+}
+
+.doc-modal-header span {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.doc-modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0 4px;
+    flex-shrink: 0;
+    transition: color 0.15s;
+}
+
+.doc-modal-close:hover {
+    color: var(--text-primary);
+}
+
+.doc-modal-body {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1a1a1a;
+    min-height: 0;
+}
+
+/* Image preview */
+.doc-modal-body img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* PDF preview */
+.doc-modal-body iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    background: white;
+}
+
+/* Ensure hidden overrides all display rules inside the modal */
+.doc-modal-body img.hidden,
+.doc-modal-body iframe.hidden,
+.doc-modal-unsupported.hidden {
+    display: none !important;
+}
+
+/* Unsupported file fallback */
+.doc-modal-unsupported {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 40px;
+    color: #fff;
+    text-align: center;
+}
+
+.doc-modal-unsupported p {
+    font-size: 15px;
+    opacity: 0.75;
+}
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+    .modal-box {
+        padding: 28px 20px 24px;
+    }
+
+    .modal-icon {
+        width: 52px;
+        height: 52px;
+        font-size: 22px;
+    }
+
+    .modal-box h3 {
+        font-size: 17px;
+    }
+
+    .doc-modal-box {
+        height: 85vh;
+    }
+}
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE — TABLET (≤ 1024 px)
+════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .requirements__content {
+        padding: 14px 24px;
+    }
+
+    .upload-field {
+        padding: 16px;
+    }
+}
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤ 768 px)
+════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+    .requirements__content {
+        padding: 12px 0 0;
+    }
+
+    .requirements-section__header {
+        padding: 0 2px;
+    }
+
+    .requirements-section__header-top {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .requirements-section__header h3 {
+        font-size: 17px;
+    }
+
+    /* Upload cards — stack action below info */
+    .upload-field {
+        flex-direction: column;
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .requirement-upload-actions {
+        align-self: flex-end;
+    }
+
+    .requirement-upload-action {
+        opacity: 1;
+    }
+
+    .requirement-title {
+        font-size: 14px;
+    }
+
+    /* Bottom action bar */
+    .requirements-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 0 20px;
+    }
+
+    .requirements-actions__buttons {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .requirements-actions__buttons .btn-primary,
+    .requirements-actions__buttons .btn-secondary {
+        flex: 1;
+        justify-content: center;
+        text-align: center;
+    }
+}

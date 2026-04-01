@@ -1,0 +1,247 @@
+.applicants {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* -----------------
+    TOP ACTIONS
+----------------- */
+.applicants__top-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.applicants__top-actions--back {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    cursor: pointer;
+}
+
+.applicants__top-actions--back img {
+    width: 8px;
+}
+
+.applicants__top-actions--back span {
+    white-space: nowrap;
+}
+
+.applicants__top-actions--trash {
+    padding: 8px 10px;
+    border: 1px solid #F24822;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.applicants__top-actions--trash:hover {
+    background-color: color-mix(in srgb, #F24822 5%, transparent);
+    transition: 0.1s;
+}
+
+.applicants__top-actions--trash img {
+    width: 20px;
+}
+
+
+/* -----------------
+      PROFILE
+----------------- */
+.applicant-profile {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary);
+    border-radius: 10px;
+    padding: 15px;
+    gap: 20px;
+}
+
+.applicant-profile__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.applicant-profile__identity {
+    display: flex;
+    gap: 15px;
+}
+
+.applicant-profile__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 6px 0;
+}
+
+.applicant-profile__name {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+.applicant-profile__id {
+    font-size: 17px;
+    font-weight: 500;
+    color: #787878;
+}
+
+.applicant-profile__summaries {
+    display: flex;
+    gap: 20px;
+}
+
+.applicant-profile__summary {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-right: 1px solid #D0D0D0;
+    padding: 0 20px;
+}
+
+.no-border {
+    border: 0;
+}
+
+.applicant-profile__label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+}
+
+.applicant-profile__value {
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+
+/* -----------------
+    APPLICATIONS
+----------------- */
+.applicants__application {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+/* -----------------
+       TABS
+----------------- */
+.application-tabs {
+    display: flex;
+    border-bottom: 1px solid #D0D0D0;
+}
+
+.application-tabs__item {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.application-tabs__item--active {
+    border-bottom: 2px solid var(--primary);
+}
+
+
+/* -----------------
+      CONTENT
+----------------- */
+.application-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.application-content__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+/* -----------------
+       TABLE
+----------------- */
+/* Container */
+.application-table__card {
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Table */
+.application-table__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+/* Header */
+.application-table__head {
+    background-color: #F8F8F8;
+}
+
+.application-table__row--head {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.application-table__head .application-table__cell {
+    font-weight: 600;
+    font-size: 13px;
+    color: #6b7280;
+    text-align: left;
+    padding: 14px 16px;
+    white-space: nowrap;
+}
+
+/* Body rows */
+.application-table__body .application-table__row {
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.15s ease;
+}
+
+.application-table__body .application-table__row:hover {
+    background-color: #f9fafb;
+}
+
+/* Cells */
+.application-table__cell {
+    padding: 14px 16px;
+    color: #111827;
+    vertical-align: middle;
+    user-select: none;        /* Standard */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE/Edge */
+}
+
+/* Actions column */
+.application-table__cell--actions-header {
+    display: flex;
+    justify-content: center;
+}
+
+.application-table__cell--actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.application-table__cell--actions-img {
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Loading state */
+.applicants-table__loading {
+    padding: 20px;
+    text-align: center;
+    font-weight: 500;
+    color: #6b7280;
+}

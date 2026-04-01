@@ -1,0 +1,292 @@
+/* ============================================= */
+/* ********** TUITION FEE CALCULATOR ********** */
+/* ============================================= */
+
+.calc-page {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.calc-header.card h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+.calc-header.card p {
+    font-size: 13px;
+    color: #5a6a85;
+    line-height: 1.6;
+}
+
+.calc-body {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 16px;
+    align-items: start;
+}
+
+/* SUBJECT LIST */
+.calc-section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0d1e38;
+    margin-bottom: 4px;
+}
+
+.calc-section-sub {
+    font-size: 12px;
+    color: #5a6a85;
+    margin-bottom: 14px;
+}
+
+.subj-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.subj-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1.5px solid #dde3f0;
+    border-radius: var(--radius);
+    background: #f4f6fb;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    user-select: none;
+}
+
+.subj-item:hover {
+    border-color: var(--primary);
+    background: #e8eef8;
+}
+
+.subj-item.sel {
+    border-color: var(--primary);
+    background: #e8eef8;
+}
+
+.subj-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 2px solid #dde3f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    flex-shrink: 0;
+    transition: all 0.18s ease;
+    color: transparent;
+}
+
+.subj-item.sel .subj-check {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.subj-info {
+    flex: 1;
+}
+
+.subj-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0d1e38;
+}
+
+.subj-meta {
+    font-size: 11px;
+    color: #5a6a85;
+    margin-top: 2px;
+}
+
+.subj-fee {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    flex-shrink: 0;
+}
+
+.units-ctrl {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.ubtn {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    border: 1.5px solid #dde3f0;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    color: #0d1e38;
+    transition: all 0.18s ease;
+    line-height: 1;
+    padding: 0;
+}
+
+.ubtn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.uval {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0d1e38;
+    min-width: 18px;
+    text-align: center;
+}
+
+/* SUMMARY PANEL */
+.calc-summary {
+    background: var(--primary);
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    color: white;
+    position: sticky;
+    top: 70px;
+}
+
+.cs-eyebrow {
+    font-size: 9px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 14px;
+}
+
+.cs-empty {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.35);
+    padding-bottom: 8px;
+    line-height: 1.5;
+}
+
+.cs-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.cs-row:last-child {
+    border-bottom: none;
+}
+
+.cs-subtotal {
+    border-bottom: none;
+    padding-top: 8px;
+    margin-top: 2px;
+}
+
+.cs-subtotal .cs-lbl,
+.cs-subtotal .cs-val {
+    opacity: 0.7;
+    font-size: 11px;
+}
+
+.cs-lbl {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.4;
+    padding-right: 12px;
+}
+
+.cs-val {
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    flex-shrink: 0;
+}
+
+.cs-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    margin: 10px 0;
+}
+
+.cs-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 14px;
+    margin-top: 8px;
+    border-top: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.cs-total-lbl {
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+}
+
+.cs-total-val {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.8px;
+}
+
+.cs-units-row {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 4px;
+    text-align: right;
+}
+
+.cs-note {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.3);
+    margin-top: 14px;
+    line-height: 1.6;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 12px;
+}
+
+.cs-reset-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 9px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.cs-reset-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: white;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .calc-body {
+        grid-template-columns: 1fr;
+    }
+
+    .calc-summary {
+        position: static;
+    }
+}

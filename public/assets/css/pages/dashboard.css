@@ -1,0 +1,590 @@
+/* assets/css/pages/dashboard.css */
+
+/* ============================================================
+   PROFILE BANNER
+   ============================================================ */
+.profile-banner {
+    width: 100%;
+    height: fit-content;
+    background-color: var(--primary);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 6px 24px 22px;
+    gap: var(--space-sm);
+}
+
+.top-most-span span {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.banner-name-header h1 {
+    font-size: 36px;
+    font-weight: 500;
+    color: var(--text-inverse);
+}
+
+.banner-name-header span {
+    color: var(--accent);
+}
+
+.banner-header-info {
+    width: 340px;
+    display: flex;
+    padding: 6px 0;
+}
+
+.banner-header-info p {
+    font-size: 12px;
+    font-weight: 400;
+    color: color-mix(in srgb, var(--text-inverse) 60%, transparent);
+    line-height: 1.6;
+}
+
+.lower-profile-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.profile-banner-applicant-id-box {
+    width: fit-content;
+    padding: 8px 16px 14px;
+    background-color: var(--primary-light);
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--text-inverse) 30%, transparent);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.profile-banner-applicant-id-box span {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-muted);
+}
+
+.profile-banner-applicant-id-box p {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.lower-profile-banner .quick-actions {
+    display: flex;
+    gap: 12px;
+    margin-left: 8px;
+    flex-wrap: wrap;
+}
+
+.lower-profile-banner .quick-actions a {
+    text-decoration: none;
+    color: var(--accent-text);
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    background-color: var(--accent);
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+.lower-profile-banner .quick-actions a:hover {
+    opacity: 0.85;
+    transition: 0.2s;
+}
+
+
+/* ============================================================
+   OVERALL APPLICATION PROGRESS
+   ============================================================ */
+.application-progress {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0 8px;
+}
+
+.app-progress-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px 12px;
+}
+
+.app-progress-header h2 {
+    font-size: 20px;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.app-progress-header span {
+    font-size: 28px;
+    color: var(--primary);
+    font-weight: 900;
+}
+
+.steps-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.step-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+}
+
+.step-bar-container {
+    width: 100%;
+    padding: 0 6px;
+}
+
+.step-bar {
+    width: 100%;
+    height: 16px;
+    border-radius: 20px;
+    background-color: var(--border-muted);
+}
+
+.step-bottom {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.step-bottom .step-ring {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step-line {
+    flex: 1;
+    height: 2px;
+    background-color: var(--border-muted);
+}
+
+.step-circle {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    background-color: var(--border-muted);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.step-bottom .left-line,
+.step-bottom .right-line {
+    height: 0;
+}
+
+.step-bottom > span {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 0 4px;
+}
+
+/* Step states */
+.step-bar-done        { background-color: var(--primary); }
+.step-bar-inprogress  { background-color: var(--accent);  }
+
+.step-line-done       { background-color: var(--primary); }
+.step-line-inprogress { background-color: var(--accent);  }
+
+.step-circle-done {
+    background-color: var(--primary);
+    color: #ffffff;
+}
+.step-circle-inprogress {
+    background-color: var(--accent);
+    color: var(--accent-text);
+}
+
+.step-label-done {
+    color: var(--primary) !important;
+    font-weight: 700 !important;
+}
+.step-label-inprogress {
+    color: var(--accent) !important;
+    font-weight: 600 !important;
+}
+
+
+/* ============================================================
+   CHECKLIST SUMMARY CARDS
+   ============================================================ */
+.checklist-summary-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 8px 0 16px;
+}
+
+/* Both cards share the same base style */
+.dashboard-checklist-summary,
+.document-checklist-summary {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid var(--border-default);
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    min-width: 0;          /* prevents grid blowout */
+}
+
+/* ── Top section (grows to fill) ── */
+.top-dashboard-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px 0;
+}
+
+.top-dashboard-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+.top-dashboard-header h4 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.top-dashboard-header p {
+    font-size: 13px;
+    font-weight: 500;
+    color: color-mix(in srgb, var(--text-primary) 45%, transparent);
+}
+
+/* ── Progress bar (inside top section) ── */
+.documents-progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.documents-progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: var(--bg-muted);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.documents-current-progress {
+    height: 10px;
+    border-radius: 10px;
+    background-color: var(--border-muted);
+    transition: width 0.4s ease;
+}
+
+.documents-current-progress.progress-inprogress { background-color: var(--accent);  }
+.documents-current-progress.progress-done       { background-color: var(--primary); }
+
+.documents-progress-legend-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.document-progress-legend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.documents-progress-legend-circle {
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    flex-shrink: 0;
+    background-color: var(--text-muted);
+}
+
+.documents-progress-legend-circle.legend-uploaded { background-color: var(--primary); }
+.documents-progress-legend-circle.legend-missing  { background-color: var(--text-muted); }
+.documents-progress-legend-circle.legend-optional { background-color: var(--accent); }
+
+.documents-progress-legend-container p {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.documents-progress-legend-container p span {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* ── Checklist rows ── */
+.dashboard-checklist-row-container {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid color-mix(in srgb, var(--border-default) 60%, transparent);
+    margin: 0 -20px;        /* bleed to card edges */
+}
+
+.dashboard-checklist-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    border-bottom: 1px solid color-mix(in srgb, var(--border-default) 40%, transparent);
+    transition: background 0.15s;
+}
+
+.dashboard-checklist-row:last-child {
+    border-bottom: none;
+}
+
+.dashboard-checklist-row.checklist-row-done {
+    background-color: color-mix(in srgb, var(--primary) 4%, transparent);
+}
+
+.dashboard-checklist-row p {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-primary);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dashboard-checklist-row > span {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.dashboard-checklist-box {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    border: 1.5px solid var(--border-default);
+    background-color: var(--bg-muted);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: transparent;
+}
+
+.dashboard-checklist-box.checklist-box-done {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: #ffffff;
+}
+
+/* ── Bottom action bar ── */
+.bottom-dashboard-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-top: 1px solid color-mix(in srgb, var(--border-default) 60%, transparent);
+    background-color: #fafafa;
+    flex-shrink: 0;
+}
+
+.checklist-completed-container span {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.continue-dashboard-btn {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 20px;
+    background-color: var(--primary);
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+}
+
+.continue-dashboard-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+
+/* ============================================================
+   PAYMENT NOTIFICATION
+   ============================================================ */
+.payment-notification-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background-color: var(--primary);
+    border-radius: 14px;
+    margin: 8px 0 20px;
+    gap: 16px;
+}
+
+.payment-notification-text-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.payment-notification-text-info p {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-inverse);
+}
+
+.payment-notification-text-info span {
+    font-size: 12px;
+    font-weight: 400;
+    color: color-mix(in srgb, var(--text-inverse) 65%, transparent);
+}
+
+.payment-notification-container .pay-now-btn {
+    text-decoration: none;
+    color: var(--accent-text);
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 28px;
+    background-color: var(--accent);
+    border-radius: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+}
+
+.payment-notification-container .pay-now-btn:hover {
+    opacity: 0.85;
+}
+
+
+/* ============================================================
+   RESPONSIVE — TABLET (≤ 1024 px)
+   ============================================================ */
+@media (max-width: 1024px) {
+    .app-progress-header h2  { font-size: 17px; }
+    .app-progress-header span { font-size: 22px; }
+
+    .step-bottom > span { font-size: 11px; }
+
+    .checklist-summary-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE (≤ 768 px)
+   ============================================================ */
+@media (max-width: 768px) {
+    /* Profile banner */
+    .profile-banner {
+        border-radius: 10px;
+        padding: 6px 14px 18px;
+    }
+
+    .banner-name-header h1 { font-size: 22px; }
+    .banner-header-info    { width: 100%; }
+
+    .lower-profile-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .lower-profile-banner .quick-actions {
+        margin-left: 0;
+        gap: 8px;
+    }
+
+    .lower-profile-banner .quick-actions a {
+        font-size: 12px;
+        padding: 9px 14px;
+    }
+
+    /* Progress steps */
+    .app-progress-header { padding: 8px 8px 10px; }
+    .app-progress-header h2  { font-size: 15px; }
+    .app-progress-header span { font-size: 20px; }
+
+    .steps-container { flex-wrap: wrap; }
+    .step-box        { flex: 1 1 60px; gap: 6px; }
+    .step-bar        { height: 12px; }
+    .step-circle     { width: 22px; height: 22px; font-size: 11px; }
+    .step-bottom > span { font-size: 10px; }
+
+    /* Checklist cards — stack vertically */
+    .checklist-summary-container {
+        grid-template-columns: 1fr;
+        padding: 4px 0 12px;
+    }
+
+    .top-dashboard-container  { padding: 16px 16px 0; }
+    .bottom-dashboard-container { padding: 10px 16px; }
+
+    .dashboard-checklist-row { padding: 9px 16px; }
+
+    .top-dashboard-header h4 { font-size: 15px; }
+
+    .documents-progress-legend-container {
+        gap: 8px;
+    }
+
+    /* Payment notification */
+    .payment-notification-container {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        padding: 16px;
+        margin: 4px 0 16px;
+    }
+
+    .payment-notification-container .pay-now-btn {
+        width: 100%;
+        padding: 11px;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — SMALL MOBILE (≤ 480 px)
+   ============================================================ */
+@media (max-width: 480px) {
+    .step-bottom > span { display: none; }
+
+    .banner-name-header h1 { font-size: 20px; }
+}
