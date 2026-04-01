@@ -1,66 +1,105 @@
+<?php
+// Variables expected:
+// $doc_stats, $doc_progress, $docBarClass, $previewReqs, $uploadedDoc, $moreCount, $allReqs
+?>
+
 <div class="document-checklist-summary card">
     <div class="top-dashboard-container">
+
         <div class="top-dashboard-header">
             <h4>Documents</h4>
-            <p>3 of 10 required uploaded</p>
+            <p><?= $doc_stats['uploaded_required'] ?> of <?= $doc_stats['total_required'] ?> required uploaded</p>
         </div>
 
         <div class="documents-progress-container">
             <div class="documents-progress-bar">
-                <div class="documents-current-progress"></div>
+                <div class="documents-current-progress <?= $docBarClass ?>"
+                     style="width:<?= $doc_progress ?>%"></div>
             </div>
-
             <div class="documents-progress-legend-container">
                 <div class="document-progress-legend">
-                    <div class="documents-progress-legend-circle"></div>
-                    <p>Uploaded <span>3</span></p>
+                    <div class="documents-progress-legend-circle legend-uploaded"></div>
+                    <p>Uploaded <span><?= $doc_stats['uploaded_required'] ?></span></p>
                 </div>
-
                 <div class="document-progress-legend">
-                    <div class="documents-progress-legend-circle"></div>
-                    <p>Missing <span>7</span></p>
+                    <div class="documents-progress-legend-circle legend-missing"></div>
+                    <p>Missing <span><?= $doc_stats['missing_required'] ?></span></p>
                 </div>
-
+                <?php if ($doc_stats['total_optional'] > 0): ?>
                 <div class="document-progress-legend">
-                    <div class="documents-progress-legend-circle"></div>
-                    <p>Optional <span>1</span></p>
+                    <div class="documents-progress-legend-circle legend-optional"></div>
+                    <p>Optional <span><?= $doc_stats['total_optional'] ?></span></p>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
 
         <div class="dashboard-checklist-row-container">
-            <div class="dashboard-checklist-row">
-                <div class="dashboard-checklist-box"></div>
-                <p>PSA Birth Certificate</p>
-            </div>
+            <?php foreach ($previewReqs as $req):
+                $uploaded = isset($uploadedDoc[$req['program_requirement_id']]);
+            ?>
+                <div class="dashboard-checklist-row <?= $uploaded ? 'checklist-row-done' : '' ?>">
+                    <div class="dashboard-checklist-box <?= $uploaded ? 'checklist-box-done' : '' ?>">
+                        <?= $uploaded ? '✓' : '' ?>
+                    </div>
+                    <p><?= esc($req['requirement_name']) ?></p>
+                </div>
+            <?php endforeach; ?>
 
-            <div class="dashboard-checklist-row">
-                <div class="dashboard-checklist-box"></div>
-                <p>Form 138 / Report Card</p>
-            </div>
+            <?php if ($moreCount > 0): ?>
+                <div class="dashboard-checklist-row">
+                    <button class="doc-see-all-btn" onclick="document.getElementById('docListModal').classList.add('active')">
+                        +<?= $moreCount ?> more — <span>See all</span>
+                    </button>
+                </div>
+            <?php endif; ?>
 
-            <div class="dashboard-checklist-row">
-                <div class="dashboard-checklist-box"></div>
-                <p>Certificate of Good Moral</p>
-            </div>
+            <?php if (empty($allReqs)): ?>
+                <div class="dashboard-checklist-row">
+                    <span>No documents required for your program yet.</span>
+                </div>
+            <?php endif; ?>
+        </div>
 
-            <div class="dashboard-checklist-row">
-                <div class="dashboard-checklist-box"></div>
-                <p>2x2 Picture</p>
+    </div>
+
+    <!-- Documents Modal -->
+    <div id="docListModal" class="doc-modal-overlay" onclick="if(event.target===this)this.classList.remove('active')">
+        <div class="doc-modal">
+            <div class="doc-modal-header">
+                <h4>All Required Documents</h4>
+                <button class="doc-modal-close" onclick="document.getElementById('docListModal').classList.remove('active')">&times;</button>
             </div>
-            <div class="dashboard-checklist-row">
-                <span>+6 more documents…</span>
+            <div class="doc-modal-body">
+                <?php foreach ($allReqs as $req):
+                    $uploaded = isset($uploadedDoc[$req['program_requirement_id']]);
+                ?>
+                    <div class="doc-modal-row <?= $uploaded ? 'doc-modal-row-done' : '' ?>">
+                        <div class="dashboard-checklist-box <?= $uploaded ? 'checklist-box-done' : '' ?>">
+                            <?= $uploaded ? '✓' : '' ?>
+                        </div>
+                        <div class="doc-modal-row-info">
+                            <p><?= esc($req['requirement_name']) ?></p>
+                            <?php if (!empty($req['requirement_description'])): ?>
+                                <span><?= esc($req['requirement_description']) ?></span>
+                            <?php endif; ?>
+                        </div>
+                        <?php if (!$req['is_required']): ?>
+                            <span class="doc-modal-optional-tag">Optional</span>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <div class="doc-modal-footer">
+                <a href="<?= base_url('requirements') ?>" class="continue-dashboard-btn">Go to Upload</a>
             </div>
         </div>
     </div>
 
     <div class="bottom-dashboard-container">
-        <div class="checklist-completed-container">
-            <span>30% Completed</span>
-        </div>
-
-        <div class="continue-dashboard-btn-container">
-            <a href="" class="continue-dashboard-btn btn-primary">Upload</a>
-        </div>
+        <span class="checklist-completed-container"><?= $doc_progress ?>% Completed</span>
+        <a href="<?= base_url('requirements') ?>" class="continue-dashboard-btn">
+            <?= $doc_progress >= 100 ? 'Review' : 'Upload' ?>
+        </a>
     </div>
 </div>

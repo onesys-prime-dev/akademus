@@ -4,20 +4,28 @@
     padding: 12px 24px;
     border: var(--border-default);
     border-radius: var(--radius-md);
-    background: var(--color-primary);
+    background: var(--primary);
     color: var(--text-inverse);
     font-weight: 600;
     cursor: pointer;
+    user-select: none;        /* Standard */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE/Edge */
 }
 
 .btn-accent {
     padding: 12px 24px;
     border: var(--border-default);
     border-radius: var(--radius-md);
-    background: var(--color-accent);
+    background: var(--accent);
     color: color-mix(in srgb, var(--text-primary) 75%, transparent);
     font-weight: 600;
     cursor: pointer;
+    user-select: none;        /* Standard */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE/Edge */
 }
 
 .btn-secondary {
@@ -28,19 +36,29 @@
     color: var(--text-primary);
     font-weight: 600;
     cursor: pointer;
+    user-select: none;        /* Standard */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE/Edge */
 }
 
 .btn-primary:hover {
-    background: var(--color-primary-hover);
+    background: var(--primary-dark);
     transition: 0.2s;
 }
 
 .btn-accent:hover {
-    background: var(--color-accent-hover);
+    background: color-mix(in srgb, var(--accent) 92%, black);
     transition: 0.2s;
 }
 
 .btn-secondary:hover {
     background: var(--color-default-hover);
     transition: 0.2s;
+}
+
+.btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
 }

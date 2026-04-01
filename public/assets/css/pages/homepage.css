@@ -1,22 +1,18 @@
 /* assets/css/pages/homepage.css */
+/* Matches Figma: Admission — Homepage Style 2 (1920px canvas) */
 
-/* ═══════════════════════════════════════════════
-   HOMEPAGE — RESPONSIVE REWRITE
-   Preserves all original aesthetics; replaces
-   fixed-pixel absolute positioning with fluid layout.
-   ═══════════════════════════════════════════════ */
-
-/* ── BASE ── */
-.homepage {
-  background-color: #ffffff;
-  width: 100%;
-  position: relative;
-  overflow-x: hidden;
+/* ── Scope reset ── */
+.hp, .hp * { box-sizing: border-box; }
+.hp {
+    font-family: 'Poppins', sans-serif;
+    background: #fff;
+    overflow-x: hidden;
 }
 
 /* ════════════════════════════════════════════════
-   HEADER / NAVIGATION
+   MOBILE OVERLAY MENU
    ════════════════════════════════════════════════ */
+<<<<<<< HEAD
 .homepage .header-navigation {
   display: flex;
   flex-direction: column;
@@ -28,726 +24,621 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+=======
+.hp-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+.hp-overlay.open {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+.hp-overlay__panel {
+    background: #fff;
+    width: 280px;
+    min-height: 100vh;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.hp-overlay__close {
+    align-self: flex-end;
+    background: transparent;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    color: #0040a6;
+    margin-bottom: 1rem;
+}
+.hp-overlay__nav {
+    display: flex;
+    flex-direction: column;
+}
+.hp-overlay__link {
+    color: #242424;
+    font-size: 1.05rem;
+    font-weight: 500;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eef0f3;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+}
+.hp-overlay__cta {
+    margin-top: 1.5rem;
+    background: #0040a6;
+    color: #fff;
+    text-align: center;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+>>>>>>> testing-branch-theo
 }
 
-.homepage .header {
-  position: relative;
-  width: 100%;
-  height: 105px;
-  display: flex;
-  align-items: center;
-  padding: 0 50px;
+/* ════════════════════════════════════════════════
+   HEADER  (Figma: 105px tall, white, border-bottom #eef0f3)
+   ════════════════════════════════════════════════ */
+.hp-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #fff;
+    border-bottom: 1.5px solid #eef0f3;
+}
+.hp-header__inner {
+    display: flex;
+    align-items: center;
+    height: 105px;
+    padding: 0 clamp(20px, 2.6vw, 50px);
+    max-width: 1920px;
+    margin: 0 auto;
 }
 
-/* Logo + brand name */
-.homepage .left-content {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
+/* Logo */
+.hp-header__logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+.hp-header__logo-img {
+    width: 82px;
+    height: 82px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+.hp-header__brand {
+    font-size: clamp(26px, 2.9vw, 55px);
+    font-weight: 500;
+    color: #0040a6;
+    white-space: nowrap;
+    font-family: 'Poppins', sans-serif;
 }
 
-.homepage .image {
-  width: 82px;
-  height: 82px;
-  object-fit: cover;
+/* Desktop nav — centered in remaining space */
+.hp-header__nav {
+    display: flex;
+    gap: clamp(16px, 2.7vw, 52px);
+    margin: 0 auto;
 }
-
-.homepage .text-wrapper-3 {
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #0040a6;
-  font-size: clamp(28px, 3.5vw, 55px);
-  white-space: nowrap;
+.hp-header__link {
+    font-size: clamp(13px, 0.9vw, 17px);
+    font-weight: 500;
+    color: #242424;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s;
+    font-family: 'Poppins', sans-serif;
 }
-
-/* Nav links — centered in remaining space */
-.homepage .navbar {
-  display: flex;
-  gap: clamp(20px, 3vw, 52px);
-  margin: 0 auto;
-}
-
-.homepage .navbar .item,
-.homepage .navbar .text-wrapper,
-.homepage .navbar .div,
-.homepage .navbar .item-2,
-.homepage .navbar .item-3 {
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #242424;
-  font-size: clamp(13px, 1.1vw, 17px);
-  white-space: nowrap;
-  cursor: pointer;
-  /* Reset the old fixed widths */
-  width: auto;
-  height: auto;
-  margin: 0;
-}
+.hp-header__link:hover,
+.hp-header__link--active { color: #0040a6; }
 
 /* CTA button */
-.homepage .CREATE-ACCOUNT {
-  position: relative;
-  top: auto;
-  left: auto;
-  width: auto;
-  height: auto;
-  flex-shrink: 0;
+.hp-header__cta {
+    flex-shrink: 0;
+    background: #0040a6;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    padding: 0 clamp(14px, 1.5vw, 24px);
+    height: 51px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    transition: background 0.2s;
 }
+.hp-header__cta:hover { background: #003090; }
 
-.homepage .CREATE-ACCOUNT-2 {
-  position: absolute;
-  inset: 0;
-  background-color: #0040a6;
-  border-radius: 10px;
+/* Hamburger — hidden on desktop */
+.hp-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    margin-left: auto;
 }
-
-.homepage .text-wrapper-2 {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 13px 20px;
-  font-family: "Poppins", Helvetica;
-  font-weight: 600;
-  color: #ffffff;
-  font-size: 16px;
-  white-space: nowrap;
-  z-index: 1;
-}
-
-/* ── MOBILE HAMBURGER MENU ── */
-.homepage .hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  margin-left: auto;
-  padding: 8px;
-  z-index: 100;
-}
-
-.homepage .hamburger span {
-  display: block;
-  width: 25px;
-  height: 2px;
-  background-color: #0040a6;
-  border-radius: 2px;
-  transition: all 0.3s ease;
-}
-
-/* Mobile nav overlay */
-.homepage .mobile-nav {
-  display: none;
-  position: fixed;
-  top: 105px;
-  left: 0;
-  right: 0;
-  background: #ffffff;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-  padding: 24px 32px;
-  flex-direction: column;
-  gap: 20px;
-  z-index: 999;
-  border-top: 1.5px solid #eef0f3;
-}
-
-.homepage .mobile-nav.open {
-  display: flex;
-}
-
-.homepage .mobile-nav .nav-item {
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #242424;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 8px 0;
-  border-bottom: 1px solid #eef0f3;
-}
-
-.homepage .mobile-nav .nav-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #0040a6;
-  border-radius: 10px;
-  padding: 14px 24px;
-  font-family: "Poppins", Helvetica;
-  font-weight: 600;
-  color: #ffffff;
-  font-size: 16px;
-  margin-top: 8px;
+.hp-hamburger span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background: #0040a6;
+    border-radius: 2px;
 }
 
 /* ════════════════════════════════════════════════
-   HERO — BG IMAGE + OVERLAY CARD
+   HERO  (Figma: bg image 975px, card 770×436px at left:68 top:217 from image)
    ════════════════════════════════════════════════ */
-.homepage .frame {
-  width: 100%;
-  height: clamp(400px, 55vw, 975px);
-  object-fit: cover;
-  display: block;
+.hp-hero {
+    position: relative;
+    width: 100%;
+    height: clamp(400px, 55vw, 975px);
+    overflow: hidden;
 }
-
-.homepage .container {
-  position: absolute;
-  top: clamp(160px, calc(105px + 14vw), 430px);
-  left: clamp(20px, 3.5vw, 68px);
-  width: clamp(280px, 45vw, 774px);
-  height: auto;
+.hp-hero__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
-
-.homepage .container-2 {
-  position: absolute;
-  inset: 0;
-  border-radius: 10px;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 119, 255, 0.19) 0%,
-    rgba(0, 64, 166, 0.73) 100%
-  );
+.hp-hero__card {
+    position: absolute;
+    top: clamp(24px, 12vw, 217px);
+    left: clamp(20px, 3.5vw, 68px);
+    width: clamp(280px, 42vw, 770px);
+    min-height: clamp(180px, 24vw, 436px);
+    border-radius: 10px;
+    background: linear-gradient(119.914deg, rgba(0,119,255,0.19) 5.29%, rgba(0,64,166,0.73) 76.68%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(24px, 4vw, 68px) clamp(20px, 3.5vw, 64px);
+    gap: clamp(10px, 1.2vw, 18px);
 }
-
-.homepage .text-wrapper-4 {
-  position: relative;
-  padding: clamp(24px, 4vw, 68px) clamp(20px, 4vw, 65px) 0;
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #ffffff;
-  font-size: clamp(16px, 1.8vw, 30px);
-  line-height: normal;
-  white-space: nowrap;
+/* "WELCOME TO AKADEMUS" — Figma: #ffb200, 30px */
+.hp-hero__subtitle {
+    font-size: clamp(14px, 1.6vw, 30px);
+    font-weight: 500;
+    color: #ffb200;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
 }
-
-.homepage .p {
-  position: relative;
-  padding: clamp(12px, 2vw, 24px) clamp(20px, 4vw, 64px);
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #ffffff;
-  font-size: clamp(22px, 3.2vw, 45px);
-  line-height: normal;
+/* Main heading — Figma: white, 45px */
+.hp-hero__title {
+    font-size: clamp(18px, 2.4vw, 45px);
+    font-weight: 500;
+    color: #fff;
+    margin: 0;
+    line-height: 1.3;
+    font-family: 'Poppins', sans-serif;
 }
-
-.homepage .learn-more {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 0 clamp(24px, 3vw, 40px) clamp(20px, 4vw, 71px);
+/* "Learn More" button — Figma: #0040a6 bg, #ffb200 text, 25px, rounded-30px */
+.hp-hero__btn {
+    align-self: flex-start;
+    background: #0040a6;
+    color: #ffb200;
+    font-size: clamp(13px, 1.3vw, 25px);
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    border-radius: 30px;
+    padding: clamp(10px, 1vw, 18px) clamp(20px, 2.5vw, 45px);
+    cursor: pointer;
+    margin-top: clamp(6px, 0.8vw, 14px);
+    white-space: nowrap;
+    transition: background 0.2s;
 }
+.hp-hero__btn:hover { background: #003090; }
 
-.homepage .rectangle {
-  position: absolute;
-  inset: 0;
-  background-color: #0040a6;
-  border-radius: 30px;
+/* ════════════════════════════════════════════════
+   SHARED SECTION HEADER  (line + title, centered)
+   ════════════════════════════════════════════════ */
+.hp-section-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(40px, 5vw, 80px) 20px clamp(20px, 3vw, 40px);
+    position: relative;
+    z-index: 1;
 }
-
-.homepage .text-wrapper-5 {
-  position: relative;
-  padding: clamp(10px, 1.2vw, 17px) clamp(20px, 2.5vw, 40px);
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #ffb200;
-  font-size: clamp(14px, 1.6vw, 25px);
-  white-space: nowrap;
-  z-index: 1;
+/* Figma: #FFB200 line, 250px wide, 3px */
+.hp-section-header__line {
+    width: 250px;
+    height: 3px;
+    background: #ffb200;
+}
+/* "Other Systems" uses blue line */
+.hp-section-header__line--blue { background: #0040a6; }
+/* Figma: #0040a6, 60px, Poppins 500 */
+.hp-section-header__title {
+    font-size: clamp(28px, 3.2vw, 60px);
+    font-weight: 500;
+    color: #0040a6;
+    text-align: center;
+    margin: 8px 0 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* ════════════════════════════════════════════════
-   SECTION HEADERS (Featured / Future Systems)
+   MIDDLE BAND — contains featured + other sections
+   Deco shapes are clipped to this container via overflow:hidden
    ════════════════════════════════════════════════ */
-.section-header {
-  display: flex;
-  justify-content: center;
-  padding: clamp(40px, 5vw, 80px) 20px clamp(20px, 3vw, 40px);
+.hp-middle {
+    position: relative;
+    overflow: hidden;
 }
-
-.section-header-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.hp-featured {
+    position: relative;
+    z-index: 1;
+    padding-bottom: clamp(48px, 6vw, 96px);
 }
-
-.section-header-inner .header-line {
-  height: 3px;
-  width: 250px;
-  margin-bottom: 0;
+.hp-other {
+    position: relative;
+    z-index: 1;
+    background: transparent;
+    padding-bottom: clamp(48px, 6vw, 96px);
 }
+.hp-hero   { position: relative; z-index: 1; }
+.hp-footer { position: relative; z-index: 1; }
 
-.section-header-inner .header-title {
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #0040a6;
-  font-size: clamp(32px, 4.5vw, 60px);
-  text-align: center;
-  line-height: 1.2;
-  padding-top: 8px;
+/* ── Decorative diagonal shapes (inside .hp-middle, clipped by overflow:hidden) ── */
+.hp-deco {
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
 }
-
-/* ── keep the old classes working too ── */
-.homepage .FEATURED-SYSTEMS,
-.homepage .FUTURE-SYSTEMS {
-  display: flex;
-  justify-content: center;
-  padding: clamp(40px, 5vw, 80px) 20px clamp(20px, 3vw, 40px);
-  position: relative;
-  top: auto; left: auto; width: 100%;
+/* Yellow band — left side */
+.hp-deco--yellow {
+    width: 30vw;
+    height: 300vw;
+    background: #ffb200;
+    left: -14vw;
+    top: 20%;
+    transform: translateY(-50%) rotate(105.79deg);
 }
-
-.homepage .header-3,
-.homepage .header-2 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: auto;
-  height: auto;
-}
-
-.homepage .line-3,
-.homepage .line-2 {
-  height: 3px;
-  width: 250px;
-  margin: 0;
-}
-
-.homepage .text-wrapper-13 {
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #0040a6;
-  font-size: clamp(32px, 4.5vw, 60px);
-  text-align: center;
-  padding-top: 8px;
-  width: auto;
-  height: auto;
-  margin: 0;
-  line-height: 1.3;
-}
-
-.homepage .text-wrapper-12 {
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #0040a6;
-  font-size: clamp(32px, 4.5vw, 60px);
-  text-align: center;
-  padding-top: 8px;
-  width: auto;
-  height: auto;
-  margin: 0;
-  line-height: 1.3;
+/* Blue band — right side */
+.hp-deco--blue {
+    width: 30vw;
+    height: 300vw;
+    background: linear-gradient(to bottom, #0040a6 22.6%, #001940 79.2%);
+    right: -14vw;
+    top: 50%;
+    transform: translateY(-50%) rotate(42.37deg);
 }
 
 /* ════════════════════════════════════════════════
-   FEATURE CONTENT SECTIONS (Akademus / Mentora / Learnix)
+   FEATURED CARDS  (Figma: 3 cols, 523px wide, 703px tall, rounded-20px)
    ════════════════════════════════════════════════ */
-.homepage .akademus-content,
-.homepage .mentora-contents,
-.homepage .learnix-contents {
-  position: relative;
-  top: auto; left: auto;
-  width: 100%;
-  height: auto;
-  overflow: hidden;
+.hp-featured__cards {
+    display: flex;
+    gap: clamp(16px, 2.1vw, 40px);
+    padding: 0 clamp(20px, 3.5vw, 68px);
+    max-width: 1920px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
-
-/* Shared gradient backgrounds */
-.homepage .rectangle-4,
-.homepage .rectangle-2 {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 23, 60, 1) 0%,
-    rgba(14, 86, 201, 1) 50%
-  );
-  box-shadow: 8px 13px 8px #00000040;
+.hp-feat-card {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    height: clamp(400px, 40vw, 703px);
+    box-shadow: 8px 13px 8px rgba(0, 0, 0, 0.25);
 }
-
-.homepage .rectangle-5 {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(14, 86, 201, 1) 0%,
-    rgba(0, 23, 60, 1) 100%
-  );
-  box-shadow: 8px 13px 8px #00000040;
+/* Full-bleed photo */
+.hp-feat-card__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
-
-/* Inner layout — side by side on desktop, stacked on mobile */
-.feature-inner {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: clamp(24px, 4vw, 60px);
-  padding: clamp(32px, 4vw, 60px) clamp(20px, 6vw, 100px);
-  max-width: 1920px;
-  margin: 0 auto;
+/* Gradient overlay for text readability (Figma: #00173c→#0e56c9 left-to-right) */
+.hp-feat-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 23, 60, 0.1)  0%,
+        rgba(0, 23, 60, 0.55) 40%,
+        rgba(14, 86, 201, 0.95) 100%
+    );
 }
-
-.feature-inner.reverse {
-  flex-direction: row-reverse;
+/* Content layer */
+.hp-feat-card__content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(18px, 2.5vw, 39px) clamp(16px, 2.5vw, 40px);
+    z-index: 1;
 }
-
-.feature-inner .feature-img {
-  flex-shrink: 0;
-  width: clamp(240px, 38vw, 677px);
-  height: clamp(200px, 30vw, 516px);
-  object-fit: cover;
-  border-radius: 6px;
+/* Logo — Figma: 67×67px, rounded-20px, top-left */
+.hp-feat-card__logo {
+    width: clamp(44px, 3.5vw, 67px);
+    height: clamp(44px, 3.5vw, 67px);
+    object-fit: cover;
+    border-radius: 20px;
+    flex-shrink: 0;
 }
-
-.feature-inner .feature-text {
-  flex: 1;
-  min-width: 0;
+/* Title — Figma: white, 40px, Poppins 500, pushed to bottom */
+.hp-feat-card__title {
+    font-size: clamp(22px, 2.1vw, 40px);
+    font-weight: 500;
+    color: #fff;
+    margin: auto 0 clamp(8px, 1vw, 16px);
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.2;
 }
-
-.feature-inner .feature-title {
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #ffffff;
-  font-size: clamp(36px, 5vw, 70px);
-  line-height: 1.1;
-  margin-bottom: clamp(12px, 1.5vw, 24px);
-}
-
-.feature-inner .feature-body {
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #ffffff;
-  font-size: clamp(13px, 1.1vw, 17px);
-  text-align: justify;
-  line-height: 1.7;
-  margin-bottom: clamp(24px, 3vw, 48px);
-}
-
-/* READ MORE button */
-.feature-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  width: fit-content;
-}
-
-.feature-btn .rectangle-3 {
-  position: absolute;
-  inset: 0;
-  background-color: #ffb200;
-  border-radius: 30px;
-}
-
-.feature-btn .btn-label {
-  position: relative;
-  padding: clamp(10px, 1vw, 17px) clamp(16px, 2vw, 40px);
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #2a2a2a;
-  font-size: clamp(13px, 1.2vw, 20px);
-  white-space: nowrap;
-  z-index: 1;
-}
-
-.feature-btn .arrow {
-  position: relative;
-  width: 26px;
-  height: auto;
-  z-index: 1;
-  margin-right: 14px;
-}
-
-/* ── Backward-compat: keep old classes but override to use new layout ── */
-.homepage .akademus-content .rectangle-4,
-.homepage .mentora-contents .rectangle-5,
-.homepage .learnix-contents .rectangle-2 { /* already handled above */ }
-
-.homepage .akademus,
-.homepage .akademus-2,
-.homepage .learnix {
-  position: relative;
-  top: auto; left: auto;
-  border-radius: 6px;
-}
-
-.homepage .text-wrapper-14,
-.homepage .text-wrapper-17,
-.homepage .text-wrapper-7 {
-  position: relative;
-  top: auto; left: auto;
-  width: 100%;
-}
-
-.homepage .text-wrapper-15,
-.homepage .text-wrapper-18,
-.homepage .text-wrapper-8 {
-  position: relative;
-  top: auto; left: auto;
-  width: 100%;
-}
-
-.homepage .learn-more-2,
-.homepage .learn-more-3 {
-  position: relative;
-  top: auto; left: auto;
+/* Body — Figma: white, 22px, text-justify */
+.hp-feat-card__body {
+    font-size: clamp(12px, 1.15vw, 22px);
+    font-weight: 500;
+    color: #fff;
+    margin: 0;
+    text-align: justify;
+    line-height: 1.6;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* ════════════════════════════════════════════════
-   CARDS SECTION
+   OTHER SYSTEMS  (Figma: 3×2 grid, 577px wide, 443px tall, rounded-15px)
    ════════════════════════════════════════════════ */
-.homepage .group {
-  position: relative;
-  top: auto; left: auto;
-  width: 100%;
-  max-width: 1920px;
-  margin: 0 auto;
-  padding: 0 clamp(16px, 3vw, 48px) clamp(40px, 5vw, 80px);
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+.hp-other__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 2vw, 32px);
+    padding: 0 clamp(20px, 3.5vw, 68px);
+    max-width: 1920px;
+    margin: 0 auto;
 }
-
-.homepage .top,
-.homepage .bottom {
-  width: 100%;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(16px, 2vw, 32px);
+/* Card — Figma: gradient #001638→#0e56c9 (top→bottom), rounded-15px */
+.hp-sys-card {
+    background: linear-gradient(to bottom, #001638 0%, #0e56c9 100%);
+    border-radius: 15px;
+    padding: clamp(24px, 2.5vw, 46px) clamp(16px, 2vw, 30px);
+    height: clamp(300px, 26vw, 443px);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
 }
-
-.homepage .group-2 {
-  display: flex;
-  flex-direction: column;
-  padding: clamp(24px, 3vw, 46px) clamp(16px, 2vw, 25px) clamp(20px, 2.5vw, 30px);
-  min-height: clamp(280px, 30vw, 443px);
-  border-radius: 15px;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 22, 56, 1) 0%,
-    rgba(14, 86, 201, 1) 100%
-  );
+/* Yellow accent line — Figma: #ffb200, ~168px wide, 7px tall */
+.hp-sys-card__line {
+    width: clamp(80px, 8.75vw, 168px);
+    height: 7px;
+    background: #ffb200;
+    margin-bottom: clamp(14px, 1.8vw, 32px);
+    flex-shrink: 0;
 }
-
-.homepage .line {
-  width: clamp(80px, 10vw, 168px);
-  height: 7px;
-  background-color: #ffb200;
-  margin-bottom: clamp(20px, 3vw, 40px);
-  flex-shrink: 0;
+/* Title — Figma: white, 60px, Poppins 500 */
+.hp-sys-card__title {
+    font-size: clamp(20px, 3.1vw, 60px);
+    font-weight: 500;
+    color: #fff;
+    margin: 0 0 clamp(8px, 1vw, 14px);
+    white-space: nowrap;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.1;
 }
-
-.homepage .div-wrapper {
-  width: 100%;
-  margin-bottom: clamp(10px, 1.5vw, 20px);
-  flex-shrink: 0;
+/* Body — Figma: #d8d8d8, 17px */
+.hp-sys-card__body {
+    font-size: clamp(11px, 0.9vw, 17px);
+    font-weight: 500;
+    color: #d8d8d8;
+    margin: 0;
+    line-height: 1.65;
+    flex: 1;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
 }
-
-.homepage .text-wrapper-9 {
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #ffffff;
-  font-size: clamp(24px, 3.5vw, 52px);
-  line-height: 1.1;
-  white-space: nowrap;
+/* Explore row — Figma: "Explore" text + arrow svg + logo icon */
+.hp-sys-card__explore {
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 0.8vw, 14px);
+    margin-top: clamp(12px, 1.5vw, 20px);
+    flex-shrink: 0;
 }
-
-.homepage .body {
-  flex: 1;
-  margin-bottom: clamp(12px, 2vw, 24px);
+.hp-sys-card__explore-text {
+    font-size: clamp(13px, 0.95vw, 18px);
+    font-weight: 500;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
 }
-
-.homepage .text-wrapper-10 {
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #d7d7d7;
-  font-size: clamp(12px, 1vw, 17px);
-  line-height: 1.6;
-}
-
-.homepage .explore-and-icon {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-
-.homepage .image-2 {
-  width: clamp(36px, 4vw, 61px);
-  height: clamp(36px, 4vw, 61px);
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.homepage .text-wrapper-11 {
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #ffffff;
-  font-size: clamp(13px, 1.2vw, 18px);
-}
-
-.homepage .img {
-  width: 20px;
-  height: auto;
+.hp-sys-card__explore svg { flex-shrink: 0; }
+/* Figma: logo icon 40px, rounded-5px */
+.hp-sys-card__icon {
+    width: clamp(28px, 2.1vw, 40px);
+    height: clamp(28px, 2.1vw, 40px);
+    object-fit: cover;
+    border-radius: 5px;
 }
 
 /* ════════════════════════════════════════════════
-   FOOTER
+   FOOTER  (Figma: #000d5e, 4-col grid)
    ════════════════════════════════════════════════ */
-.homepage .site-footer {
-  position: relative;
-  top: auto; left: auto;
-  width: 100%;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 23, 60, 1) 0%,
-    rgba(14, 86, 201, 1) 100%
-  );
-  padding: 40px 20px;
+.hp-footer {
+    background: #000d5e;
+    padding: 40px 70px 0;
+}
+/* 4-column: brand (wider) + Resources + Product + Company */
+.hp-footer__inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    max-width: 1920px;
+    margin: 0 auto;
+    padding-bottom: 32px;
 }
 
-.homepage .footer-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
+/* Brand column */
+.hp-footer__logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
 }
-
-.homepage .footer-logo {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-  opacity: 0.85;
-}
-
-.homepage .footer-text {
-  font-family: "Poppins", Helvetica;
-  font-weight: 500;
-  color: #ffffff;
-  font-size: 16px;
-  letter-spacing: 0.5px;
-  text-align: center;
-}
-
-/* Responsiveness Section hereee */
-
-/* ── Tablet (≤1024px) ── */
-@media (max-width: 1024px) {
-  .homepage .header {
-    padding: 0 24px;
-    height: 90px;
-  }
-
-  .homepage .image {
+.hp-footer__logo-img {
     width: 60px;
     height: 60px;
-  }
-
-  .homepage .navbar {
-    gap: 20px;
-  }
-
-  .homepage .top,
-  .homepage .bottom {
-    grid-template-columns: repeat(2, 1fr);
-  }
+    object-fit: contain;
+    border-radius: 12px;
+}
+.hp-footer__logo-name {
+    font-size: 28px;
+    font-weight: 600;
+    color: #ffb200;
+    font-family: 'Poppins', sans-serif;
+}
+.hp-footer__desc {
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.6;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    opacity: 0.85;
 }
 
-/* ── Large mobile / small tablet (≤768px) ── */
-@media (max-width: 768px) {
-  /* Header: logo + brand + hamburger only */
-  .homepage .header {
-    height: 72px;
-    padding: 0 20px;
-  }
-
-  .homepage .image {
-    width: 48px;
-    height: 48px;
-  }
-
-  .homepage .text-wrapper-3 {
-    font-size: 22px;
-  }
-
-  /* Hide desktop nav & CTA; show hamburger */
-  .homepage .navbar,
-  .homepage .CREATE-ACCOUNT {
-    display: none;
-  }
-
-  .homepage .hamburger {
+/* Link columns */
+.hp-footer__col {
     display: flex;
-  }
-
-  /* Hero image taller on small screens */
-  .homepage .frame {
-    height: clamp(320px, 80vw, 600px);
-  }
-
-  /* Hero card: wider, repositioned */
-  .homepage .container {
-    top: 88px;
-    left: 16px;
-    width: calc(100% - 32px);
-  }
-
-  .homepage .text-wrapper-4 {
-    padding: 20px 20px 0;
-    font-size: clamp(14px, 4vw, 20px);
-  }
-
-  .homepage .p {
-    padding: 10px 20px;
-    font-size: clamp(20px, 6vw, 36px);
-  }
-
-  .homepage .learn-more {
-    margin: 0 0 20px 20px;
-  }
-
-  /* Feature sections — stack vertically */
-  .feature-inner,
-  .feature-inner.reverse {
     flex-direction: column;
-    padding: 32px 20px;
-    gap: 24px;
-  }
+    gap: 8px;
+}
+.hp-footer__col-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffb200;
+    margin: 0 0 6px;
+    font-family: 'Poppins', sans-serif;
+}
+.hp-footer__col-link {
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+}
+.hp-footer__col-link:hover { opacity: 1; }
 
-  .feature-inner .feature-img {
-    width: 100%;
-    height: clamp(200px, 56vw, 400px);
-  }
-
-  /* Cards: single column */
-  .homepage .top,
-  .homepage .bottom {
-    grid-template-columns: 1fr;
-  }
-
-  .homepage .group-2 {
-    min-height: auto;
-  }
+/* Divider */
+.hp-footer__divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    max-width: 1920px;
+    margin: 0 auto 16px;
 }
 
-/* ── Small mobile (≤480px) ── */
+/* Bottom bar */
+.hp-footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 24px;
+    max-width: 1920px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.hp-footer__copy {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+.hp-footer__legal {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+.hp-footer__legal-link {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    text-decoration: underline;
+    font-family: 'Poppins', sans-serif;
+    transition: opacity 0.2s;
+}
+.hp-footer__legal-link:hover { opacity: 1; }
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .hp-header__inner { height: 90px; }
+    .hp-header__logo-img { width: 60px; height: 60px; }
+
+    .hp-featured__cards { flex-direction: column; }
+    .hp-feat-card { height: clamp(320px, 60vw, 520px); }
+
+    .hp-other__grid { grid-template-columns: repeat(2, 1fr); }
+    .hp-sys-card { height: auto; min-height: 300px; }
+
+    .hp-footer__inner { grid-template-columns: 1fr 1fr; }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    /* Header */
+    .hp-header__inner { height: 72px; }
+    .hp-header__logo-img { width: 48px; height: 48px; }
+    .hp-header__brand { font-size: 22px; }
+    .hp-header__nav,
+    .hp-header__cta { display: none; }
+    .hp-hamburger { display: flex; }
+
+    /* Hero */
+    .hp-hero { height: clamp(320px, 80vw, 600px); }
+    .hp-hero__card {
+        top: 16px;
+        left: 16px;
+        width: calc(100% - 32px);
+        padding: 20px;
+        gap: 10px;
+    }
+
+    /* Hide deco shapes on small screens */
+    .hp-deco { display: none; }
+
+    /* Featured */
+    .hp-featured__cards { flex-direction: column; }
+    .hp-feat-card { height: clamp(280px, 70vw, 450px); }
+
+    /* Other systems */
+    .hp-other__grid { grid-template-columns: 1fr; }
+
+    /* Footer */
+    .hp-footer__inner { grid-template-columns: 1fr; }
+    .hp-footer__bottom { flex-direction: column; align-items: flex-start; }
+}
+
+/* Small mobile */
 @media (max-width: 480px) {
-  .homepage .frame {
-    height: 300px;
-  }
-
-  .homepage .container {
-    top: 76px;
-  }
-
-  .homepage .text-wrapper-4 {
-    font-size: 13px;
-  }
-
-  .homepage .p {
-    font-size: 18px;
-  }
+    .hp-hero { height: 300px; }
+    .hp-section-header__title { white-space: normal; }
+    .hp-sys-card__title { font-size: 28px; }
 }

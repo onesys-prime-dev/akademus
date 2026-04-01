@@ -1,17 +1,61 @@
 // assets/js/pages/applicant-form.js
 
-const { initialStep, maxSteps, baseUrl, stepUrl, updateUrl, dashboardUrl } = window.requirementsConfig;
+const { initialStep, maxSteps, baseUrl, stepUrl, updateUrl, submitUrl, documentUrl, dashboardUrl, applicationStatus } = window.requirementsConfig;
 
 let currentStep = initialStep;
 
 const formProgressH4Text = document.getElementById('form-progress-text');
 const backBtn = document.getElementById('btn-back');
 const saveAndContinueBtn = document.getElementById('btn-save');
-//const submitFormBtn = document.getElementById('btn-submit');
+const submitFormBtn = document.getElementById('btn-submit');
 const formFillupContainer = document.getElementById('requirements-body');
 const autosaveText = document.getElementById('autosave-text');
 
 let autoSaveTimeout;
+
+function openDocumentModal(reqId, docName) {
+    const modal       = document.getElementById('document-modal');
+    const frame       = document.getElementById('doc-modal-frame');
+    const img         = document.getElementById('doc-modal-img');
+    const downloadRow = document.getElementById('doc-modal-download');
+    const downloadBtn = document.getElementById('doc-modal-download-btn');
+    const title       = document.getElementById('doc-modal-title');
+
+    const ext = (docName || '').split('.').pop().toLowerCase();
+    const url = `${documentUrl}${reqId}`;
+    const isImage = ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(ext);
+    const isPdf   = ext === 'pdf';
+
+    // Reset all viewers
+    frame.classList.add('hidden');       frame.src = '';
+    img.classList.add('hidden');         img.src = '';
+    downloadRow.classList.add('hidden');
+
+    title.textContent = docName || 'Document Preview';
+
+    if (isImage) {
+        img.src = url;
+        img.classList.remove('hidden');
+    } else if (isPdf) {
+        frame.src = url;
+        frame.classList.remove('hidden');
+    } else {
+        // DOCX or other — offer download
+        downloadBtn.href = url;
+        downloadBtn.download = docName || 'document';
+        downloadRow.classList.remove('hidden');
+    }
+
+    modal.classList.remove('hidden');
+}
+
+function closeDocumentModal(e) {
+    if (e.target === document.getElementById('document-modal')) {
+        document.getElementById('document-modal').classList.add('hidden');
+        document.getElementById('doc-modal-frame').src = '';
+        document.getElementById('doc-modal-img').src   = '';
+    }
+}
 
 async function loadForm(step) {
     try {
@@ -27,10 +71,16 @@ async function loadForm(step) {
         formProgressH4Text.textContent = `Form Progress — Step ${step} of ${maxSteps}`;
         formFillupContainer.innerHTML = data.form;
 
-        updateProgress(step);
+        if (data.allRequiredComplete) {
+            markAllComplete();
+        } else {
+            updateProgress(step);
+        }
 
         // Populate all fields including dynamic selects
         populateForm(`requirements-${step}`, data.formData);
+
+        updateUploadCounter(`requirements-${step}`, data.formData);
 
         setupAutoSave(step);
 
@@ -50,19 +100,25 @@ function populateForm(formId, data) {
         const field = form.querySelector(`#requirement_${requirementId}`);
         if (!field) return;
 
+        // Remove required so validation passes on review step
+        field.removeAttribute('required');
+
         const label = form.querySelector(`label[for="requirement_${requirementId}"]`);
         if (!label) return;
 
-        label.classList.add('upload-success');
-
-        const uploadContainer = label;
-        uploadContainer.classList.add('uploaded');
+        label.classList.add('upload-success', 'uploaded');
 
         const btn = label.querySelector('.requirement-upload-action');
-
         if (btn) {
             btn.textContent = "Uploaded ✔";
             btn.classList.add('uploaded-btn');
+        }
+
+        // Show the View button with the correct URL and file name
+        const viewBtn = label.querySelector('.requirement-view-action');
+        if (viewBtn) {
+            viewBtn.dataset.docName = data[requirementId]?.document_name ?? '';
+            viewBtn.classList.remove('hidden');
         }
     });
 }
@@ -95,6 +151,32 @@ async function processForm(step) {
     }
 }
 
+function updateUploadCounter(formId, formData) {
+    const counter = document.querySelector('.upload-counter');
+    if (!counter) return;
+
+    const form = document.getElementById(formId);
+    if (!form) return;
+
+    const requiredInputs = form.querySelectorAll('input[type="file"][required]');
+    const totalRequired = requiredInputs.length;
+
+    if (totalRequired === 0) {
+        counter.style.display = 'none';
+        return;
+    }
+
+    // Count uploaded required docs from formData
+    let uploadedRequired = 0;
+    requiredInputs.forEach(input => {
+        const reqId = input.id.replace('requirement_', '');
+        if (formData && formData[reqId]) uploadedRequired++;
+    });
+
+    counter.textContent = `${uploadedRequired}/${totalRequired} required uploaded`;
+    counter.classList.toggle('upload-counter--done', uploadedRequired >= totalRequired);
+}
+
 function setupAutoSave(step) {
     const form = document.getElementById(`requirements-${step}`);
     if (!form) return;
@@ -119,6 +201,7 @@ async function autoSaveHandler() {
 
         if (success) {
             autosaveText.textContent = 'Auto-saved changes';
+            // loadForm (called inside processForm) already updates the counter
         } else {
             autosaveText.textContent = 'Auto-save failed';
         }
@@ -172,42 +255,125 @@ function updateProgress(step) {
     });
 }
 
+function markAllComplete() {
+    const circles = document.querySelectorAll('.form-progress__circle');
+    const lines = document.querySelectorAll('.form-progress__line');
+
+    circles.forEach(circle => {
+        circle.classList.add('form-progress__circle-done');
+        circle.classList.remove('form-progress__circle-active');
+        circle.textContent = '✔';
+    });
+
+    lines.forEach(line => {
+        line.classList.add('form-progress__line-done');
+        line.classList.remove('form-progress__line-active');
+    });
+}
+
 function updateButtons() {
     backBtn.classList.toggle('hidden', currentStep === 1);
     saveAndContinueBtn.classList.toggle('hidden', currentStep === maxSteps);
+    submitFormBtn.classList.toggle('hidden', currentStep !== maxSteps);
 }
+
+// ── Passed / Approved modal ───────────────────────────────────────────────
+const reqPassedModal = document.getElementById('req-passed-modal');
+const reqPassedClose = document.getElementById('req-passed-close');
+
+function openPassedModal() {
+    reqPassedModal.removeAttribute('hidden');
+    document.body.style.overflow = 'hidden';
+    reqPassedClose.focus();
+}
+
+function closePassedModal() {
+    reqPassedModal.setAttribute('hidden', '');
+    document.body.style.overflow = '';
+}
+
+reqPassedClose.addEventListener('click', closePassedModal);
+reqPassedModal.addEventListener('click', e => { if (e.target === reqPassedModal) closePassedModal(); });
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !reqPassedModal.hasAttribute('hidden')) closePassedModal();
+});
 
 document.addEventListener('DOMContentLoaded', async () => {
     await loadForm(currentStep);
     updateButtons();
+
+    if (applicationStatus === 'approved') {
+        openPassedModal();
+    }
 });
 
 // Buttons
 saveAndContinueBtn.addEventListener('click', async () => {
-    // Show "Saving..." while waiting for debounce
     autosaveText.textContent = 'Saving...';
-    
+
+    // Upload any selected files before advancing
+    const success = await processForm(currentStep);
+    if (!success) return;
+
     if (currentStep < maxSteps) {
         currentStep++;
-        
         await loadForm(currentStep);
         updateButtons();
-        
         autosaveText.textContent = 'Auto-saved changes';
+        setTimeout(() => { autosaveText.textContent = ''; }, 3000);
     }
 });
-/*
-submitFormBtn.addEventListener('click', async () => {
+// ── Submit confirmation modal ─────────────────────────────────────────────
+const reqConfirmModal  = document.getElementById('req-confirm-modal');
+const reqModalCancel   = document.getElementById('req-modal-cancel');
+const reqModalConfirm  = document.getElementById('req-modal-confirm');
+
+function openReqModal() {
+    reqConfirmModal.removeAttribute('hidden');
+    document.body.style.overflow = 'hidden';
+    reqModalConfirm.focus();
+}
+
+function closeReqModal() {
+    reqConfirmModal.setAttribute('hidden', '');
+    document.body.style.overflow = '';
+}
+
+reqConfirmModal.addEventListener('click', e => { if (e.target === reqConfirmModal) closeReqModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !reqConfirmModal.hasAttribute('hidden')) closeReqModal(); });
+reqModalCancel.addEventListener('click', closeReqModal);
+
+reqModalConfirm.addEventListener('click', async () => {
+    reqModalConfirm.disabled = true;
+    reqModalConfirm.textContent = 'Submitting…';
+
+    try {
+        const response = await fetch(submitUrl, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.querySelector('input[name="csrf_token_name"]')?.value ?? ''
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            closeReqModal();
+            document.getElementById('submit-modal').classList.remove('hidden');
+        }
+    } catch (error) {
+        console.error('Submit error:', error);
+    } finally {
+        reqModalConfirm.disabled = false;
+        reqModalConfirm.textContent = 'Yes, Submit Now';
+    }
+});
+
+submitFormBtn.addEventListener('click', () => {
     if (!checkAllFields(currentStep)) return;
-
-    const success = await processForm(currentStep);
-
-    if (success) {
-        alert('Application submitted successfully!');
-        window.location.href = `${dashboardUrl}`;
-    }
+    openReqModal();
 });
-*/
 backBtn.addEventListener('click', async () => {
     autosaveText.textContent = 'Saving...';
 

@@ -18,12 +18,23 @@ if (!function_exists('get_field_configs')) {
 if (!function_exists('get_enabled_pages')) {
     function get_enabled_pages(): array
     {
-        static $pages = null;
-        if ($pages === null) {
+        static $cache = [];
+        $programId = session()->get('selected_program_id');
+        $key = $programId ? (int)$programId : 'default';
+
+        if (!isset($cache[$key])) {
+            if ($programId) {
+                $service = new \App\Services\PresetService();
+                $pages   = $service->getFormPagesForApplicant($programId);
+                if (!empty($pages)) {
+                    $cache[$key] = $pages;
+                    return $cache[$key];
+                }
+            }
             $model = new FormPageModel();
-            $pages = $model->getEnabledOrdered();
+            $cache[$key] = $model->getEnabledOrdered();
         }
-        return $pages;
+        return $cache[$key];
     }
 }
 

@@ -1,234 +1,243 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta charset="UTF-8"/>
-        <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css') . '?v=' . time(); ?>">
-        <link rel="stylesheet" href="<?= base_url('assets/css/base/reset.css') . '?v=' . time(); ?>">
-        <link rel="stylesheet" href="<?= base_url('assets/css/pages/homepage.css') . '?v=' . time(); ?>">
-    </head>
-    <body>
-        <div class="homepage">
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css') . '?v=' . time(); ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/base/reset.css') . '?v=' . time(); ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/homepage.css') . '?v=' . time(); ?>">
+</head>
+<body>
 
-            <!-- ══ HEADER / NAV ══ -->
-            <div class="header-navigation">
-                <div class="header">
-                    <!-- Logo + Brand -->
-                    <div class="left-content">
-                        <img class="image" src="assets/images/logo_akademus.png" alt="Logo"/>
-                        <div class="text-wrapper-3">AKADEMUS</div>
-                    </div>
-
-                    <!-- Desktop Nav -->    
-                    <div class="navbar">
-                        <div class="item">Home</div>
-                        <div class="text-wrapper">About Us</div>
-                        <div class="div">Features</div>
-                        <div class="item-2">Services</div>
-                        <div class="item-3">Contact</div>
-                    </div>
-
-                    <!-- Desktop CTA -->
-                    <div class="CREATE-ACCOUNT">
-                        <div class="CREATE-ACCOUNT-2"></div>
-                        <a class="text-wrapper-2" href="<?= base_url('sign-in') ?>">Get Started</a>
-                    </div>
-
-                    <!-- Mobile Hamburger -->
-                    <div class="hamburger" onclick="toggleMobileNav(this)">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
-
-                <!-- Mobile Nav Dropdown -->
-                <div class="mobile-nav" id="mobileNav">
-                    <div class="nav-item">Home</div>
-                    <div class="nav-item">About Us</div>
-                    <div class="nav-item">Features</div>
-                    <div class="nav-item">Services</div>
-                    <div class="nav-item">Contact</div>
-                    <a class="nav-cta" href="<?= base_url('sign_in') ?>">Get Started</a>
-                </div>
-
-                <!-- Hero BG Image -->
-                <img class="frame" src="assets/images/bg.jpg" alt="Hero Background"/>
-
-                <!-- Hero Overlay Card -->
-                <div class="container">
-                    <div class="container-2"></div>
-                    <div class="text-wrapper-4">Welcome to Akademus</div>
-                    <p class="p">Cultivating Excellence Through Guided Learning.</p>
-                    <div class="learn-more">
-                        <div class="rectangle"></div>
-                        <div class="text-wrapper-5">Learn More</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ══ FEATURED SYSTEMS HEADER ══ -->
-            <div class="FEATURED-SYSTEMS">
-                <div class="header-3">
-                    <img class="line-3" src="assets/images/line.png" alt=""/>
-                    <div class="text-wrapper-13">Featured Systems</div>
-                </div>
-            </div>
-
-            <!-- ══ AKADEMUS CONTENT ══ -->
-            <div class="akademus-content">
-                <div class="rectangle-4"></div>
-                <div class="feature-inner">
-                    <img class="feature-img" src="assets/images/pillars.jpg" alt="Akademus Preview"/>
-                    <div class="feature-text">
-                        <div class="feature-title">Akademus</div>
-                        <p class="feature-body">
-                            Akademos serves as the central hub of learning, providing a structured and reliable source of
-                            knowledge. It organizes lessons, courses, and academic materials in a clear progression from basic
-                            to advanced topics, ensuring that learners acquire information in a consistent and goal-oriented
-                            manner. For example, a learner studying Data Analysis can follow a sequence of lessons in Akademos,
-                            starting with Excel basics and gradually progressing to advanced statistical concepts. In this way,
-                            Akademos forms the foundation of serious learning by combining credibility, structure, and depth. 
-                        </p>
-                        <div class="feature-btn learn-more-2">
-                            <div class="rectangle-3"></div>
-                            <div class="btn-label text-wrapper-16">READ MORE</div>
-                            <img class="arrow" src="assets/images/arrow.png" alt=""/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ══ MENTORA CONTENT ══ -->
-            <div class="mentora-contents">
-                <div class="rectangle-5"></div>
-                <div class="feature-inner reverse">
-                    <img class="feature-img" src="assets/images/book.jpg" alt="Mentora Preview"/>
-                    <div class="feature-text">
-                        <div class="feature-title">Mentora</div>
-                        <p class="feature-body">
-                            Akademos serves as the central hub of learning, providing a structured and reliable source of
-                            knowledge. It organizes lessons, courses, and academic materials in a clear progression from basic
-                            to advanced topics, ensuring that learners acquire information in a consistent and goal-oriented
-                            manner. For example, a learner studying Data Analysis can follow a sequence of lessons in Akademos,
-                            starting with Excel basics and gradually progressing to advanced statistical concepts. In this way,
-                            Akademos forms the foundation of serious learning by combining credibility, structure, and depth.
-                        </p>
-                        <div class="feature-btn learn-more-3">
-                            <div class="rectangle-3"></div>
-                            <div class="btn-label text-wrapper-17-btn">READ MORE</div>
-                            <img class="arrow" src="assets/images/arrow.png" alt=""/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ══ LEARNIX CONTENT ══ -->
-            <div class="learnix-contents">
-                <div class="rectangle-2"></div>
-                <div class="feature-inner">
-                    <img class="feature-img" src="assets/images/comp.jpg" alt="Learnix Preview"/>
-                    <div class="feature-text">
-                        <div class="feature-title">Learnix</div>
-                        <p class="feature-body">
-                            Akademos serves as the central hub of learning, providing a structured and reliable source of
-                            knowledge. It organizes lessons, courses, and academic materials in a clear progression from basic
-                            to advanced topics, ensuring that learners acquire information in a consistent and goal-oriented
-                            manner. For example, a learner studying Data Analysis can follow a sequence of lessons in Akademos,
-                            starting with Excel basics and gradually progressing to advanced statistical concepts. In this way,
-                            Akademos forms the foundation of serious learning by combining credibility, structure, and depth.
-                        </p>
-                        <div class="feature-btn learn-more-2">
-                            <div class="rectangle-3"></div>
-                            <div class="btn-label text-wrapper-6">READ MORE</div>
-                            <img class="arrow" src="assets/images/arrow.png" alt=""/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ══ FUTURE SYSTEMS HEADER ══ -->
-            <div class="FUTURE-SYSTEMS">
-                <div class="header-2">
-                    <img class="line-2" src="assets/images/line.png" alt=""/>
-                    <div class="text-wrapper-12">Future Systems</div>
-                </div>
-            </div>
-
-            <!-- ══ CARDS SECTION ══ -->
-            <div class="group">
-                <div class="top">
-                    <?php for ($i = 0; $i < 3; $i++): ?>
-                    <div class="group-2">
-                        <div class="line"></div>
-                        <div class="div-wrapper"><div class="text-wrapper-9">Akademus</div></div>
-                        <div class="body">
-                            <p class="text-wrapper-10">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc,
-                                in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec
-                                turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis. Mauris varius
-                                sem velit, at posuere augue tincidunt eget.
-                            </p>
-                        </div>
-                        <div class="explore-and-icon">
-                            <div class="text-wrapper-11">Explore</div>
-                            <img class="img" src="assets/images/arrow_white.png" alt=""/>
-                            <img class="image-2" src="assets/images/logo_akademus.png" alt=""/>
-                        </div>
-                    </div>
-                    <?php endfor; ?>
-                </div>
-
-                <div class="bottom">
-                    <?php for ($i = 0; $i < 3; $i++): ?>
-                    <div class="group-2">
-                        <div class="line"></div>
-                        <div class="div-wrapper"><div class="text-wrapper-9">Akademus</div></div>
-                        <div class="body">
-                            <p class="text-wrapper-10">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc,
-                                in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec
-                                turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis. Mauris varius
-                                sem velit, at posuere augue tincidunt eget.
-                            </p>
-                        </div>
-                        <div class="explore-and-icon">
-                            <div class="text-wrapper-11">Explore</div>
-                            <img class="img" src="assets/images/arrow_white.png" alt=""/>
-                            <img class="image-2" src="assets/images/logo_akademus.png" alt=""/>
-                        </div>
-                    </div>
-                    <?php endfor; ?>
-                </div>
-            </div>
-
-            <!-- ══ FOOTER ══ -->
-            <footer class="site-footer">
-                <div class="footer-inner">
-                    <img class="footer-logo" src="assets/images/logo_akademus.png" alt="Akademus Logo"/>
-                    <p class="footer-text">&copy; 2026 Akademus. All Rights Reserved.</p>
-                </div>
-            </footer>
-
+    <!-- ══ MOBILE OVERLAY ══ -->
+    <div class="hp-overlay" id="hpOverlay">
+        <div class="hp-overlay__panel">
+            <button class="hp-overlay__close" id="hpOverlayClose">&#10005;</button>
+            <nav class="hp-overlay__nav">
+                <a href="#home"     class="hp-overlay__link" onclick="hpCloseMenu()">Home</a>
+                <a href="<?= base_url('about') ?>" class="hp-overlay__link">About Us</a>
+                <a href="#featured" class="hp-overlay__link" onclick="hpCloseMenu()">Features</a>
+                <a href="#services" class="hp-overlay__link" onclick="hpCloseMenu()">Services</a>
+                <a href="#contact"  class="hp-overlay__link" onclick="hpCloseMenu()">Contact</a>
+            </nav>
+            <a href="<?= base_url('sign-in') ?>" class="hp-overlay__cta">Get Started</a>
         </div>
+    </div>
 
-        <script>
-            function toggleMobileNav(btn) {
-                const nav = document.getElementById('mobileNav');
-                nav.classList.toggle('open');
-                // Animate hamburger → X
-                const spans = btn.querySelectorAll('span');
-                btn.classList.toggle('active');
-                if (btn.classList.contains('active')) {
-                    spans[0].style.transform = 'translateY(7px) rotate(45deg)';
-                    spans[1].style.opacity = '0';
-                    spans[2].style.transform = 'translateY(-7px) rotate(-45deg)';
-                } else {
-                    spans[0].style.transform = '';
-                    spans[1].style.opacity = '';
-                    spans[2].style.transform = '';
+    <div class="hp" id="home">
+
+        <!-- ══ HEADER ══ -->
+        <header class="hp-header">
+            <div class="hp-header__inner">
+                <a href="<?= base_url('/') ?>" class="hp-header__logo">
+                    <img src="<?= base_url('assets/images/logo_akademus.png') ?>" alt="Akademus Logo" class="hp-header__logo-img" />
+                    <span class="hp-header__brand">AKADEMUS</span>
+                </a>
+                <nav class="hp-header__nav">
+                    <a href="#home"                          class="hp-header__link hp-header__link--active">Home</a>
+                    <a href="<?= base_url('about') ?>"       class="hp-header__link">About Us</a>
+                    <a href="#featured"                      class="hp-header__link">Features</a>
+                    <a href="#services"                      class="hp-header__link">Services</a>
+                    <a href="#contact"                       class="hp-header__link">Contact</a>
+                </nav>
+                <a href="<?= base_url('sign-in') ?>" class="hp-header__cta">Get Started</a>
+                <button class="hp-hamburger" id="hpHamburger" aria-label="Open menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- ══ HERO ══ -->
+        <section class="hp-hero">
+            <img class="hp-hero__bg" src="<?= base_url('assets/images/bg.jpg') ?>" alt="Hero Background" />
+            <div class="hp-hero__card">
+                <p class="hp-hero__subtitle">WELCOME TO AKADEMUS</p>
+                <h1 class="hp-hero__title">Where Smart Learning Begins and Grows</h1>
+                <button class="hp-hero__btn"
+                        onclick="document.getElementById('featured').scrollIntoView({behavior:'smooth'})">
+                    Learn More
+                </button>
+            </div>
+        </section>
+
+        <!-- ══ MIDDLE BAND (featured + other, clips deco shapes) ══ -->
+        <div class="hp-middle">
+
+        <!-- ══ DECORATIVE BACKGROUND SHAPES ══ -->
+        <div class="hp-deco hp-deco--yellow" aria-hidden="true"></div>
+        <div class="hp-deco hp-deco--blue"   aria-hidden="true"></div>
+
+        <!-- ══ FEATURED SYSTEMS ══ -->
+        <section class="hp-featured" id="featured">
+            <div class="hp-section-header">
+                <div class="hp-section-header__line"></div>
+                <h2 class="hp-section-header__title">Featured Systems</h2>
+            </div>
+
+            <div class="hp-featured__cards">
+                <!-- Akademus -->
+                <div class="hp-feat-card">
+                    <img class="hp-feat-card__img" src="<?= base_url('assets/images/pillars.jpg') ?>" alt="Akademus" />
+                    <div class="hp-feat-card__overlay"></div>
+                    <div class="hp-feat-card__content">
+                        <img class="hp-feat-card__logo" src="<?= base_url('assets/images/logo_akademus.png') ?>" alt="" />
+                        <h3 class="hp-feat-card__title">Akademus</h3>
+                        <p class="hp-feat-card__body">Akademos is a modern learning platform designed to provide a structured, reliable, and convenient environment where learners can access high-quality lessons, courses, and academic materials. By organizing a clear content from basic concepts to advanced topics.</p>
+                    </div>
+                </div>
+
+                <!-- Mentora -->
+                <div class="hp-feat-card">
+                    <img class="hp-feat-card__img" src="<?= base_url('assets/images/book.jpg') ?>" alt="Mentora" />
+                    <div class="hp-feat-card__overlay"></div>
+                    <div class="hp-feat-card__content">
+                        <img class="hp-feat-card__logo" src="<?= base_url('assets/images/logo_akademus.png') ?>" alt="" />
+                        <h3 class="hp-feat-card__title">Mentora</h3>
+                        <p class="hp-feat-card__body">Mentora is a smart Learning Management System (LMS) designed to help teachers, and students in managing their classes. Mentora allows teachers to upload lessons, create activities and track student progress in one platform.</p>
+                    </div>
+                </div>
+
+                <!-- Learnix -->
+                <div class="hp-feat-card">
+                    <img class="hp-feat-card__img" src="<?= base_url('assets/images/comp.jpg') ?>" alt="Learnix" />
+                    <div class="hp-feat-card__overlay"></div>
+                    <div class="hp-feat-card__content">
+                        <img class="hp-feat-card__logo" src="<?= base_url('assets/images/logo_akademus.png') ?>" alt="" />
+                        <h3 class="hp-feat-card__title">Learnix</h3>
+                        <p class="hp-feat-card__body">Learnix is the game-based learning portal under Mentora. It is designed to make learning more engaging, and motivating through educational games and challenges that support different subjects.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ OTHER SYSTEMS ══ -->
+        <section class="hp-other" id="services">
+            <div class="hp-section-header">
+                <div class="hp-section-header__line hp-section-header__line--blue"></div>
+                <h2 class="hp-section-header__title">Other Systems</h2>
+            </div>
+
+            <div class="hp-other__grid">
+                <?php
+                $systems = [
+                    'OTIS'     => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis. Mauris varius sem velit, at posuere augue tincidunt eget.',
+                    'Akademus' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis. Mauris varius sem velit, at posuere augue tincidunt eget.',
+                    'Learnix'  => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis. Mauris varius sem velit, at posuere augue tincidunt eget.',
+                    'Mentora'  => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis. Mauris varius sem velit, at posuere augue tincidunt eget.',
+                    'ONESYS'   => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis. Mauris varius sem velit, at posuere augue tincidunt eget.',
+                    'Sample'   => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis. Mauris varius sem velit, at posuere augue tincidunt eget.',
+                ];
+                foreach ($systems as $name => $body): ?>
+                <div class="hp-sys-card">
+                    <div class="hp-sys-card__line"></div>
+                    <h3 class="hp-sys-card__title"><?= $name ?></h3>
+                    <p class="hp-sys-card__body"><?= $body ?></p>
+                    <div class="hp-sys-card__explore">
+                        <span class="hp-sys-card__explore-text">Explore</span>
+                        <svg width="20" height="15" viewBox="0 0 20 14.7279" fill="none" aria-hidden="true">
+                            <path d="M19.7071 8.07107C20.0976 7.68054 20.0976 7.04738 19.7071 6.65685L13.3431 0.292893C12.9526 -0.097631 12.3195 -0.097631 11.9289 0.292893C11.5384 0.683418 11.5384 1.31658 11.9289 1.70711L17.5858 7.36396L11.9289 13.0208C11.5384 13.4113 11.5384 14.0445 11.9289 14.435C12.3195 14.8256 12.9526 14.8256 13.3431 14.435L19.7071 8.07107ZM0 7.36396V8.36396H19V7.36396V6.36396H0V7.36396Z" fill="white" />
+                        </svg>
+                        <img class="hp-sys-card__icon" src="<?= base_url('assets/images/logo_akademus.png') ?>" alt="" />
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </section>
+
+        </div><!-- /.hp-middle -->
+
+        <!-- ══ FOOTER ══ -->
+        <footer class="hp-footer" id="contact">
+            <div class="hp-footer__inner">
+                <div class="hp-footer__brand">
+                    <div class="hp-footer__logo-wrap">
+                        <img class="hp-footer__logo-img" src="<?= base_url('assets/images/logo_akademus.png') ?>" alt="Akademus Logo" />
+                        <span class="hp-footer__logo-name">Akademus</span>
+                    </div>
+                    <p class="hp-footer__desc">Akademos is a modern learning platform that provides structured and reliable access to courses and academic resources.</p>
+                </div>
+
+                <div class="hp-footer__col">
+                    <h4 class="hp-footer__col-title">Resources</h4>
+                    <a href="#" class="hp-footer__col-link">About</a>
+                    <a href="#" class="hp-footer__col-link">Career</a>
+                    <a href="#" class="hp-footer__col-link">Contact</a>
+                    <a href="#" class="hp-footer__col-link">Partners</a>
+                </div>
+
+                <div class="hp-footer__col">
+                    <h4 class="hp-footer__col-title">Product</h4>
+                    <a href="#" class="hp-footer__col-link">OTIS</a>
+                    <a href="#" class="hp-footer__col-link">Learnix</a>
+                    <a href="#" class="hp-footer__col-link">Mentora</a>
+                    <a href="#" class="hp-footer__col-link">Akademos</a>
+                </div>
+
+                <div class="hp-footer__col">
+                    <h4 class="hp-footer__col-title">Company</h4>
+                    <a href="#" class="hp-footer__col-link">About</a>
+                    <a href="#" class="hp-footer__col-link">Career</a>
+                    <a href="#" class="hp-footer__col-link">Contact</a>
+                    <a href="#" class="hp-footer__col-link">Partners</a>
+                </div>
+            </div>
+
+            <div class="hp-footer__divider"></div>
+
+            <div class="hp-footer__bottom">
+                <p class="hp-footer__copy">2026 Akademus. All rights reserved.</p>
+                <div class="hp-footer__legal">
+                    <a href="#" class="hp-footer__legal-link">Privacy Policy</a>
+                    <a href="#" class="hp-footer__legal-link">Terms of Service</a>
+                    <a href="#" class="hp-footer__legal-link">Cookie Settings</a>
+                </div>
+            </div>
+        </footer>
+
+    </div><!-- .hp -->
+
+    <script>
+        /* ── Mobile menu ── */
+        function hpOpenMenu() {
+            document.getElementById('hpOverlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function hpCloseMenu() {
+            document.getElementById('hpOverlay').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        document.getElementById('hpHamburger').addEventListener('click', hpOpenMenu);
+        document.getElementById('hpOverlayClose').addEventListener('click', hpCloseMenu);
+        document.getElementById('hpOverlay').addEventListener('click', function(e) {
+            if (e.target === this) hpCloseMenu();
+        });
+
+        /* ── Smooth scroll ── */
+        document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+            a.addEventListener('click', function(e) {
+                var t = document.querySelector(this.getAttribute('href'));
+                if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+            });
+        });
+
+        /* ── Scroll spy ── */
+        var spySections = ['home', 'featured', 'services', 'contact'];
+        window.addEventListener('scroll', function() {
+            var y = window.scrollY + 120;
+            spySections.forEach(function(id) {
+                var el = document.getElementById(id);
+                if (!el) return;
+                if (el.offsetTop <= y && el.offsetTop + el.offsetHeight > y) {
+                    document.querySelectorAll('.hp-header__link').forEach(function(l) {
+                        l.classList.remove('hp-header__link--active');
+                    });
+                    var link = document.querySelector('.hp-header__link[href="#' + id + '"]');
+                    if (link) link.classList.add('hp-header__link--active');
                 }
-            }
-        </script>
-    </body>
+            });
+        });
+    </script>
+</body>
 </html>

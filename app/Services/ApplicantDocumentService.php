@@ -13,6 +13,10 @@ class ApplicantDocumentService
     }
 
     public function insertDocuments($applicant_id, $files) {
+        if (empty($files['documents'])) {
+            return;
+        }
+
         $uploadPath = WRITEPATH . "uploads/applicants/{$applicant_id}/";
 
         if (!is_dir($uploadPath)) {
@@ -37,6 +41,15 @@ class ApplicantDocumentService
                 'document_name' => $fileName
             ]);
         }
+    }
+
+    public function getDocument($applicant_id, $program_requirement_id)
+    {
+        return $this->applicantDocumentModel
+            ->select('document_name')
+            ->where('applicant_id', $applicant_id)
+            ->where('program_requirement_id', $program_requirement_id)
+            ->first();
     }
 
     public function getStepDocuments($applicant_id, $requirements) {

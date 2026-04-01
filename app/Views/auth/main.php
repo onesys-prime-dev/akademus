@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Akademus | <?= $title ?></title>
+<?php $favicon = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/favicons/favicon-32x32.png'); ?>
+<link rel="icon" type="image/png" sizes="32x32" href="<?= $favicon ?>">
+<link rel="icon" type="image/png" sizes="16x16" href="<?= !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/favicons/favicon-16x16.png') ?>">
+<link rel="apple-touch-icon" sizes="180x180" href="<?= !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/favicons/favicon-180x180.png') ?>">
 
 <link href="https://fonts.googleapis.com/css2?family=<?= urlencode($theme['font_family'] ?? 'Poppins') ?>:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -77,6 +81,76 @@
 
     <!-- OVERLAY -->
     <div class="mobile-overlay" id="mobile-overlay"></div>
+
+    <!-- FORGOT PASSWORD MODAL -->
+    <div id="forgotModal" style="
+        display:none;position:fixed;inset:0;z-index:99999;
+        align-items:center;justify-content:center;
+        background:rgba(0,0,0,0.5);backdrop-filter:blur(3px);
+    ">
+        <div style="
+            background:#fff;border-radius:16px;width:100%;max-width:400px;
+            margin:16px;box-shadow:0 24px 60px rgba(0,0,0,0.2);overflow:hidden;
+        ">
+            <div style="background:var(--primary);padding:22px 24px 18px;">
+                <h2 style="margin:0;font-size:17px;font-weight:700;color:#fff;">Forgot Password</h2>
+                <p style="margin:4px 0 0;font-size:12.5px;color:rgba(255,255,255,0.75);">
+                    Enter your email and we'll send you a reset link.
+                </p>
+            </div>
+            <div style="padding:22px 24px;">
+                <div id="fpError" style="
+                    display:none;margin-bottom:14px;padding:10px 14px;
+                    background:#fff5f5;border:1.5px solid #fed7d7;
+                    border-radius:8px;font-size:13px;color:#c53030;
+                "></div>
+                <div id="fpSuccess" style="
+                    display:none;margin-bottom:14px;padding:12px 14px;
+                    background:#f0fff4;border:1.5px solid #c6f6d5;
+                    border-radius:8px;font-size:13px;color:#276749;
+                    align-items:flex-start;gap:8px;
+                ">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#276749" stroke-width="2.5" style="flex-shrink:0;margin-top:1px;"><path d="M20 6L9 17l-5-5"/></svg>
+                    <span id="fpSuccessMsg"></span>
+                </div>
+                <div id="fpForm">
+                    <label style="display:block;font-size:12px;font-weight:600;color:#4a5568;margin-bottom:6px;">
+                        EMAIL ADDRESS
+                    </label>
+                    <input type="email" id="fpEmail" placeholder="yourname@email.com"
+                        onkeydown="if(event.key==='Enter') fpSubmit()"
+                        style="
+                            width:100%;padding:10px 12px;box-sizing:border-box;
+                            border:1.5px solid #e2e8f0;border-radius:8px;
+                            font-size:13.5px;outline:none;
+                            transition:border-color 0.2s;margin-bottom:18px;
+                        "
+                        onfocus="this.style.borderColor='var(--primary)'"
+                        onblur="this.style.borderColor='#e2e8f0'">
+                    <button onclick="fpSubmit()" id="fpBtn" style="
+                        width:100%;padding:11px;background:var(--primary);color:#fff;
+                        border:none;border-radius:8px;font-size:14px;font-weight:600;
+                        cursor:pointer;transition:opacity 0.2s;margin-bottom:10px;
+                    ">Send Reset Link</button>
+                    <button onclick="closeForgotModal()" style="
+                        width:100%;padding:10px;background:#f7fafc;color:#4a5568;
+                        border:1.5px solid #e2e8f0;border-radius:8px;
+                        font-size:13.5px;font-weight:500;cursor:pointer;
+                    ">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN ERROR MODAL -->
+    <div class="auth-modal-overlay" id="auth-error-modal" style="display:none;">
+        <div class="auth-modal-card">
+            <div class="auth-modal-icon">&#10006;</div>
+            <h3 class="auth-modal-title">Sign In Failed</h3>
+            <p class="auth-modal-message" id="auth-error-message">Invalid email or password.</p>
+            <button class="auth-modal-btn" id="auth-error-close">Try Again</button>
+        </div>
+    </div>
 
     <!-- MAIN CARD -->
     <div class="main-container">
@@ -232,12 +306,9 @@
                             if (data.status === 'success') {
                                 window.location.href = data.redirect;
                             } else {
-                                const existing = document.querySelector('.alert-error');
-                                if (existing) existing.remove();
-                                const err = document.createElement('div');
-                                err.className = 'alert alert-error';
-                                err.textContent = data.message || 'Something went wrong.';
-                                form.prepend(err);
+                                document.querySelector('.auth-modal-title').textContent    = 'Registration Failed';
+                                document.getElementById('auth-error-message').textContent = data.message || 'Something went wrong.';
+                                document.getElementById('auth-error-modal').style.display = 'flex';
                             }
                         });
                     },
@@ -260,6 +331,111 @@
             if (widgetId !== null) turnstile.reset(widgetId);
         }
     });
+
+    // SIGN-IN AJAX & ERROR MODAL
+    document.addEventListener('submit', function(e) {
+        const form = e.target;
+        if (form.id !== 'sign-in-form') return;
+        e.preventDefault();
+
+        const btn = document.getElementById('sign-in-button');
+        btn.disabled = true;
+        btn.textContent = 'Signing in...';
+
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'success' || data.redirect) {
+                window.location.href = data.redirect || '<?= base_url('dashboard') ?>';
+            } else {
+                document.getElementById('auth-error-message').textContent = data.message || 'Invalid email or password.';
+                document.getElementById('auth-error-modal').style.display = 'flex';
+                btn.disabled = false;
+                btn.textContent = 'Sign In';
+            }
+        })
+        .catch(() => {
+            document.getElementById('auth-error-message').textContent = 'Something went wrong. Please try again.';
+            document.getElementById('auth-error-modal').style.display = 'flex';
+            btn.disabled = false;
+            btn.textContent = 'Sign In';
+        });
+    });
+
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'auth-error-close') {
+            document.getElementById('auth-error-modal').style.display = 'none';
+        }
+        if (e.target && e.target.id === 'auth-error-modal') {
+            e.target.style.display = 'none';
+        }
+    });
+
+    // FORGOT PASSWORD MODAL
+    function openForgotModal() {
+        document.getElementById('forgotModal').style.display = 'flex';
+        document.getElementById('fpEmail').focus();
+    }
+
+    function closeForgotModal() {
+        document.getElementById('forgotModal').style.display = 'none';
+        document.getElementById('fpError').style.display     = 'none';
+        document.getElementById('fpSuccess').style.display   = 'none';
+        document.getElementById('fpForm').style.display      = 'block';
+        document.getElementById('fpEmail').value             = '';
+        const btn = document.getElementById('fpBtn');
+        btn.disabled    = false;
+        btn.textContent = 'Send Reset Link';
+    }
+
+    document.getElementById('forgotModal').addEventListener('click', function (e) {
+        if (e.target === this) closeForgotModal();
+    });
+
+    async function fpSubmit() {
+        const btn   = document.getElementById('fpBtn');
+        const errEl = document.getElementById('fpError');
+        const email = document.getElementById('fpEmail').value.trim();
+
+        errEl.style.display = 'none';
+
+        if (!email) {
+            errEl.textContent   = 'Please enter your email address.';
+            errEl.style.display = 'block';
+            return;
+        }
+
+        btn.disabled    = true;
+        btn.textContent = 'Sending...';
+
+        const form = new FormData();
+        form.append('email', email);
+
+        try {
+            const res  = await fetch('<?= base_url('/forgot-password') ?>', { method: 'POST', body: form });
+            const data = await res.json();
+
+            if (data.success) {
+                document.getElementById('fpForm').style.display    = 'none';
+                document.getElementById('fpSuccessMsg').textContent = data.message;
+                document.getElementById('fpSuccess').style.display  = 'flex';
+            } else {
+                errEl.textContent   = data.message;
+                errEl.style.display = 'block';
+                btn.disabled        = false;
+                btn.textContent     = 'Send Reset Link';
+            }
+        } catch (e) {
+            errEl.textContent   = 'Something went wrong. Please try again.';
+            errEl.style.display = 'block';
+            btn.disabled        = false;
+            btn.textContent     = 'Send Reset Link';
+        }
+    }
 
     // HAMBURGER MENU
     const hamburger      = document.getElementById('hamburger');

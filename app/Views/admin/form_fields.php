@@ -30,16 +30,7 @@ $grouped = $grouped ?? [];
         body { background: #f0f4f8; font-family: var(--font), 'Sora', sans-serif; overflow: hidden; }
         .shell { display: flex; height: 100vh; overflow: hidden; }
 
-        /* ── ICON SIDEBAR ── */
-        .icon-sidebar { width:64px; background:#0d1e38; display:flex; flex-direction:column; align-items:center; padding:14px 0; gap:4px; flex-shrink:0; z-index:10; }
-        .isb-logo { width:36px; height:36px; background:var(--accent,#ffb200); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:var(--accent-text,#002d7a); margin-bottom:14px; overflow:hidden; }
-        .isb-logo img { width:100%; height:100%; object-fit:cover; }
-        .isb-item { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:18px; transition:all .18s; border:1px solid transparent; position:relative; text-decoration:none; }
-        .isb-item:hover { background:rgba(255,255,255,.08); }
-        .isb-item.on { background:rgba(0,64,166,.5); border-color:rgba(0,64,166,.6); }
-        .isb-tip { position:absolute; left:52px; top:50%; transform:translateY(-50%); background:#1e293b; color:#fff; font-size:10px; font-weight:600; padding:4px 9px; border-radius:6px; white-space:nowrap; pointer-events:none; opacity:0; transition:opacity .18s; z-index:100; }
-        .isb-item:hover .isb-tip { opacity:1; }
-        .isb-spacer { flex:1; }
+        /* sidebar styles are in admin/_sidebar.php */
 
         /* ── MAIN ── */
         .main-area { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
@@ -188,29 +179,7 @@ $grouped = $grouped ?? [];
 <body>
 <div class="shell">
 
-    <!-- ICON SIDEBAR -->
-    <div class="icon-sidebar">
-        <div class="isb-logo">
-            <?php if (!empty($theme['logo_url'])): ?><img src="<?= esc($theme['logo_url']) ?>"><?php else: ?><?= esc($theme['logo_text'] ?? 'AK') ?><?php endif; ?>
-        </div>
-        <a href="<?= base_url('admin/theme') ?>" class="isb-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#94a3b8"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/><path d="M2 12h20"/></svg>
-            <div class="isb-tip">Theme Editor</div>
-        </a>
-        <a href="<?= base_url('admin/form-fields') ?>" class="isb-item on">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#fff"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            <div class="isb-tip">Form Fields</div>
-        </a>
-        <a href="#" class="isb-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#94a3b8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            <div class="isb-tip">Applicants</div>
-        </a>
-        <div class="isb-spacer"></div>
-        <a href="<?= base_url('admin/logout') ?>" class="isb-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#94a3b8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            <div class="isb-tip">Logout</div>
-        </a>
-    </div>
+    <?php echo view('admin/_sidebar', ['theme' => $theme ?? []]); ?>
 
     <!-- MAIN -->
     <div class="main-area">

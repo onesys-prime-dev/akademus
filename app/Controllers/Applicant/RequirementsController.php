@@ -28,7 +28,7 @@ class RequirementsController extends BaseController
 
     private function renderLayout(int $step) {
         // Check user if logged in
-        if (!session()->get('logged_in')) { 
+        if (!session()->get('logged_in')) {
             return redirect()->to('/sign-in');
         }
 
@@ -38,16 +38,26 @@ class RequirementsController extends BaseController
         // Compute primary_soft (lightened tint) from primary_color
         $theme['primary_soft'] = $this->lightenHex($theme['primary_color'] ?? '#0040a6', 0.88);
 
-        $categories = $this->requirementService->getCategories();
+        // Prefer the program confirmed on the application form (step 1) when available
+        $program_id = session()->get('selected_program_id') ?? session()->get('program_id');
+
+        $categories = $this->requirementService->getCategories($program_id);
         $maxSteps = count($categories) + 1;
 
+        // Application status for "passed" modal
+        $applicant_id = session()->get('applicant_id');
+        $db = \Config\Database::connect();
+        $application = $db->table('applications')->where('applicant_id', $applicant_id)->get()->getRowArray();
+        $application_status = $application['application_status'] ?? '';
+
         return view('applicant/main', [
-            'title' => 'Requirements',
-            'page_content' => 'applicant/requirements/requirements',
-            'initial_step' => $step,  // Pass to JS to load correct step
-            'max_steps' => $maxSteps,
-            'categories' => $categories,
-            'theme'         => $theme
+            'title'              => 'Requirements',
+            'page_content'       => 'applicant/requirements/requirements',
+            'initial_step'       => $step,
+            'max_steps'          => $maxSteps,
+            'categories'         => $categories,
+            'theme'              => $theme,
+            'application_status' => $application_status,
         ]);
     }
 
@@ -68,15 +78,15 @@ class RequirementsController extends BaseController
     public function getStep($step)
     {
         $step = (int) $step;
+        
+        $program_id = session()->get('selected_program_id') ?? session()->get('program_id');
 
-        $categories = $this->requirementService->getCategories();
+        $categories = $this->requirementService->getCategories($program_id);
         $maxSteps = count($categories) + 1;
 
         if ($step < 1 || $step > $maxSteps) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
-
-        $program_id = session()->get('program_id');
 
         if ($step == $maxSteps) {
 
@@ -92,25 +102,40 @@ class RequirementsController extends BaseController
             $requirements = $this->requirementService->getStepRequirements($program_id, $step);
 
             $category_name = $category['category_name'];
-            $category_description = $category['description'];
+            $category_description = $category['category_description'];
         }
 
         $applicant_id = session()->get('applicant_id');
-        
+
         $formData = $this->documentService->getStepDocuments($applicant_id, $requirements);
+
+        // Compute upload counts for the counter shown in the step header
+        $totalRequired   = count(array_filter($requirements, fn($r) => $r['is_required']));
+        $uploadedRequired = count(array_filter($requirements, fn($r) => $r['is_required'] && isset($formData[$r['program_requirement_id']])));
+        $totalUploaded   = count($formData);
+
+        // Check ALL requirements across every step (not just the current one)
+        $allReqs          = $this->requirementService->getRequirements($program_id);
+        $allUploaded      = $this->documentService->getStepDocuments($applicant_id, $allReqs);
+        $allTotalRequired = count(array_filter($allReqs, fn($r) => $r['is_required']));
+        $allUploadedReq   = count(array_filter($allReqs, fn($r) => $r['is_required'] && isset($allUploaded[$r['program_requirement_id']])));
 
         if ($this->request->isAJAX()) {
 
             return $this->response->setJSON([
-                'title' => 'Requirements',
-                'step_num' => $step,
-                'form' => view("applicant/requirements/steps/step", [
-                    'step_num' => $step,
-                    'requirements' => $requirements,
-                    'category_name' => $category_name,
-                    'category_description' => $category_description
+                'title'              => 'Requirements',
+                'step_num'           => $step,
+                'form'               => view("applicant/requirements/steps/step", [
+                    'step_num'             => $step,
+                    'requirements'         => $requirements,
+                    'category_name'        => $category_name,
+                    'category_description' => $category_description,
+                    'uploaded_required'    => $uploadedRequired,
+                    'total_required'       => $totalRequired,
+                    'total_uploaded'       => $totalUploaded,
                 ]),
-                'formData' => $formData
+                'formData'            => $formData,
+                'allRequiredComplete' => $allTotalRequired > 0 && $allUploadedReq >= $allTotalRequired,
             ]);
         }
 
@@ -118,6 +143,10 @@ class RequirementsController extends BaseController
     }
 
     public function updateDocument($step) {
+        if (!session()->get('logged_in')) {
+            return $this->response->setStatusCode(401)->setJSON(['status' => 'error', 'message' => 'Unauthorized']);
+        }
+
         $applicant_id = session()->get('applicant_id');
 
         $files = $this->request->getFiles();
@@ -127,5 +156,48 @@ class RequirementsController extends BaseController
         return $this->response->setJSON([
             'status' => 'success'
         ]);
+    }
+
+    public function viewDocument($requirementId)
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/sign-in');
+        }
+
+        $applicant_id = session()->get('applicant_id');
+        $doc = $this->documentService->getDocument($applicant_id, (int) $requirementId);
+
+        if (!$doc) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $filePath = WRITEPATH . "uploads/applicants/{$applicant_id}/" . basename($doc['document_name']);
+
+        if (!file_exists($filePath)) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $mime = mime_content_type($filePath);
+
+        return $this->response
+            ->setHeader('Content-Type', $mime)
+            ->setHeader('Content-Disposition', 'inline; filename="' . $doc['document_name'] . '"')
+            ->setBody(file_get_contents($filePath));
+    }
+
+    public function submitApplication()
+    {
+        if (!session()->get('logged_in')) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized']);
+        }
+
+        $applicant_id = session()->get('applicant_id');
+        $db = \Config\Database::connect();
+
+        $db->table('applications')
+            ->where('applicant_id', $applicant_id)
+            ->update(['application_status' => 'pending']);
+
+        return $this->response->setJSON(['status' => 'success']);
     }
 }
