@@ -168,3 +168,8 @@ $routes->get ('follow-up-messages',             'Applicant\FollowUpController::i
 $routes->post('follow-up-messages/send',        'Applicant\FollowUpController::send');
 $routes->get ('follow-up-messages/fetch',       'Applicant\FollowUpController::fetchMessages');
 $routes->get ('follow-up-messages/unread-count','Applicant\FollowUpController::unreadCount');
+// Tracking Progress
+$routes->get('tracking-progress', 'Applicant\TrackingProgressController::index');
+
+// Processing Fee
+$routes->get('admission-processing-fee', 'Applicant\ProcessingFeeController::index');
