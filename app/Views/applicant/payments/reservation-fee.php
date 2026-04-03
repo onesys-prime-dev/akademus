@@ -13,7 +13,7 @@ $referenceCode   = 'RESFEE-' . esc($applicantNumber);
         <p class="payment-subtext">
             A one-time reservation fee is required to reserve your slot in the application process. Non-refundable.
         </p>
-        <h1 class="payment-amount">₱1500.00</h1>
+        <h1 class="payment-amount">₱20 vc00.00</h1>
         <span class="payment-note">One-time · Non-refundable reservation fee</span>
 
         <div class="payment-methods">
