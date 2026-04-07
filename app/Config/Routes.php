@@ -65,9 +65,10 @@ $routes->post('admin/users/(:num)/reset-password',    'Admin\UsersController::re
 $routes->post('admin/users/(:num)/delete',            'Admin\UsersController::delete/$1');
 
 // Theme Editor
-$routes->get('admin/theme',       'ThemeController::index');
-$routes->post('admin/theme/save', 'ThemeController::save');
-$routes->get('admin/theme/json',  'ThemeController::getThemeJson');
+$routes->get('admin/theme',            'ThemeController::index');
+$routes->post('admin/theme/save',      'ThemeController::save');
+$routes->get('admin/theme/json',       'ThemeController::getThemeJson');
+$routes->get('admin/theme/preview',    'ThemeController::preview');
 
 // FAQ
 $routes->get('faq', 'Applicant\FaqController::index');
