@@ -109,7 +109,10 @@
     <a href="<?= base_url('admin/theme') ?>" class="nav-brand">
         <div class="nav-brand-logo">
             <?php if (!empty($theme['logo_url'])): ?>
-                <img src="<?= base_url(esc($theme['logo_url'])) ?>" alt="logo">
+                <img src="<?= base_url(esc($theme['logo_url'])) ?>"
+                     alt="<?= esc($theme['app_name'] ?? 'Logo') ?>"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
+                <span style="display:none"><?= strtoupper(substr($theme['logo_text'] ?? $theme['app_name'] ?? 'AK', 0, 2)) ?></span>
             <?php else: ?>
                 <?= strtoupper(substr($theme['logo_text'] ?? $theme['app_name'] ?? 'AK', 0, 2)) ?>
             <?php endif; ?>

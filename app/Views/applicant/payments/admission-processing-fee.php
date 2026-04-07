@@ -135,4 +135,4 @@ $referenceCode   = 'ADMFEE-' . esc($applicantNumber);
 
 </div>
 
-<script src="<?= base_url('assets/js/pages/admission-processing-fee.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('assets/js/admission-processing-fee.js') ?>?v=<?= time() ?>"></script>
