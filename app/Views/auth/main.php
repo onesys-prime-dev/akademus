@@ -39,7 +39,7 @@
 
         <div class="nav-links">
             <!--<a href="<?= base_url('/') ?>"><p>Home</p></a>-->
-            <a href="<?= base_url('about-us') ?>"><p>About Us</p></a>
+            <a href="<?= base_url('about.php') ?>"><p>About Us</p></a>
             <a href="<?= base_url('features') ?>"><p>Features</p></a>
             <div class="nav-dropdown">
                 <p class="nav-dropdown-trigger">Services ▾</p>

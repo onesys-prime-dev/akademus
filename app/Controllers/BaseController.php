@@ -42,4 +42,16 @@ abstract class BaseController extends Controller
         // Preload any models, libraries, etc, here.
         // $this->session = service('session');
     }
+
+    protected function renderApplicant($page, $data = []) {
+
+        $themeModel = new \App\Models\ThemeModel();
+        $data['theme'] = $themeModel->first();
+
+        return view('applicant/main', [
+            'title' => $data['title'] ?? '',
+            'page_content' => $page,
+            'theme' => $data['theme']
+        ]);
+    }
 }

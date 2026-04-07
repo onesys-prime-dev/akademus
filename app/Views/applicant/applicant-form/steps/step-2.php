@@ -1,3 +1,4 @@
+<!-- dashboard/menu/applicant_form_steps/step_2.php -->
 <?php
 helper('form_field');
 $fields = get_field_configs(2);
@@ -182,15 +183,15 @@ $fields = get_field_configs(2);
             <!-- ROW: Email Address -->
             <?php if (field_visible($fields, 'email_address')): ?>
             <div class="application-form-input-field-row">
-                <div class="application-form-input-field large-field">
+                <div class="application-form-input-field large-field">`
                     <label>
                         <?= esc(field_label($fields, 'email_address', 'Email Address')) ?>
                         <?php if (field_required($fields, 'email_address')): ?><span class="required-field">*</span><?php endif; ?>
                     </label>
                     <input type="email" name="email_address"
-                           placeholder="<?= esc(field_placeholder($fields, 'email_address', 'e.g., sample@email.com')) ?>"
-                           value="<?= esc($data['email_address'] ?? '') ?>"
-                           <?= field_required($fields, 'email_address') ? 'required' : '' ?>>
+                        placeholder="<?= esc(field_placeholder($fields, 'email_address', 'e.g., sample@email.com')) ?>"
+                        value="<?= esc($data['email_address'] ?? '') ?>"
+                        <?= field_required($fields, 'email_address') ? 'required' : '' ?>>
                 </div>
             </div>
             <?php endif; ?>

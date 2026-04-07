@@ -70,6 +70,20 @@ $routes->post('admin/theme/save',      'ThemeController::save');
 $routes->get('admin/theme/json',       'ThemeController::getThemeJson');
 $routes->get('admin/theme/preview',    'ThemeController::preview');
 
+// Admission Processing Fee
+$routes->get('admission-processing-fee', 'Payment\AdmissionProcessingFeeController::admissionProcessingFee');
+
+$routes->get('/payment', 'PaymentController::create');
+$routes->post('/payment/store', 'PaymentController::store');
+
+$routes->get('/payment/approve/(:num)', 'PaymentController::approve/$1');
+$routes->get('/payment/reject/(:num)', 'PaymentController::reject/$1');
+// Payment method accounts (for dynamic display on payment instructions)
+$routes->get('/payment/method-accounts', 'PaymentController::methodAccounts');
+
+// Reservation Fee
+$routes->get('reservation-fee', 'Payment\ReservationFeeController::reservationFee');
+
 // FAQ
 $routes->get('faq', 'Applicant\FaqController::index');
 
@@ -155,3 +169,8 @@ $routes->get ('follow-up-messages',             'Applicant\FollowUpController::i
 $routes->post('follow-up-messages/send',        'Applicant\FollowUpController::send');
 $routes->get ('follow-up-messages/fetch',       'Applicant\FollowUpController::fetchMessages');
 $routes->get ('follow-up-messages/unread-count','Applicant\FollowUpController::unreadCount');
+// Tracking Progress
+$routes->get('tracking-progress', 'Applicant\TrackingProgressController::index');
+
+// Processing Fee
+$routes->get('admission-processing-fee', 'Applicant\ProcessingFeeController::index');
