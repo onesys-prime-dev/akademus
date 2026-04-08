@@ -55,7 +55,7 @@ class AdmissionProcessingFeeController extends BaseController
             'fee'              => $fee,
             'payment_methods'  => $paymentMethods,   
             'existing_payment' => $existingPayment,  // pass existing payment to view for conditional display
-            'amount_paid'           => $fee['amount'],
+            'amount'      => $fee['amount'],
         ];
 
         return $this->renderApplicant(

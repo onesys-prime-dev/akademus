@@ -70,7 +70,7 @@ $routes->post('admin/theme/save', 'ThemeController::save');
 $routes->get('admin/theme/json',  'ThemeController::getThemeJson');
 
 
-// ----------------------------------------------------------------------------- //
+// -------------------------------- PAYMENT FEES ------------------------------ //
 // Admission Processing Fee
 $routes->get('admission-processing-fee', 'Payment\AdmissionProcessingFeeController::admissionProcessingFee');
 $routes->post('admission-processing-fee/submit', 'Payment\AdmissionProcessingFeeController::store');
@@ -78,7 +78,10 @@ $routes->post('admin/payments/approve/(:num)', 'Payment\AdmissionProcessingFeeCo
 $routes->post('admin/payments/reject/(:num)', 'Payment\AdmissionProcessingFeeController::reject/$1');
 
 // Reservation Fee
-$routes->get('reservation-fee', 'Payment\ReservationFeeController::reservationFee');
+$routes->get('reservation-fee', 'Payment\ReservationFeeController::index');
+$routes->post('reservation-fee/submit', 'Payment\ReservationFeeController::store');
+$routes->post('admin/reservation/approve/(:num)', 'Payment\ReservationFeeController::approve/$1');
+$routes->post('admin/reservation/reject/(:num)', 'Payment\ReservationFeeController::reject/$1');
 // ----------------------------------------------------------------------------- //
 
 
