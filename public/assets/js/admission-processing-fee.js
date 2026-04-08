@@ -3,7 +3,7 @@
 let selectedMethodId  = null;
 let selectedAccountId = null;
 
-// ── Method tab selection ──────────────────────────────────────────
+// tab selection 
 function selectMethod(btn) {
     document.querySelectorAll('.apf-method-btn')
             .forEach(b => b.classList.remove('apf-method-btn--active'));
@@ -131,7 +131,7 @@ async function submitPayment() {
     formData.append('proof_of_payment',          file);
 
     try {
-        const res  = await fetch('/admission-processing-fee/submit', {
+        const res  = await fetch(BASE_URL + '/admission-processing-fee/submit', {
             method:  'POST',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             body:    formData,

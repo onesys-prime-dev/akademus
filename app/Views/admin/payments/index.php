@@ -15,7 +15,7 @@
 <tbody>
 <?php foreach($payments as $p): ?>
 <tr>
-<td><?= esc($p['first_name'].' '.$p['last_name']) ?></td>
+<td><?= esc($p['firstname'].' '.$p['lastname']) ?></td>
 <td><?= esc($p['fee_name']) ?></td>
 <td>₱<?= number_format($p['amount_paid'],2) ?></td>
 
