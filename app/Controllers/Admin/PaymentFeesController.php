@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Admin;
 
+use App\Models\ThemeModel;
 use App\Models\Payment\PaymentModel;
 use App\Models\Payment\PaymentFeeTypeModel;
 
@@ -24,12 +25,17 @@ class PaymentFeesController extends BaseAdminController
                 payment.*, 
                 personal_informations.firstname, 
                 personal_informations.lastname, 
-                payment_fee_type.name as fee_name
+                payment_fee_type.name as fee_name,
+                payment_fee_type.code as fee_code
             ')
             ->join('applicants', 'applicants.applicant_id = payment.applicant_id')
             ->join('applications', 'applications.applicant_id = applicants.applicant_id')
             ->join('personal_informations', 'personal_informations.application_id = applications.application_id')
             ->join('payment_fee_type', 'payment_fee_type.payment_fee_type_id = payment.payment_fee_type_id')
+            // ->wherein('payment_fee_type.name', [
+            //         'Admission Fee',
+            //         'Reservation Fee',
+            // ])
             ->orderBy('payment.created_at', 'DESC')
             ->findAll();
 

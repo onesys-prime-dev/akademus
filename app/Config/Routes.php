@@ -85,13 +85,11 @@ $routes->post('admin/reservation/reject/(:num)', 'Payment\ReservationFeeControll
 
 // Admin Payment Fee 
 // Payment settings
-$routes->get('admin/payment-fees', 'Admin\AdminPaymentController::fees');
-$routes->post('admin/payment-fees/update/(:num)', 'Admin\AdminPaymentController::updateFee/$1');
-
-// Payment review
-$routes->get('admin/payments', 'Admin\PaymentFeesController::index');
-$routes->post('admin/payments/approve/(:num)', 'Admin\PaymentFeesController::approve/$1');
-$routes->post('admin/payments/reject/(:num)', 'Admin\PaymentFeesController::reject/$1');
+$routes->get('admin/payments'                   , 'Admin\PaymentFeesController::index');
+$routes->get('admin/payment-fees'               , 'Admin\PaymentFeesController::fees');
+$routes->post('admin/payment-fees/update/(:num)', 'Admin\PaymentFeesController::updateFee/$1');
+$routes->post('admin/payments/approve/(:num)'   , 'Admin\PaymentFeesController::approve/$1');
+$routes->post('admin/payments/reject/(:num)'    , 'Admin\PaymentFeesController::reject/$1');
 // ----------------------------------------------------------------------------- //
 
 
