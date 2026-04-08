@@ -1,4 +1,4 @@
-// assets/js/admission-processing-fee.js
+// assets/js/payment-fees.js
 
 let selectedMethodId  = null;
 let selectedAccountId = null;
@@ -131,7 +131,7 @@ async function submitPayment() {
     formData.append('proof_of_payment',          file);
 
     try {
-        const res  = await fetch(BASE_URL + '/admission-processing-fee/submit', {
+        const res  = await fetch(SUBMIT_URL, {
             method:  'POST',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             body:    formData,
@@ -142,7 +142,8 @@ async function submitPayment() {
         if (data.success) {
             // Reload so the view re-renders with the existing_payment
             // summary block and the form locked (status = PENDING)
-            location.reload();
+            // location.reload();
+            window.location.href = window.location.href; 
         } else {
             showError(data.message || 'Something went wrong. Please try again.');
             btn.disabled  = false;

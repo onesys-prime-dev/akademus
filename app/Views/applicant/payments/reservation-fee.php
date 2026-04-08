@@ -269,4 +269,9 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
 <script>
     const PAYMENT_DETAILS = <?= json_encode($payment_methods, JSON_UNESCAPED_UNICODE) ?>;
 </script>
-<script src="<?= base_url('assets/js/admission-processing-fee.js') ?>" defer></script>
+
+<script>
+    const SUBMIT_URL = "<?= base_url('reservation-fee/submit') ?>";
+</script>
+
+<script src="<?= base_url('assets/js/payment-fees.js') ?>" defer></script>

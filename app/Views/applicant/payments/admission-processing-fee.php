@@ -271,7 +271,7 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
 </script>
 
 <script>
-    const BASE_URL = "<?= base_url() ?>";
+    const SUBMIT_URL = "<?= base_url('admission-processing-fee/submit') ?>";
 </script>
 
-<script src="<?= base_url('assets/js/admission-processing-fee.js') ?>" defer></script>
+<script src="<?= base_url('assets/js/payment-fees.js') ?>" defer></script>
