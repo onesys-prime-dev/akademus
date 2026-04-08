@@ -177,16 +177,15 @@
             Program Assignments
         </a>
 
-        <a href="<?= base_url('admin/payment-fees') ?>" class="nav-item <?= strpos(current_url(), 'admin/payment-fees') !== false ? 'on' : '' ?>">
-            <!-- payment settings -->
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="5" width="20" height="14" rx="2" ry="2"/>
-                <line x1="2" y1="10" x2="22" y2="10"/>
-                <line x1="6" y1="15" x2="10" y2="15"/>
-                <line x1="14" y1="15" x2="18" y2="15"/>
+        <a href="<?= base_url('admin/payments') ?>" class="nav-item <?= strpos(current_url(), 'admin/payments') !== false ? 'on' : '' ?>">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3h18v4H3z"/>
+                <path d="M3 7v14h18V7"/>
+                <path d="M16 13l-4 4-4-4"/>
             </svg>
-            Payment Settings
-        </a>
+            Payment Review
+        </a>        
 
         <div class="nav-section-label">System</div>
 

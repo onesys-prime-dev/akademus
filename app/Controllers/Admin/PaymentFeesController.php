@@ -2,38 +2,63 @@
 
 namespace App\Controllers\Admin;
 
-use App\Controllers\BaseAdminController;
-use App\Models\ThemeModel;
 use App\Models\Payment\PaymentModel;
 use App\Models\Payment\PaymentFeeTypeModel;
-use App\Models\Payment\PaymentMethodModel;
-use App\Models\Payment\PaymentMethodAccountModel;
 
 class PaymentFeesController extends BaseAdminController
 {
     protected $paymentModel;
+    protected $feeModel;
 
     public function __construct()
     {
         $this->paymentModel = new PaymentModel();
+        $this->feeModel     = new PaymentFeeTypeModel();
     }
 
+    // payment list
     public function index()
     {
         $payments = $this->paymentModel
-            ->select('payment.*, 
-                      payment_fee_type.name AS fee_name,
-                      payment_method.name AS method_name,
-                      applicants.applicant_number')
-            ->join('payment_fee_type', 'payment_fee_type.payment_fee_type_id = payment.payment_fee_type_id')
-            ->join('payment_method', 'payment_method.payment_method_id = payment.payment_method_id')
+            ->select('
+                payment.*, 
+                personal_informations.firstname, 
+                personal_informations.lastname, 
+                payment_fee_type.name as fee_name
+            ')
             ->join('applicants', 'applicants.applicant_id = payment.applicant_id')
+            ->join('applications', 'applications.applicant_id = applicants.applicant_id')
+            ->join('personal_informations', 'personal_informations.application_id = applications.application_id')
+            ->join('payment_fee_type', 'payment_fee_type.payment_fee_type_id = payment.payment_fee_type_id')
             ->orderBy('payment.created_at', 'DESC')
             ->findAll();
 
-        return view('admin/payment-fees/index', [
-            'payments' => $payments
+        return $this->renderAdmin('admin/payments/index', [
+            'payments' => $payments,
+            'sidebarActive' => 'payments'
         ]);
+    }
+
+    // fee settings
+    public function fees()
+    {
+        $fees = $this->feeModel->findAll();
+
+        return $this->renderAdmin('admin/payments/fees', [
+            'fees' => $fees,
+            'sidebarActive' => 'payment-fees'
+        ]);
+    }
+
+    public function updateFee($id)
+    {
+        $amount = $this->request->getPost('amount');
+
+        $this->feeModel->update($id, [
+            'amount' => $amount
+        ]);
+
+        return redirect()->back();
     }
 
     public function approve($id)
