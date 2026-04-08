@@ -121,7 +121,7 @@ class ReservationFeeController extends BaseController
             'payment_method_account_id' => $accountId,
             'reference_num'             => $referenceNum,
             'proof_of_payment'          => $proofPath,
-            'amount'               => $fee['amount'],
+            'amount_paid'               => $fee['amount'],
             'payment_status'            => PaymentModel::STATUS_PENDING,
         ]);
 

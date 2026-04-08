@@ -32,10 +32,10 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
         </div>
         <?php endif; ?>
 
-        <div class="apf-banner__label">Admission Processing Fee</div>
+        <div class="apf-banner__label">Reservation Processing Fee</div>
         <h2 class="apf-banner__title">Pay to Submit Your Application</h2>
         <p class="apf-banner__subtitle">
-            A one-time processing fee is required to officially submit your admission application. Non-refundable.
+            A one-time processing fee is required to officially submit your reservation application. Non-refundable.
         </p>
 
         <div class="apf-banner__amount">
@@ -76,7 +76,7 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
         </svg>
         <span>
             <?php if ($status === 'PAID'): ?>
-                Your admission fee payment has been <strong>approved</strong>. No further action is needed.
+                Your reservation fee payment has been <strong>approved</strong>. No further action is needed.
             <?php elseif ($status === 'PROCESSING'): ?>
                 Your payment is currently <strong>under review</strong>. You will be notified once verified.
             <?php elseif ($status === 'PENDING'): ?>

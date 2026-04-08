@@ -82,6 +82,11 @@ $routes->get('reservation-fee', 'Payment\ReservationFeeController::index');
 $routes->post('reservation-fee/submit', 'Payment\ReservationFeeController::store');
 $routes->post('admin/reservation/approve/(:num)', 'Payment\ReservationFeeController::approve/$1');
 $routes->post('admin/reservation/reject/(:num)', 'Payment\ReservationFeeController::reject/$1');
+
+// Admin Payment Fee 
+$routes->get('admin/payments', 'Admin\PaymentFeesController::index');
+$routes->post('admin/payments/approve/(:num)', 'Admin\PaymentFeesController::approve/$1');
+$routes->post('admin/payments/reject/(:num)', 'Admin\PaymentFeesController::reject/$1');
 // ----------------------------------------------------------------------------- //
 
 
@@ -127,8 +132,8 @@ $routes->get('admin/programs/presets',           'Admin\ProgramPresetsController
 $routes->post('admin/programs/assign-preset',    'Admin\ProgramPresetsController::assignPreset');
 
 // Admin Payment Fee Management
-$routes->get('admin/payment-fees', 'Admin\PaymentFeesController::index');
-$routes->post('admin/payment-fees/update', 'Admin\PaymentFeesController::update');
+// $routes->get('admin/payment-fees', 'Admin\PaymentFeesController::index');
+// $routes->post('admin/payment-fees/update', 'Admin\PaymentFeesController::update');
 
 // API Endpoints
 $routes->get('api/presets/program/(:num)',       'Admin\PresetsController::getFormPagesForApplicant/$1');
