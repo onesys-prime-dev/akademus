@@ -1,135 +1,158 @@
-// public/assets/js/pages/admission-processing-fee.js
+// assets/js/admission-processing-fee.js
 
-'use strict';
+let selectedMethodId  = null;
+let selectedAccountId = null;
 
-// Account details per payment method 
-// TODO: Replace with an API call to /payment/method-accounts if you want
-//             to be admin-configurable without a redeploy.
-const METHOD_ACCOUNTS = {
-    GCASH: {
-        label:   'Send payment via GCash',
-        number:  '0917 000 0000',
-        name:    'Akademus Finance Office',
-        placeholder: 'e.g. GCash ref 1234567890',
-    },
-    MAYA: {
-        label:   'Send payment via Maya',
-        number:  '0998 111 2222',
-        name:    'Akademus Finance Office',
-        placeholder: 'e.g. Maya ref 9876543210',
-    },
-    BDO: {
-        label:   'Send payment via BDO',
-        number:  '0012 3456 7890',
-        name:    'Akademus Finance Office',
-        placeholder: 'e.g. BDO ref 1122334455',
-    },
-    BPI: {
-        label:   'Send payment via BPI',
-        number:  '9876 5432 1000',
-        name:    'Akademus Finance Office',
-        placeholder: 'e.g. BPI ref 5544332211',
-    },
-};
+// ── Method tab selection ──────────────────────────────────────────
+function selectMethod(btn) {
+    document.querySelectorAll('.apf-method-btn')
+            .forEach(b => b.classList.remove('apf-method-btn--active'));
 
-// ── DOM refs 
-const methodBtns      = document.querySelectorAll('.method-btn');
-const accountBoxLabel = document.getElementById('accountBoxLabel');
-const accountNumber   = document.getElementById('accountNumber');
-const accountName     = document.getElementById('accountName');
-const txInput         = document.getElementById('transaction_id');
-const uploadBox       = document.getElementById('uploadBox');
-const fileInput       = document.getElementById('proofUpload');
-const placeholder     = document.getElementById('uploadPlaceholder');
-const preview         = document.getElementById('uploadPreview');
-const fileNameEl      = document.getElementById('uploadedFileName');
-const removeBtn       = document.getElementById('removeFile');
+    btn.classList.add('apf-method-btn--active');
 
-// switch payment method 
-function switchMethod(code) {
-    const details = METHOD_ACCOUNTS[code];
-    if (!details) return;
+    selectedMethodId  = btn.dataset.methodId  || null;
+    selectedAccountId = btn.dataset.accountId || null;
 
-    // update account info box
-    accountBoxLabel.textContent = details.label;
-    accountNumber.textContent   = details.number;
-    accountName.textContent     = details.name;
+    const method = PAYMENT_DETAILS.find(m => m.payment_method_id == selectedMethodId);
 
-    // update transaction input placeholder
-    const hidden = document.getElementById('selectedMethodId');
-    if (hidden) hidden.value = code;
+    if (!method) return;
+
+    document.getElementById('methodLabel').textContent =
+        method.label || ('Send payment via ' + method.name);
+
+    // Show '–' when the method has no linked account (e.g. Cash, Bank Transfer)
+    document.getElementById('infoAccountNumber').textContent =
+        method.account_number || '–';
+
+    document.getElementById('infoAccountName').textContent =
+        method.account_name || '–';
 }
 
-methodBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        methodBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        switchMethod(btn.dataset.method);
-    });
+// Initialise with the first button on page load
+document.addEventListener('DOMContentLoaded', function () {
+    const firstBtn = document.querySelector('.apf-method-btn');
+    if (firstBtn) selectMethod(firstBtn);
 });
 
-// ── file upload 
-function showPreview(file) {
-    fileNameEl.textContent = file.name;
-    placeholder.style.display = 'none';
-    preview.style.display     = 'flex';
-    uploadBox.classList.add('has-file');
-}
-
-function clearPreview() {
-    fileInput.value       = '';
-    placeholder.style.display = 'flex';
-    preview.style.display     = 'none';
-    uploadBox.classList.remove('has-file');
-}
-
-fileInput.addEventListener('change', () => {
-    if (fileInput.files[0]) showPreview(fileInput.files[0]);
-});
-
-removeBtn.addEventListener('click', clearPreview);
-
-// drag & drop for file upload
-uploadBox.addEventListener('dragover', e => {
+// drag & drop
+function handleDragOver(e) {
     e.preventDefault();
-    uploadBox.classList.add('drag-over');
-});
+    document.getElementById('uploadZone').classList.add('apf-upload-zone--active');
+}
 
-uploadBox.addEventListener('dragleave', () => {
-    uploadBox.classList.remove('drag-over');
-});
+function handleDragLeave() {
+    document.getElementById('uploadZone').classList.remove('apf-upload-zone--active');
+}
 
-uploadBox.addEventListener('drop', e => {
+function handleDrop(e) {
     e.preventDefault();
-    uploadBox.classList.remove('drag-over');
+    handleDragLeave();
     const file = e.dataTransfer.files[0];
-    if (!file) return;
+    if (file) showPreview(file);
+}
 
-    // assign to file input
-    const dt = new DataTransfer();
-    dt.items.add(file);
-    fileInput.files = dt.files;
+function handleFileSelect(e) {
+    const file = e.target.files[0];
+    if (file) showPreview(file);
+}
 
-    showPreview(file);
-});
+function showPreview(file) {
+    document.getElementById('previewIcon').textContent     = file.type.startsWith('image/') ? '🖼️' : '📄';
+    document.getElementById('previewFileName').textContent = file.name;
+    document.getElementById('previewFileSize').textContent = formatBytes(file.size);
+    document.getElementById('uploadIdle').style.display    = 'none';
+    document.getElementById('uploadPreview').style.display = 'flex';
+}
 
-// "copy" buttons 
-document.querySelectorAll('.copy-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const targetId = btn.dataset.target;
-        const text     = document.getElementById(targetId)?.textContent?.trim();
-        if (!text) return;
+function removeFile(e) {
+    e.stopPropagation();
+    document.getElementById('proofFile').value             = '';
+    document.getElementById('uploadIdle').style.display    = 'flex';
+    document.getElementById('uploadPreview').style.display = 'none';
+}
 
-        navigator.clipboard.writeText(text).then(() => {
-            btn.textContent = '✓ Copied';
-            btn.classList.add('copied');
-            setTimeout(() => {
-                btn.textContent = 'Copy';
-                btn.classList.remove('copied');
-            }, 1800);
+function formatBytes(bytes) {
+    if (bytes < 1024)        return bytes + ' B';
+    if (bytes < 1048576)     return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+// Error display helper 
+function showError(msg) {
+    const box = document.getElementById('clientError');
+    document.getElementById('clientErrorMsg').textContent = msg;
+    box.style.display = 'flex';
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function clearError() {
+    document.getElementById('clientError').style.display = 'none';
+}
+
+// submit
+async function submitPayment() {
+    clearError();
+
+    const ref      = document.getElementById('transactionRef').value.trim();
+    const file     = document.getElementById('proofFile').files[0];
+    const btn      = document.getElementById('submitBtn');
+    const btnLabel = btn.innerHTML; // save original label for restore on error
+
+    // client-side pre-checks (server re-validates everything anyway)
+    if (!selectedMethodId) {
+        showError('Please select a payment method.');
+        return;
+    }
+    if (!ref) {
+        showError('Please enter the transaction / reference number.');
+        document.getElementById('transactionRef').focus();
+        return;
+    }
+    if (!file) {
+        showError('Please upload your proof of payment.');
+        return;
+    }
+
+    // Loading state
+    btn.disabled  = true;
+    btn.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+             style="animation:spin .8s linear infinite">
+            <polyline points="23 4 23 10 17 10"/>
+            <path d="M20.49 15a9 9 0 1 1-.49-4.5"/>
+        </svg>
+        Submitting…`;
+
+    const formData = new FormData();
+    formData.append('payment_method_id',         selectedMethodId);
+    formData.append('payment_method_account_id', selectedAccountId ?? '');
+    formData.append('reference_num',             ref);
+    formData.append('proof_of_payment',          file);
+
+    try {
+        const res  = await fetch('/admission-processing-fee/submit', {
+            method:  'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body:    formData,
         });
-    });
-});
 
-// Init 
-switchMethod('GCASH');
+        const data = await res.json();
+
+        if (data.success) {
+            // Reload so the view re-renders with the existing_payment
+            // summary block and the form locked (status = PENDING)
+            location.reload();
+        } else {
+            showError(data.message || 'Something went wrong. Please try again.');
+            btn.disabled  = false;
+            btn.innerHTML = btnLabel;
+        }
+
+    } catch (err) {
+        // Network failure or non-JSON response
+        showError('Network error. Please check your connection and try again.');
+        btn.disabled  = false;
+        btn.innerHTML = btnLabel;
+    }
+}
