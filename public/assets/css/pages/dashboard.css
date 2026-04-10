@@ -403,6 +403,157 @@
     color: #ffffff;
 }
 
+/* ── See all button ── */
+.doc-see-all-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.doc-see-all-btn span {
+    color: var(--primary);
+    font-style: normal;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.doc-see-all-btn:hover span {
+    opacity: 0.75;
+}
+
+/* ── Documents modal ── */
+.doc-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.doc-modal-overlay.active {
+    display: flex;
+}
+
+.doc-modal {
+    background: #ffffff;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    margin: 16px;
+    overflow: hidden;
+}
+
+.doc-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border-default);
+    flex-shrink: 0;
+}
+
+.doc-modal-header h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.doc-modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+}
+
+.doc-modal-close:hover {
+    color: var(--text-primary);
+}
+
+.doc-modal-body {
+    overflow-y: auto;
+    flex: 1;
+}
+
+.doc-modal-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 20px;
+    border-bottom: 1px solid color-mix(in srgb, var(--border-default) 40%, transparent);
+    transition: background 0.15s;
+}
+
+.doc-modal-row:last-child {
+    border-bottom: none;
+}
+
+.doc-modal-row.doc-modal-row-done {
+    background-color: color-mix(in srgb, var(--primary) 4%, transparent);
+}
+
+.doc-modal-row-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.doc-modal-row-info p {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.doc-modal-row-info span {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.doc-modal-optional-tag {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent-text);
+    background-color: var(--accent);
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.doc-modal-footer {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border-default);
+    display: flex;
+    justify-content: flex-end;
+    background-color: #fafafa;
+    flex-shrink: 0;
+}
+
 /* ── Bottom action bar ── */
 .bottom-dashboard-container {
     display: flex;

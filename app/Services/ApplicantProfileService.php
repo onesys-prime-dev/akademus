@@ -24,11 +24,13 @@ class ApplicantProfileService
                 a.applicant_id,
                 a.applicant_number,
                 a.application_status,
+                a.decision_remarks,
                 a.application_date,
                 ap.applicant_type,
                 CONCAT(u.lastname, ", ", u.firstname) as applicant_name,
+                u.user_id,
                 u.email,
-                p.program_name,
+                p.program_name
             ')
             ->join('users u', 'u.user_id = a.user_id')
             ->join('programs p', 'p.program_id = a.program_id')
@@ -59,23 +61,36 @@ class ApplicantProfileService
 
     private function getApplicantFormPayload(int $applicantId): array
     {
-        /*
         $db = \Config\Database::connect();
 
-        $profile = $this->getApplicantProfile($applicantId);
+        $app = $db->table('applications')
+            ->select('application_id')
+            ->where('applicant_id', $applicantId)
+            ->get()->getRowArray();
 
-        $builder = $db->table('applicant_forms af')
-            ->select('af.*')
-            ->where('af.applicant_id', $applicantId)
-            ->get();
+        if (!$app) {
+            return ['personal' => [], 'educational' => [], 'family' => []];
+        }
 
-        $form = $builder->getRowArray() ?? [];
+        $applicationId = $app['application_id'];
+
+        $personal = $db->table('personal_informations')
+            ->where('application_id', $applicationId)
+            ->get()->getRowArray() ?? [];
+
+        $educational = $db->table('educational_backgrounds')
+            ->where('application_id', $applicationId)
+            ->get()->getResultArray() ?? [];
+
+        $family = $db->table('family_backgrounds')
+            ->where('application_id', $applicationId)
+            ->get()->getResultArray() ?? [];
 
         return [
-            'profile' => $profile,
-            'form'    => $form,
+            'personal'    => $personal,
+            'educational' => $educational,
+            'family'      => $family,
         ];
-        */
     }
 
     private function getRequirementsPayload(int $applicantId, array $filters, int $limit, int $offset): array
@@ -139,127 +154,17 @@ class ApplicantProfileService
 
     private function getExamPayload(int $applicantId, array $filters, int $limit, int $offset): array
     {
-        /*
-        $db = \Config\Database::connect();
-
-        $builder = $db->table('applicant_exams ae')
-            ->select('
-                ae.exam_id,
-                ae.exam_title,
-                ae.exam_date,
-                ae.score,
-                ae.status
-            ')
-            ->where('ae.applicant_id', $applicantId);
-
-        if (!empty($filters['status']) && $filters['status'] !== 'all') {
-            $builder->where('ae.status', $filters['status']);
-        }
-
-        if (!empty($filters['search'])) {
-            $builder->groupStart()
-                ->like('ae.exam_title', $filters['search'])
-                ->orLike('ae.status', $filters['search'])
-                ->groupEnd();
-        }
-
-        $total = (clone $builder)->countAllResults(false);
-
-        $rows = $builder
-            ->orderBy('ae.exam_date', 'DESC')
-            ->limit($limit, $offset)
-            ->get()
-            ->getResultArray();
-
-        return [
-            'rows'   => $rows,
-            'total'  => $total,
-            'counts' => $this->getExamStatusCounts($applicantId, $filters),
-        ];
-        */
+        return ['rows' => [], 'total' => 0, 'counts' => []];
     }
 
     private function getReservationFeePayload(int $applicantId, array $filters, int $limit, int $offset): array
     {
-        /*
-        $db = \Config\Database::connect();
-
-        $builder = $db->table('reservation_fees rf')
-            ->select('
-                rf.fee_id,
-                rf.reference_number,
-                rf.amount,
-                rf.payment_date,
-                rf.status
-            ')
-            ->where('rf.applicant_id', $applicantId);
-
-        if (!empty($filters['status']) && $filters['status'] !== 'all') {
-            $builder->where('rf.status', $filters['status']);
-        }
-
-        if (!empty($filters['search'])) {
-            $builder->groupStart()
-                ->like('rf.reference_number', $filters['search'])
-                ->orLike('rf.status', $filters['search'])
-                ->groupEnd();
-        }
-
-        $total = (clone $builder)->countAllResults(false);
-
-        $rows = $builder
-            ->orderBy('rf.payment_date', 'DESC')
-            ->limit($limit, $offset)
-            ->get()
-            ->getResultArray();
-
-        return [
-            'rows'   => $rows,
-            'total'  => $total,
-            'counts' => $this->getReservationFeeStatusCounts($applicantId, $filters),
-        ];
-        */
+        return ['rows' => [], 'total' => 0, 'counts' => []];
     }
 
     private function getClearancePayload(int $applicantId, array $filters, int $limit, int $offset): array
     {
-        /*
-        $db = \Config\Database::connect();
-
-        $builder = $db->table('clearances c')
-            ->select('
-                c.clearance_id,
-                c.clearance_name,
-                c.updated_at,
-                c.status
-            ')
-            ->where('c.applicant_id', $applicantId);
-
-        if (!empty($filters['status']) && $filters['status'] !== 'all') {
-            $builder->where('c.status', $filters['status']);
-        }
-
-        if (!empty($filters['search'])) {
-            $builder->groupStart()
-                ->like('c.clearance_name', $filters['search'])
-                ->orLike('c.status', $filters['search'])
-                ->groupEnd();
-        }
-
-        $total = (clone $builder)->countAllResults(false);
-
-        $rows = $builder
-            ->orderBy('c.updated_at', 'DESC')
-            ->limit($limit, $offset)
-            ->get()
-            ->getResultArray();
-
-        return [
-            'rows'   => $rows,
-            'total'  => $total,
-            'counts' => $this->getClearanceStatusCounts($applicantId, $filters),
-        ];
-        */
+        return ['rows' => [], 'total' => 0, 'counts' => []];
     }
 
     private function getRequirementStatusCounts(int $applicantId, array $filters = []): array
@@ -304,56 +209,17 @@ class ApplicantProfileService
 
     private function getExamStatusCounts(int $applicantId, array $filters = []): array
     {
-        /*
-        $db = \Config\Database::connect();
-
-        $builder = $db->table('applicant_exams ae')
-            ->select('ae.status, COUNT(*) as total')
-            ->where('ae.applicant_id', $applicantId);
-
-        if (!empty($filters['search'])) {
-            $builder->groupStart()
-                ->like('ae.exam_title', $filters['search'])
-                ->orLike('ae.status', $filters['search'])
-                ->groupEnd();
-        }
-
-        $results = $builder
-            ->groupBy('ae.status')
-            ->get()
-            ->getResultArray();
-
-        return $this->normalizeCounts($results);
-        */
+        return [];
     }
 
     private function getReservationFeeStatusCounts(int $applicantId, array $filters = []): array
     {
-        /*
-        $db = \Config\Database::connect();
-
-        $builder = $db->table('reservation_fees rf')
-            ->select('rf.status, COUNT(*) as total')
-            ->where('rf.applicant_id', $applicantId);
-
-        if (!empty($filters['search'])) {
-            $builder->groupStart()
-                ->like('rf.reference_number', $filters['search'])
-                ->orLike('rf.status', $filters['search'])
-                ->groupEnd();
-        }
-
-        $results = $builder
-            ->groupBy('rf.status')
-            ->get()
-            ->getResultArray();
-
-        return $this->normalizeCounts($results);
-        */
+        return [];
     }
 
     private function getClearanceStatusCounts(int $applicantId, array $filters = []): array
     {
+        return [];
         /*
         $db = \Config\Database::connect();
 

@@ -70,6 +70,31 @@ class ApplicantsController extends BaseController
         ]);
     }
 
+    public function decide(int $applicantId)
+    {
+        $allowed = ['approved', 'rejected'];
+        $status  = $this->request->getPost('status');
+        $remarks = trim($this->request->getPost('remarks') ?? '');
+
+        if (!in_array($status, $allowed) || !$applicantId) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Invalid request.']);
+        }
+
+        $db = \Config\Database::connect();
+        $db->table('applicants')
+            ->where('applicant_id', $applicantId)
+            ->update([
+                'application_status' => $status,
+                'decision_remarks'   => $remarks,
+            ]);
+
+        return $this->response->setJSON([
+            'success' => true,
+            'status'  => $status,
+            'message' => 'Decision saved successfully.',
+        ]);
+    }
+
     public function bulkUpdate()
     {
         $data = $this->request->getJSON(true);
@@ -77,7 +102,9 @@ class ApplicantsController extends BaseController
         $ids    = $data['ids'] ?? [];
         $status = $data['status'] ?? null;
 
-        if (empty($ids) || !$status) {
+        $allowed = ['approved', 'rejected', 'pending', 'in_progress'];
+
+        if (empty($ids) || !$status || !in_array($status, $allowed, true)) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Invalid payload'
@@ -154,6 +181,32 @@ class ApplicantsController extends BaseController
         ]);
     }
 
+    public function viewDocument(int $applicantId, int $requirementId)
+    {
+        $db  = \Config\Database::connect();
+        $doc = $db->table('applicant_documents')
+            ->where('applicant_id', $applicantId)
+            ->where('program_requirement_id', $requirementId)
+            ->get()->getRowArray();
+
+        if (!$doc) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $filePath = WRITEPATH . "uploads/applicants/{$applicantId}/" . basename($doc['document_name']);
+
+        if (!file_exists($filePath)) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $mime = mime_content_type($filePath);
+
+        return $this->response
+            ->setHeader('Content-Type', $mime)
+            ->setHeader('Content-Disposition', 'inline; filename="' . esc($doc['document_name']) . '"')
+            ->setBody(file_get_contents($filePath));
+    }
+
     public function fetchContent()
     {
         $applicantId = (int) ($this->request->getGet('applicant_id') ?? 0);
@@ -174,13 +227,21 @@ class ApplicantsController extends BaseController
 
         $filters = compact('status', 'search');
 
-        $payload = $this->applicantProfileService->getTabPayload(
-            $applicantId,
-            $tab,
-            $filters,
-            $limit,
-            $offset
-        );
+        try {
+            $payload = $this->applicantProfileService->getTabPayload(
+                $applicantId,
+                $tab,
+                $filters,
+                $limit,
+                $offset
+            );
+        } catch (\Throwable $e) {
+            log_message('error', 'fetchContent getTabPayload error: ' . $e->getMessage());
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Error loading tab data: ' . $e->getMessage(),
+            ]);
+        }
 
         $viewMap = $this->applicantProfileService->getViewMap();
 
@@ -188,13 +249,21 @@ class ApplicantsController extends BaseController
             $tab = self::DEFAULT_TAB;
         }
 
-        $html = view($viewMap[$tab], array_merge($payload, [
-            'applicantId' => $applicantId,
-            'activeTab'   => $tab,
-            'filters'     => $filters,
-            'page'        => $page,
-            'limit'       => $limit,
-        ]));
+        try {
+            $html = view($viewMap[$tab], array_merge($payload, [
+                'applicantId' => $applicantId,
+                'activeTab'   => $tab,
+                'filters'     => $filters,
+                'page'        => $page,
+                'limit'       => $limit,
+            ]));
+        } catch (\Throwable $e) {
+            log_message('error', 'fetchContent view error: ' . $e->getMessage());
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Error rendering tab: ' . $e->getMessage(),
+            ]);
+        }
 
         return $this->response->setJSON([
             'success' => true,

@@ -39,6 +39,9 @@ $routes->get('applicant-form/step/(:num)', 'Applicant\ApplicantFormController::g
 $routes->post('applicant-form/update/(:num)', 'Applicant\ApplicantFormController::updateForm/$1');
 $routes->post('applicant-form/get-drafts', 'Applicant\ApplicantFormController::getSavedDraft');
 
+// tracking progress
+$routes->get('tracking-progress', 'Applicant\TrackingProgressController::index');
+
 // requirement steps routes
 $routes->get('requirements', 'Applicant\RequirementsController::index');
 $routes->get('requirements/step/(:num)', 'Applicant\RequirementsController::getStep/$1');
@@ -54,10 +57,32 @@ $routes->get('admin/login',  'ThemeController::adminLogin');
 $routes->post('admin/login', 'ThemeController::adminLoginPost');
 $routes->get('admin/logout', 'ThemeController::adminLogout');
 
+// Admin User Management
+$routes->get ('admin/users',                          'Admin\UsersController::index');
+$routes->post('admin/users/store',                    'Admin\UsersController::store');
+$routes->post('admin/users/(:num)/update',            'Admin\UsersController::update/$1');
+$routes->post('admin/users/(:num)/reset-password',    'Admin\UsersController::resetPassword/$1');
+$routes->post('admin/users/(:num)/delete',            'Admin\UsersController::delete/$1');
+
 // Theme Editor
-$routes->get('admin/theme',       'ThemeController::index');
-$routes->post('admin/theme/save', 'ThemeController::save');
-$routes->get('admin/theme/json',  'ThemeController::getThemeJson');
+$routes->get('admin/theme',            'ThemeController::index');
+$routes->post('admin/theme/save',      'ThemeController::save');
+$routes->get('admin/theme/json',       'ThemeController::getThemeJson');
+$routes->get('admin/theme/preview',    'ThemeController::preview');
+
+// Admission Processing Fee
+$routes->get('admission-processing-fee', 'Payment\AdmissionProcessingFeeController::admissionProcessingFee');
+
+$routes->get('/payment', 'PaymentController::create');
+$routes->post('/payment/store', 'PaymentController::store');
+
+$routes->get('/payment/approve/(:num)', 'PaymentController::approve/$1');
+$routes->get('/payment/reject/(:num)', 'PaymentController::reject/$1');
+// Payment method accounts (for dynamic display on payment instructions)
+$routes->get('/payment/method-accounts', 'PaymentController::methodAccounts');
+
+// Reservation Fee
+$routes->get('reservation-fee', 'Payment\ReservationFeeController::reservationFee');
 
 // FAQ
 $routes->get('faq', 'Applicant\FaqController::index');
@@ -103,15 +128,24 @@ $routes->post('admin/programs/assign-preset',    'Admin\ProgramPresetsController
 // API Endpoints
 $routes->get('api/presets/program/(:num)',       'Admin\PresetsController::getFormPagesForApplicant/$1');
 
+// Admission Officer Auth
+$routes->get ('admission-officer/login',  'AdmissionOfficer\AuthController::login');
+$routes->post('admission-officer/login',  'AdmissionOfficer\AuthController::loginPost');
+$routes->get ('admission-officer/logout', 'AdmissionOfficer\AuthController::logout');
+
 // Admission Officer Dashboard
 $routes->get('admission-officer/dashboard',                     'AdmissionOfficer\DashboardController::index');
 
 // Admission Officer Applicants
+$routes->get('admission-officer/applicants/(:num)',                          'AdmissionOfficer\ApplicantsController::index/$1');
+$routes->get('admission-officer/applicants/fetch-content',                   'AdmissionOfficer\ApplicantsController::fetchContent');
+$routes->get('admission-officer/applicants/document/(:num)/(:num)',          'AdmissionOfficer\ApplicantsController::viewDocument/$1/$2');
 $routes->get('admission-officer/applicants',                     'AdmissionOfficer\ApplicantsController::index');
 $routes->get('admission-officer/applicants/fetch-applicants',    'AdmissionOfficer\ApplicantsController::fetchApplicants');
 $routes->post('admission-officer/applicants/bulk-update',        'AdmissionOfficer\ApplicantsController::bulkUpdate');
 $routes->get('admission-officer/detailed-applicant/(:num)',         'AdmissionOfficer\ApplicantsController::profile/$1');
 $routes->get('admission-officer/detailed-applicant/fetch-content',  'AdmissionOfficer\ApplicantsController::fetchContent');
+$routes->post('admission-officer/applicants/(:num)/decide',         'AdmissionOfficer\ApplicantsController::decide/$1');
 
 // Admission Officer Exam Schedule
 $routes->get('admission-officer/exam-schedule',                         'AdmissionOfficer\ExamScheduleController::index');
@@ -135,3 +169,8 @@ $routes->get ('follow-up-messages',             'Applicant\FollowUpController::i
 $routes->post('follow-up-messages/send',        'Applicant\FollowUpController::send');
 $routes->get ('follow-up-messages/fetch',       'Applicant\FollowUpController::fetchMessages');
 $routes->get ('follow-up-messages/unread-count','Applicant\FollowUpController::unreadCount');
+// Tracking Progress
+$routes->get('tracking-progress', 'Applicant\TrackingProgressController::index');
+
+// Processing Fee
+$routes->get('admission-processing-fee', 'Applicant\ProcessingFeeController::index');

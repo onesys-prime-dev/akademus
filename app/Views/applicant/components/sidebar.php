@@ -60,7 +60,6 @@
 
             <div class="group-container">
                 <p>PAYMENTS</p>
-
                 <div class="grouped-links">
                     <a href="<?= base_url('/admission-processing-fee') ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-processing-fee') ? 'active' : '' ?>">
                         <div class="dotted-link"></div>

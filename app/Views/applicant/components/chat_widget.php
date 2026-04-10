@@ -244,7 +244,7 @@ function toggleChatWidget() {
 }
 
 // ── Groq config — same key as faq.php ──
-const W_GROQ_KEY = 'secret';
+const W_GROQ_KEY = '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';  
 const W_GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 const W_SCHOOL_NAME      = '<?= esc($theme['app_name']         ?? 'the school') ?>';

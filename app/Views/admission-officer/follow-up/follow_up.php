@@ -138,6 +138,28 @@
 .fo-chat-header-info p    { font-size: 13.5px; font-weight: 700; color: #1a202c; margin: 0; }
 .fo-chat-header-info span { font-size: 11px; color: #718096; }
 
+.fo-view-applicant-btn {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 13px;
+    background: var(--primary-soft, #e8f0ff);
+    color: var(--primary, #0040a6);
+    border: 1.5px solid var(--primary, #0040a6);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+}
+.fo-view-applicant-btn:hover {
+    background: var(--primary, #0040a6);
+    color: #fff;
+}
+
 .fo-chat-placeholder {
     flex: 1;
     display: flex;
@@ -322,6 +344,13 @@
                 <p><?= esc($activeApplicant['firstname'] . ' ' . $activeApplicant['lastname']) ?></p>
                 <span>Applicant #<?= esc($activeApplicant['applicant_number'] ?? '') ?></span>
             </div>
+            <a href="<?= base_url('admission-officer/detailed-applicant/' . (int)$activeApplicant['applicant_id']) ?>"
+               class="fo-view-applicant-btn" target="_blank">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+                View Applicant
+            </a>
         </div>
 
         <!-- Messages -->

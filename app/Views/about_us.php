@@ -8,9 +8,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Akademus &#8212; About Us</title>
   <!-- Same CSS files as homepage -->
-  <link rel="stylesheet" href="assets/css/base/global.css">
-  <link rel="stylesheet" href="assets/css/base/reset.css">
-  <link rel="stylesheet" href="assets/css/pages/homepage.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css') . '?v=' . time(); ?>">
+  <link rel="stylesheet" href="<?= base_url('assets/css/base/reset.css') . '?v=' . time(); ?>">
+  <link rel="stylesheet" href="<?= base_url('assets/css/pages/homepage.css') . '?v=' . time(); ?>">
   <style>
     /* ── About Us page-specific styles only ── */
     body { background: #0040a6; overflow-x: hidden; }
@@ -292,78 +294,6 @@
       line-height: normal;
     }
 
-    /* ---- FOOTER ---- */
-    footer {
-      width: 100%;
-      background: #000c5d;
-      box-shadow: 0 4px 4px rgba(0,0,0,.25);
-      padding: 40px 70px;
-    }
-    .footer-main {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      gap: 32px;
-    }
-    .footer-brand { display: flex; flex-direction: column; max-width: 400px; }
-    .footer-brand-top { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
-    /* [IMAGE-LABEL: footer-logo] — Akademus logo in footer */
-    .footer-brand-top img { width: 60px; height: 60px; border-radius: 14px; object-fit: cover; }
-    .footer-brand-top span {
-      font-weight: 500;
-      font-size: 28px;
-      color: #ffb200;
-      line-height: normal;
-    }
-    .footer-brand p {
-      font-weight: 400;
-      font-size: 16px;
-      color: #fff;
-      text-align: justify;
-      line-height: normal;
-    }
-    .footer-nav-cols { display: flex; flex-direction: row; gap: 80px; flex-wrap: wrap; }
-    .footer-nav-col { display: flex; flex-direction: column; min-width: 80px; }
-    .footer-nav-col .col-title {
-      font-weight: 500;
-      font-size: 20px;
-      color: #ffb200;
-      margin-bottom: 16px;
-    }
-    .footer-nav-col a {
-      font-weight: 400;
-      font-size: 16px;
-      color: #fff;
-      margin-top: 12px;
-    }
-    .footer-nav-col a:hover { text-decoration: underline; }
-    .footer-separator {
-      width: 100%;
-      height: 1px;
-      background: rgba(255,255,255,.3);
-      margin: 24px 0;
-    }
-    .footer-bottom {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-    }
-    .footer-bottom span {
-      font-weight: 400;
-      font-size: 16px;
-      color: #fff;
-    }
-    .footer-bottom .legal-links { display: flex; flex-direction: row; gap: 32px; flex-wrap: wrap; }
-    .footer-bottom .legal-links a {
-      font-weight: 400;
-      font-size: 16px;
-      color: #fff;
-      text-decoration: underline;
-    }
-    .footer-bottom .legal-links a:hover { color: #ffb200; }
-
     /* ---- RESPONSIVE ---- */
     @media (max-width: 1024px) {
       .header { padding: 0 16px; }
@@ -404,68 +334,52 @@
       .history-block.img-right .history-text { margin-right: 0; }
       .history-text p { font-size: 17px; }
 
-      footer { padding: 40px 16px; }
-      .footer-main { flex-direction: column; }
-      .footer-nav-cols { gap: 32px; }
-      .footer-bottom { flex-direction: column; align-items: flex-start; }
     }
 
     @media (max-width: 640px) {
       .hero-headings span { font-size: 40px; }
       .hero-desc { display: none; }
       .cards-grid { grid-template-columns: 1fr; }
-      .footer-nav-cols { gap: 24px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ==================== NAVBAR (matches homepage) ==================== -->
-<div class="homepage">
-<div class="header-navigation">
-  <div class="header">
-    <!-- Logo + Brand -->
-    <a href="<?= base_url('/') ?>" style="text-decoration:none; color:inherit; display:contents;">
-      <div class="left-content" style="cursor:pointer;">
-        <img class="image" src="assets/images/logo_akademus.png" alt="Logo"/>
-        <div class="text-wrapper-3">AKADEMUS</div>
-      </div>
-    </a>
-
-    <!-- Desktop Nav -->
-    <div class="navbar">
-      <a href="<?= base_url('/') ?>" style="text-decoration:none; color:inherit;"><div class="item">Home</div></a>
-      <div class="text-wrapper">About Us</div>
-      <div class="div">Features</div>
-      <div class="item-2">Services</div>
-      <div class="item-3">Contact</div>
+<!-- ==================== MOBILE OVERLAY ==================== -->
+<div class="hp-overlay" id="hpOverlay">
+    <div class="hp-overlay__panel">
+        <button class="hp-overlay__close" id="hpOverlayClose">&#10005;</button>
+        <nav class="hp-overlay__nav">
+            <a href="<?= base_url('/') ?>"      class="hp-overlay__link">Home</a>
+            <a href="<?= base_url('about') ?>"  class="hp-overlay__link">About Us</a>
+            <a href="<?= base_url('/') ?>#featured" class="hp-overlay__link">Features</a>
+            <a href="<?= base_url('/') ?>#services" class="hp-overlay__link">Services</a>
+            <a href="<?= base_url('/') ?>#contact"  class="hp-overlay__link">Contact</a>
+        </nav>
+        <a href="<?= base_url('sign-in') ?>" class="hp-overlay__cta">Get Started</a>
     </div>
-
-    <!-- Desktop CTA -->
-    <div class="CREATE-ACCOUNT">
-      <div class="CREATE-ACCOUNT-2"></div>
-      <a class="text-wrapper-2" href="<?= base_url('sign-in') ?>">Get Started</a>
-    </div>
-
-    <!-- Mobile Hamburger -->
-    <div class="hamburger" onclick="toggleMobileNav(this)">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </div>
-
-  <!-- Mobile Nav Dropdown -->
-  <div class="mobile-nav" id="mobileNav">
-    <div class="nav-item">Home</div>
-    <div class="nav-item">About Us</div>
-    <div class="nav-item">Features</div>
-    <div class="nav-item">Services</div>
-    <div class="nav-item">Contact</div>
-    <a class="nav-cta" href="<?= base_url('sign-in') ?>">Get Started</a>
-  </div>
 </div>
-</div>
+
+<!-- ==================== NAVBAR ==================== -->
+<header class="hp-header">
+    <div class="hp-header__inner">
+        <a href="<?= base_url('/') ?>" class="hp-header__logo">
+            <img src="<?= base_url('assets/images/logo_akademus.png') ?>" alt="Akademus Logo" class="hp-header__logo-img" />
+            <span class="hp-header__brand">AKADEMUS</span>
+        </a>
+        <nav class="hp-header__nav">
+            <a href="<?= base_url('/') ?>"          class="hp-header__link">Home</a>
+            <a href="<?= base_url('about') ?>"       class="hp-header__link hp-header__link--active">About Us</a>
+            <a href="<?= base_url('/') ?>#featured"  class="hp-header__link">Features</a>
+            <a href="<?= base_url('/') ?>#services"  class="hp-header__link">Services</a>
+            <a href="<?= base_url('/') ?>#contact"   class="hp-header__link">Contact</a>
+        </nav>
+        <a href="<?= base_url('sign-in') ?>" class="hp-header__cta">Get Started</a>
+        <button class="hp-hamburger" id="hpHamburger" aria-label="Open menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
 
 <!-- ==================== HERO ==================== -->
 <div id="hero" class="hero-wrapper" style="position:relative;width:100%;">
@@ -573,18 +487,6 @@
        "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
       ["title" => "LOREM IPSUM", "deco" => "dark",
        "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
-      ["title" => "LOREM IPSUM", "deco" => "dark",
-       "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
-      ["title" => "LOREM IPSUM", "deco" => "light",
-       "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
-      ["title" => "LOREM IPSUM", "deco" => "light",
-       "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
-      ["title" => "LOREM IPSUM", "deco" => "light",
-       "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
-      ["title" => "LOREM IPSUM", "deco" => "light",
-       "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
-      ["title" => "LOREM IPSUM", "deco" => "light",
-       "desc"  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare tempus nunc, in feugiat purus ullamcorper vitae. In ante ex, dapibus vitae ornare eget, rutrum nec turpis. Fusce vitae velit tincidunt, malesuada erat sed, maximus felis."],
     ];
     foreach ($coreValues as $card):
     ?>
@@ -635,67 +537,68 @@
 </section>
 
 <!-- ==================== FOOTER ==================== -->
-<footer>
-  <div class="footer-main">
-    <!-- Brand -->
-    <div class="footer-brand">
-      <div class="footer-brand-top">
-        <!-- [IMAGE-LABEL: footer-logo] — Akademus logo in footer -->
-        <img class="image" src="assets/images/logo_akademus.png" alt="Akademus Logo" />
-        <span>Akademus</span>
+<footer class="hp-footer" id="contact">
+  <div class="hp-footer__inner">
+    <div class="hp-footer__brand">
+      <div class="hp-footer__logo-wrap">
+        <img class="hp-footer__logo-img" src="<?= base_url('assets/images/logo_akademus.png') ?>" alt="Akademus Logo" />
+        <span class="hp-footer__logo-name">Akademus</span>
       </div>
-      <p>Akademos is a modern learning platform that provides structured and reliable access to courses and academic resources.</p>
+      <p class="hp-footer__desc">Akademos is a modern learning platform that provides structured and reliable access to courses and academic resources.</p>
     </div>
 
-    <!-- Nav columns -->
-    <div class="footer-nav-cols">
-      <?php
-      $footerCols = [
-        "Product"   => ["OTIS", "Learnix", "Mentora", "Akademos"],
-        "Resources" => ["About", "Career", "Contact", "Partners"],
-        "Company"   => ["About", "Career", "Contact", "Partners"],
-      ];
-      foreach ($footerCols as $colTitle => $links):
-      ?>
-      <nav class="footer-nav-col">
-        <span class="col-title"><?= htmlspecialchars($colTitle) ?></span>
-        <?php foreach ($links as $link): ?>
-          <a href="#"><?= htmlspecialchars($link) ?></a>
-        <?php endforeach; ?>
-      </nav>
-      <?php endforeach; ?>
+    <div class="hp-footer__col">
+      <h4 class="hp-footer__col-title">Product</h4>
+      <a href="#" class="hp-footer__col-link">OTIS</a>
+      <a href="#" class="hp-footer__col-link">Learnix</a>
+      <a href="#" class="hp-footer__col-link">Mentora</a>
+      <a href="#" class="hp-footer__col-link">Akademos</a>
+    </div>
+
+    <div class="hp-footer__col">
+      <h4 class="hp-footer__col-title">Resources</h4>
+      <a href="#" class="hp-footer__col-link">About</a>
+      <a href="#" class="hp-footer__col-link">Career</a>
+      <a href="#" class="hp-footer__col-link">Contact</a>
+      <a href="#" class="hp-footer__col-link">Partners</a>
+    </div>
+
+    <div class="hp-footer__col">
+      <h4 class="hp-footer__col-title">Company</h4>
+      <a href="#" class="hp-footer__col-link">About</a>
+      <a href="#" class="hp-footer__col-link">Career</a>
+      <a href="#" class="hp-footer__col-link">Contact</a>
+      <a href="#" class="hp-footer__col-link">Partners</a>
     </div>
   </div>
 
-  <div class="footer-separator"></div>
+  <div class="hp-footer__divider"></div>
 
-  <div class="footer-bottom">
-    <span>&copy; 2026 Akademus. All rights reserved.</span>
-    <div class="legal-links">
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Service</a>
-      <a href="#">Cookie Settings</a>
+  <div class="hp-footer__bottom">
+    <p class="hp-footer__copy">&copy; 2026 Akademus. All rights reserved.</p>
+    <div class="hp-footer__legal">
+      <a href="#" class="hp-footer__legal-link">Privacy Policy</a>
+      <a href="#" class="hp-footer__legal-link">Terms of Service</a>
+      <a href="#" class="hp-footer__legal-link">Cookie Settings</a>
     </div>
   </div>
 </footer>
 
 <!-- ==================== SCRIPTS ==================== -->
 <script>
-  function toggleMobileNav(btn) {
-    const nav = document.getElementById('mobileNav');
-    nav.classList.toggle('open');
-    const spans = btn.querySelectorAll('span');
-    btn.classList.toggle('active');
-    if (btn.classList.contains('active')) {
-      spans[0].style.transform = 'translateY(7px) rotate(45deg)';
-      spans[1].style.opacity = '0';
-      spans[2].style.transform = 'translateY(-7px) rotate(-45deg)';
-    } else {
-      spans[0].style.transform = '';
-      spans[1].style.opacity = '';
-      spans[2].style.transform = '';
+    function hpOpenMenu() {
+        document.getElementById('hpOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
     }
-  }
+    function hpCloseMenu() {
+        document.getElementById('hpOverlay').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    document.getElementById('hpHamburger').addEventListener('click', hpOpenMenu);
+    document.getElementById('hpOverlayClose').addEventListener('click', hpCloseMenu);
+    document.getElementById('hpOverlay').addEventListener('click', function(e) {
+        if (e.target === this) hpCloseMenu();
+    });
 </script>
 
 </body>

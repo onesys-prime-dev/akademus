@@ -1,0 +1,409 @@
+/* public/assets/css/pages/admission-processing-fee.css
+   Builds on your existing globals (.card, .btn, .form-control, etc.)
+   All selectors are page-scoped to avoid conflicts.
+*/
+
+/* ── Page layout ─────────────────────────────────────────────── */
+.payment-page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ── Hero card ───────────────────────────────────────────────── */
+.payment-hero-card {
+    background: linear-gradient(135deg, #1a2d6b 0%, #1546a0 60%, #1d4ed8 100%);
+    color: #fff;
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+}
+
+.payment-hero-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 80% 10%, rgba(255,255,255,.07) 0%, transparent 50%),
+        radial-gradient(circle at 5%  85%, rgba(255,255,255,.04) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.payment-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.5);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.payment-title {
+    font-size: clamp(18px, 2.5vw, 24px);
+    font-weight: 800;
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.payment-subtext {
+    font-size: 12.5px;
+    color: rgba(255,255,255,.55);
+    line-height: 1.6;
+    max-width: 500px;
+    margin-bottom: 16px;
+}
+
+.payment-amount {
+    font-size: 42px;
+    font-weight: 800;
+    color: #ffc107;
+    margin: 0 0 4px;
+    line-height: 1;
+}
+
+.payment-note {
+    font-size: 11.5px;
+    color: rgba(255,255,255,.4);
+    display: block;
+    margin-bottom: 22px;
+}
+
+/* ── Method buttons ──────────────────────────────────────────── */
+.payment-methods {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.method-btn {
+    background: rgba(255,255,255,.12);
+    border: 1.5px solid rgba(255,255,255,.2);
+    border-radius: 8px;
+    color: rgba(255,255,255,.75);
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 10px 22px;
+    cursor: pointer;
+    transition: background .18s, border-color .18s, color .15s, transform .15s;
+    font-family: inherit;
+}
+
+.method-btn:hover {
+    background: rgba(255,255,255,.2);
+    border-color: rgba(255,255,255,.4);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.method-btn.active {
+    background: #fff;
+    border-color: #fff;
+    color: #1a2d6b;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0,0,0,.18);
+    transform: none;
+}
+
+/* ── Step card ───────────────────────────────────────────────── */
+.payment-step-card {
+    background: #fff;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.05);
+    border: 1px solid #e9ecef;
+}
+
+.step-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #1546a0;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.step-heading h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+/* ── Account info box (read-only) ────────────────────────────── */
+.account-box {
+    background: #eff6ff;
+    border: 1.5px solid #dbeafe;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.account-box-label {
+    padding: 11px 16px;
+    background: #dbeafe;
+    border-bottom: 1.5px solid #bfdbfe;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #2563eb;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.account-box-label::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #2563eb;
+    flex-shrink: 0;
+}
+
+.account-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 16px;
+    border-bottom: 1px solid rgba(191,219,254,.5);
+    gap: 12px;
+    transition: background .12s;
+}
+
+.account-row:hover    { background: rgba(219,234,254,.3); }
+.account-row.last     { border-bottom: none; }
+
+.account-row > span {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    min-width: 130px;
+    flex-shrink: 0;
+}
+
+.account-row > p,
+.account-value-group p {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+    font-family: 'DM Mono', 'Courier New', monospace;
+}
+
+.account-value-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+/* ── Copy button ─────────────────────────────────────────────── */
+.copy-btn {
+    background: none;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .14s, border-color .14s, color .14s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.copy-btn:hover  { background: #2563eb; border-color: #2563eb; color: #fff; }
+.copy-btn.copied { background: #10b981; border-color: #10b981; color: #fff; }
+
+/* ── Warning banner ──────────────────────────────────────────── */
+.payment-warning {
+    background: #fff8e1;
+    border: 1.5px solid #fde68a;
+    color: #78350f;
+    padding: 11px 14px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    line-height: 1.55;
+}
+
+/* ── Form group ──────────────────────────────────────────────── */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 6px;
+}
+
+.req { color: #ef4444; margin-left: 2px; }
+
+.form-input {
+    width: 100%;
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-size: 13.5px;
+    color: #0f172a;
+    font-family: inherit;
+    outline: none;
+    transition: border-color .18s, box-shadow .18s;
+}
+
+.form-input::placeholder { color: #94a3b8; }
+
+.form-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+    background: #fff;
+}
+
+/* ── Upload box ──────────────────────────────────────────────── */
+.upload-box {
+    border: 2px dashed #cbd5e1;
+    border-radius: 10px;
+    background: #f8fafc;
+    position: relative;
+    cursor: pointer;
+    transition: border-color .18s, background .18s;
+    overflow: hidden;
+}
+
+.upload-box:hover,
+.upload-box.drag-over {
+    border-color: #2563eb;
+    background: #eff6ff;
+}
+
+.upload-box.has-file {
+    border-color: #10b981;
+    background: #f0fdf4;
+    border-style: solid;
+}
+
+.upload-box input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 32px 20px;
+    color: #64748b;
+    pointer-events: none;
+}
+
+.upload-placeholder svg   { color: #94a3b8; }
+.upload-placeholder span  { font-size: 13.5px; font-weight: 600; color: #334155; }
+.upload-placeholder small { font-size: 11.5px; color: #94a3b8; }
+
+.upload-preview {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    pointer-events: none;
+}
+
+.upload-preview span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0f172a;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.remove-file-btn {
+    pointer-events: all;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    line-height: 1;
+    transition: color .14s;
+    z-index: 2;
+    position: relative;
+}
+
+.remove-file-btn:hover { color: #ef4444; }
+
+/* ── Submit area ─────────────────────────────────────────────── */
+.step2-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform .18s, box-shadow .18s;
+}
+
+.submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(37,99,235,.28);
+}
+
+.submit-btn:active { transform: none; box-shadow: none; }
+
+.submit-note {
+    text-align: center;
+    font-size: 11.5px;
+    color: #94a3b8;
+    margin: 0;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 560px) {
+    .payment-hero-card  { padding: 22px 18px; }
+    .payment-step-card  { padding: 18px; }
+    .payment-amount     { font-size: 34px; }
+    .account-row > span { min-width: 100px; }
+    .method-btn         { padding: 9px 14px; font-size: 13px; }
+}

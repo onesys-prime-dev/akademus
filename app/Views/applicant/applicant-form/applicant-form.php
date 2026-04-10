@@ -293,14 +293,16 @@ $isSubmittedPHP = !empty($is_submitted);
 
     function updateProgress(step) {
         document.querySelectorAll('.progress-circle').forEach(circle => {
-            const num = +circle.dataset.step;
-            circle.classList.toggle('progress-circle-done',   num < step);
-            circle.classList.toggle('progress-circle-active', num === step);
+            const num  = +circle.dataset.step;
+            const done = formIsSubmitted || num < step;
+            circle.classList.toggle('progress-circle-done',   done);
+            circle.classList.toggle('progress-circle-active', !formIsSubmitted && num === step);
+            circle.textContent = done ? '✓' : String(num);
         });
         document.querySelectorAll('.progress-line').forEach(line => {
             const num = +line.dataset.step + 1;
-            line.classList.toggle('progress-line-done',   num < step);
-            line.classList.toggle('progress-line-active', num === step);
+            line.classList.toggle('progress-line-done',   formIsSubmitted || num < step);
+            line.classList.toggle('progress-line-active', !formIsSubmitted && num === step);
         });
     }
 

@@ -40,29 +40,44 @@ class DashboardController extends BaseController
 
         $appStatus = $application['application_status'] ?? '';
 
+        // ── Document Stats ───────────────────────────────────────────────
+        $programId = $application['program_id']
+            ?? $applicant['program_id']
+            ?? session()->get('selected_program_id');
+
         // ── Form Completion ──────────────────────────────────────────────
-        $formPageModel  = new FormPageModel();
-        $formPages      = $formPageModel->getEnabledOrdered();
+        // Use the same page-fetching logic as the applicant form itself so
+        // the dashboard always reflects the preset-filtered page list.
+        if ($programId) {
+            $presetSvc = new \App\Services\PresetService();
+            $formPages = $presetSvc->getFormPagesForApplicant((int) $programId);
+            if (empty($formPages)) {
+                $formPages = (new FormPageModel())->getEnabledOrdered();
+            }
+        } else {
+            $formPages = (new FormPageModel())->getEnabledOrdered();
+        }
+
         $formPageCount  = count($formPages);
         $formCompletion = array_fill_keys(array_column($formPages, 'id'), false);
 
+        // Completion is checked by the actual page ID (1=AppType, 2=Personal,
+        // 3=Family, 4=Education) — consistent with ApplicantFormController.
         if ($application) {
             $appId = $application['application_id'];
+            $pi    = (new PersonalInformationModel())->where('application_id', $appId)->first();
+            $fb    = (new FamilyBackgroundModel())->where('application_id', $appId)->first();
+            $eb    = (new EducationalBackgroundModel())->where('application_id', $appId)->first();
 
-            if (isset($formCompletion[1])) {
-                $formCompletion[1] = !empty($application['applicant_type']);
-            }
-            if (isset($formCompletion[2])) {
-                $pi = (new PersonalInformationModel())->where('application_id', $appId)->first();
-                $formCompletion[2] = !empty($pi['firstname']);
-            }
-            if (isset($formCompletion[3])) {
-                $fb = (new FamilyBackgroundModel())->where('application_id', $appId)->first();
-                $formCompletion[3] = !empty($fb['father_lastname']) || !empty($fb['guardian_name']);
-            }
-            if (isset($formCompletion[4])) {
-                $eb = (new EducationalBackgroundModel())->where('application_id', $appId)->first();
-                $formCompletion[4] = !empty($eb['school_name']);
+            foreach ($formPages as $page) {
+                $pageId = (int) $page['id'];
+                $formCompletion[$pageId] = match($pageId) {
+                    1 => !empty($application['applicant_type']),
+                    2 => !empty($pi['firstname']),
+                    3 => !empty($fb['father_lastname']) || !empty($fb['guardian_name']),
+                    4 => !empty($eb['school_name']),
+                    default => false,
+                };
             }
         }
 
@@ -70,11 +85,6 @@ class DashboardController extends BaseController
         $formProgress = $formPageCount > 0
             ? (int) round(($formPagesCompleted / $formPageCount) * 100)
             : 0;
-
-        // ── Document Stats ───────────────────────────────────────────────
-        $programId = $application['program_id']
-            ?? $applicant['program_id']
-            ?? session()->get('selected_program_id');
 
         $docStats = [
             'total_required'    => 0,
@@ -137,7 +147,14 @@ class DashboardController extends BaseController
                 $docStats['uploaded_required'] >= $docStats['total_required']       => 'done',
                 default                                                             => 'inprogress',
             },
-            4 => in_array($appStatus, ['approved', 'enrolled']) ? 'done' : '',
+            4 => match(true) {
+                in_array($appStatus, ['approved', 'enrolled'])
+                    => 'done',
+                $docStats['total_required'] > 0
+                    && $docStats['uploaded_required'] >= $docStats['total_required']
+                    => 'inprogress',
+                default => '',
+            },
             5 => $appStatus === 'enrolled' ? 'done' : '',
         ];
 

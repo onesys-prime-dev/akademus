@@ -1,6 +1,6 @@
 // assets/js/pages/applicant-form.js
 
-const { initialStep, maxSteps, baseUrl, stepUrl, updateUrl, submitUrl, documentUrl, dashboardUrl } = window.requirementsConfig;
+const { initialStep, maxSteps, baseUrl, stepUrl, updateUrl, submitUrl, documentUrl, dashboardUrl, applicationStatus } = window.requirementsConfig;
 
 let currentStep = initialStep;
 
@@ -71,7 +71,11 @@ async function loadForm(step) {
         formProgressH4Text.textContent = `Form Progress — Step ${step} of ${maxSteps}`;
         formFillupContainer.innerHTML = data.form;
 
-        updateProgress(step);
+        if (data.allRequiredComplete) {
+            markAllComplete();
+        } else {
+            updateProgress(step);
+        }
 
         // Populate all fields including dynamic selects
         populateForm(`requirements-${step}`, data.formData);
@@ -251,15 +255,56 @@ function updateProgress(step) {
     });
 }
 
+function markAllComplete() {
+    const circles = document.querySelectorAll('.form-progress__circle');
+    const lines = document.querySelectorAll('.form-progress__line');
+
+    circles.forEach(circle => {
+        circle.classList.add('form-progress__circle-done');
+        circle.classList.remove('form-progress__circle-active');
+        circle.textContent = '✔';
+    });
+
+    lines.forEach(line => {
+        line.classList.add('form-progress__line-done');
+        line.classList.remove('form-progress__line-active');
+    });
+}
+
 function updateButtons() {
     backBtn.classList.toggle('hidden', currentStep === 1);
     saveAndContinueBtn.classList.toggle('hidden', currentStep === maxSteps);
     submitFormBtn.classList.toggle('hidden', currentStep !== maxSteps);
 }
 
+// ── Passed / Approved modal ───────────────────────────────────────────────
+const reqPassedModal = document.getElementById('req-passed-modal');
+const reqPassedClose = document.getElementById('req-passed-close');
+
+function openPassedModal() {
+    reqPassedModal.removeAttribute('hidden');
+    document.body.style.overflow = 'hidden';
+    reqPassedClose.focus();
+}
+
+function closePassedModal() {
+    reqPassedModal.setAttribute('hidden', '');
+    document.body.style.overflow = '';
+}
+
+reqPassedClose.addEventListener('click', closePassedModal);
+reqPassedModal.addEventListener('click', e => { if (e.target === reqPassedModal) closePassedModal(); });
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !reqPassedModal.hasAttribute('hidden')) closePassedModal();
+});
+
 document.addEventListener('DOMContentLoaded', async () => {
     await loadForm(currentStep);
     updateButtons();
+
+    if (applicationStatus === 'approved') {
+        openPassedModal();
+    }
 });
 
 // Buttons

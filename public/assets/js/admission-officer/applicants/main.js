@@ -7,6 +7,7 @@ import {
     initBulkSelect,
     initBulkActions,
     initRowClick,
+    initDocModal,
     init
 } from './handlers.js';
 
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initFilters();
     initSearch();
     initPagination();
+    initDocModal();
 
     // ================= PROFILE =================
     if (state.mode === 'profile') {

@@ -20,7 +20,8 @@ class ThemeController extends BaseController
         if (session()->get('admin_logged_in')) {
             return redirect()->to('admin/theme');
         }
-        return view('admin/login');
+        $data['theme'] = $this->themeModel->getAllSettings();
+        return view('admin/login', $data);
     }
 
     public function adminLoginPost()
@@ -37,6 +38,9 @@ class ThemeController extends BaseController
             ->get()->getRowArray();
 
         if (!$user || !password_verify($password, $user['admin_password'])) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid credentials. Please try again.']);
+            }
             return redirect()->back()->with('error', 'Invalid credentials');
         }
 
@@ -46,6 +50,10 @@ class ThemeController extends BaseController
             'admin_name'      => $user['firstname'] . ' ' . $user['lastname'],
             'admin_email'     => $user['email'],
         ]);
+
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON(['status' => 'success', 'redirect' => base_url('admin/theme')]);
+        }
 
         return redirect()->to('admin/theme');
     }
@@ -107,6 +115,21 @@ class ThemeController extends BaseController
         }
 
         return redirect()->to('admin/theme')->with('saved', true);
+    }
+
+    // ── Theme Preview (iframe) ────────────────────────────────
+    public function preview()
+    {
+        $page    = $this->request->getGet('page') ?? 'dashboard';
+        $allowed = ['dashboard', 'signin', 'signup', 'appform', 'documents', 'track', 'success'];
+        if (!in_array($page, $allowed)) {
+            $page = 'dashboard';
+        }
+
+        $data['theme'] = $this->themeModel->getAllSettings();
+        $data['page']  = $page;
+
+        return view('admin/theme-preview', $data);
     }
 
     /**

@@ -1,13 +1,9 @@
 <?php 
-    $firstname = session()->get('firstname') ?? 'Applicant';
-    $lastname  = session()->get('lastname')  ?? '';
-    $fullname  = trim($firstname . ' ' . $lastname);
-
-    // Generate initials from name
-    $initials = strtoupper(substr($firstname, 0, 1) . substr($lastname, 0, 1));
-    if (empty(trim($initials))) $initials = 'AP';
-
-    $applicant_number = session()->get('applicant_number');
+    $aoName    = session()->get('ao_name') ?? 'Admission Officer';
+    $fullname  = $aoName;
+    $parts     = explode(' ', trim($aoName), 2);
+    $initials  = strtoupper(substr($parts[0] ?? 'A', 0, 1) . substr($parts[1] ?? '', 0, 1));
+    if (empty(trim($initials))) $initials = 'AO';
 
     // Theme values
     $app_name  = $theme['app_name']  ?? 'AKADEMUS';
@@ -17,7 +13,7 @@
 <nav>
     <div class="sidebar-top-and-links">
         <div class="sidebar-top">
-            <a href="<?= base_url('/dashboard') ?>" class="brand">
+            <a href="<?= base_url('/admission-officer/dashboard') ?>" class="brand">
                 <img src="<?= $logo_url ?>">
                 <div class="header-wrapper">
                     <p><?= esc($app_name) ?></p>
@@ -71,11 +67,11 @@
             </div>
             <div class="profile-info">
                 <p><?= esc($fullname) ?></p>
-                <span>Applicant</span>
+                <span>Admission Officer</span>
             </div>
         </div>
 
-        <a href="<?= base_url('logout') ?>" class="logout-link">
+        <a href="<?= base_url('admission-officer/logout') ?>" class="logout-link">
             <span>Logout</span>
         </a>
     </div>

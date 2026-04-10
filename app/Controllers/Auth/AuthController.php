@@ -181,7 +181,7 @@ class AuthController extends BaseController
             log_message('error', 'Registration failed: ' . $e->getMessage());
             return $this->response->setJSON([
                 'status'  => 'error',
-                'message' => 'Registration failed: ' . $e->getMessage()
+                'message' => 'Registration failed. Please try again later.'
             ]);
         }
     }

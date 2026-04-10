@@ -10,6 +10,7 @@ import {
     // profile
     setActiveTab,
     renderContent,
+    showError,
     showContentLoading,
     updateTableOnly,
 
@@ -22,7 +23,11 @@ import {
     showTableLoading,
     updatePagination,
     updateFilterCounts,
-    resetFilters
+    resetFilters,
+
+    // doc modal
+    openDocModal,
+    closeDocModal
 } from './ui.js';
 
 let debounceTimer;
@@ -35,11 +40,21 @@ async function update({ fullRender = false } = {}) {
 
     // ================= PROFILE =================
     if (state.mode === 'profile') {
-
         fullRender ? showContentLoading() : showTableLoading();
 
-        const res = await fetchApplicationContent();
-        if (!res.success) return;
+        let res;
+        try {
+            res = await fetchApplicationContent();
+        } catch (err) {
+            console.error('fetchApplicationContent error:', err);
+            showError('Failed to load content. Please refresh the page.');
+            return;
+        }
+
+        if (!res.success) {
+            showError(res.message || 'Failed to load content.');
+            return;
+        }
 
         state.totalPages = Math.max(1, Math.ceil((res.total || 0) / res.limit));
 
@@ -56,7 +71,6 @@ async function update({ fullRender = false } = {}) {
             if (!ok) renderContent(res.html);
         }
 
-        // sync filters UI
         document.querySelectorAll('[data-filter]').forEach(btn => {
             btn.classList.toggle('filter-active', btn.dataset.filter === state.status);
         });
@@ -186,6 +200,26 @@ export function initProgram() {
         state.page = 1;
 
         update();
+    });
+}
+
+export function initDocModal() {
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.ao-view-doc-btn');
+        if (btn) {
+            openDocModal(btn.dataset.docUrl, btn.dataset.docName);
+            return;
+        }
+
+        const closeBtn = e.target.closest('#ao-doc-modal-close');
+        if (closeBtn) { closeDocModal(); return; }
+
+        const modal = document.getElementById('ao-doc-modal');
+        if (modal && e.target === modal) { closeDocModal(); }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeDocModal();
     });
 }
 

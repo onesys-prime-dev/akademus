@@ -20,12 +20,13 @@
         <tbody class="recent-applicants-table__body" id="recent-applicants-table-body">
             <?php if (empty($rows)): ?>
                 <tr class="recent-applicants-table__row">
-                    <td class="recent-applicants-table__cell" colspan="8" style="text-align:center;">
-                        No requirements found
+                    <td class="recent-applicants-table__cell" colspan="8" style="text-align:center;color:#718096;padding:24px 0;">
+                        No applicants found.
                     </td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($rows as $row): ?>
+                <?php $rowStatus = $row['status'] ?? ''; ?>
                     <tr class="recent-applicants-table__row">
 
                         <!-- APPLICANT NAME -->
@@ -55,21 +56,23 @@
 
                         <!-- STATUS -->
                         <td class="recent-applicants-table__cell">
-                            <span class="status-badge status-badge--<?= esc($status) ?? '' ?>">
-                                <?= esc(ucwords(str_replace('_', ' ', $status))) ?>
+                            <span class="status-badge status-badge--<?= esc($rowStatus) ?>">
+                                <?= esc(ucwords(str_replace('_', ' ', $rowStatus))) ?>
                             </span>
                         </td>
 
                         <!-- DATE ADDED -->
                         <td class="recent-applicants-table__cell">
-                            <?= esc($row['date_added'] ?? '-') ?>
+                            <?= $row['date_added'] ? esc(date('M j, Y', strtotime($row['date_added']))) : '-' ?>
                         </td>
 
                         <!-- ACTION -->
                         <td class="recent-applicants-table__cell recent-applicants-table__cell--actions">
-                            <img class="recent-applicants-table__cell--actions-img" src="<?= base_url('assets/images/icons/view.svg') ?>">
-                            <img class="recent-applicants-table__cell--actions-img" src="<?= base_url('assets/images/icons/pen-edit.svg') ?>">
-                            <img class="recent-applicants-table__cell--actions-img" src="<?= base_url('assets/images/icons/trash.svg') ?>">
+                            <a href="<?= base_url('admission-officer/detailed-applicant/' . (int) $row['applicant_id']) ?>"
+                               title="View Applicant">
+                                <img class="recent-applicants-table__cell--actions-img"
+                                     src="<?= base_url('assets/images/icons/view.svg') ?>">
+                            </a>
                         </td>
 
                     </tr>

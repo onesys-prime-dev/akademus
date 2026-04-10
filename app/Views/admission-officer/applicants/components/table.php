@@ -19,7 +19,6 @@
         </thead>
 
         <tbody class="applicants-table__body" id="applicants-table-body">
-            <!-- JS will render here -->
         </tbody>
     </table>
 
