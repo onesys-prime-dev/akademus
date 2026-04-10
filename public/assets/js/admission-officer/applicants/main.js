@@ -8,6 +8,7 @@ import {
     initBulkActions,
     initRowClick,
     initDocModal,
+    initActions,
     init
 } from './handlers.js';
 
@@ -32,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initBulkSelect();
         initBulkActions();
         initRowClick();
+        initActions();
     }
 
     // ================= INITIAL LOAD =================

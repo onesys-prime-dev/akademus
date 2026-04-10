@@ -18,8 +18,8 @@ class ExamScheduleService
         $builder = $this->db->table('exam_schedules es')
             ->select("
                 es.exam_schedule_id,
-                es.exam_date AS date,
-                CONCAT(es.start_time, ' - ', es.end_time) AS time,
+                DATE_FORMAT(es.exam_date, '%M %d, %Y') AS date,
+                CONCAT(DATE_FORMAT(es.start_time, '%l:%i %p'), ' - ', DATE_FORMAT(es.end_time, '%l:%i %p')) AS time,
                 es.location,
                 CONCAT(es.booked_slots, ' / ', es.max_slots) AS slots,
                 es.status
@@ -99,8 +99,9 @@ class ExamScheduleService
         return $this->db->table('exam_schedules es')
             ->select("
                 es.exam_schedule_id,
-                es.exam_date,
-                CONCAT(es.start_time, ' - ', es.end_time) AS time,
+                DATE_FORMAT(es.exam_date, '%M %d, %Y') AS exam_date,
+                es.exam_date as raw_date,
+                CONCAT(DATE_FORMAT(es.start_time, '%l:%i %p'), ' - ', DATE_FORMAT(es.end_time, '%l:%i %p')) AS time,
                 es.start_time,
                 es.end_time,
                 es.location,
@@ -108,7 +109,7 @@ class ExamScheduleService
                 es.booked_slots,
                 (es.max_slots - es.booked_slots) AS available_slots,
                 es.status,
-                es.created_at
+                DATE_FORMAT(es.created_at, '%M %d, %Y') as created_at
             ")
             ->where('es.exam_schedule_id', $scheduleId)
             ->get()
@@ -123,8 +124,8 @@ class ExamScheduleService
                 CONCAT(u.lastname, ', ', u.firstname) AS applicant,
                 u.mobile AS contact,
                 eb.status,
-                eb.booked_at,
-                eb.checked_in_at,
+                DATE_FORMAT(eb.booked_at, '%M %d, %Y %l:%i %p') AS booked_at,
+                DATE_FORMAT(eb.checked_in_at, '%M %d, %Y %l:%i %p') AS checked_in_at,
                 eb.applicant_id
             ")
             ->join('exam_bookings eb', 'eb.exam_schedule_id = es.exam_schedule_id')

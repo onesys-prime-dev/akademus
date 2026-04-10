@@ -83,7 +83,7 @@
 
 .applicants-table__cell--actions-img {
     height: 18px;
-    cursor: pointer;
+    cursor: pointer !important;
 }
 
 /* Email styling */

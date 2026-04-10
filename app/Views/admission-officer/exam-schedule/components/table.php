@@ -1,8 +1,4 @@
 <div class="exam-schedule-table__card card">
-    <div class="exam-schedule-table__loading" id="exam-schedule-table-loading" hidden>
-        Loading...
-    </div>
-
     <table class="exam-schedule-table__table">
         <thead class="exam-schedule-table__head">
             <tr class="exam-schedule-table__row--head">
@@ -16,6 +12,12 @@
         </thead>
 
         <tbody class="exam-schedule-table__body" id="exam-schedule-table-body">
+            <tr id="exam-schedule-table-loading" hidden>
+                <td colspan="6" style="text-align:center;">
+                    Loading...
+                </td>
+            </tr>
+
             <?php if (empty($rows)): ?>
                 <tr class="exam-schedule-table__row">
                     <td class="exam-schedule-table__cell" colspan="6" style="text-align:center;">

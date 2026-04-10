@@ -287,9 +287,7 @@ function formatStatus(status) {
 
 function renderActions(id) {
     return `
-        <img src="${baseUrl}/assets/images/icons/view.svg" data-action="view" data-id="${id}">
-        <img src="${baseUrl}/assets/images/icons/pen-edit.svg" data-action="edit" data-id="${id}">
-        <img src="${baseUrl}/assets/images/icons/trash.svg" data-action="delete" data-id="${id}">
+        <img class="applicants-table__cell--actions-img" src="${baseUrl}/assets/images/icons/view.svg" data-action="view" data-id="${id}">
     `;
 }
 
