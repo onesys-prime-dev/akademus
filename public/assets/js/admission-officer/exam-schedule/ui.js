@@ -149,8 +149,8 @@ export function renderScheduleDetails(data) {
 
     if (!applicants.length) {
         tbody.innerHTML = `
-            <tr>
-                <td colspan="6" style="text-align:center;">No applicants booked yet</td>
+            <tr class="exam-schedule-table__row">
+                <td class="exam-schedule-table__cell" colspan="6" style="text-align:center;">No applicants booked yet</td>
             </tr>
         `;
         return;

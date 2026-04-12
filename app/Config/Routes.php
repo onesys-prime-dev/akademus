@@ -134,7 +134,10 @@ $routes->post('admission-officer/login',  'AdmissionOfficer\AuthController::logi
 $routes->get ('admission-officer/logout', 'AdmissionOfficer\AuthController::logout');
 
 // Admission Officer Dashboard
-$routes->get('admission-officer/dashboard',                     'AdmissionOfficer\DashboardController::index');
+$routes->get('admission-officer/dashboard',             'AdmissionOfficer\DashboardController::index');
+$routes->get('admission-officer/dashboard/search',      'AdmissionOfficer\DashboardController::search');
+$routes->get('admission-officer/dashboard/data',        'AdmissionOfficer\DashboardController::data');
+$routes->get('admission-officer/dashboard/calendar-data', 'AdmissionOfficer\DashboardController::calendarData');
 
 // Admission Officer Applicants
 $routes->get('admission-officer/applicants/(:num)',                          'AdmissionOfficer\ApplicantsController::index/$1');

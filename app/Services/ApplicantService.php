@@ -39,12 +39,18 @@ class ApplicantService
         }
 
         if (!empty($filters['search'])) {
-            $builder->groupStart()
-                ->like('u.firstname', $filters['search'])
-                ->orLike('u.lastname', $filters['search'])
-                ->orLike('u.email', $filters['search'])
-                ->orLike('a.applicant_number', $filters['search'])
+            $terms = explode(' ', $filters['search']);
+
+            $builder->groupStart();
+            foreach ($terms as $term) {
+                $builder->groupStart()
+                    ->like('u.firstname', $term)
+                    ->orLike('u.lastname', $term)
+                    ->orLike('u.email', $term)
+                    ->orLike('a.applicant_number', $term)
                 ->groupEnd();
+            }
+            $builder->groupEnd();
         }
 
         return $builder;
@@ -123,5 +129,85 @@ class ApplicantService
         return $db->table('applicants')
             ->whereIn('applicant_id', $ids)
             ->update(['application_status' => $status]);
+    }
+
+    public function dashboardSearchApplicants($query, $limit = 10) {
+        $builder = $this->baseQuery(['search' => $query]);
+
+        return $builder
+            ->select("
+                a.applicant_id,
+                CONCAT(u.firstname, ' ', u.lastname) as applicant_name,
+                u.email,
+                a.applicant_number,
+                ass.applicant_type,
+                p.program_code as program,
+                a.application_status as status,
+                a.created_at as date_added
+            ")
+            ->orderBy("
+                CASE 
+                    WHEN u.firstname LIKE '{$query}%' THEN 1
+                    WHEN u.lastname LIKE '{$query}%' THEN 2
+                    ELSE 3
+                END
+            ", '', false)
+            ->orderBy('a.created_at', 'DESC')
+            ->limit($limit)
+            ->get()
+            ->getResultArray();
+    }
+
+    public function getDashboardData($filters = [], $limit = 10, $offset = 0)
+    {
+        $db = \Config\Database::connect();
+
+        // =========================
+        // STATUS COUNTS
+        // =========================
+        $statusCounts = $this->getStatusCounts($filters);
+
+        // =========================
+        // PASSING RATE
+        // =========================
+        $processed = $statusCounts['approved'] + $statusCounts['completed'];
+        $ratedTotal = $processed + $statusCounts['rejected'];
+
+        $passingRate = $ratedTotal > 0
+            ? round(($processed / $ratedTotal) * 100)
+            : 0;
+
+        // =========================
+        // APPLICANTS PER PROGRAM
+        // =========================
+        $builder = $db->table('applicants a')
+            ->select('p.program_name, p.program_code, COUNT(*) as total')
+            ->join('programs p', 'p.program_id = a.program_id');
+
+        if (!empty($filters['program'])) {
+            $builder->where('a.program_id', $filters['program']);
+        }
+
+        if (!empty($filters['status']) && $filters['status'] !== 'all') {
+            $builder->where('a.application_status', $filters['status']);
+        }
+
+        $perProgram = $builder
+            ->groupBy('a.program_id')
+            ->orderBy('total', 'DESC')
+            ->get()
+            ->getResultArray();
+
+        // =========================
+        // TABLE DATA
+        // =========================
+        $rows = $this->getApplicants($filters, $limit, $offset);
+
+        return [
+            'statusCounts' => $statusCounts,
+            'passingRate'  => $passingRate,
+            'perProgram'   => $perProgram,
+            'rows'         => $rows,
+        ];
     }
 }

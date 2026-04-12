@@ -15,7 +15,12 @@ while (count($cells) % 7 !== 0) {
 }
 $weeks = array_chunk($cells, 7);
 ?>
-<div class="calendar card">
+
+<div class="calendar card"
+     id="calendar"
+     data-month="<?= $calMonth ?>"
+     data-year="<?= $calYear ?>">
+
     <div class="calendar__months">
         <div class="calendar__months--prev">
             <img class="calendar__months--prev--img" src="<?= base_url('assets/images/icons/less-than.svg') ?>" alt="">
@@ -82,3 +87,54 @@ $weeks = array_chunk($cells, 7);
     transform: translateX(-50%);
 }
 </style>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('calendar');
+
+    const prevBtn = document.querySelector('.calendar__months--prev');
+    const nextBtn = document.querySelector('.calendar__months--next');
+
+    function loadCalendar(month, year) {
+        fetch(`<?= base_url('admission-officer/dashboard/calendar-data') ?>?month=${month}&year=${year}`)
+            .then(res => res.json())
+            .then(data => {
+                // Update only allowed sections
+                document.querySelector('.calendar__months--current').innerHTML = data.header;
+                document.querySelector('.calendar__grid').innerHTML = data.grid;
+
+                // Update stored values
+                calendarEl.dataset.month = month;
+                calendarEl.dataset.year = year;
+            })
+            .catch(err => console.error('Calendar load error:', err));
+    }
+
+    prevBtn.addEventListener('click', () => {
+        let month = parseInt(calendarEl.dataset.month);
+        let year  = parseInt(calendarEl.dataset.year);
+
+        month--;
+        if (month < 1) {
+            month = 12;
+            year--;
+        }
+
+        loadCalendar(month, year);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        let month = parseInt(calendarEl.dataset.month);
+        let year  = parseInt(calendarEl.dataset.year);
+
+        month++;
+        if (month > 12) {
+            month = 1;
+            year++;
+        }
+
+        loadCalendar(month, year);
+    });
+});
+</script>

@@ -155,4 +155,109 @@ class DashboardController extends BaseController
             'todoItems'         => $todoItems,
         ]);
     }
+
+    public function search()
+    {
+        $query = $this->request->getGet('q');
+        if (!$query) {
+            return redirect()->to(base_url('admission-officer/dashboard'));
+        }
+
+        $applicantService = new ApplicantService();
+        $results          = $applicantService->dashboardSearchApplicants($query, 10);
+        return $this->response->setJSON([
+            'applicants' => $results
+        ]);
+    }
+
+    public function data()
+    {
+        $program = $this->request->getGet('program');
+
+        $filters = [];
+
+        if (!empty($program)) {
+            $filters['program'] = $program;
+        }
+
+        $applicantSvc = new ApplicantService();
+
+        $data = $applicantSvc->getDashboardData($filters);
+
+        return $this->response->setJSON($data);
+    }
+
+    public function calendarData()
+    {
+        $month = (int) $this->request->getGet('month');
+        $year  = (int) $this->request->getGet('year');
+
+        $examSvc = new \App\Services\ExamScheduleService();
+        $calendarSummary = $examSvc->getCalendarSummary($month, $year);
+
+        $monthName     = date('F', mktime(0, 0, 0, $month, 1, $year));
+        $daysInMonth   = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+        $firstDayOfWeek = (int) date('w', mktime(0, 0, 0, $month, 1, $year));
+
+        $today   = (int) date('j');
+        $isCurrentMY = ((int) date('n') === $month && (int) date('Y') === $year);
+
+        $cells = array_fill(0, $firstDayOfWeek, null);
+        for ($d = 1; $d <= $daysInMonth; $d++) {
+            $cells[] = $d;
+        }
+        while (count($cells) % 7 !== 0) {
+            $cells[] = null;
+        }
+        $weeks = array_chunk($cells, 7);
+
+        // HEADER HTML
+        $header = '
+            <span class="calendar__current--month">'.$monthName.'</span>
+            <span class="calendar__current--year">'.$year.'</span>
+        ';
+
+        // GRID HTML
+        ob_start();
+        ?>
+        <div class="calendar__row">
+            <div class="calendar__day calendar__day--label">Sun</div>
+            <div class="calendar__day calendar__day--label">Mon</div>
+            <div class="calendar__day calendar__day--label">Tue</div>
+            <div class="calendar__day calendar__day--label">Wed</div>
+            <div class="calendar__day calendar__day--label">Thu</div>
+            <div class="calendar__day calendar__day--label">Fri</div>
+            <div class="calendar__day calendar__day--label">Sat</div>
+        </div>
+
+        <?php foreach ($weeks as $week): ?>
+        <div class="calendar__row">
+            <?php foreach ($week as $day): ?>
+                <?php if ($day === null): ?>
+                    <div class="calendar__day calendar__day--inactive"></div>
+                <?php else: ?>
+                    <?php
+                    $hasExam = isset($calendarSummary[$day]);
+                    $isToday = $isCurrentMY && ($day === $today);
+
+                    $cls = 'calendar__day';
+                    if ($isToday) $cls .= ' calendar__day--active';
+                    if ($hasExam) $cls .= ' calendar__day--has-exam';
+                    ?>
+                    <div class="<?= $cls ?>">
+                        <?= $day ?>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+        <?php endforeach; ?>
+
+        <?php
+        $grid = ob_get_clean();
+
+        return $this->response->setJSON([
+            'header' => $header,
+            'grid'   => $grid,
+        ]);
+    }
 }

@@ -31,3 +31,11 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.exam-schedule__card').forEach(card => {
+        card.addEventListener('click', function () {
+            window.location.href = '<?= base_url('admission-officer/exam-schedule') ?>';
+        });
+    });
+</script>
