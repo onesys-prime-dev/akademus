@@ -216,25 +216,20 @@ function updateKeyMetrics(counts = {}) {
 function updateApplicantsPerProgram(perProgram = []) {
   const body = document.querySelector('.applicants-per-program__body');
   const svg = document.querySelector('.applicants-per-program__svg');
-  const legends = document.querySelector('.applicants-per-program__legends');
 
-  if (!body || !svg || !legends) return;
+  if (!body || !svg) return;
 
   // =========================
-  // HANDLE EMPTY STATE SAFELY
+  // EMPTY STATE
   // =========================
   let emptyEl = body.querySelector('.applicants-empty');
 
   if (!perProgram.length) {
-    // hide chart
     svg.style.display = 'none';
-    legends.style.display = 'none';
 
-    // create empty message if not exists
     if (!emptyEl) {
       emptyEl = document.createElement('p');
       emptyEl.className = 'applicants-empty';
-      emptyEl.style = 'text-align:center;color:#718096;padding:24px 0;';
       emptyEl.textContent = 'No applicant data yet.';
       body.appendChild(emptyEl);
     }
@@ -242,22 +237,19 @@ function updateApplicantsPerProgram(perProgram = []) {
     return;
   }
 
-  // =========================
-  // RESTORE STRUCTURE
-  // =========================
   if (emptyEl) emptyEl.remove();
-
   svg.style.display = '';
-  legends.style.display = '';
 
   // =========================
-  // RENDER DATA
+  // CONFIG (MATCH PHP)
   // =========================
   const colors = ['#3b82f6','#8b5cf6','#f59e0b','#ef4444','#10b981','#f97316','#06b6d4','#ec4899'];
 
-  const barGap = 56;
-  const barH = 32;
-  const maxBarW = 650;
+  const barGap = 46;
+  const barH = 28;
+  const labelX = 100;
+  const barX = 120;
+  const maxBarW = 700;
 
   const safeData = perProgram.map(p => ({
     ...p,
@@ -266,36 +258,67 @@ function updateApplicantsPerProgram(perProgram = []) {
 
   const maxVal = Math.max(...safeData.map(p => p.total), 1);
 
-  // ✅ update height
-  const svgHeight = Math.max(80, safeData.length * barGap + 30);
-  svg.setAttribute('viewBox', `0 0 1000 ${svgHeight}`);
+  // dynamic height
+  const svgHeight = Math.max(80, safeData.length * barGap + 20);
+  svg.setAttribute('viewBox', `0 0 900 ${svgHeight}`);
 
+  // =========================
+  // RENDER
+  // =========================
   let content = '';
 
   safeData.forEach((prog, i) => {
-    const y = 20 + i * barGap;
-    const barW = Math.max(4, (prog.total / maxVal) * maxBarW);
+    const y = 10 + i * barGap;
+    const value = prog.total;
+
+    const barW = value > 0
+      ? Math.max(6, Math.round((value / maxVal) * maxBarW))
+      : 4;
+
     const color = colors[i % colors.length];
     const midY = y + barH / 2 + 4;
 
-    const label = escapeHtml(prog.program_code || prog.program_name || `Program ${i + 1}`);
+    const rawLabel = prog.program_code || prog.program_name || `Program ${i + 1}`;
+
+    // truncate (match PHP)
+    const label = escapeHtml(
+      rawLabel.length > 18 ? rawLabel.slice(0, 18) + '...' : rawLabel
+    );
+
+    const valueX = Math.min(barX + barW + 8, 880);
 
     content += `
-      <text x="290" y="${midY}" text-anchor="end" fill="#333" font-size="12">${label}</text>
-      <rect x="300" y="${y}" width="${barW}" height="${barH}" rx="6" fill="${color}"></rect>
-      <text x="${300 + barW + 8}" y="${midY}" fill="#555" font-size="11">${format(prog.total)}</text>
+      <!-- Label -->
+      <text x="${labelX}" y="${midY}"
+            text-anchor="end"
+            class="bar-label">
+        ${label}
+      </text>
+
+      <!-- Background -->
+      <rect x="${barX}" y="${y}"
+            width="${maxBarW}" height="${barH}"
+            rx="6"
+            class="bar-bg"></rect>
+
+      <!-- Fill -->
+      <rect x="${barX}" y="${y}"
+            width="${barW}" height="${barH}"
+            rx="6"
+            fill="${color}"
+            class="bar-fill">
+        <title>${escapeHtml(rawLabel)}: ${format(value)}</title>
+      </rect>
+
+      <!-- Value -->
+      <text x="${valueX}" y="${midY}"
+            class="bar-value">
+        ${format(value)}
+      </text>
     `;
   });
 
   svg.innerHTML = content;
-
-  // legends
-  legends.innerHTML = safeData.map((prog, i) => `
-    <div class="applicants-per-program__legend">
-      <div class="legend-box" style="background:${colors[i % colors.length]}"></div>
-      <span>${escapeHtml(prog.program_code || prog.program_name)}</span>
-    </div>
-  `).join('');
 }
 
 function updateApplicantsPerStatus(counts = {}) {
@@ -326,7 +349,6 @@ function updateApplicantsPerStatus(counts = {}) {
     if (!emptyEl) {
       emptyEl = document.createElement('p');
       emptyEl.className = 'applicants-empty';
-      emptyEl.style = 'text-align:center;color:#718096;padding:24px 0;';
       emptyEl.textContent = 'No applicant data yet.';
       body.appendChild(emptyEl);
     }
@@ -410,7 +432,6 @@ function updatePassingRate(rate = 0, hasData = true) {
     if (!emptyEl) {
       emptyEl = document.createElement('p');
       emptyEl.className = 'applicants-empty';
-      emptyEl.style = 'text-align:center;color:#718096;padding:24px 0;';
       emptyEl.textContent = 'No applicant data yet.';
       body.appendChild(emptyEl);
     }
