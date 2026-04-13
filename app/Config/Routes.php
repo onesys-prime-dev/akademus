@@ -70,19 +70,29 @@ $routes->post('admin/theme/save',      'ThemeController::save');
 $routes->get('admin/theme/json',       'ThemeController::getThemeJson');
 $routes->get('admin/theme/preview',    'ThemeController::preview');
 
+
+// -------------------------------- PAYMENT FEES ------------------------------ //
 // Admission Processing Fee
 $routes->get('admission-processing-fee', 'Payment\AdmissionProcessingFeeController::admissionProcessingFee');
-
-$routes->get('/payment', 'PaymentController::create');
-$routes->post('/payment/store', 'PaymentController::store');
-
-$routes->get('/payment/approve/(:num)', 'PaymentController::approve/$1');
-$routes->get('/payment/reject/(:num)', 'PaymentController::reject/$1');
-// Payment method accounts (for dynamic display on payment instructions)
-$routes->get('/payment/method-accounts', 'PaymentController::methodAccounts');
+$routes->post('admission-processing-fee/submit', 'Payment\AdmissionProcessingFeeController::store');
+$routes->post('admin/payments/approve/(:num)', 'Payment\AdmissionProcessingFeeController::approve/$1');
+$routes->post('admin/payments/reject/(:num)', 'Payment\AdmissionProcessingFeeController::reject/$1');
 
 // Reservation Fee
-$routes->get('reservation-fee', 'Payment\ReservationFeeController::reservationFee');
+$routes->get('reservation-fee', 'Payment\ReservationFeeController::index');
+$routes->post('reservation-fee/submit', 'Payment\ReservationFeeController::store');
+$routes->post('admin/reservation/approve/(:num)', 'Payment\ReservationFeeController::approve/$1');
+$routes->post('admin/reservation/reject/(:num)', 'Payment\ReservationFeeController::reject/$1');
+
+// Admin Payment Fee 
+// Payment settings
+$routes->get('admin/payments'                   , 'Admin\PaymentFeesController::index');
+$routes->get('admin/payment-fees'               , 'Admin\PaymentFeesController::fees');
+$routes->post('admin/payment-fees/update/(:num)', 'Admin\PaymentFeesController::updateFee/$1');
+$routes->post('admin/payments/approve/(:num)'   , 'Admin\PaymentFeesController::approve/$1');
+$routes->post('admin/payments/reject/(:num)'    , 'Admin\PaymentFeesController::reject/$1');
+// ----------------------------------------------------------------------------- //
+
 
 // FAQ
 $routes->get('faq', 'Applicant\FaqController::index');
@@ -124,6 +134,10 @@ $routes->get ('admin/requirement-categories/(:num)/delete',          'Admin\Requ
 // Admin Program-Preset Management
 $routes->get('admin/programs/presets',           'Admin\ProgramPresetsController::index');
 $routes->post('admin/programs/assign-preset',    'Admin\ProgramPresetsController::assignPreset');
+
+// Admin Payment Fee Management
+// $routes->get('admin/payment-fees', 'Admin\PaymentFeesController::index');
+// $routes->post('admin/payment-fees/update', 'Admin\PaymentFeesController::update');
 
 // API Endpoints
 $routes->get('api/presets/program/(:num)',       'Admin\PresetsController::getFormPagesForApplicant/$1');

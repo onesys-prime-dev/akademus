@@ -180,6 +180,16 @@
             Program Assignments
         </a>
 
+        <a href="<?= base_url('admin/payments') ?>" class="nav-item <?= strpos(current_url(), 'admin/payments') !== false ? 'on' : '' ?>">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3h18v4H3z"/>
+                <path d="M3 7v14h18V7"/>
+                <path d="M16 13l-4 4-4-4"/>
+            </svg>
+            Payment Review
+        </a>        
+
         <div class="nav-section-label">System</div>
 
         <a href="<?= base_url('admin/users') ?>" class="nav-item <?= strpos(current_url(), 'admin/users') !== false ? 'on' : '' ?>">
