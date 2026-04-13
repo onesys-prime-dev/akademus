@@ -36,7 +36,20 @@ class ExamScheduleController extends BaseController
     {
         helper('theme');
 
-        $themeModel = new ThemeModel();
+        $themeModel  = new ThemeModel();
+        $examEnabled = $themeModel->getSetting('exam_enabled', '1') === '1';
+
+        if (! $examEnabled) {
+            return view('admission-officer/main', [
+                'title'        => 'Exam Schedule',
+                'page_content' => 'admission-officer/exam-schedule/disabled',
+                'breadcrumb'   => [
+                    ['label' => 'Exam Schedule'],
+                ],
+                'theme' => $themeModel->getAllSettings(),
+            ]);
+        }
+
         $state = $this->resolveState();
 
         return view('admission-officer/main', [
@@ -56,11 +69,20 @@ class ExamScheduleController extends BaseController
 
     public function content()
     {
+        $examEnabled = (new ThemeModel())->getSetting('exam_enabled', '1') === '1';
+
+        if (! $examEnabled) {
+            return $this->response->setStatusCode(403)->setJSON([
+                'success' => false,
+                'message' => 'Exam scheduling is currently disabled.',
+            ]);
+        }
+
         $state = $this->resolveState();
 
         return $this->response->setJSON([
             'html'   => $this->renderContent($state),
-            'state'  => $state, // cleaner than repeating fields
+            'state'  => $state,
         ]);
     }
 

@@ -20,6 +20,8 @@ class PaymentModel extends Model
         'payment_status',
         'payment_date',
         'remarks',
+        'reviewed_by',
+        'reviewed_at',
     ];
 
     protected $useTimestamps = true;
@@ -75,9 +77,9 @@ class PaymentModel extends Model
             ->getRowArray();
     }
 
-    //  Used by admin approve/reject actions. Sets payment_status and
-    //  optionally records a remark and payment_date (on PAID).
-    public function updateStatus(int $paymentId, string $status, string $remarks = ''): bool
+    //  Used by admission officer approve/reject actions. Sets payment_status and
+    //  optionally records a remark, payment_date (on PAID), and reviewer info.
+    public function updateStatus(int $paymentId, string $status, string $remarks = '', ?int $reviewedBy = null): bool
     {
         $data = ['payment_status' => $status];
 
@@ -87,6 +89,11 @@ class PaymentModel extends Model
 
         if ($status === self::STATUS_PAID) {
             $data['payment_date'] = date('Y-m-d H:i:s');
+        }
+
+        if ($reviewedBy !== null) {
+            $data['reviewed_by'] = $reviewedBy;
+            $data['reviewed_at'] = date('Y-m-d H:i:s');
         }
 
         return $this->update($paymentId, $data);

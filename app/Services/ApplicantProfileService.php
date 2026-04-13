@@ -10,6 +10,7 @@ class ApplicantProfileService
             'applicant_form'  => 'admission-officer/applicants/detailed-applicant/components/content/applicant-form',
             'requirements'    => 'admission-officer/applicants/detailed-applicant/components/content/requirements',
             'exam'            => 'admission-officer/applicants/detailed-applicant/components/content/exam',
+            'admission_fee'   => 'admission-officer/applicants/detailed-applicant/components/content/admission-fee',
             'reservation_fee' => 'admission-officer/applicants/detailed-applicant/components/content/reservation-fee',
             'clearance'       => 'admission-officer/applicants/detailed-applicant/components/content/clearance',
         ];
@@ -53,7 +54,8 @@ class ApplicantProfileService
             'applicant_form'  => $this->getApplicantFormPayload($applicantId),
             'requirements'    => $this->getRequirementsPayload($applicantId, $filters, $limit, $offset),
             'exam'            => $this->getExamPayload($applicantId, $filters, $limit, $offset),
-            'reservation_fee' => $this->getReservationFeePayload($applicantId, $filters, $limit, $offset),
+            'admission_fee'   => $this->getAdmissionFeePayload($applicantId),
+            'reservation_fee' => $this->getReservationFeePayload($applicantId),
             'clearance'       => $this->getClearancePayload($applicantId, $filters, $limit, $offset),
             default           => $this->getRequirementsPayload($applicantId, $filters, $limit, $offset),
         };
@@ -154,12 +156,76 @@ class ApplicantProfileService
 
     private function getExamPayload(int $applicantId, array $filters, int $limit, int $offset): array
     {
-        return ['rows' => [], 'total' => 0, 'counts' => []];
+        $db = \Config\Database::connect();
+
+        $booking = $db->table('exam_bookings eb')
+            ->select([
+                'eb.exam_booking_id',
+                'eb.status       AS booking_status',
+                'eb.booked_at',
+                'eb.checked_in_at',
+                'es.exam_schedule_id',
+                'es.exam_date',
+                'es.start_time',
+                'es.end_time',
+                'es.location',
+                'es.max_slots',
+                'es.booked_slots',
+                'es.status       AS schedule_status',
+            ])
+            ->join('exam_schedules es', 'es.exam_schedule_id = eb.exam_schedule_id')
+            ->where('eb.applicant_id', $applicantId)
+            ->orderBy('eb.booked_at', 'DESC')
+            ->limit(1)
+            ->get()
+            ->getRowArray();
+
+        return ['booking' => $booking ?: null];
     }
 
-    private function getReservationFeePayload(int $applicantId, array $filters, int $limit, int $offset): array
+    private function getAdmissionFeePayload(int $applicantId): array
     {
-        return ['rows' => [], 'total' => 0, 'counts' => []];
+        return ['payment' => $this->fetchPaymentRecord($applicantId, 'ADMISSION_FEE')];
+    }
+
+    private function getReservationFeePayload(int $applicantId): array
+    {
+        return ['payment' => $this->fetchPaymentRecord($applicantId, 'RESERVATION_FEE')];
+    }
+
+    private function fetchPaymentRecord(int $applicantId, string $feeCode): ?array
+    {
+        $db = \Config\Database::connect();
+
+        return $db->table('payment p')
+            ->select([
+                'p.payment_id',
+                'p.reference_num',
+                'p.amount_paid',
+                'p.payment_status',
+                'p.payment_date',
+                'p.proof_of_payment',
+                'p.remarks',
+                'p.reviewed_by',
+                'p.reviewed_at',
+                'p.created_at',
+                'pm.name  AS method_name',
+                'pft.name AS fee_type_name',
+                'pma.account_number',
+                'pma.account_name',
+                'u.firstname AS reviewer_firstname',
+                'u.lastname  AS reviewer_lastname',
+            ])
+            ->join('payment_method pm',         'pm.payment_method_id = p.payment_method_id',                   'left')
+            ->join('payment_fee_type pft',       'pft.payment_fee_type_id = p.payment_fee_type_id',             'left')
+            ->join('payment_method_account pma', 'pma.payment_method_account_id = p.payment_method_account_id', 'left')
+            ->join('users u',                    'u.user_id = p.reviewed_by',                                   'left')
+            ->where('p.applicant_id', $applicantId)
+            ->where('pft.code', $feeCode)
+            ->orderBy('p.created_at', 'DESC')
+            ->limit(1)
+            ->get()
+            ->getRowArray() ?: null;
     }
 
     private function getClearancePayload(int $applicantId, array $filters, int $limit, int $offset): array

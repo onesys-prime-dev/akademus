@@ -53,9 +53,9 @@ class AdmissionProcessingFeeController extends BaseController
         $data = [
             'title'            => 'Admission Processing Fee',
             'fee'              => $fee,
-            'payment_methods'  => $paymentMethods,   
-            'existing_payment' => $existingPayment,  // pass existing payment to view for conditional display
-            'amount'      => $fee['amount'],
+            'payment_methods'  => $paymentMethods,
+            'existing_payment' => $existingPayment,
+            'amount'           => $fee['amount'] ?? 0,
         ];
 
         return $this->renderApplicant(
@@ -174,20 +174,6 @@ class AdmissionProcessingFeeController extends BaseController
         return $this->jsonSuccess(
             'Your payment has been submitted and is awaiting verification by the finance office.'
         );
-    }
-
-    // admin approve
-    public function approve($id)
-    {
-        $this->paymentModel->updateStatus((int) $id, PaymentModel::STATUS_PAID);
-        return redirect()->back();
-    }
-
-    // admin reject
-    public function reject($id)
-    {
-        $this->paymentModel->updateStatus((int) $id, PaymentModel::STATUS_REJECTED);
-        return redirect()->back();
     }
 
     private function buildMethodsMap(array $rows): array

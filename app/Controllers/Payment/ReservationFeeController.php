@@ -95,9 +95,16 @@ class ReservationFeeController extends BaseController
 
         $file = $this->request->getFile('proof_of_payment');
 
+        if (! $file->isValid() || $file->hasMoved()) {
+            return $this->jsonError('File upload failed. Please try again.');
+        }
+
         $uploadDir   = WRITEPATH . 'uploads/payments/';
         $newFileName = $file->getRandomName();
-        $file->move($uploadDir, $newFileName);
+
+        if (! $file->move($uploadDir, $newFileName)) {
+            return $this->jsonError('Could not save the uploaded file. Please try again.');
+        }
 
         $proofPath = 'uploads/payments/' . $newFileName;
 
@@ -112,34 +119,28 @@ class ReservationFeeController extends BaseController
 
         $fee = $this->feeModel
             ->where('code', PaymentFeeTypeModel::CODE_RESERVATION)
+            ->where('is_active', 1)
             ->first();
 
-        $this->paymentModel->insert([
+        $inserted = $this->paymentModel->insert([
             'applicant_id'              => $applicantId,
             'payment_fee_type_id'       => $feeTypeId,
             'payment_method_id'         => $paymentMethodId,
             'payment_method_account_id' => $accountId,
             'reference_num'             => $referenceNum,
             'proof_of_payment'          => $proofPath,
-            'amount_paid'               => $fee['amount'],
+            'amount_paid'               => $fee['amount'] ?? 0,
             'payment_status'            => PaymentModel::STATUS_PENDING,
         ]);
+
+        if (! $inserted) {
+            @unlink($uploadDir . $newFileName);
+            return $this->jsonError('Could not record your payment. Please try again.');
+        }
 
         return $this->jsonSuccess(
             'Reservation fee submitted successfully.'
         );
-    }
-
-    public function approve($id)
-    {
-        $this->paymentModel->updateStatus((int)$id, PaymentModel::STATUS_PAID);
-        return redirect()->back();
-    }
-
-    public function reject($id)
-    {
-        $this->paymentModel->updateStatus((int)$id, PaymentModel::STATUS_REJECTED);
-        return redirect()->back();
     }
 
     private function buildMethodsMap(array $rows): array
