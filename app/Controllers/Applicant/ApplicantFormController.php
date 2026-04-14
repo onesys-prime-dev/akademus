@@ -126,6 +126,11 @@ class ApplicantFormController extends BaseController
             $formData = $this->getFormDataForPage($pageId, $application['application_id']);
         }
 
+        // ✅ ADD THIS BLOCK
+        if (empty($formData['program_id'])) {
+            $formData['program_id'] = session()->get('program_id');
+        }
+
         // Load view by page_id — step_1.php = Application Type, step_4.php = Educational Background, etc.
         $viewFile = "applicant/applicant-form/steps/step-{$pageId}";
         if (!file_exists(APPPATH . "Views/{$viewFile}.php")) {
