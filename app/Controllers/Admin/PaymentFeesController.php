@@ -20,6 +20,7 @@ class PaymentFeesController extends BaseAdminController
     // payment list
     public function index()
     {
+        
         $payments = $this->paymentModel
             ->select('
                 payment.*, 
