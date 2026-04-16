@@ -1,6 +1,14 @@
 <?php
 helper('form_field');
 $fields = get_field_configs(1);
+
+$program = session()->get('program_name') ?? '';
+
+$programName = 'BS ' . preg_replace(
+    '/^Bachelor of Science in (.+)$/i',
+    '$1',
+    $program
+);
 ?>
 
 <form 
@@ -69,7 +77,7 @@ $fields = get_field_configs(1);
                 <div class="program-choice-box">
                     <div class="program-choice">
                         <span>1ST CHOICE</span>
-                        <p>BS Computer Science</p>
+                        <p><?= $programName ?></p>
                     </div>
                 </div>
             </div>

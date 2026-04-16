@@ -81,3 +81,23 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    const applicantRow = document.querySelectorAll('.recent-applicants-table__row');
+
+    applicantRow.forEach(row => {
+        row.addEventListener('click', (e) => {
+            const target = e.target;
+            const actionCell = row.querySelector('.recent-applicants-table__cell--actions');
+            if (actionCell.contains(target)) {
+                // Clicked on the action cell, do nothing here (let the link handle it)
+                return;
+            }
+            // Otherwise, navigate to the applicant's detailed view
+            const viewLink = row.querySelector('.recent-applicants-table__cell--actions a');
+            if (viewLink) {
+                window.location.href = viewLink.href;
+            }
+        });
+    });
+</script>

@@ -1,3 +1,5 @@
+<!-- admission-officer/dashboard/dashboard.php -->
+
 <div class="dashboard">
 
     <?= $this->include('admission-officer/dashboard/components/top-controls') ?>

@@ -13,6 +13,11 @@
     outline: none;
 
     transition: all 0.2s ease;
+
+    user-select: none;        /* Standard */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE/Edge */
 }
 
 /* Focus state */

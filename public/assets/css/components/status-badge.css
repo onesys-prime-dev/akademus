@@ -38,3 +38,34 @@
     background-color: #A374D5;
     color: #5B00BD;
 }
+
+
+/* Additional statuses for exam schedule applicants */
+/* Cancelled */
+.status-badge--cancelled {
+    background-color: #FEE2E2;
+    color: #B91C1C;
+}
+
+/* Booked */
+.status-badge--booked {
+    background-color: #E0F2FE;
+    color: #0369A1;
+}
+
+/* Attended */
+.status-badge--attended {
+    background-color: #DCFCE7;
+    color: #166534;
+}
+
+
+.status-badge--open {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-badge--closed {
+    background: #fee2e2;
+    color: #991b1b;
+}

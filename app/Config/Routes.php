@@ -42,6 +42,11 @@ $routes->post('applicant-form/get-drafts', 'Applicant\ApplicantFormController::g
 // tracking progress
 $routes->get('tracking-progress', 'Applicant\TrackingProgressController::index');
 
+// Applicant Exam Schedule (only accessible when exam_enabled = 1)
+$routes->get ('exam-schedule',        'Applicant\ExamScheduleController::index');
+$routes->post('exam-schedule/book',   'Applicant\ExamScheduleController::book');
+$routes->post('exam-schedule/cancel', 'Applicant\ExamScheduleController::cancel');
+
 // requirement steps routes
 $routes->get('requirements', 'Applicant\RequirementsController::index');
 $routes->get('requirements/step/(:num)', 'Applicant\RequirementsController::getStep/$1');
@@ -65,32 +70,36 @@ $routes->post('admin/users/(:num)/reset-password',    'Admin\UsersController::re
 $routes->post('admin/users/(:num)/delete',            'Admin\UsersController::delete/$1');
 
 // Theme Editor
-$routes->get('admin/theme',       'ThemeController::index');
-$routes->post('admin/theme/save', 'ThemeController::save');
-$routes->get('admin/theme/json',  'ThemeController::getThemeJson');
+$routes->get('admin/theme',            'ThemeController::index');
+$routes->post('admin/theme/save',      'ThemeController::save');
+$routes->get('admin/theme/json',       'ThemeController::getThemeJson');
+$routes->get('admin/theme/preview',    'ThemeController::preview');
 
 
 // -------------------------------- PAYMENT FEES ------------------------------ //
-// Admission Processing Fee
-$routes->get('admission-processing-fee', 'Payment\AdmissionProcessingFeeController::admissionProcessingFee');
+// Applicant — submit payments
+$routes->get('admission-processing-fee',         'Payment\AdmissionProcessingFeeController::admissionProcessingFee');
 $routes->post('admission-processing-fee/submit', 'Payment\AdmissionProcessingFeeController::store');
-$routes->post('admin/payments/approve/(:num)', 'Payment\AdmissionProcessingFeeController::approve/$1');
-$routes->post('admin/payments/reject/(:num)', 'Payment\AdmissionProcessingFeeController::reject/$1');
 
-// Reservation Fee
-$routes->get('reservation-fee', 'Payment\ReservationFeeController::index');
+$routes->get('reservation-fee',         'Payment\ReservationFeeController::index');
 $routes->post('reservation-fee/submit', 'Payment\ReservationFeeController::store');
-$routes->post('admin/reservation/approve/(:num)', 'Payment\ReservationFeeController::approve/$1');
-$routes->post('admin/reservation/reject/(:num)', 'Payment\ReservationFeeController::reject/$1');
 
-// Admin Payment Fee 
-// Payment settings
-$routes->get('admin/payments'                   , 'Admin\PaymentFeesController::index');
-$routes->get('admin/payment-fees'               , 'Admin\PaymentFeesController::fees');
-$routes->post('admin/payment-fees/update/(:num)', 'Admin\PaymentFeesController::updateFee/$1');
-$routes->post('admin/payments/approve/(:num)'   , 'Admin\PaymentFeesController::approve/$1');
-$routes->post('admin/payments/reject/(:num)'    , 'Admin\PaymentFeesController::reject/$1');
+// Admin — fee amount settings only (no payment review)
+$routes->get('admin/payment-fees',                        'Admin\PaymentFeesController::fees');
+$routes->post('admin/payment-fees/update/(:num)',          'Admin\PaymentFeesController::updateFee/$1');
+$routes->post('admin/payment-methods/add',                 'Admin\PaymentFeesController::addMethod');
+$routes->post('admin/payment-methods/update/(:num)',       'Admin\PaymentFeesController::updateMethod/$1');
+$routes->post('admin/payment-methods/toggle/(:num)',       'Admin\PaymentFeesController::toggleMethod/$1');
+
+// Admission Officer — payment review (approve/reject + proof file)
+$routes->post('admission-officer/payments/(:num)/approve', 'AdmissionOfficer\PaymentController::approve/$1');
+$routes->post('admission-officer/payments/(:num)/reject',  'AdmissionOfficer\PaymentController::reject/$1');
+$routes->get('admission-officer/payments/(:num)/proof',    'AdmissionOfficer\PaymentController::proofFile/$1');
 // ----------------------------------------------------------------------------- //
+
+// Admin System Settings
+$routes->get ('admin/settings',      'Admin\SettingsController::index');
+$routes->post('admin/settings/save', 'Admin\SettingsController::save');
 
 
 // FAQ
@@ -147,7 +156,10 @@ $routes->post('admission-officer/login',  'AdmissionOfficer\AuthController::logi
 $routes->get ('admission-officer/logout', 'AdmissionOfficer\AuthController::logout');
 
 // Admission Officer Dashboard
-$routes->get('admission-officer/dashboard',                     'AdmissionOfficer\DashboardController::index');
+$routes->get('admission-officer/dashboard',             'AdmissionOfficer\DashboardController::index');
+$routes->get('admission-officer/dashboard/search',      'AdmissionOfficer\DashboardController::search');
+$routes->get('admission-officer/dashboard/data',        'AdmissionOfficer\DashboardController::data');
+$routes->get('admission-officer/dashboard/calendar-data', 'AdmissionOfficer\DashboardController::calendarData');
 
 // Admission Officer Applicants
 $routes->get('admission-officer/applicants/(:num)',                          'AdmissionOfficer\ApplicantsController::index/$1');
@@ -169,6 +181,7 @@ $routes->post('admission-officer/exam-schedule/update/(:num)',          'Admissi
 $routes->post('admission-officer/exam-schedule/delete/(:num)',          'AdmissionOfficer\ExamScheduleController::delete/$1');
 $routes->post('admission-officer/exam-schedule/bookings/check-in/(:num)', 'AdmissionOfficer\ExamScheduleController::checkIn/$1');
 $routes->post('admission-officer/exam-schedule/bookings/cancel/(:num)', 'AdmissionOfficer\ExamScheduleController::cancelBooking/$1');
+
 // Admission Officer Follow-Up Messages
 $routes->get ('admission-officer/follow-up',                        'AdmissionOfficer\FollowUpController::index');
 $routes->get ('admission-officer/follow-up/(:num)',                  'AdmissionOfficer\FollowUpController::conversation/$1');
@@ -185,5 +198,4 @@ $routes->get ('follow-up-messages/unread-count','Applicant\FollowUpController::u
 // Tracking Progress
 $routes->get('tracking-progress', 'Applicant\TrackingProgressController::index');
 
-// Processing Fee
-$routes->get('admission-processing-fee', 'Applicant\ProcessingFeeController::index');
+// (duplicate route removed — handled by Payment\AdmissionProcessingFeeController above)

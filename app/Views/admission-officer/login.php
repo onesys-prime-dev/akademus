@@ -176,7 +176,7 @@
             font-weight: 700;
             cursor: pointer;
             transition: background 0.2s, opacity 0.2s;
-            margin-top: 4px;
+            margin-top: 20px;
         }
         .submit-btn:hover:not(:disabled) { background: var(--primary-dark); }
         .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }

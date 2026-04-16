@@ -83,9 +83,18 @@ export function syncContent(html) {
 }
 
 export function setLoading(loading) {
-    const loader = document.getElementById('exam-schedule-table-loading');
-    if (!loader) return;
-    loader.hidden = !loading;
+    const tbody = document.getElementById('exam-schedule-table-body');
+    if (!tbody) return;
+
+    if (loading) {
+        tbody.innerHTML = `
+            <tr>
+                <td class="exam-schedule-table__cell" colspan="6" style="text-align:center;">
+                    Loading...
+                </td>
+            </tr>
+        `;
+    }
 }
 
 export function openModal(id) {
@@ -106,16 +115,33 @@ export function renderScheduleDetails(data) {
 
     if (!schedule) return;
 
-    const setText = (key, value) => {
+    const setText = (key, value, options = {}) => {
         const el = document.querySelector(`[data-detail="${key}"]`);
-        if (el) el.textContent = value ?? '-';
+        if (!el) return;
+
+        el.textContent = value ?? '-';
+
+        if (options.dataset) {
+            Object.entries(options.dataset).forEach(([k, v]) => {
+                el.dataset[k] = v;
+            });
+        }
+    };
+
+    const formatStatus = (status) => {
+        if (!status) return '-';
+        return status.charAt(0).toUpperCase() + status.slice(1);
     };
 
     setText('date', schedule.exam_date ?? '-');
     setText('time', schedule.time ?? `${schedule.start_time ?? '-'} - ${schedule.end_time ?? '-'}`);
     setText('location', schedule.location ?? '-');
     setText('slots', `${schedule.booked_slots ?? 0} / ${schedule.max_slots ?? 0} (${schedule.available_slots ?? 0} available)`);
-    setText('status', schedule.status ?? '-');
+    setText('status', formatStatus(schedule.status), {
+        dataset: {
+            status: (schedule.status ?? '').toLowerCase()
+        }
+    });
     setText('created_at', schedule.created_at ?? '-');
 
     const tbody = document.querySelector('[data-applicants-body]');
@@ -123,8 +149,8 @@ export function renderScheduleDetails(data) {
 
     if (!applicants.length) {
         tbody.innerHTML = `
-            <tr>
-                <td colspan="6" style="text-align:center;">No applicants booked yet</td>
+            <tr class="exam-schedule-table__row">
+                <td class="exam-schedule-table__cell" colspan="6" style="text-align:center;">No applicants booked yet</td>
             </tr>
         `;
         return;
@@ -136,15 +162,15 @@ export function renderScheduleDetails(data) {
             : 'Not yet';
 
         return `
-            <tr>
-                <td>${escapeHtml(applicant.applicant ?? '-')}</td>
-                <td>${escapeHtml(applicant.contact ?? '-')}</td>
-                <td>${escapeHtml(applicant.status ?? '-')}</td>
-                <td>${escapeHtml(applicant.booked_at ?? '-')}</td>
-                <td>${escapeHtml(checkedIn)}</td>
-                <td>
-                    ${!applicant.checked_in_at ? `<button type="button" data-check-in="${applicant.booking_id}">Check-in</button>` : ''}
-                    ${applicant.status !== 'cancelled' ? `<button type="button" data-cancel-booking="${applicant.booking_id}">Cancel</button>` : ''}
+            <tr class="exam-schedule-table__row">
+                <td class="exam-schedule-table__cell">${escapeHtml(applicant.applicant ?? '-')}</td>
+                <td class="exam-schedule-table__cell">${escapeHtml(applicant.contact ?? '-')}</td>
+                <td class="exam-schedule-table__cell">${renderStatus(applicant.status)}</td>
+                <td class="exam-schedule-table__cell">${escapeHtml(applicant.booked_at ?? '-')}</td>
+                <td class="exam-schedule-table__cell">${escapeHtml(checkedIn)}</td>
+                <td class="exam-schedule-table__cell exam-schedule-table__cell--actions">
+                    ${!applicant.checked_in_at && applicant.status !== 'cancelled' ? `<button type="button" class="schedule_btn schedule_btn--check-in" data-check-in="${applicant.booking_id}">Check-in</button>` : ''}
+                    ${applicant.status !== 'cancelled' && applicant.status !== 'attended' ? `<button type="button" class="schedule_btn schedule_btn--cancel" data-cancel-booking="${applicant.booking_id}">Cancel</button>` : ''}
                 </td>
             </tr>
         `;
@@ -158,4 +184,26 @@ function escapeHtml(value) {
         .replaceAll('>', '&gt;')
         .replaceAll('"', '&quot;')
         .replaceAll("'", '&#039;');
+}
+
+function renderStatus(status) {
+    const map = {
+        cancelled: 'status-badge status-badge--cancelled',
+        booked: 'status-badge status-badge--booked',
+        attended: 'status-badge status-badge--attended',
+    };
+
+    const cls = map[status] || 'status-badge';
+
+    return `<span class="${cls}">
+        ${formatStatus(status)}
+    </span>`;
+}
+
+function formatStatus(status) {
+    if (!status) return '-';
+
+    return status
+        .replace('_', ' ')
+        .replace(/\b\w/g, l => l.toUpperCase());
 }

@@ -12,8 +12,9 @@
     $applicant_number = session()->get('applicant_number');
 
     // Theme values
-    $app_name  = $theme['app_name']  ?? 'AKADEMUS';
-    $logo_url  = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png');
+    $app_name    = $theme['app_name']  ?? 'AKADEMUS';
+    $logo_url    = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png');
+    $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') === '1';
 ?>
 
 <nav>
@@ -55,6 +56,12 @@
                         <div class="dotted-link"></div>
                         <span>Tracking Progress</span>
                     </a>
+                    <?php if ($examEnabled): ?>
+                    <a href="<?= base_url('/exam-schedule') ?>" class="sidebar-nav-link <?= str_contains($uri, 'exam-schedule') ? 'active' : '' ?>">
+                        <div class="dotted-link"></div>
+                        <span>Exam Schedule</span>
+                    </a>
+                    <?php endif; ?>
                 </div>
             </div>
 

@@ -181,7 +181,7 @@ function bindContentEvents() {
                 if (form) {
                     form.mode.value = 'edit';
                     form.exam_schedule_id.value = details?.schedule?.exam_schedule_id ?? id;
-                    form.exam_date.value = details?.schedule?.exam_date ?? '';
+                    form.exam_date.value = details?.schedule?.raw_date ?? '';
                     form.start_time.value = details?.schedule?.start_time ?? '';
                     form.end_time.value = details?.schedule?.end_time ?? '';
                     form.location.value = details?.schedule?.location ?? '';
@@ -205,7 +205,7 @@ function bindContentEvents() {
         if (checkInBtn) {
             const bookingId = checkInBtn.dataset.checkIn;
 
-            await postForm(`/admission-officer/exam-schedule/check-in/${bookingId}`, new FormData());
+            await postForm(`/admission-officer/exam-schedule/bookings/check-in/${bookingId}`, new FormData());
 
             const details = await fetchScheduleDetails(state.selectedScheduleId);
             renderScheduleDetails(details);
@@ -219,7 +219,7 @@ function bindContentEvents() {
             const ok = confirm('Cancel this booking?');
             if (!ok) return;
 
-            await postForm(`/admission-officer/exam-schedule/cancel-booking/${bookingId}`, new FormData());
+            await postForm(`/admission-officer/exam-schedule/bookings/cancel/${bookingId}`, new FormData());
 
             const details = await fetchScheduleDetails(state.selectedScheduleId);
             renderScheduleDetails(details);
@@ -275,6 +275,16 @@ function bindModals() {
         document.querySelectorAll('.modal').forEach((modal) => {
             modal.hidden = true;
         });
+    });
+
+    document.addEventListener('click', (e) => {
+        const closeBtn = e.target.closest('.modal__close');
+        if (!closeBtn) return;
+
+        const modal = closeBtn.closest('.modal');
+        if (!modal) return;
+
+        closeModal(modal.id); // uses your existing logic
     });
 }
 

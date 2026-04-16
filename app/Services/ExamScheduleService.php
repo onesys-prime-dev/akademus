@@ -18,8 +18,8 @@ class ExamScheduleService
         $builder = $this->db->table('exam_schedules es')
             ->select("
                 es.exam_schedule_id,
-                es.exam_date AS date,
-                CONCAT(es.start_time, ' - ', es.end_time) AS time,
+                DATE_FORMAT(es.exam_date, '%M %d, %Y') AS date,
+                CONCAT(DATE_FORMAT(es.start_time, '%l:%i %p'), ' - ', DATE_FORMAT(es.end_time, '%l:%i %p')) AS time,
                 es.location,
                 CONCAT(es.booked_slots, ' / ', es.max_slots) AS slots,
                 es.status
@@ -99,8 +99,9 @@ class ExamScheduleService
         return $this->db->table('exam_schedules es')
             ->select("
                 es.exam_schedule_id,
-                es.exam_date,
-                CONCAT(es.start_time, ' - ', es.end_time) AS time,
+                DATE_FORMAT(es.exam_date, '%M %d, %Y') AS exam_date,
+                es.exam_date as raw_date,
+                CONCAT(DATE_FORMAT(es.start_time, '%l:%i %p'), ' - ', DATE_FORMAT(es.end_time, '%l:%i %p')) AS time,
                 es.start_time,
                 es.end_time,
                 es.location,
@@ -108,7 +109,7 @@ class ExamScheduleService
                 es.booked_slots,
                 (es.max_slots - es.booked_slots) AS available_slots,
                 es.status,
-                es.created_at
+                DATE_FORMAT(es.created_at, '%M %d, %Y') as created_at
             ")
             ->where('es.exam_schedule_id', $scheduleId)
             ->get()
@@ -123,8 +124,8 @@ class ExamScheduleService
                 CONCAT(u.lastname, ', ', u.firstname) AS applicant,
                 u.mobile AS contact,
                 eb.status,
-                eb.booked_at,
-                eb.checked_in_at,
+                DATE_FORMAT(eb.booked_at, '%M %d, %Y %l:%i %p') AS booked_at,
+                DATE_FORMAT(eb.checked_in_at, '%M %d, %Y %l:%i %p') AS checked_in_at,
                 eb.applicant_id
             ")
             ->join('exam_bookings eb', 'eb.exam_schedule_id = es.exam_schedule_id')
@@ -134,6 +135,79 @@ class ExamScheduleService
             ->orderBy('eb.booked_at', 'DESC')
             ->get()
             ->getResultArray();
+    }
+
+    /**
+     * Fetch open, not-yet-full schedules for the applicant booking list.
+     */
+    public function getAvailableSchedules(): array
+    {
+        return $this->db->table('exam_schedules')
+            ->select([
+                'exam_schedule_id',
+                'exam_date',
+                'start_time',
+                'end_time',
+                'location',
+                'max_slots',
+                'booked_slots',
+                '(max_slots - booked_slots) AS available_slots',
+            ])
+            ->where('status', 'open')
+            ->where('booked_slots < max_slots')
+            ->where('exam_date >=', date('Y-m-d'))
+            ->orderBy('exam_date', 'ASC')
+            ->orderBy('start_time', 'ASC')
+            ->get()
+            ->getResultArray();
+    }
+
+    /**
+     * Book a slot for an applicant. Returns true on success or a string error message.
+     */
+    public function bookSlot(int $applicantId, int $scheduleId): bool|string
+    {
+        // Verify schedule is still open and has slots
+        $schedule = $this->db->table('exam_schedules')
+            ->where('exam_schedule_id', $scheduleId)
+            ->where('status', 'open')
+            ->get()->getRowArray();
+
+        if (! $schedule) {
+            return 'This exam slot is no longer available.';
+        }
+
+        if ((int) $schedule['booked_slots'] >= (int) $schedule['max_slots']) {
+            return 'This slot is fully booked. Please choose another.';
+        }
+
+        // Check applicant doesn't already have an active booking
+        $existing = $this->db->table('exam_bookings')
+            ->where('applicant_id', $applicantId)
+            ->whereIn('status', ['booked', 'attended'])
+            ->get()->getRowArray();
+
+        if ($existing) {
+            return 'You already have an active exam booking.';
+        }
+
+        $this->db->transStart();
+
+        $this->db->table('exam_bookings')->insert([
+            'exam_schedule_id' => $scheduleId,
+            'applicant_id'     => $applicantId,
+            'status'           => 'booked',
+            'booked_at'        => date('Y-m-d H:i:s'),
+        ]);
+
+        $this->db->table('exam_schedules')
+            ->where('exam_schedule_id', $scheduleId)
+            ->set('booked_slots', 'booked_slots + 1', false)
+            ->update();
+
+        $this->db->transComplete();
+
+        return $this->db->transStatus() ? true : 'Booking failed. Please try again.';
     }
 
     public function createSchedule(array $data): int

@@ -9,3 +9,9 @@
         <button class="table-overview__footer--btn btn-primary">Review Applicants</button>
     </div>
 </div>
+
+<script>
+    document.querySelector('.table-overview__footer--btn').addEventListener('click', function() {
+    window.location.href = '<?= base_url('admission-officer/applicants') ?>';
+});
+</script>

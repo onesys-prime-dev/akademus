@@ -117,6 +117,21 @@ class ThemeController extends BaseController
         return redirect()->to('admin/theme')->with('saved', true);
     }
 
+    // ── Theme Preview (iframe) ────────────────────────────────
+    public function preview()
+    {
+        $page    = $this->request->getGet('page') ?? 'dashboard';
+        $allowed = ['dashboard', 'signin', 'signup', 'appform', 'documents', 'track', 'success'];
+        if (!in_array($page, $allowed)) {
+            $page = 'dashboard';
+        }
+
+        $data['theme'] = $this->themeModel->getAllSettings();
+        $data['page']  = $page;
+
+        return view('admin/theme-preview', $data);
+    }
+
     /**
      * API endpoint — returns current theme as JSON (used by portal views)
      */

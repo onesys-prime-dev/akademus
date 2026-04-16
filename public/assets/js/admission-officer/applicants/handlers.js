@@ -312,6 +312,32 @@ export function initRowClick() {
     });
 }
 
+export function initActions() {
+    document.addEventListener('click', (e) => {
+        const actionEl = e.target.closest('[data-action]');
+        if (!actionEl) return;
+
+        e.stopPropagation(); // ✅ THIS FIXES YOUR BUG
+
+        const action = actionEl.dataset.action;
+        const id = actionEl.dataset.id;
+
+        if (!id) return;
+
+        if (action === 'view') {
+            goToApplicant(id);
+        }
+
+        if (action === 'edit') {
+            console.log('edit', id);
+        }
+
+        if (action === 'delete') {
+            console.log('delete', id);
+        }
+    });
+}
+
 
 // ===============================
 // INIT

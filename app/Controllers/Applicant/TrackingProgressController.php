@@ -117,6 +117,27 @@ class TrackingProgressController extends BaseController
         $isRejected   = $applicantStatus === 'rejected';
         $isEnrolled   = $applicantStatus === 'enrolled';
 
+        // ── Exam Schedule (conditional) ──────────────────────────────────
+        $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') === '1';
+        $examBooking = null;
+
+        if ($examEnabled) {
+            $examBooking = $db->table('exam_bookings eb')
+                ->select([
+                    'eb.status AS booking_status',
+                    'eb.booked_at',
+                    'es.exam_date',
+                    'es.start_time',
+                    'es.location',
+                ])
+                ->join('exam_schedules es', 'es.exam_schedule_id = eb.exam_schedule_id')
+                ->where('eb.applicant_id', $applicant['applicant_id'])
+                ->whereIn('eb.status', ['booked', 'attended'])
+                ->orderBy('es.exam_date', 'ASC')
+                ->limit(1)
+                ->get()->getRowArray();
+        }
+
         $steps = [
             [
                 'title'    => 'Account Created',
@@ -148,22 +169,49 @@ class TrackingProgressController extends BaseController
                     : ($docsComplete ? 'active' : 'pending'),
                 'remarks'  => null,
             ],
-            [
-                'title'    => $isRejected ? 'Application Declined' : 'Admission Decision',
-                'subtitle' => $isApproved
-                    ? 'Your application has been approved.'
-                    : ($isRejected ? 'Your application was not approved at this time.' : 'Final review; decision released via email.'),
-                'date'     => $decisionMade ? ($applicant['application_date'] ?? null) : null,
-                'status'   => $decisionMade ? ($isRejected ? 'rejected' : 'done') : 'pending',
-                'remarks'  => $decisionMade ? $decisionRemarks : null,
-            ],
-            [
-                'title'    => 'Enrollment & Payment',
-                'subtitle' => 'Accept offer; complete enrollment.',
-                'date'     => $isEnrolled ? ($applicant['application_date'] ?? null) : null,
-                'status'   => $isEnrolled ? 'done' : 'pending',
+        ];
+
+        // Inject exam step only when the feature is enabled
+        if ($examEnabled) {
+            if ($examBooking) {
+                $examDate  = date('M j, Y', strtotime($examBooking['exam_date']));
+                $examTime  = $examBooking['start_time'] ? date('g:i A', strtotime($examBooking['start_time'])) : '';
+                $examLabel = $examDate . ($examTime ? ' at ' . $examTime : '');
+                $examSub   = 'Venue: ' . ($examBooking['location'] ?? 'TBA');
+                $examStatus = $examBooking['booking_status'] === 'attended' ? 'done' : 'active';
+                $examDate2  = $examBooking['booking_status'] === 'attended' ? $examBooking['booked_at'] : null;
+            } else {
+                $examLabel  = 'Entrance Examination';
+                $examSub    = 'Your exam schedule will be assigned by the admissions office.';
+                $examStatus = 'pending';
+                $examDate2  = null;
+            }
+
+            $steps[] = [
+                'title'    => $examLabel,
+                'subtitle' => $examSub,
+                'date'     => $examDate2,
+                'status'   => $examStatus,
                 'remarks'  => null,
-            ],
+            ];
+        }
+
+        $steps[] = [
+            'title'    => $isRejected ? 'Application Declined' : 'Admission Decision',
+            'subtitle' => $isApproved
+                ? 'Your application has been approved.'
+                : ($isRejected ? 'Your application was not approved at this time.' : 'Final review; decision released via email.'),
+            'date'     => $decisionMade ? ($applicant['application_date'] ?? null) : null,
+            'status'   => $decisionMade ? ($isRejected ? 'rejected' : 'done') : 'pending',
+            'remarks'  => $decisionMade ? $decisionRemarks : null,
+        ];
+
+        $steps[] = [
+            'title'    => 'Enrollment & Payment',
+            'subtitle' => 'Accept offer; complete enrollment.',
+            'date'     => $isEnrolled ? ($applicant['application_date'] ?? null) : null,
+            'status'   => $isEnrolled ? 'done' : 'pending',
+            'remarks'  => null,
         ];
 
         // ── Status Header ────────────────────────────────────────────────
@@ -178,6 +226,8 @@ class TrackingProgressController extends BaseController
             'form_submitted'   => $formSubmitted,
             'docs_complete'    => $docsComplete,
             'decision_remarks' => $decisionRemarks,
+            'exam_enabled'     => $examEnabled,
+            'exam_booking'     => $examBooking,
         ];
 
         return view('applicant/main', $data);

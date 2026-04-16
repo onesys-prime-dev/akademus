@@ -1,13 +1,14 @@
-<?php 
-    $aoName    = session()->get('ao_name') ?? 'Admission Officer';
-    $fullname  = $aoName;
-    $parts     = explode(' ', trim($aoName), 2);
-    $initials  = strtoupper(substr($parts[0] ?? 'A', 0, 1) . substr($parts[1] ?? '', 0, 1));
+<?php
+    $aoName      = session()->get('ao_name') ?? 'Admission Officer';
+    $fullname    = $aoName;
+    $parts       = explode(' ', trim($aoName), 2);
+    $initials    = strtoupper(substr($parts[0] ?? 'A', 0, 1) . substr($parts[1] ?? '', 0, 1));
     if (empty(trim($initials))) $initials = 'AO';
 
     // Theme values
-    $app_name  = $theme['app_name']  ?? 'AKADEMUS';
-    $logo_url  = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png');
+    $app_name    = $theme['app_name']  ?? 'AKADEMUS';
+    $logo_url    = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png');
+    $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') === '1';
 ?>
 
 <nav>
@@ -36,10 +37,12 @@
                         <div class="dotted-link"></div>
                         <span>Applicants</span>
                     </a>
+                    <?php if ($examEnabled): ?>
                     <a href="<?= base_url('/admission-officer/exam-schedule') ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-officer/exam-schedule') ? 'active' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Exam Schedule</span>
                     </a>
+                    <?php endif; ?>
                     <a href="<?= base_url('/admission-officer/follow-up') ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-officer/follow-up') ? 'active' : '' ?>" style="justify-content:space-between;">
                         <div style="display:flex;align-items:center;gap:8px;">
                             <div class="dotted-link"></div>

@@ -169,13 +169,12 @@
         .page-selector:focus { border-color: #0040a6; box-shadow: 0 0 0 3px rgba(0,64,166,0.08); }
 
         /* page transition */
-        #portal-preview { width: 100%; height: 100%; display: flex; transition: opacity 0.2s ease; }
-        #portal-preview.fading { opacity: 0; }
+        #preview-iframe { display: block; width: 100%; height: 100%; border: none; opacity: 1; transition: opacity 0.2s ease; }
+        #preview-iframe.fading { opacity: 0; }
 
-        .preview-body { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; background: #f0f4f8; overflow: auto; }
+        .preview-body { flex: 1; display: flex; align-items: stretch; padding: 20px; background: #f0f4f8; overflow: hidden; }
         .preview-frame {
-            width: 100%; max-width: 760px; aspect-ratio: 16/10;
-            border-radius: 14px; overflow: hidden;
+            flex: 1; border-radius: 14px; overflow: hidden;
             box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 4px 16px rgba(0,0,0,0.08);
             transition: all 0.4s cubic-bezier(.4,0,.2,1);
         }
@@ -400,7 +399,10 @@ $csrfHash  = csrf_hash();
         </div>
         <div class="preview-body">
             <div class="preview-frame">
-                <div id="portal-preview"></div>
+                <iframe id="preview-iframe"
+                        src="<?= base_url('admin/theme/preview?page=dashboard') ?>"
+                        frameborder="0"
+                        title="Portal Preview"></iframe>
             </div>
         </div>
         <div class="preview-footer">
@@ -480,29 +482,29 @@ const PAGE_NAMES = {
     success:   'Registration Success',
 };
 
-const lighten = (hex, a=0.88) => {
-    const r = Math.round(parseInt(hex.slice(1,3),16) + (255-parseInt(hex.slice(1,3),16))*a);
-    const g = Math.round(parseInt(hex.slice(3,5),16) + (255-parseInt(hex.slice(3,5),16))*a);
-    const b = Math.round(parseInt(hex.slice(5,7),16) + (255-parseInt(hex.slice(5,7),16))*a);
-    return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
-};
+const PREVIEW_BASE = '<?= base_url('admin/theme/preview') ?>';
 
 // ── PAGE SWITCHER ─────────────────────────────────────────
 function switchPage(page) {
-    const el = document.getElementById('portal-preview');
-    el.classList.add('fading');
-    setTimeout(() => {
-        currentPage = page;
-        document.getElementById('pf-page').textContent = PAGE_NAMES[page];
+    const iframe = document.getElementById('preview-iframe');
+    iframe.classList.add('fading');
+    currentPage = page;
+    document.getElementById('pf-page').textContent = PAGE_NAMES[page];
+    iframe.src = PREVIEW_BASE + '?page=' + page;
+    iframe.onload = function() {
         updatePreview();
-        el.classList.remove('fading');
-    }, 180);
+        iframe.classList.remove('fading');
+    };
 }
 
 // ── INIT ──────────────────────────────────────────────────
 function init() {
     buildPresets(); buildFonts(); buildRadii(); buildColorPreview();
-    updatePreview(); updateFontPreview();
+    updateFontPreview();
+
+    // Send current (unsaved) theme to iframe once it finishes loading
+    const iframe = document.getElementById('preview-iframe');
+    iframe.addEventListener('load', function() { updatePreview(); });
 
     document.querySelectorAll('.tab').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -554,454 +556,12 @@ function init() {
     });
 }
 
-// ── SHARED LAYOUT HELPERS ─────────────────────────────────
-function getSidebarHtml(p, pd, acc, at, f, rad) {
-    const logoHtml = state.logo_url
-        ? `<img src="${state.logo_url}" style="width:100%;height:100%;object-fit:cover;">`
-        : (state.logo_text || 'AK');
-    return `
-    <div style="width:140px;background:${pd};display:flex;flex-direction:column;flex-shrink:0;">
-        <div style="padding:14px 12px 10px;border-bottom:1px solid rgba(255,255,255,0.07);">
-            <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px;">
-                <div style="width:26px;height:26px;border-radius:${parseInt(rad)/2}px;background:${acc};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:${at};flex-shrink:0;overflow:hidden;">${logoHtml}</div>
-                <div>
-                    <div style="font-size:9px;font-weight:800;color:#fff;letter-spacing:-0.2px;">${state.app_name || 'AKADEMUS'}</div>
-                    <div style="font-size:7px;color:rgba(255,255,255,0.3);letter-spacing:1px;text-transform:uppercase;">Portal</div>
-                </div>
-            </div>
-            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:${parseInt(rad)/2}px;padding:6px 8px;">
-                <div style="font-size:7px;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;margin-bottom:2px;">Applicant ID</div>
-                <div style="font-size:11px;font-weight:800;color:${acc};">#APP-2026-00001</div>
-            </div>
-        </div>
-        <div style="flex:1;padding:8px 6px;display:flex;flex-direction:column;gap:2px;">
-            ${[
-                {l:'Dashboard',   page:'dashboard'},
-                {l:'Applic. Form',page:'appform'},
-                {l:'Documents',   page:'documents'},
-                {l:'Track Status',page:'track'}
-            ].map(n=>`
-                <div onclick="switchPage('${n.page}');document.getElementById('page-selector').value='${n.page}';"
-                     style="display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:${parseInt(rad)/1.5}px;background:${currentPage===n.page?p+'80':'transparent'};border:1px solid ${currentPage===n.page?p+'99':'transparent'};cursor:pointer;">
-                    <div style="width:4px;height:4px;border-radius:50%;background:${currentPage===n.page?acc:'rgba(255,255,255,0.25)'};"></div>
-                    <span style="font-size:9px;font-weight:${currentPage===n.page?600:400};color:${currentPage===n.page?'#fff':'rgba(255,255,255,0.5)'};">${n.l}</span>
-                </div>`).join('')}
-        </div>
-        <div style="padding:8px 10px;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:6px;">
-            <div style="width:22px;height:22px;border-radius:50%;background:${acc};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:${at};">JD</div>
-            <div>
-                <div style="font-size:9px;font-weight:700;color:#fff;">Juan Dela Cruz</div>
-                <div style="font-size:7px;color:rgba(255,255,255,0.35);text-transform:uppercase;">Applicant</div>
-            </div>
-        </div>
-    </div>`;
-}
-
-function getTopbarHtml(title, p, acc, at, rad) {
-    return `
-    <div style="height:38px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 14px;flex-shrink:0;">
-        <span style="font-size:10px;font-weight:700;color:#0d1e38;">${title}</span>
-        <div style="display:flex;gap:6px;align-items:center;">
-            <div style="padding:3px 8px;border-radius:99px;background:#dcfce7;font-size:8px;font-weight:700;color:#166534;">Approved</div>
-            <div style="padding:3px 9px;border-radius:${parseInt(rad)/1.5}px;background:${acc};font-size:8px;font-weight:700;color:${at};">Pay Fee</div>
-        </div>
-    </div>`;
-}
-
-// ── PAGE RENDERERS ────────────────────────────────────────
-function renderDashboard(p, pd, acc, at, f, rad, lt) {
-    return `
-    <div style="font-family:'${f}',sans-serif;display:flex;height:100%;width:100%;">
-        ${getSidebarHtml(p,pd,acc,at,f,rad)}
-        <div style="flex:1;display:flex;flex-direction:column;background:#f8fafc;min-width:0;">
-            ${getTopbarHtml('Dashboard',p,acc,at,rad)}
-            <div style="flex:1;padding:10px;overflow:hidden;">
-                <div style="background:${p};border-radius:${rad};padding:12px 14px;margin-bottom:8px;position:relative;overflow:hidden;">
-                    <div style="position:absolute;top:-30px;right:-30px;width:90px;height:90px;border-radius:50%;background:${acc};opacity:0.12;"></div>
-                    <div style="font-size:8px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">${state.school_year} · AKADEMUS</div>
-                    <div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">Hello, <span style="color:${acc};">Juan.</span></div>
-                    <div style="display:flex;gap:6px;">
-                        <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:${parseInt(rad)/2}px;padding:4px 8px;">
-                            <div style="font-size:8px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;">ID</div>
-                            <div style="font-size:9px;font-weight:800;color:${acc};">#APP-2026-00001</div>
-                        </div>
-                        <div style="padding:5px 10px;background:${acc};border-radius:${parseInt(rad)/1.5}px;font-size:8px;font-weight:800;color:${at};align-self:center;">Upload Docs</div>
-                    </div>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-                    ${[{t:'Applicant Form',s:'2 of 4 completed',w:'50%'},{t:'Documents',s:'3 of 10 uploaded',w:'30%'}].map((c,i)=>`
-                        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:${rad};padding:10px 10px 8px;">
-                            <div style="font-size:9px;font-weight:700;color:#0d1e38;margin-bottom:3px;">${c.t}</div>
-                            <div style="height:4px;background:#edf1f9;border-radius:99px;margin-bottom:5px;overflow:hidden;">
-                                <div style="height:100%;width:${c.w};background:${p};border-radius:99px;"></div>
-                            </div>
-                            <div style="font-size:8px;color:#5a6a85;">${c.s}</div>
-                            <div style="margin-top:6px;padding:3px 8px;background:${lt};border-radius:${parseInt(rad)/1.5}px;font-size:8px;font-weight:700;color:${p};display:inline-block;">${i===0?'Continue':'Upload'}</div>
-                        </div>`).join('')}
-                </div>
-            </div>
-        </div>
-    </div>`;
-}
-
-function renderSignIn(p, pd, acc, at, f, rad, lt) {
-    const logoHtml = state.logo_url
-        ? `<img src="${state.logo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:${rad};">`
-        : `<img src="assets/images/logo_akademus.png" style="width:100%;height:100%;object-fit:cover;border-radius:${rad};">`;
-    return `
-    <div style="font-family:'${f}',sans-serif;display:flex;flex-direction:column;height:100%;width:100%;background:linear-gradient(-20deg,${p},${pd},${p},${pd});background-size:400% 400%;">
-        <!-- NAVBAR -->
-        <div style="width:100%;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
-            <div style="display:flex;align-items:center;">
-                <div style="width:24px;height:24px;border-radius:${rad};overflow:hidden;">${logoHtml}</div>
-            </div>
-            <div style="display:flex;gap:6px;">
-                ${['Admissions','Academics','About Us','Contact Us'].map(n=>`<span style="font-size:7px;color:#fff;padding:4px 7px;">${n}</span>`).join('')}
-            </div>
-            <span style="font-size:7px;color:#fff;white-space:nowrap;">Proceed to Mentora →</span>
-        </div>
-        <!-- MAIN CARD AREA -->
-        <div style="flex:1;display:flex;justify-content:center;align-items:center;padding:2px 12px 6px;">
-            <div style="width:92%;height:88%;background:linear-gradient(180deg,rgba(255,255,255,0.61),rgba(138,140,202,0.61));border-radius:${rad};display:flex;overflow:hidden;">
-                <!-- LEFT -->
-                <div style="width:50%;padding:14px 22px;border-right:1px solid #D9D9D9;display:flex;flex-direction:column;justify-content:center;gap:12px;">
-                    <!-- Logo + name -->
-                    <div style="display:flex;align-items:center;gap:8px;">
-                        <div style="width:26px;height:26px;border-radius:${rad};overflow:hidden;flex-shrink:0;">${logoHtml}</div>
-                        <div>
-                            <div style="font-size:13px;font-weight:700;color:${p};line-height:1.2;word-break:break-word;max-width:150px;">${state.app_name || 'AKADEMUS'}</div>
-<div style="font-size:7px;color:${p};">Admission System</div>
-                        </div>
-                    </div>
-                    <!-- Tagline -->
-                    <div style="display:flex;flex-direction:column;gap:8px;">
-                        <div>
-                            <div style="font-size:18px;font-weight:900;color:#fff;line-height:1.1;">Your Future</div>
-                            <div style="font-size:18px;font-weight:900;color:#fff;line-height:1.1;">Starts <span style="color:${acc};">Here</span></div>
-                        </div>
-                        <div style="font-size:8px;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.4;">Complete your admission entirely online — from document submission to enrollment.</div>
-                        <!-- Steps -->
-                        <div style="display:flex;flex-direction:column;gap:6px;">
-                            ${[['1','Create your applicant account'],['2','Submit required documents'],['3','Track your application status']].map(([n,l])=>`
-                            <div style="display:flex;align-items:center;gap:7px;">
-                                <div style="width:14px;height:14px;border:1px solid ${acc};border-radius:${parseInt(rad)/2}px;display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff;flex-shrink:0;">${n}</div>
-                                <span style="font-size:7px;color:rgba(255,255,255,0.85);font-weight:600;">${l}</span>
-                            </div>`).join('')}
-                        </div>
-                    </div>
-                </div>
-                <!-- RIGHT -->
-                <div style="width:50%;padding:14px 22px;display:flex;flex-direction:column;gap:8px;justify-content:center;">
-                    <div>
-                        <div style="font-size:14px;font-weight:600;color:${p};line-height:1;">Sign In</div>
-                        <div style="font-size:7px;color:rgba(61,61,61,0.6);font-weight:700;">Welcome back! Sign in to continue.</div>
-                    </div>
-                    <!-- Toggle -->
-                    <div style="display:flex;height:22px;background:rgba(255,255,255,0.5);border-radius:${rad};padding:2px;">
-                        <div style="flex:1;display:flex;align-items:center;justify-content:center;background:${p};border-radius:${rad};font-size:8px;font-weight:600;color:#fff;">Sign In</div>
-                        <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;color:#656070;">Sign Up</div>
-                    </div>
-                    <!-- Fields -->
-                    ${[['EMAIL ADDRESS','yourname@email.com'],['PASSWORD','••••••••']].map(([l,ph])=>`
-                    <div style="display:flex;flex-direction:column;gap:2px;">
-                        <div style="font-size:7px;font-weight:600;color:#F2F4F5;margin-left:3px;">${l}</div>
-                        <div style="height:20px;background:rgba(255,255,255,0.6);border:1px solid #D9D9D9;border-radius:${rad};padding:0 8px;display:flex;align-items:center;font-size:7px;color:#797777;">${ph}</div>
-                    </div>`).join('')}
-                    <div style="text-align:right;font-size:7px;color:#F2F4F5;font-weight:600;">Forgot Password?</div>
-                    <div style="height:22px;background:${p};border-radius:${rad};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;color:#fff;">Sign In</div>
-                    <div style="text-align:center;font-size:7px;color:#F2F4F5;">Don't have an account? <span style="text-decoration:underline;">Click here</span></div>
-                </div>
-            </div>
-        </div>
-    </div>`;
-}
-
-function renderSignUp(p, pd, acc, at, f, rad, lt) {
-    const logoHtml = state.logo_url
-        ? `<img src="${state.logo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:${rad};">`
-        : `<img src="assets/images/logo_akademus.png" style="width:100%;height:100%;object-fit:cover;border-radius:${rad};">`;
-    return `
-    <div style="font-family:'${f}',sans-serif;display:flex;flex-direction:column;height:100%;width:100%;background:linear-gradient(-20deg,${p},${pd},${p},${pd});background-size:400% 400%;">
-        <!-- NAVBAR -->
-        <div style="width:100%;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
-            <div style="display:flex;align-items:center;">
-                <div style="width:24px;height:24px;border-radius:${rad};overflow:hidden;">${logoHtml}</div>
-            </div>
-            <div style="display:flex;gap:6px;">
-                ${['Admissions','Academics','About Us','Contact Us'].map(n=>`<span style="font-size:7px;color:#fff;padding:4px 7px;">${n}</span>`).join('')}
-            </div>
-            <span style="font-size:7px;color:#fff;white-space:nowrap;">Proceed to Mentora →</span>
-        </div>
-        <!-- MAIN CARD AREA -->
-        <div style="flex:1;display:flex;justify-content:center;align-items:center;padding:2px 12px 6px;">
-            <div style="width:88%;height:94%;background:linear-gradient(180deg,rgba(255,255,255,0.61),rgba(138,140,202,0.61));border-radius:${rad};display:flex;overflow:hidden;">
-                <!-- LEFT -->
-                <div style="width:50%;padding:14px 22px;border-right:1px solid #D9D9D9;display:flex;flex-direction:column;justify-content:center;gap:12px;">
-                    <div style="display:flex;align-items:center;gap:8px;">
-                        <div style="width:26px;height:26px;border-radius:${rad};overflow:hidden;flex-shrink:0;">${logoHtml}</div>
-                        <div>
-                            <div style="font-size:13px;font-weight:700;color:${p};line-height:1.2;word-break:break-word;max-width:150px;">${state.app_name || 'AKADEMUS'}</div>
-<div style="font-size:7px;color:${p};">Admission System</div>
-                        </div>
-                    </div>
-                    <div style="display:flex;flex-direction:column;gap:8px;">
-                        <div>
-                            <div style="font-size:12px;font-weight:900;color:#fff;line-height:1.1;">Your Future</div>
-                            <div style="font-size:12px;font-weight:900;color:#fff;line-height:1.1;">Starts <span style="color:${acc};">Here</span></div>
-                        </div>
-                        <div style="font-size:8px;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.4;">Complete your admission entirely online — from document submission to enrollment.</div>
-                        <div style="display:flex;flex-direction:column;gap:6px;">
-                            ${[['1','Create your applicant account'],['2','Submit required documents'],['3','Track your application status']].map(([n,l])=>`
-                            <div style="display:flex;align-items:center;gap:7px;">
-                                <div style="width:14px;height:14px;border:1px solid ${acc};border-radius:${parseInt(rad)/2}px;display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff;flex-shrink:0;">${n}</div>
-                                <span style="font-size:7px;color:rgba(255,255,255,0.85);font-weight:600;">${l}</span>
-                            </div>`).join('')}
-                        </div>
-                    </div>
-                </div>
-                <!-- RIGHT -->
-                <div style="width:50%;padding:12px 22px;display:flex;flex-direction:column;gap:6px;justify-content:center;">
-                    <div>
-                        <div style="font-size:14px;font-weight:600;color:${p};line-height:1;">Create Account</div>
-                        <div style="font-size:7px;color:rgba(61,61,61,0.6);font-weight:700;">Fill in your details to get started.</div>
-                    </div>
-                    <!-- Toggle -->
-                    <div style="display:flex;height:22px;background:rgba(255,255,255,0.5);border-radius:${rad};padding:2px;">
-                        <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;color:#656070;">Sign In</div>
-                        <div style="flex:1;display:flex;align-items:center;justify-content:center;background:${p};border-radius:${rad};font-size:8px;font-weight:600;color:#fff;">Sign Up</div>
-                    </div>
-                    <!-- Two fields row -->
-                    <div style="display:flex;gap:6px;">
-                        ${[['FIRST NAME','John'],['LAST NAME','Doe']].map(([l,ph])=>`
-                        <div style="flex:1;display:flex;flex-direction:column;gap:2px;">
-                            <div style="font-size:7px;font-weight:600;color:#F2F4F5;margin-left:3px;">${l}</div>
-                            <div style="height:18px;background:rgba(255,255,255,0.6);border:1px solid #D9D9D9;border-radius:${rad};padding:0 6px;display:flex;align-items:center;font-size:7px;color:#797777;">${ph}</div>
-                        </div>`).join('')}
-                    </div>
-                    <!-- Single fields -->
-                    ${[['EMAIL ADDRESS','yourname@email.com'],['MOBILE NUMBER','09XXXXXXXXX']].map(([l,ph])=>`
-                    <div style="display:flex;flex-direction:column;gap:2px;">
-                        <div style="font-size:7px;font-weight:600;color:#F2F4F5;margin-left:3px;">${l}</div>
-                        <div style="height:18px;background:rgba(255,255,255,0.6);border:1px solid #D9D9D9;border-radius:${rad};padding:0 8px;display:flex;align-items:center;font-size:7px;color:#797777;">${ph}</div>
-                    </div>`).join('')}
-                    <!-- Program select -->
-                    <div style="display:flex;flex-direction:column;gap:2px;">
-                        <div style="font-size:7px;font-weight:600;color:#F2F4F5;margin-left:3px;">1ST CHOICE OF PROGRAM</div>
-                        <div style="height:18px;background:rgba(255,255,255,0.6);border:1px solid #D9D9D9;border-radius:${rad};padding:0 8px;display:flex;align-items:center;font-size:7px;color:#9b9999;">Select a Program ▾</div>
-                    </div>
-                    <!-- Note box -->
-                    <div style="border:1px solid rgba(0,64,166,0.4);background:rgba(0,64,166,0.2);border-radius:${rad};padding:4px 8px;">
-                        <div style="font-size:7px;font-weight:600;color:${p};">Note:</div>
-                        <div style="font-size:8px;color:#031D46;font-weight:700;opacity:0.8;line-height:1.3;">Your final program will be confirmed in the Applicant Information Form.</div>
-                    </div>
-                    <div style="height:20px;background:${p};border-radius:${rad};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;color:#fff;">CREATE ACCOUNT</div>
-                </div>
-            </div>
-        </div>
-    </div>`;
-}
-
-function renderAppForm(p, pd, acc, at, f, rad, lt) {
-    return `
-    <div style="font-family:'${f}',sans-serif;display:flex;height:100%;width:100%;">
-        ${getSidebarHtml(p,pd,acc,at,f,rad)}
-        <div style="flex:1;display:flex;flex-direction:column;background:#f8fafc;min-width:0;">
-            ${getTopbarHtml('Application Form',p,acc,at,rad)}
-            <div style="flex:1;padding:10px;overflow:hidden;display:flex;flex-direction:column;gap:8px;">
-                <!-- Step indicator -->
-                <div style="display:flex;align-items:center;gap:4px;background:#fff;border:1px solid #e2e8f0;border-radius:${rad};padding:8px 12px;">
-                    ${[['1','Personal','done'],['2','Academic','active'],['3','Contact',''],['4','Review','']].map(([n,l,s])=>`
-                        <div style="display:flex;align-items:center;gap:4px;flex:1;">
-                            <div style="width:18px;height:18px;border-radius:50%;background:${s==='done'?acc:s==='active'?p:'#e2e8f0'};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:${s==='done'?at:s==='active'?'#fff':'#94a3b8'};flex-shrink:0;">${s==='done'?'✓':n}</div>
-                            <span style="font-size:8px;font-weight:${s==='active'?700:500};color:${s==='active'?p:'#94a3b8'};">${l}</span>
-                            ${n!='4'?`<div style="flex:1;height:1px;background:${s==='done'?acc:'#e2e8f0'};margin:0 4px;"></div>`:''}
-                        </div>`).join('')}
-                </div>
-                <!-- Form fields -->
-                <div style="background:#fff;border:1px solid #e2e8f0;border-radius:${rad};padding:10px 12px;flex:1;">
-                    <div style="font-size:10px;font-weight:700;color:#0d1e38;margin-bottom:8px;">Academic Information</div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                        ${[['Previous School','St. Paul University Manila'],['Year Level','Grade 12 / Senior High'],['Program Applying For','BS Computer Science'],['GWA / Grade Average','95.5']].map(([l,v])=>`
-                            <div>
-                                <div style="font-size:8px;font-weight:700;color:#5a6a85;margin-bottom:3px;">${l}</div>
-                                <div style="height:26px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:${parseInt(rad)/1.5}px;padding:0 10px;display:flex;align-items:center;font-size:9px;color:#0d1e38;font-weight:600;">${v}</div>
-                            </div>`).join('')}
-                    </div>
-                    <div style="margin-top:8px;">
-                        <div style="font-size:8px;font-weight:700;color:#5a6a85;margin-bottom:3px;">Honors & Awards</div>
-                        <div style="height:40px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:${parseInt(rad)/1.5}px;padding:8px 10px;font-size:9px;color:#94a3b8;">With Honors, Academic Excellence Award 2024...</div>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
-                        <div style="padding:5px 12px;border:1px solid #e2e8f0;border-radius:${parseInt(rad)/1.5}px;font-size:9px;font-weight:600;color:#5a6a85;">← Back</div>
-                        <div style="padding:5px 14px;background:${p};border-radius:${parseInt(rad)/1.5}px;font-size:9px;font-weight:700;color:#fff;">Save & Continue →</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>`;
-}
-
-function renderDocuments(p, pd, acc, at, f, rad, lt) {
-    const docs = [
-        {n:'Birth Certificate',s:'uploaded',i:'✓'},
-        {n:'Form 138 / Report Card',s:'uploaded',i:'✓'},
-        {n:'Good Moral Certificate',s:'pending',i:'⏳'},
-        {n:'2x2 ID Photo',s:'missing',i:'📷'},
-        {n:'Medical Certificate',s:'missing',i:'📋'},
-    ];
-    return `
-    <div style="font-family:'${f}',sans-serif;display:flex;height:100%;width:100%;">
-        ${getSidebarHtml(p,pd,acc,at,f,rad)}
-        <div style="flex:1;display:flex;flex-direction:column;background:#f8fafc;min-width:0;">
-            ${getTopbarHtml('Document Upload',p,acc,at,rad)}
-            <div style="flex:1;padding:10px;overflow:hidden;display:flex;flex-direction:column;gap:6px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;">
-                    <div style="font-size:10px;font-weight:700;color:#0d1e38;">Required Documents <span style="color:#5a6a85;font-weight:500;">(2 of 5 uploaded)</span></div>
-                    <div style="height:5px;width:120px;background:#e2e8f0;border-radius:99px;overflow:hidden;">
-                        <div style="height:100%;width:40%;background:${p};border-radius:99px;"></div>
-                    </div>
-                </div>
-                ${docs.map(d=>`
-                    <div style="background:#fff;border:1px solid ${d.s==='uploaded'?acc+'66':d.s==='pending'?p+'44':'#e2e8f0'};border-radius:${rad};padding:8px 10px;display:flex;align-items:center;gap:10px;">
-                        <div style="width:28px;height:28px;border-radius:${parseInt(rad)/1.5}px;background:${d.s==='uploaded'?acc+'22':d.s==='pending'?lt:'#f0f4f8'};display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">${d.i}</div>
-                        <div style="flex:1;">
-                            <div style="font-size:9px;font-weight:700;color:#0d1e38;">${d.n}</div>
-                            <div style="font-size:8px;color:${d.s==='uploaded'?'#0a7a52':d.s==='pending'?p:'#94a3b8'};">${d.s==='uploaded'?'Uploaded successfully':d.s==='pending'?'Under review':'Not yet uploaded'}</div>
-                        </div>
-                        <div style="padding:3px 10px;border-radius:${parseInt(rad)/1.5}px;font-size:8px;font-weight:700;background:${d.s==='uploaded'?'#dcfce7':d.s==='pending'?lt:p};color:${d.s==='uploaded'?'#166534':d.s==='pending'?p:'#fff'};">${d.s==='uploaded'?'View':d.s==='pending'?'Pending':'Upload'}</div>
-                    </div>`).join('')}
-            </div>
-        </div>
-    </div>`;
-}
-
-function renderTrack(p, pd, acc, at, f, rad, lt) {
-    const steps = [
-        {l:'Application Submitted',d:'Feb 10, 2026',done:true},
-        {l:'Documents Verified',d:'Feb 14, 2026',done:true},
-        {l:'Entrance Exam Scheduled',d:'Feb 20, 2026',done:true},
-        {l:'Interview',d:'Mar 5, 2026',active:true},
-        {l:'Final Decision',d:'Pending',done:false},
-    ];
-    return `
-    <div style="font-family:'${f}',sans-serif;display:flex;height:100%;width:100%;">
-        ${getSidebarHtml(p,pd,acc,at,f,rad)}
-        <div style="flex:1;display:flex;flex-direction:column;background:#f8fafc;min-width:0;">
-            ${getTopbarHtml('Track Progress',p,acc,at,rad)}
-            <div style="flex:1;padding:10px;overflow:hidden;display:flex;flex-direction:column;gap:8px;">
-                <!-- Status card -->
-                <div style="background:${p};border-radius:${rad};padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">
-                    <div>
-                        <div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;font-weight:700;margin-bottom:2px;">Current Status</div>
-                        <div style="font-size:13px;font-weight:800;color:#fff;">Interview Scheduled</div>
-                        <div style="font-size:9px;color:${acc};font-weight:600;margin-top:2px;">Mar 5, 2026 · 10:00 AM · Room 204</div>
-                    </div>
-                    <div style="padding:6px 12px;background:${acc};border-radius:${parseInt(rad)/1.5}px;font-size:9px;font-weight:700;color:${at};">View Details</div>
-                </div>
-                <!-- Timeline -->
-                <div style="background:#fff;border:1px solid #e2e8f0;border-radius:${rad};padding:10px 14px;flex:1;">
-                    <div style="font-size:10px;font-weight:700;color:#0d1e38;margin-bottom:10px;">Application Timeline</div>
-                    ${steps.map((s,i)=>`
-                        <div style="display:flex;gap:10px;margin-bottom:${i<steps.length-1?'8':'0'}px;">
-                            <div style="display:flex;flex-direction:column;align-items:center;">
-                                <div style="width:16px;height:16px;border-radius:50%;background:${s.done?acc:s.active?p:'#e2e8f0'};display:flex;align-items:center;justify-content:center;font-size:8px;color:${s.done?at:s.active?'#fff':'#94a3b8'};flex-shrink:0;font-weight:700;">${s.done?'✓':s.active?'●':''}</div>
-                                ${i<steps.length-1?`<div style="width:1px;flex:1;background:${s.done?acc+'55':'#e2e8f0'};margin:2px 0;min-height:14px;"></div>`:''}
-                            </div>
-                            <div style="padding-bottom:${i<steps.length-1?'6':'0'}px;">
-                                <div style="font-size:9px;font-weight:${s.active?700:600};color:${s.active?p:s.done?'#0d1e38':'#94a3b8'};">${s.l}</div>
-                                <div style="font-size:8px;color:#94a3b8;">${s.d}</div>
-                            </div>
-                        </div>`).join('')}
-                </div>
-            </div>
-        </div>
-    </div>`;
-}
-
-function renderSuccess(p, pd, acc, at, f, rad, lt) {
-    const logoHtml = state.logo_url
-        ? `<img src="${state.logo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:${rad};">`
-        : `<img src="assets/images/logo_akademus.png" style="width:100%;height:100%;object-fit:cover;border-radius:${rad};">`;
-    return `
-    <div style="font-family:'${f}',sans-serif;display:flex;flex-direction:column;height:100%;width:100%;background:linear-gradient(-20deg,${p},${pd},${p},${pd});background-size:400% 400%;">
-        <!-- NAVBAR -->
-        <div style="width:100%;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
-            <div style="width:24px;height:24px;border-radius:${rad};overflow:hidden;">${logoHtml}</div>
-            <div style="display:flex;gap:6px;">
-                ${['Admissions','Academics','About Us','Contact Us'].map(n=>`<span style="font-size:7px;color:#fff;padding:4px 7px;">${n}</span>`).join('')}
-            </div>
-            <span style="font-size:7px;color:#fff;white-space:nowrap;">Proceed to Mentora →</span>
-        </div>
-        <!-- MAIN CARD AREA -->
-        <div style="flex:1;display:flex;justify-content:center;align-items:center;padding:2px 12px 6px;">
-            <div style="width:88%;height:88%;background:linear-gradient(180deg,rgba(255,255,255,0.61),rgba(138,140,202,0.61));border-radius:${rad};display:flex;overflow:hidden;">
-                <!-- LEFT (same as sign-in) -->
-                <div style="width:50%;padding:14px 22px;border-right:1px solid #D9D9D9;display:flex;flex-direction:column;justify-content:center;gap:12px;">
-                    <div style="display:flex;align-items:center;gap:8px;">
-                        <div style="width:26px;height:26px;border-radius:${rad};overflow:hidden;flex-shrink:0;">${logoHtml}</div>
-                        <div>
-                            <div style="font-size:13px;font-weight:700;color:${p};line-height:1.2;word-break:break-word;max-width:150px;">${state.app_name || 'AKADEMUS'}</div>
-<div style="font-size:7px;color:${p};">Admission System</div>
-                        </div>
-                    </div>
-                    <div style="display:flex;flex-direction:column;gap:8px;">
-                        <div>
-                            <div style="font-size:12px;font-weight:900;color:#fff;line-height:1.1;">Your Future</div>
-                            <div style="font-size:12px;font-weight:900;color:#fff;line-height:1.1;">Starts <span style="color:${acc};">Here</span></div>
-                        </div>
-                        <div style="font-size:8px;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.4;">Complete your admission entirely online — from document submission to enrollment.</div>
-                        <div style="display:flex;flex-direction:column;gap:6px;">
-                            ${[['1','Create your applicant account'],['2','Submit required documents'],['3','Track your application status']].map(([n,l])=>`
-                            <div style="display:flex;align-items:center;gap:7px;">
-                                <div style="width:14px;height:14px;border:1px solid ${acc};border-radius:${parseInt(rad)/2}px;display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff;flex-shrink:0;">${n}</div>
-                                <span style="font-size:7px;color:rgba(255,255,255,0.85);font-weight:600;">${l}</span>
-                            </div>`).join('')}
-                        </div>
-                    </div>
-                </div>
-                <!-- RIGHT — success view, no toggle -->
-                <div style="width:50%;padding:14px 22px;display:flex;flex-direction:column;gap:10px;justify-content:center;">
-                    <div>
-                        <div style="font-size:14px;font-weight:600;color:${p};line-height:1;">Registration Successful! 🎉</div>
-                        <div style="font-size:7px;color:rgba(61,61,61,0.6);font-weight:700;margin-top:2px;">Your account has been created.</div>
-                    </div>
-                    <!-- Applicant ID box -->
-                    <div style="width:100%;padding:10px 10px 18px;background:rgba(0,64,166,0.2);border-radius:${rad};border:1px solid rgba(0,64,166,0.4);display:flex;flex-direction:column;align-items:center;gap:4px;">
-                        <div style="font-size:8px;font-weight:600;color:${p};">Applicant ID</div>
-                        <div style="font-size:16px;font-weight:700;color:#031D46;">#APP-2026-00001</div>
-                    </div>
-                    <!-- Info text -->
-                    <div style="font-size:7px;color:#3D3D3D;font-weight:700;line-height:1.5;">A welcome email with your ID has been sent to your registered email address. Keep this for your records.</div>
-                    <!-- Go back btn -->
-                    <div style="height:22px;background:${p};border-radius:${rad};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;color:#fff;">GO BACK TO LOGIN</div>
-                </div>
-            </div>
-        </div>
-    </div>`;
-}
-
-// ── MASTER UPDATE ─────────────────────────────────────────
+// ── MASTER UPDATE (postMessage to iframe) ─────────────────
 function updatePreview() {
-    const p   = state.primary_color;
-    const pd  = state.sidebar_color;
-    const acc = state.accent_color;
-    const at  = state.accent_text;
-    const f   = state.font_family;
-    const rad = state.border_radius;
-    const lt  = lighten(p);
-
-    const renders = {
-        dashboard: renderDashboard,
-        signin:    renderSignIn,
-        signup:    renderSignUp,
-        appform:   renderAppForm,
-        documents: renderDocuments,
-        track:     renderTrack,
-        success:   renderSuccess,
-    };
-
-    const fn = renders[currentPage] || renderDashboard;
-    document.getElementById('portal-preview').innerHTML = fn(p, pd, acc, at, f, rad, lt);
+    const iframe = document.getElementById('preview-iframe');
+    if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ type: 'theme-update', theme: state }, '*');
+    }
 }
 
 // ── PRESETS / FONTS / RADII ───────────────────────────────

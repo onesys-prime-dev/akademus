@@ -18,8 +18,7 @@
             </tr>
         </thead>
 
-        <tbody class="applicants-table__body" id="applicants-table-body">
-        </tbody>
+        <tbody class="applicants-table__body" id="applicants-table-body"></tbody>
     </table>
 
     <?= $this->include('admission-officer/components/pagination') ?>
