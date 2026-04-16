@@ -324,21 +324,10 @@
     text-anchor: end;
 }
 
-.applicants-per-status__bars rect {
-    fill: #3b82f6;
-}
-
-.applicants-per-status__bars rect:nth-child(2) {
-    fill: #8b5cf6;
-}
-
-.applicants-per-status__bars rect:nth-child(3) {
-    fill: #10b981;
-}
-
-.applicants-per-status__bars rect:nth-child(4) {
-    fill: #ef4444;
-}
+.applicants-per-status__bars rect:nth-of-type(1) { fill: #3b82f6; }
+.applicants-per-status__bars rect:nth-of-type(2) { fill: #8b5cf6; }
+.applicants-per-status__bars rect:nth-of-type(3) { fill: #10b981; }
+.applicants-per-status__bars rect:nth-of-type(4) { fill: #ef4444; }
 
 /* legends */
 .applicants-per-status__legends {

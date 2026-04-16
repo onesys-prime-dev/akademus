@@ -28,7 +28,7 @@
         <div class="applicant-profile__summary">
             <span class="applicant-profile__label">Date Added</span>
             <span class="applicant-profile__value">
-                <?= !empty($profile['application_date']) ? esc(date('Y-m-d', strtotime($profile['application_date']))) : '-' ?>
+                <?= !empty($profile['application_date']) ? esc(date('F j, Y', strtotime($profile['application_date']))) : '-' ?>
             </span>
         </div>
 

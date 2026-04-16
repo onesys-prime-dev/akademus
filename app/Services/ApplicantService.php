@@ -66,7 +66,7 @@ class ApplicantService
                 CONCAT(u.firstname, ' ', u.lastname) as applicant_name,
                 u.email,
                 a.applicant_number,
-                ass.applicant_type,
+                CONCAT(UPPER(LEFT(ass.applicant_type, 1)), LOWER(SUBSTRING(ass.applicant_type, 2))) as applicant_type,
                 p.program_code as program,
                 a.application_status as status,
                 a.created_at as date_added
