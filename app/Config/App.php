@@ -16,7 +16,7 @@ class App extends BaseConfig
      *
      * E.g., http://example.com/
      */
-    public string $baseURL = 'http://localhost/Akademus/akademus/public/';
+    public string $baseURL = 'https://www.srv1404227.hstgr.cloud';
 
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
