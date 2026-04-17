@@ -26,10 +26,10 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => 'localhost',
-        'username'     => 'root',
-        'password'     => '',
-        'database'     => 'akademus_db',
+        'hostname'     => '127.0.0.1',
+        'username'     => 'akademus',
+        'password'     => '123',
+        'database'     => 'akademus',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,

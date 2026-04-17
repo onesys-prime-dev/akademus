@@ -11,6 +11,7 @@ use App\Services\EmailService;
 
 class AuthController extends BaseController
 {
+
     public function sign_in()
     {
         if ($this->request->isAJAX()) {
