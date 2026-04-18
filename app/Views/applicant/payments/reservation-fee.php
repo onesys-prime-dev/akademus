@@ -33,7 +33,7 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
         <?php endif; ?>
 
         <div class="apf-banner__label">Reservation Processing Fee</div>
-        <h2 class="apf-banner__title">Pay to Submit Your Application</h2>
+        <h2 class="apf-banner__title">Pay to Reserve your Slot</h2>
         <p class="apf-banner__subtitle">
             A one-time processing fee is required to officially submit your reservation application. Non-refundable.
         </p>

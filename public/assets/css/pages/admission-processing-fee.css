@@ -12,7 +12,7 @@
 /* ─── Banner ─── */
 .apf-banner {
     padding: 32px 36px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, #0057d6 55%, #0040a6 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 55%, var(--primary-dark) 100%);
     color: #fff;
     border: none;
     position: relative;
@@ -41,6 +41,42 @@
     border-radius: 50%;
     background: rgba(255,255,255,0.04);
     pointer-events: none;
+}
+
+.apf-banner__status-row {
+    margin-bottom: 12px;
+}
+
+.apf-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background-color: #dbdbdb;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.apf-badge--warning { 
+    background-color: #FFDA86;
+    color: #9D6E00;
+}
+
+.apf-badge--info { 
+    background-color: #3784FF;
+    color: #0040A6;
+}
+
+.apf-badge--success { 
+    background-color: #74D586;
+    color: #007315;
+}
+
+.apf-badge--danger { 
+    background-color: #EB5151;
+    color: #970000;
 }
 
 .apf-banner__label {
@@ -77,13 +113,13 @@
 .apf-banner__currency {
     font-size: 22px;
     font-weight: 700;
-    color: var(--color-accent);
+    color: var(--accent);
 }
 
 .apf-banner__number {
     font-size: 42px;
     font-weight: 800;
-    color: var(--color-accent);
+    color: var(--accent);
     line-height: 1;
 }
 
@@ -141,7 +177,7 @@
 
 .apf-step-badge {
     padding: 4px 14px;
-    background: var(--color-primary);
+    background: var(--primary);
     color: #fff;
     font-size: 12px;
     font-weight: 700;
@@ -168,7 +204,7 @@
     background: rgba(0, 64, 166, 0.08);
     font-size: 13px;
     font-weight: 700;
-    color: var(--color-primary);
+    color: var(--primary);
     border-bottom: 1px solid var(--border-muted);
 }
 
@@ -240,7 +276,7 @@
 
 .apf-upload-zone:hover,
 .apf-upload-zone--active {
-    border-color: var(--color-primary);
+    border-color: var(--primary);
     background: rgba(0, 64, 166, 0.04);
 }
 
@@ -348,7 +384,7 @@
     font-size: 15px;
     font-family: inherit;
     border-radius: var(--radius-md);
-    background: var(--color-primary);
+    background: var(--primary);
     color: #fff;
     font-weight: 600;
     cursor: pointer;
@@ -358,7 +394,7 @@
 }
 
 .apf-submit-btn:hover:not(:disabled) {
-    background: var(--color-primary-hover);
+    background: var(--primary-dark);
     transform: translateY(-1px);
     box-shadow: 0 6px 20px rgba(0,64,166,0.3);
 }
