@@ -30,6 +30,8 @@ import {
     closeDocModal
 } from './ui.js';
 
+import { handlePaymentAction } from './payments.js';
+
 let debounceTimer;
 
 
@@ -336,6 +338,71 @@ export function initActions() {
             console.log('delete', id);
         }
     });
+}
+
+
+// ===============================
+// PAYMENT ACTIONS
+// ===============================
+export function initPaymentActions() {
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-payment-action]');
+    if (!btn) return;
+
+    const paymentId = btn.dataset.paymentId;
+    const action    = btn.dataset.action;
+    const panel     = btn.dataset.panel;
+
+    if (!paymentId || !action) return;
+
+    handlePaymentAction(paymentId, action, panel);
+  });
+}
+
+export function initLightbox() {
+
+  // OPEN
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-lightbox]');
+    if (!trigger) return;
+
+    const url = trigger.dataset.src;
+
+    const img = document.getElementById('pr-lightbox-img');
+    const box = document.getElementById('pr-lightbox');
+
+    if (img && box) {
+      img.src = url;
+      box.classList.add('active');
+    }
+  });
+
+  // CLOSE (overlay or button)
+  document.addEventListener('click', (e) => {
+    const isOverlay = e.target.matches('[data-lightbox-overlay]');
+    const isCloseBtn = e.target.closest('[data-lightbox-close]');
+
+    if (!isOverlay && !isCloseBtn) return;
+
+    const box = document.getElementById('pr-lightbox');
+    const img = document.getElementById('pr-lightbox-img');
+
+    if (box) box.classList.remove('active');
+    if (img) img.src = '';
+  });
+
+  // ESC key support (nice UX)
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+
+    const box = document.getElementById('pr-lightbox');
+    const img = document.getElementById('pr-lightbox-img');
+
+    if (box?.classList.contains('active')) {
+      box.classList.remove('active');
+      if (img) img.src = '';
+    }
+  });
 }
 
 

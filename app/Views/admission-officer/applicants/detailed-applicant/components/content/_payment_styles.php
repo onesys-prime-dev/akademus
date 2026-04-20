@@ -61,6 +61,12 @@
 .pr-btn--approve{background:#22c55e;color:#fff;}
 .pr-btn--reject{background:transparent;color:#ef4444;border:1.5px solid #fca5a5;}
 .pr-btn:hover:not(:disabled){opacity:.88;}
+.pr-btn.loading {opacity: 0.7;pointer-events: none;position: relative; cursor: wait;}
+/* spinner */
+.pr-btn.loading::after {content: '';width: 14px;height: 14px;border: 2px solid rgba(255,255,255,0.6);border-top-color: #fff;border-radius: 50%;margin-left: 8px;animation: pr-spin 0.6s linear infinite;}
+/* animation */
+@keyframes pr-spin {to { transform: rotate(360deg); }}
+.pr-btn--reject.loading::after {border: 2px solid rgba(239,68,68,0.4);border-top-color: #ef4444;}
 
 /* Lightbox */
 .pr-lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:99999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
@@ -68,4 +74,6 @@
 .pr-lightbox img{max-width:90vw;max-height:88vh;border-radius:8px;box-shadow:0 24px 64px rgba(0,0,0,.5);}
 .pr-lightbox__close{position:absolute;top:18px;right:22px;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:24px;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;}
 .pr-lightbox__close:hover{background:rgba(255,255,255,.25);}
+
+
 </style>
