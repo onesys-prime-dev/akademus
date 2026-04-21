@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - testing-branch-theo
+      - staging
 
 jobs:
   deploy:
@@ -25,6 +25,6 @@ jobs:
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "bash ~/deploy.sh production"
-          elif [ "${{ github.ref }}" = "refs/heads/testing-branch-theo" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/staging" ]; then
             ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "bash ~/deploy.sh testing"
           fi
