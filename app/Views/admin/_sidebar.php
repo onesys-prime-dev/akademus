@@ -170,6 +170,15 @@
             Requirement Docs
         </a>
 
+        <a href="<?= base_url('admin/programs') ?>" class="nav-item <?= (strpos(current_url(), 'admin/programs') !== false && strpos(current_url(), 'admin/programs/presets') === false) ? 'on' : '' ?>">
+            <!-- GraduationCap: manage academic programs -->
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+            Manage Programs
+        </a>
+
         <a href="<?= base_url('admin/programs/presets') ?>" class="nav-item <?= strpos(current_url(), 'admin/programs/presets') !== false ? 'on' : '' ?>">
             <!-- Layers: stacking programs to presets -->
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

@@ -43,7 +43,7 @@ class AuthController extends BaseController
         $programs = array_map(function($program) {
             return [
                 'id'   => $program['program_id'],
-                'name' => preg_replace('/^Bachelor of Science in\s*/', '', $program['program_name'])
+                'name' => $program['program_name'],
             ];
         }, $programs);
 
