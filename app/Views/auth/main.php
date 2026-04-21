@@ -267,7 +267,9 @@
             if (!opt) return;
             value.value           = opt.dataset.value;
             display.textContent   = opt.dataset.name;
-            display.style.color   = '#fff';
+            display.style.color   = '#000000';
+            display.style.fontWeight = '600';
+            display.style.fontSize = '13px';
             const err = document.getElementById('prog-error');
             if (err) err.style.display = 'none';
             trigger.style.border  = '';
