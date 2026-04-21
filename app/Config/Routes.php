@@ -199,3 +199,6 @@ $routes->get ('follow-up-messages/unread-count','Applicant\FollowUpController::u
 $routes->get('tracking-progress', 'Applicant\TrackingProgressController::index');
 
 // (duplicate route removed — handled by Payment\AdmissionProcessingFeeController above)
+
+// API Route for Groq AI Assistant
+$routes->post('api/groq/chat', 'API\Groq::chat');
