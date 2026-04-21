@@ -13,6 +13,16 @@ class ProgramModel extends Model
     protected $allowedFields = ['program_code', 'program_name', 'preset_id'];
     protected $useTimestamps = false;
 
+    protected $validationRules = [
+        'program_name' => 'required|max_length[100]',
+        'program_code' => 'required|max_length[20]',
+    ];
+
+    protected $validationMessages = [
+        'program_name' => ['required' => 'Program name is required.'],
+        'program_code' => ['required' => 'Program code is required.'],
+    ];
+
     public function getProgramWithFields($programId)
     {
         $program = $this->find($programId);
