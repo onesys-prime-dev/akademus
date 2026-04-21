@@ -46,7 +46,7 @@ abstract class BaseController extends Controller
     protected function renderApplicant($page, $data = [])
     {
         $themeModel = new \App\Models\ThemeModel();
-        $data['theme'] = $themeModel->first();
+        $data['theme'] = $themeModel->getAllSettings();
 
         return view('applicant/main', array_merge($data, [
             'page_content' => $page
