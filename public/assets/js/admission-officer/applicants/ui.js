@@ -88,7 +88,7 @@ export function updateApplicantsTable(applicants) {
             </td>
 
             <td class="applicants-table__cell">
-                ${escapeHtml(app.applicant_type || '-')}
+                ${escapeHtml(app.applicant_type || '')}
             </td>
 
             <td class="applicants-table__cell">

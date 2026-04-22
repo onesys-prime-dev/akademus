@@ -31,27 +31,27 @@
 
                         <!-- APPLICANT NAME -->
                         <td class="recent-applicants-table__cell">
-                            <?= esc($row['applicant_name'] ?? '-') ?>
+                            <?= esc($row['applicant_name'] ?? '') ?>
                         </td>
 
                         <!-- EMAIL -->
                         <td class="recent-applicants-table__cell">
-                            <?= esc($row['email'] ?? '-') ?>
+                            <?= esc($row['email'] ?? '') ?>
                         </td>
 
                         <!-- APPLICANT NUMBER -->
                         <td class="recent-applicants-table__cell">
-                            <?= esc($row['applicant_number'] ?? '-') ?>
+                            <?= esc($row['applicant_number'] ?? '') ?>
                         </td>
 
                         <!-- APPLICANT TYPE -->
                         <td class="recent-applicants-table__cell">
-                            <?= esc($row['applicant_type'] ?? '-') ?>
+                            <?= esc($row['applicant_type'] ?? '') ?>
                         </td>
 
                         <!-- PROGRAM -->
                         <td class="recent-applicants-table__cell">
-                            <?= esc($row['program'] ?? '-') ?>
+                            <?= esc($row['program'] ?? '') ?>
                         </td>
 
                         <!-- STATUS -->
@@ -63,7 +63,7 @@
 
                         <!-- DATE ADDED -->
                         <td class="recent-applicants-table__cell">
-                            <?= $row['date_added'] ? esc(date('M j, Y', strtotime($row['date_added']))) : '-' ?>
+                            <?= $row['date_added'] ? esc(date('M j, Y', strtotime($row['date_added']))) : '' ?>
                         </td>
 
                         <!-- ACTION -->

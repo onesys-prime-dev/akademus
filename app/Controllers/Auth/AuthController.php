@@ -4,7 +4,6 @@ namespace App\Controllers\Auth;
 
 use App\Controllers\BaseController;
 
-use App\Models\Applicant\ApplicantsViewModel;
 use App\Models\Program\ProgramModel;
 use App\Models\ThemeModel;
 use App\Services\EmailService;
