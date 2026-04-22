@@ -16,7 +16,9 @@ class App extends BaseConfig
      *
      * E.g., http://example.com/
      */
-    public string $baseURL = 'http://localhost/Akademus/akademus/public/';
+    // NOTE: Base URL should be configured via the .env file for deployment.
+    // This ensures environment-specific URLs (local, staging, production) are handled properly.
+    public string $baseURL = ''; // IMPORTANT: Do not set the base URL here.
 
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.

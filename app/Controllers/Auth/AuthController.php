@@ -4,13 +4,13 @@ namespace App\Controllers\Auth;
 
 use App\Controllers\BaseController;
 
-use App\Models\Applicant\ApplicantsViewModel;
 use App\Models\Program\ProgramModel;
 use App\Models\ThemeModel;
 use App\Services\EmailService;
 
 class AuthController extends BaseController
 {
+
     public function sign_in()
     {
         if ($this->request->isAJAX()) {
@@ -42,7 +42,7 @@ class AuthController extends BaseController
         $programs = array_map(function($program) {
             return [
                 'id'   => $program['program_id'],
-                'name' => preg_replace('/^Bachelor of Science in\s*/', '', $program['program_name'])
+                'name' => $program['program_name'],
             ];
         }, $programs);
 
@@ -187,50 +187,72 @@ class AuthController extends BaseController
     }
 
     public function login()
-    {
-        $model = new ApplicantsViewModel();
+{
+    $db = \Config\Database::connect();
 
-        $user = $model
-            ->where('email', $this->request->getPost('email'))
-            ->first();
+    $builder = $db->table('applicants a');
+    $builder->select('
+        a.applicant_id,
+        u.user_id,
+        a.program_id,
+        p.program_name,
+        u.firstname,
+        u.lastname,
+        u.email,
+        u.mobile,
+        u.role,
+        a.applicant_number,
+        a.password,
+        a.temp_password,
+        a.application_status,
+        a.application_date,
+        a.created_at
+    ');
 
-        if (!$user) {
-            return $this->response->setJSON([
-                'status'  => 'error',
-                'message' => 'User not found'
-            ]);
-        }
+    $builder->join('users u', 'a.user_id = u.user_id');
+    $builder->join('programs p', 'a.program_id = p.program_id');
 
-        if (!password_verify($this->request->getPost('password'), $user['password'])) {
-            return $this->response->setJSON([
-                'status'  => 'error',
-                'message' => 'Invalid email or password'
-            ]);
-        }
+    $builder->where('u.email', $this->request->getPost('email'));
 
-        session()->set([
-            'user_id'          => $user['user_id'],
-            'firstname'        => $user['firstname'],
-            'lastname'         => $user['lastname'],
-            'email'            => $user['email'],
-            'role'             => $user['role'],
-            'applicant_number' => $user['applicant_number'],
-            'applicant_id'     => $user['applicant_id'],
-            'program_id'       => $user['program_id'],
-            'program_name'     => $user['program_name'],
-            'temp_password'    => (bool) $user['temp_password'],
-            'logged_in'        => true
+    $user = $builder->get()->getRowArray();
+
+    if (!$user) {
+        return $this->response->setJSON([
+            'status'  => 'error',
+            'message' => 'User not found'
         ]);
-
-        if ($this->request->isAJAX()) {
-            return $this->response->setJSON([
-                'status'   => 'success',
-                'redirect' => base_url('dashboard'),
-            ]);
-        }
-
-        return redirect()->to('/dashboard');
     }
+
+    if (!password_verify($this->request->getPost('password'), $user['password'])) {
+        return $this->response->setJSON([
+            'status'  => 'error',
+            'message' => 'Invalid email or password'
+        ]);
+    }
+
+    session()->set([
+        'user_id'          => $user['user_id'],
+        'firstname'        => $user['firstname'],
+        'lastname'         => $user['lastname'],
+        'email'            => $user['email'],
+        'role'             => $user['role'],
+        'applicant_number' => $user['applicant_number'],
+        'applicant_id'     => $user['applicant_id'],
+        'program_id'       => $user['program_id'],
+        'program_name'     => $user['program_name'],
+        'temp_password'    => (bool) $user['temp_password'],
+        'logged_in'        => true
+    ]);
+
+    if ($this->request->isAJAX()) {
+        return $this->response->setJSON([
+            'status'   => 'success',
+            'redirect' => base_url('dashboard'),
+        ]);
+    }
+
+    return redirect()->to('/dashboard');
+}
 
     public function forgotPassword()
     {

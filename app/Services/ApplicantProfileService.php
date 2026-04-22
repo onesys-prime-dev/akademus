@@ -27,7 +27,7 @@ class ApplicantProfileService
                 a.application_status,
                 a.decision_remarks,
                 a.application_date,
-                ap.applicant_type,
+                CONCAT(UPPER(LEFT(ap.applicant_type, 1)), LOWER(SUBSTRING(ap.applicant_type, 2))) as applicant_type,
                 CONCAT(u.lastname, ", ", u.firstname) as applicant_name,
                 u.user_id,
                 u.email,

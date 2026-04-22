@@ -6,8 +6,26 @@ use CodeIgniter\Config\BaseConfig;
 
 class Email extends BaseConfig
 {
-    public string $fromEmail  = 'testakademusmentora@gmail.com';
-    public string $fromName   = 'Akademus Portal';
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Load from .env with fallback values
+        $this->fromEmail = env('email.fromEmail');
+        $this->fromName  = env('email.fromName');
+
+        $this->protocol  = env('email.protocol');
+
+        $this->SMTPHost  = env('email.SMTPHost');
+        $this->SMTPUser  = env('email.SMTPUser');
+        $this->SMTPPass  = env('email.SMTPPass');
+        $this->SMTPPort  = (int) env('email.SMTPPort');
+        $this->SMTPTimeout = (int) env('email.SMTPTimeout');
+        $this->SMTPCrypto = env('email.SMTPCrypto');
+    }
+
+    public string $fromEmail;
+    public string $fromName;
     public string $recipients = '';
 
     /**
@@ -18,7 +36,7 @@ class Email extends BaseConfig
     /**
      * The mail sending protocol: mail, sendmail, smtp
      */
-    public string $protocol = 'smtp';
+    public string $protocol;
 
     /**
      * The server path to Sendmail.
@@ -28,7 +46,7 @@ class Email extends BaseConfig
     /**
      * SMTP Server Hostname
      */
-    public string $SMTPHost = 'smtp.gmail.com';
+    public string $SMTPHost;
 
     /**
      * Which SMTP authentication method to use: login, plain
@@ -38,23 +56,22 @@ class Email extends BaseConfig
     /**
      * SMTP Username
      */
-    public string $SMTPUser = 'testakademusmentora@gmail.com'; // pwede nyo e try gmail nyo for testing punta lng google app password to generate
-    // public string $SMTPUser = $myemail;
+    public string $SMTPUser;
 
     /**
      * SMTP Password
      */
-    public string $SMTPPass = 'dxfs trbl bnwz omnn'; // gumamit ako app password from gmail :D
+    public string $SMTPPass;
 
     /**
      * SMTP Port
      */
-    public int $SMTPPort = 587;
+    public int $SMTPPort;
 
     /**
      * SMTP Timeout (in seconds)
      */
-    public int $SMTPTimeout = 5;
+    public int $SMTPTimeout;
 
     /**
      * Enable persistent SMTP connections
@@ -68,7 +85,7 @@ class Email extends BaseConfig
      *             to the server. 'ssl' means implicit SSL. Connection on port
      *             465 should set this to ''.
      */
-    public string $SMTPCrypto = 'tls';
+    public string $SMTPCrypto;
 
     /**
      * Enable word-wrap

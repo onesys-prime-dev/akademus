@@ -139,6 +139,14 @@ $routes->get ('admin/requirement-categories/(:num)/edit',            'Admin\Requ
 $routes->post('admin/requirement-categories/(:num)/update',          'Admin\RequirementCategoriesController::update/$1');
 $routes->get ('admin/requirement-categories/(:num)/delete',          'Admin\RequirementCategoriesController::delete/$1');
 
+// Admin Program Management (CRUD)
+$routes->get ('admin/programs',                  'Admin\CoursesController::index');
+$routes->get ('admin/programs/create',           'Admin\CoursesController::create');
+$routes->post('admin/programs/create',           'Admin\CoursesController::create');
+$routes->get ('admin/programs/(:num)/edit',      'Admin\CoursesController::edit/$1');
+$routes->post('admin/programs/(:num)/edit',      'Admin\CoursesController::edit/$1');
+$routes->get ('admin/programs/(:num)/delete',    'Admin\CoursesController::delete/$1');
+
 // Admin Program-Preset Management
 $routes->get('admin/programs/presets',           'Admin\ProgramPresetsController::index');
 $routes->post('admin/programs/assign-preset',    'Admin\ProgramPresetsController::assignPreset');
@@ -199,3 +207,6 @@ $routes->get ('follow-up-messages/unread-count','Applicant\FollowUpController::u
 $routes->get('tracking-progress', 'Applicant\TrackingProgressController::index');
 
 // (duplicate route removed — handled by Payment\AdmissionProcessingFeeController above)
+
+// API Route for Groq AI Assistant
+$routes->post('api/groq/chat', 'API\Groq::chat');

@@ -9,6 +9,8 @@ import {
     initRowClick,
     initDocModal,
     initActions,
+    initPaymentActions,
+    initLightbox,
     init
 } from './handlers.js';
 
@@ -21,6 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initSearch();
     initPagination();
     initDocModal();
+    initPaymentActions();
+    initLightbox();
 
     // ================= PROFILE =================
     if (state.mode === 'profile') {

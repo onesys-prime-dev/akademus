@@ -466,10 +466,6 @@ const SCHOOL_NAME      = '<?= esc($theme['app_name']         ?? 'the school') ?>
 const SCHOOL_YEAR      = '<?= esc($theme['school_year']      ?? '') ?>';
 const ADMISSION_STATUS = '<?= esc($theme['admission_status'] ?? 'Open for Applications') ?>';
 
-// ── Groq config — paste your key from console.groq.com ──
-const FAQ_GROQ_KEY = 'Secret';
-const FAQ_GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
-
 // ── Strict admission-only system prompt ──
 const SYSTEM_PROMPT = `You are the official admissions assistant for ${SCHOOL_NAME}, an online admission portal system.
 
@@ -582,22 +578,21 @@ async function sendMessage(text = null) {
     showTyping();
 
     try {
-        const res = await fetch(FAQ_GROQ_URL, {
+        const res = await fetch('<?= base_url('api/groq/chat') ?>', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${FAQ_GROQ_KEY}`
+                'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify({
-                model: 'llama-3.1-8b-instant',
                 messages: [
                     { role: 'system', content: SYSTEM_PROMPT },
                     ...conversationHistory
-                ],
-                temperature: 0.2,
-                max_tokens: 512
+                ]
             })
         });
+
+        if (!res.ok) throw new Error('Server error');
 
         const data = await res.json();
         removeTyping();

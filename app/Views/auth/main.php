@@ -221,27 +221,105 @@
     const headerTitle   = document.querySelector('#auth-header h2');
     const headerSubtitle = document.querySelector('#auth-header span');
 
+    // ── Searchable program dropdown ──────────────────────────────────────────
+    function initProgramSearch() {
+        const wrap    = document.getElementById('prog-wrap');
+        const trigger = document.getElementById('prog-trigger');
+        const display = document.getElementById('prog-display');
+        const arrow   = document.getElementById('prog-arrow');
+        const list    = document.getElementById('prog-list');
+        const search  = document.getElementById('prog-search');
+        const opts    = document.getElementById('prog-options');
+        const noRes   = document.getElementById('prog-no-results');
+        const value   = document.getElementById('program-value');
+        if (!wrap || !trigger) return;
+
+        function openList() {
+            list.style.display = 'block';
+            if (arrow) arrow.style.transform = 'rotate(180deg)';
+            search.value = '';
+            filterOpts('');
+            setTimeout(() => search.focus(), 50);
+        }
+        function closeList() {
+            list.style.display = 'none';
+            if (arrow) arrow.style.transform = '';
+        }
+        function filterOpts(q) {
+            let visible = 0;
+            opts.querySelectorAll('.prog-opt').forEach(o => {
+                const match = o.dataset.name.toLowerCase().includes(q.toLowerCase());
+                o.style.display = match ? 'block' : 'none';
+                if (match) visible++;
+            });
+            noRes.style.display = (visible === 0) ? 'block' : 'none';
+        }
+
+        trigger.addEventListener('click', e => {
+            e.stopPropagation();
+            list.style.display === 'none' ? openList() : closeList();
+        });
+        search.addEventListener('click', e => e.stopPropagation());
+        search.addEventListener('input', function() { filterOpts(this.value); });
+
+        opts.addEventListener('click', function(e) {
+            const opt = e.target.closest('.prog-opt');
+            if (!opt) return;
+            value.value           = opt.dataset.value;
+            display.textContent   = opt.dataset.name;
+            display.style.color   = '#000000';
+            display.style.fontWeight = '600';
+            display.style.fontSize = '13px';
+            const err = document.getElementById('prog-error');
+            if (err) err.style.display = 'none';
+            trigger.style.border  = '';
+            closeList();
+        });
+
+        // Hover styles via JS (avoids needing a stylesheet)
+        opts.addEventListener('mouseover', e => {
+            const opt = e.target.closest('.prog-opt');
+            if (opt) opt.style.background = '#f0f4ff';
+        });
+        opts.addEventListener('mouseout', e => {
+            const opt = e.target.closest('.prog-opt');
+            if (opt) opt.style.background = '';
+        });
+
+        document.addEventListener('click', e => {
+            if (!wrap.contains(e.target)) closeList();
+        });
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
     function loadAuth(url, activeBtn) {
         fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(r => r.json())
         .then(data => {
-            document.title           = "Akademus | " + data.title;
-            headerTitle.textContent  = data.header;
+            document.title             = "Akademus | " + data.title;
+            headerTitle.textContent    = data.header;
             headerSubtitle.textContent = data.subheader;
-            formContainer.innerHTML  = data.form;
+            formContainer.innerHTML    = data.form;
 
+            // Repopulate custom searchable dropdown with fresh programs from server
             if (data.programs) {
-                const select = document.getElementById('program');
-                if (select) {
-                    select.innerHTML = '<option value="" disabled selected hidden>Select a Program</option>';
+                const optsEl = document.getElementById('prog-options');
+                const noRes  = document.getElementById('prog-no-results');
+                if (optsEl) {
+                    optsEl.querySelectorAll('.prog-opt').forEach(o => o.remove());
                     data.programs.forEach(p => {
-                        const opt = document.createElement('option');
-                        opt.value = p.id;
-                        opt.textContent = p.name;
-                        select.appendChild(opt);
+                        const div = document.createElement('div');
+                        div.className        = 'prog-opt';
+                        div.dataset.value    = p.id;
+                        div.dataset.name     = p.name;
+                        div.style.cssText    = 'padding:11px 16px;cursor:pointer;font-size:14px;color:#1a202c;transition:background .12s;';
+                        div.textContent      = p.name;
+                        optsEl.insertBefore(div, noRes);
                     });
                 }
             }
+
+            initProgramSearch();
 
             toggleSignIn.classList.remove('active');
             toggleSignUp.classList.remove('active');
@@ -279,6 +357,15 @@
             const form = document.getElementById('sign-up-form');
             if (!form.checkValidity()) {
                 form.reportValidity();
+                return;
+            }
+            // Validate custom program dropdown
+            const progVal = document.getElementById('program-value');
+            if (progVal && !progVal.value) {
+                const trigger = document.getElementById('prog-trigger');
+                const err     = document.getElementById('prog-error');
+                if (trigger) trigger.style.border = '1.5px solid #f87171';
+                if (err)     err.style.display    = 'block';
                 return;
             }
 

@@ -103,7 +103,7 @@ $statusConfig = [
 
             <?php if ($proofUrl): ?>
                 <?php if ($isImage): ?>
-                <div class="pr-proof-thumb" onclick="prOpenLightbox('<?= esc($proofUrl) ?>')">
+                <div class="pr-proof-thumb" data-lightbox data-src="<?= esc($proofUrl) ?>">
                     <img src="<?= esc($proofUrl) ?>" alt="Proof of Payment">
                     <div class="pr-proof-thumb__overlay">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -142,11 +142,19 @@ $statusConfig = [
             <textarea class="pr-remarks-input" id="pr-remarks-<?= $pid ?>" placeholder="Add remarks for the applicant…" rows="3"></textarea>
             <p class="pr-action-err" id="pr-err-<?= $pid ?>"></p>
             <div class="pr-action-btns">
-                <button class="pr-btn pr-btn--approve" onclick="aoPaymentAction(<?= $pid ?>, 'approve', 'admission')">
+                <button class="pr-btn pr-btn--approve"
+                    data-payment-action
+                    data-payment-id="<?= $pid ?>"
+                    data-action="approve"
+                    data-panel="admission">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     Approve Payment
                 </button>
-                <button class="pr-btn pr-btn--reject" onclick="aoPaymentAction(<?= $pid ?>, 'reject', 'admission')">
+                <button class="pr-btn pr-btn--reject"
+                    data-payment-action
+                    data-payment-id="<?= $pid ?>"
+                    data-action="reject"
+                    data-panel="admission">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     Reject Payment
                 </button>
@@ -160,56 +168,7 @@ $statusConfig = [
 </div><!-- .application-content__panel -->
 
 <!-- ── Lightbox ── -->
-<div class="pr-lightbox" id="pr-lightbox" onclick="prCloseLightbox()">
-    <button class="pr-lightbox__close" onclick="prCloseLightbox()">&times;</button>
+<div class="pr-lightbox" id="pr-lightbox" data-lightbox-overlay>
+    <button class="pr-lightbox__close" data-lightbox-close>&times;</button>
     <img id="pr-lightbox-img" src="" alt="Proof of Payment">
 </div>
-
-<script>
-function prOpenLightbox(url) {
-    document.getElementById('pr-lightbox-img').src = url;
-    document.getElementById('pr-lightbox').classList.add('active');
-}
-function prCloseLightbox() {
-    document.getElementById('pr-lightbox').classList.remove('active');
-}
-
-window.aoPaymentAction = window.aoPaymentAction || function(paymentId, action, panelId) {
-    const remarksEl  = document.getElementById('pr-remarks-' + paymentId);
-    const errEl      = document.getElementById('pr-err-'     + paymentId);
-    const approveBtn = document.querySelector('#pr-action-' + paymentId + ' .pr-btn--approve');
-    const rejectBtn  = document.querySelector('#pr-action-' + paymentId + ' .pr-btn--reject');
-    const remarks    = remarksEl?.value.trim() ?? '';
-
-    if (action === 'reject' && !remarks) {
-        if (errEl) errEl.textContent = 'Remarks are required when rejecting a payment.';
-        return;
-    }
-    if (errEl) errEl.textContent = '';
-
-    const url  = '<?= base_url('admission-officer/payments') ?>/' + paymentId + '/' + action;
-    const form = new FormData();
-    form.append('remarks', remarks);
-
-    if (approveBtn) approveBtn.disabled = true;
-    if (rejectBtn)  rejectBtn.disabled  = true;
-
-    fetch(url, { method: 'POST', body: form })
-        .then(r => r.json())
-        .then(data => {
-            if (data.success) {
-                const tab = document.querySelector('[data-tab="' + (panelId === 'admission' ? 'admission_fee' : 'reservation_fee') + '"]');
-                if (tab) tab.click();
-            } else {
-                if (errEl) errEl.textContent = data.message || 'Something went wrong.';
-                if (approveBtn) approveBtn.disabled = false;
-                if (rejectBtn)  rejectBtn.disabled  = false;
-            }
-        })
-        .catch(() => {
-            if (errEl) errEl.textContent = 'Network error. Please try again.';
-            if (approveBtn) approveBtn.disabled = false;
-            if (rejectBtn)  rejectBtn.disabled  = false;
-        });
-};
-</script>

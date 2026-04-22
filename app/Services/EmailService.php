@@ -5,33 +5,117 @@ namespace App\Services;
 class EmailService
 {
     private static function send(string $to, string $subject, string $message): bool
-{
-    $email = \Config\Services::email();
-    $email->clear();
+    {
+        $email = \Config\Services::email();
+        $email->clear();
 
-    $email->setFrom('testakademusmentora@gmail.com', 'Akademus Portal');
-    $email->setTo($to);
-    $email->setSubject($subject);
-    $email->setMailType('html');
-    $email->setMessage($message);
+        $email->setFrom('testakademusmentora@gmail.com', 'Akademus Portal');
+        $email->setTo($to);
+        $email->setSubject($subject);
+        $email->setMailType('html');
+        $email->setMessage($message);
 
-    if (!$email->send()) {
-        log_message('error', 'EmailService failed: ' . $email->printDebugger(['headers']));
-        return false;
+        if (!$email->send()) {
+            log_message('error', 'EmailService failed: ' . $email->printDebugger(['headers']));
+            return false;
+        }
+
+        return true;
     }
-
-    return true;
-}
     public static function sendWelcomeEmail(string $to, string $tempPassword): bool
     {
         $loginUrl = base_url('sign-in');
-        $message  = "
-            <h2>Welcome to Akademus Portal</h2>
-            <p>Your account has been successfully created.</p>
-            <p><b>Login Portal:</b> <a href='{$loginUrl}'>{$loginUrl}</a></p>
-            <p><b>Email:</b> {$to}</p>
-            <p><b>Temporary Password:</b> {$tempPassword}</p>
-            <p>Please login and change your password immediately.</p>
+
+        $message = "
+        <table width='100%' cellpadding='0' cellspacing='0' style='background-color:#f3f4f6;padding:30px 0;font-family:Arial,sans-serif;'>
+            <tr>
+                <td align='center'>
+                    
+                    <table width='100%' cellpadding='0' cellspacing='0' style='max-width:600px;background:#ffffff;border-radius:10px;padding:30px;'>
+                        
+                        <!-- Header -->
+                        <tr>
+                            <td style='font-size:22px;font-weight:bold;color:#111827;padding-bottom:10px;'>
+                                Welcome to Akademus Portal 🎓
+                            </td>
+                        </tr>
+
+                        <!-- Intro -->
+                        <tr>
+                            <td style='font-size:14px;color:#4b5563;padding-bottom:20px;'>
+                                Your account has been successfully created.
+                            </td>
+                        </tr>
+
+                        <!-- Credentials Box -->
+                        <tr>
+                            <td style='background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:15px;'>
+                                
+                                <table width='100%' cellpadding='0' cellspacing='0'>
+                                    <tr>
+                                        <td style='font-size:13px;color:#6b7280;padding-bottom:5px;'>Email</td>
+                                    </tr>
+                                    <tr>
+                                        <td style='font-size:14px;color:#111827;font-weight:500;padding-bottom:10px;'>
+                                            {$to}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style='font-size:13px;color:#6b7280;padding-bottom:5px;'>Temporary Password</td>
+                                    </tr>
+                                    <tr>
+                                        <td style='font-size:14px;color:#111827;font-weight:600;background:#ffffff;border:1px dashed #d1d5db;padding:10px;border-radius:6px;letter-spacing:1px;'>
+                                            {$tempPassword}
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </td>
+                        </tr>
+
+                        <!-- CTA Button -->
+                        <tr>
+                            <td align='center' style='padding:25px 0 10px 0;'>
+                                <a href='{$loginUrl}' 
+                                style='background:#3b82f6;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;display:inline-block;'>
+                                    Sign In to Your Account
+                                </a>
+                            </td>
+                        </tr>
+
+                        <!-- Fallback Link -->
+                        <tr>
+                            <td align='center' style='font-size:12px;color:#6b7280;padding-bottom:20px;'>
+                                or copy and paste this link:<br>
+                                <a href='{$loginUrl}' style='color:#3b82f6;text-decoration:none;'>{$loginUrl}</a>
+                            </td>
+                        </tr>
+
+                        <!-- Instruction -->
+                        <tr>
+                            <td style='font-size:13px;color:#6b7280;padding-bottom:20px;text-align:center;'>
+                                For security, please change your password after logging in.
+                            </td>
+                        </tr>
+
+                        <!-- Divider -->
+                        <tr>
+                            <td style='border-top:1px solid #e5e7eb;padding-top:15px;'></td>
+                        </tr>
+
+                        <!-- Footer -->
+                        <tr>
+                            <td style='font-size:11px;color:#9ca3af;text-align:center;padding-top:10px;'>
+                                Akademus Portal • This is an automated message
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </td>
+            </tr>
+        </table>
         ";
 
         return self::send($to, 'Welcome to Akademus Portal', $message);

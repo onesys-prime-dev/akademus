@@ -18,6 +18,4 @@ class ApplicantModel extends Model
         'application_status',
         'application_date',
     ];
-
-    // testing
 }

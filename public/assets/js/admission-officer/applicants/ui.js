@@ -88,7 +88,7 @@ export function updateApplicantsTable(applicants) {
             </td>
 
             <td class="applicants-table__cell">
-                ${escapeHtml(app.applicant_type || '-')}
+                ${escapeHtml(app.applicant_type || '')}
             </td>
 
             <td class="applicants-table__cell">
@@ -307,4 +307,56 @@ function formatDate(date) {
     if (!date) return '-';
 
     return new Date(date).toISOString().split('T')[0];
+}
+
+
+// PAYMENT
+export function updatePaymentUI(paymentId, action, remarks = '') {
+  const container = document.querySelector(`#pr-action-${paymentId}`);
+  if (!container) return;
+
+  // 🔥 Remove action area (buttons + textarea)
+  container.remove();
+
+  // 🔥 Update status banner
+  const banner = document.querySelector('.pr-status-banner');
+  if (!banner) return;
+
+  const isApprove = action === 'approve';
+
+  banner.classList.remove(
+    'pr-status-banner--pending',
+    'pr-status-banner--approved',
+    'pr-status-banner--rejected'
+  );
+
+  banner.classList.add(
+    isApprove ? 'pr-status-banner--approved' : 'pr-status-banner--rejected'
+  );
+
+  const label = isApprove ? 'Approved' : 'Rejected';
+
+  const textSpan = banner.querySelector('span');
+  if (textSpan) {
+    textSpan.innerHTML = `${label} &mdash; Admission Processing Fee`;
+  }
+
+  // 🔥 Add remarks (if rejected)
+  if (!isApprove && remarks) {
+    const details = document.querySelector('.pr-info-grid');
+
+    const remarksBlock = document.createElement('div');
+    remarksBlock.className = 'pr-info-item pr-info-item--full';
+    remarksBlock.innerHTML = `
+      <div class="pr-info-label">Remarks</div>
+      <div class="pr-info-value">${remarks}</div>
+    `;
+
+    details?.appendChild(remarksBlock);
+  }
+}
+
+export function revertPaymentUI(paymentId) {
+  // simplest: just reload section (safe fallback)
+  location.reload();
 }

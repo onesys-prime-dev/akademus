@@ -745,9 +745,9 @@ body {
 
 .note-container p {
     font-size: 12px;
-    color: #031D46;
+    color: #000000;
     font-weight: 700;
-    opacity: 80%;
+    opacity: 30%;
 }
 
 /* SUCCESS */

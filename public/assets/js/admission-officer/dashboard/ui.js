@@ -171,9 +171,21 @@ export function getActiveItem() {
 
 // ── Utilities ──────────────────────────────────────────────────────────────────
 
-function escapeHtml(str) {
-  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-  return String(str).replace(/[&<>"']/g, ch => map[ch]);
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;',
+  }[char]));
+}
+
+function formatStatus(status) {
+  return String(status ?? '')
+    .replace('_', ' ')
+    .toLowerCase()
+    .replace(/\b\w/g, l => l.toUpperCase());
 }
 
 /**
@@ -483,14 +495,14 @@ function updateTable(rows = []) {
 
     return `
       <tr class="recent-applicants-table__row" data-row data-id="${row.applicant_id}">
-        <td class="recent-applicants-table__cell">${escape(row.applicant_name)}</td>
-        <td class="recent-applicants-table__cell">${escape(row.email)}</td>
-        <td class="recent-applicants-table__cell">${escape(row.applicant_number)}</td>
-        <td class="recent-applicants-table__cell">${escape(row.applicant_type)}</td>
-        <td class="recent-applicants-table__cell">${escape(row.program)}</td>
+        <td class="recent-applicants-table__cell">${escapeHtml(row.applicant_name)}</td>
+        <td class="recent-applicants-table__cell">${escapeHtml(row.email)}</td>
+        <td class="recent-applicants-table__cell">${escapeHtml(row.applicant_number)}</td>
+        <td class="recent-applicants-table__cell">${escapeHtml(row.applicant_type)}</td>
+        <td class="recent-applicants-table__cell">${escapeHtml(row.program)}</td>
         <td class="recent-applicants-table__cell">
           <span class="status-badge status-badge--${status}">
-            ${escape(status.replace('_',' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase()))}
+            ${escapeHtml(formatStatus(status))}
           </span>
         </td>
         <td class="recent-applicants-table__cell">
@@ -520,15 +532,5 @@ function formatDate(date) {
     day: '2-digit',
     year: 'numeric'
   });
-}
-
-function escape(str = '') {
-  return str.replace(/[&<>"']/g, m => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;',
-  }[m]));
 }
 
