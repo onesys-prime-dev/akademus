@@ -109,8 +109,8 @@
 }
 .w-msg.bot  .w-msg-bubble { background: #fff; color: #1a202c; border: 1.5px solid #e2e8f0; border-bottom-left-radius: 3px; }
 .w-msg.user .w-msg-bubble {
-  background: var(--primary-color);
-  color: #000;
+  background: var(--primary-dark);
+  color: #ffffff;
   border: 1px solid #e2e8f0;
 }
 .w-quick-replies { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
