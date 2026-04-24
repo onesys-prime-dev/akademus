@@ -4,9 +4,17 @@ namespace App\Controllers\AdmissionOfficer;
 
 use App\Controllers\BaseController;
 use App\Models\Payment\PaymentModel;
+use App\Services\NotificationService;
 
 class PaymentController extends BaseController
 {
+    protected NotificationService $notificationService;
+
+    public function __construct()
+    {
+        $this->notificationService = new NotificationService();
+    }
+
     private function requireOfficer()
     {
         if (! session()->get('ao_logged_in')) {
@@ -26,10 +34,13 @@ class PaymentController extends BaseController
         $reviewedBy = (int) session()->get('ao_id');
 
         $paymentModel = new PaymentModel();
-        $payment = $paymentModel->find($paymentId);
+        $payment = $paymentModel->getWithFeeType($paymentId);
 
         if (! $payment) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Payment record not found.']);
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Payment record not found.'
+            ]);
         }
 
         if ($payment['payment_status'] !== PaymentModel::STATUS_PENDING) {
@@ -39,7 +50,28 @@ class PaymentController extends BaseController
             ]);
         }
 
-        $paymentModel->updateStatus($paymentId, PaymentModel::STATUS_PAID, $remarks, $reviewedBy);
+        $result = $paymentModel->updateStatus(
+            $paymentId,
+            PaymentModel::STATUS_PAID,
+            $remarks,
+            $reviewedBy
+        );
+
+        if (! $result) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Failed to update payment status.'
+            ]);
+        }
+
+        $this->notificationService->trigger(
+            'payment.approved',
+            $payment['applicant_id'],
+            [
+                'reference_num' => $payment['reference_num'],
+                'fee_type'      => $payment['fee_type_name']
+            ]
+        );
 
         return $this->response->setJSON([
             'success' => true,
@@ -63,10 +95,13 @@ class PaymentController extends BaseController
         }
 
         $paymentModel = new PaymentModel();
-        $payment = $paymentModel->find($paymentId);
+        $payment = $paymentModel->getWithFeeType($paymentId);
 
         if (! $payment) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Payment record not found.']);
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Payment record not found.'
+            ]);
         }
 
         if ($payment['payment_status'] !== PaymentModel::STATUS_PENDING) {
@@ -76,7 +111,28 @@ class PaymentController extends BaseController
             ]);
         }
 
-        $paymentModel->updateStatus($paymentId, PaymentModel::STATUS_REJECTED, $remarks, $reviewedBy);
+        $result = $paymentModel->updateStatus(
+            $paymentId,
+            PaymentModel::STATUS_REJECTED,
+            $remarks,
+            $reviewedBy
+        );
+
+        if (! $result) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Failed to update payment status.'
+            ]);
+        }
+
+        $this->notificationService->trigger(
+            'payment.rejected',
+            $payment['applicant_id'],
+            [
+                'reference_num' => $payment['reference_num'],
+                'fee_type'      => $payment['fee_type_name']
+            ]
+        );
 
         return $this->response->setJSON([
             'success' => true,

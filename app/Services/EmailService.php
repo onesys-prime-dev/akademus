@@ -16,7 +16,11 @@ class EmailService
         $email->setMessage($message);
 
         if (!$email->send()) {
-            log_message('error', 'EmailService failed: ' . $email->printDebugger(['headers']));
+            $error = $email->printDebugger(['headers', 'subject', 'body']);
+            
+            log_message('error', 'EmailService failed: ' . $error);
+
+            echo $error; // 🔥 TEMP: show error in terminal
             return false;
         }
 
@@ -184,5 +188,167 @@ class EmailService
         ";
 
         return self::send($to, 'New Chat Reply - Akademus', $message);
+    }
+
+    public static function sendFollowUpNotification(string $to, array $messages): bool
+    {
+        $dashboardUrl = base_url('dashboard');
+
+        $formatted = '';
+
+        foreach ($messages as $msg) {
+            $safe = esc($msg);
+            $formatted .= "<li style='margin-bottom:8px;'>{$safe}</li>";
+        }
+
+        $message = "
+            <h2>New Messages from Admissions</h2>
+            <p>You have " . count($messages) . " new message(s):</p>
+
+            <ul style='padding-left:16px;color:#4b5563;'>
+                {$formatted}
+            </ul>
+
+            <p style='margin-top:20px;'>
+                <a href='{$dashboardUrl}' style='
+                    background:#3b82f6;
+                    color:#fff;
+                    padding:10px 16px;
+                    border-radius:6px;
+                    text-decoration:none;
+                    font-weight:600;
+                '>View in Portal</a>
+            </p>
+        ";
+
+        return self::send($to, 'New Messages - Akademus', $message);
+    }
+
+    public static function sendAdmissionFeePendingNotification(string $to, string $referenceNum): bool
+    {
+        $message = "
+            <h2>Admission Fee Payment Submitted</h2>
+            <p>Your admission fee payment has been submitted and is awaiting verification by the accounting office.</p>
+            <p>Reference Number: {$referenceNum}</p>
+            <p>We will notify you once it has been reviewed.</p>
+        ";
+
+        return self::send($to, 'Admission Fee Payment Submitted - Akademus', $message);   
+    }
+
+    public static function sendReservationFeePendingNotification(string $to, string $referenceNum): bool
+    {
+        $message = "
+            <h2>Reservation Fee Payment Submitted</h2>
+            <p>Your reservation fee payment has been submitted and is awaiting verification by the accounting office.</p>
+            <p>Reference Number: {$referenceNum}</p>
+            <p>We will notify you once it has been reviewed.</p>
+        ";
+
+        return self::send($to, 'Reservation Fee Payment Submitted - Akademus', $message);
+    }
+
+    public static function sendPaymentApprovedNotification(string $to, string $referenceNum, string $feeTypeName): bool
+    {
+        $message = "
+            <h2>{$feeTypeName} Payment Approved</h2>
+            <p>Your payment with reference number <strong>{$referenceNum}</strong> has been approved by the accounting office.</p>
+            <p>Thank you for your prompt payment!</p>
+        ";
+
+        return self::send($to, "{$feeTypeName} Payment Approved - Akademus", $message);
+    }
+
+    public static function sendPaymentRejectedNotification(string $to, string $referenceNum, string $feeTypeName): bool
+    {
+        $message = "
+            <h2>{$feeTypeName} Payment Rejected</h2>
+            <p>We regret to inform you that your payment with reference number <strong>{$referenceNum}</strong> has been rejected by the accounting office.</p>
+            <p>Please review your payment details and contact admissions if you have any questions.</p>
+        ";
+
+        return self::send($to, "{$feeTypeName} Payment Rejected - Akademus", $message);
+    }
+
+    public static function sendApplicationSubmittedNotification(string $to): bool
+    {
+        $message = "
+            <h2>Application Submitted</h2>
+            <p>Your application has been successfully submitted and is now under review by the admissions committee.</p>
+            <p>We will notify you of any updates regarding your application status.</p>
+            <p>Thank you for applying to our institution!</p>
+        ";
+
+        return self::send($to, 'Application Submitted - Akademus', $message);
+    }
+
+    public static function sendApplicationNotStarted(string $to, int $level): bool
+    {
+        $message = "
+            <h2>Application Not Started</h2>
+            <p>Our records indicate that you have not started your application yet.</p>
+            <p>We encourage you to begin the application process to be considered for admission.</p>
+            <p><a href='" . base_url('application') . "'>Start Your Application</a></p>
+        ";
+
+        return self::send($to, 'Reminder: Start Your Application - Akademus', $message);
+    }
+
+    public static function sendApplicationInProgress(string $to, int $level): bool
+    {
+        $message = "
+            <h2>Application In Progress</h2>
+            <p>We noticed that you started your application but haven't completed it yet.</p>
+            <p>Please log in to your portal to finish and submit your application for review.</p>
+            <p><a href='" . base_url('application') . "'>Continue Your Application</a></p>
+        ";
+
+        return self::send($to, 'Reminder: Complete Your Application - Akademus', $message);
+    }
+
+    public static function sendRequirementUploadedNotification(string $to, string $requirementName): bool
+    {
+        $message = "
+            <h2>Requirement Uploaded</h2>
+            <p>Your document for <strong>{$requirementName}</strong> has been successfully uploaded and received.</p>
+            <p>Admissions will review it shortly. We will notify you once it has been reviewed.</p>
+        ";
+
+        return self::send($to, 'Requirement Uploaded - Akademus', $message);
+    }
+
+    public static function sendRequirementsCompletedNotification(string $to): bool
+    {
+        $message = "
+            <h2>All Requirements Completed</h2>
+            <p>Congratulations! You have uploaded all the required documents for your application.</p>
+            <p>Admissions will review your complete application shortly. We will notify you of any updates regarding your application status.</p>
+        ";
+
+        return self::send($to, 'All Requirements Completed - Akademus', $message);
+    }
+
+    public static function sendRequirementsNotStarted(string $to, int $level): bool
+    {
+        $message = "
+            <h2>Requirements Not Started</h2>
+            <p>Our records indicate that you have not uploaded any required documents for your application yet.</p>
+            <p>Please log in to your portal to view and upload the necessary requirements for your application.</p>
+            <p><a href='" . base_url('requirements') . "'>View Requirements</a></p>
+        ";
+
+        return self::send($to, 'Reminder: Upload Your Requirements - Akademus', $message);
+    }
+
+    public static function sendRequirementsIncomplete(string $to, int $level): bool
+    {
+        $message = "
+            <h2>Requirements Incomplete</h2>
+            <p>We noticed that you have started uploading your required documents but haven't completed all of them yet.</p>
+            <p>Please log in to your portal to view which requirements are still pending and upload the necessary documents to complete your application.</p>
+            <p><a href='" . base_url('requirements') . "'>View Requirements</a></p>
+        ";
+
+        return self::send($to, 'Reminder: Complete Your Requirements - Akademus', $message);
     }
 }

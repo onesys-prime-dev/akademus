@@ -6,14 +6,17 @@ use App\Controllers\BaseController;
 use App\Models\FollowUpMessageModel;
 use App\Models\Applicant\ApplicantModel;
 use App\Models\ThemeModel;
+use App\Services\NotificationService;
 
 class FollowUpController extends BaseController
 {
     protected FollowUpMessageModel $messageModel;
+    protected NotificationService $notificationService;
 
     public function __construct()
     {
         $this->messageModel = new FollowUpMessageModel();
+        $this->notificationService = new NotificationService();
     }
 
     public function index()
@@ -81,6 +84,7 @@ class FollowUpController extends BaseController
         }
 
         $applicantModel = new ApplicantModel();
+
         if (!$applicantModel->find($applicantId)) {
             return $this->response->setJSON(['success' => false, 'message' => 'Applicant not found']);
         }
@@ -92,6 +96,17 @@ class FollowUpController extends BaseController
             'is_read'      => 0,
             'created_at'   => date('Y-m-d H:i:s'),
         ]);
+
+        if (!$messageId) {
+            log_message('error', 'Failed to insert follow_up_message for applicant ID: ' . $applicantId);
+
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Failed to send message. Please try again.'
+            ]);
+        }
+
+        $this->notificationService->trigger('followup.new_message', $applicantId, ['message' => $message]);
 
         return $this->response->setJSON(['success' => true, 'message_id' => (int) $messageId]);
     }

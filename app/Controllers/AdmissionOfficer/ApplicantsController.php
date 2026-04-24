@@ -7,11 +7,13 @@ use App\Models\ThemeModel;
 use App\Models\ProgramModel;
 use App\Services\ApplicantService;
 use App\Services\ApplicantProfileService;
+use App\Services\NotificationService;
 
 class ApplicantsController extends BaseController
 {
     protected ApplicantService $applicantService;
     protected ApplicantProfileService $applicantProfileService;
+    protected NotificationService $notificationService;
 
     private const DEFAULT_TAB = 'requirements';
 
@@ -19,6 +21,7 @@ class ApplicantsController extends BaseController
     {
         $this->applicantService = new ApplicantService();
         $this->applicantProfileService = new ApplicantProfileService();
+        $this->notificationService = new NotificationService();
     }
 
     public function index()
@@ -77,16 +80,71 @@ class ApplicantsController extends BaseController
         $remarks = trim($this->request->getPost('remarks') ?? '');
 
         if (!in_array($status, $allowed) || !$applicantId) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Invalid request.']);
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Invalid request.'
+            ]);
         }
 
         $db = \Config\Database::connect();
-        $db->table('applicants')
+
+        // 🔍 Get current status FIRST (important)
+        $current = $db->table('applicants')
+            ->select('application_status')
+            ->where('applicant_id', $applicantId)
+            ->get()
+            ->getRowArray();
+
+        if (!$current) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Applicant not found.'
+            ]);
+        }
+
+        // ❗ Prevent unnecessary update + email spam
+        if ($current['application_status'] === $status) {
+            return $this->response->setJSON([
+                'success' => true,
+                'status'  => $status,
+                'message' => 'No changes made.'
+            ]);
+        }
+
+        // 🔄 Perform update
+        $updated = $db->table('applicants')
             ->where('applicant_id', $applicantId)
             ->update([
                 'application_status' => $status,
                 'decision_remarks'   => $remarks,
             ]);
+
+        // ❗ CHECK if update query failed
+        if (!$updated) {
+            log_message('error', 'Failed to update applicant decision ID: ' . $applicantId);
+
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Failed to update decision.'
+            ]);
+        }
+
+        // ❗ Optional: double check affected rows
+        if ($db->affectedRows() === 0) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'No changes applied.'
+            ]);
+        }
+
+        // ✅ SAFE TO TRIGGER NOW
+        if ($status === 'approved') {
+            $this->notificationService->trigger('applicant.approved', $applicantId);
+        }
+
+        if ($status === 'rejected') {
+            $this->notificationService->trigger('applicant.rejected', $applicantId);
+        }
 
         return $this->response->setJSON([
             'success' => true,
@@ -111,9 +169,63 @@ class ApplicantsController extends BaseController
             ]);
         }
 
-        $this->applicantService->bulkUpdateStatus($ids, $status);
+        $db = \Config\Database::connect();
 
-        return $this->response->setJSON(['success' => true]);
+        // 🔍 Get current statuses
+        $applicants = $db->table('applicants')
+            ->select('applicant_id, application_status')
+            ->whereIn('applicant_id', $ids)
+            ->get()
+            ->getResultArray();
+
+        if (empty($applicants)) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'No valid applicants found'
+            ]);
+        }
+
+        $updatedCount = 0;
+
+        foreach ($applicants as $applicant) {
+
+            $applicantId = $applicant['applicant_id'];
+            $currentStatus = $applicant['application_status'];
+
+            // ❗ Skip if same status (prevents duplicate emails)
+            if ($currentStatus === $status) {
+                continue;
+            }
+
+            // 🔄 Update per applicant
+            $updated = $db->table('applicants')
+                ->where('applicant_id', $applicantId)
+                ->update([
+                    'application_status' => $status
+                ]);
+
+            if (!$updated || $db->affectedRows() === 0) {
+                log_message('error', 'Bulk update failed for applicant ID: ' . $applicantId);
+                continue;
+            }
+
+            $updatedCount++;
+
+            // 🔥 Trigger ONLY for relevant statuses
+            if ($status === 'approved') {
+                $this->notificationService->trigger('applicant.approved', $applicantId);
+            }
+
+            if ($status === 'rejected') {
+                $this->notificationService->trigger('applicant.rejected', $applicantId);
+            }
+        }
+
+        return $this->response->setJSON([
+            'success' => true,
+            'updated' => $updatedCount,
+            'message' => "{$updatedCount} applicant(s) updated successfully."
+        ]);
     }
 
     public function profile($applicantId)

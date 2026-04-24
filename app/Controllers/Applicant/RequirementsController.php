@@ -7,6 +7,7 @@ use App\Controllers\BaseController;
 
 use App\Services\RequirementService;
 use App\Services\ApplicantDocumentService;
+use App\Services\NotificationService;
 
 use App\Models\ThemeModel;
 
@@ -14,11 +15,12 @@ class RequirementsController extends BaseController
 {
     protected $requirementService;
     protected $documentService;
-
+    protected $notificationService;
 
     public function __construct() {
         $this->requirementService = new RequirementService();
         $this->documentService = new ApplicantDocumentService();
+        $this->notificationService = new NotificationService();
     }
 
     public function index() {
@@ -151,7 +153,34 @@ class RequirementsController extends BaseController
 
         $files = $this->request->getFiles();
 
-        $this->documentService->insertDocuments($applicant_id, $files);
+        $uploaded = $this->documentService->insertDocuments($applicant_id, $files);
+
+        // 🔥 trigger per document
+        foreach ($uploaded as $doc) {
+            $this->notificationService->trigger(
+                'requirements.uploaded',
+                $applicant_id,
+                [
+                    'requirement_name' => $doc['requirement_name']
+                ]
+            );
+        }
+
+        // 🔥 NEW: check completion
+        if ($this->documentService->allRequiredCompleted($applicant_id)) {
+
+            $key = "requirements_completed_{$applicant_id}";
+
+            if (! $this->alreadyQueued($key)) {
+
+                $this->notificationService->trigger(
+                    'requirements.completed',
+                    $applicant_id,
+                    [],
+                    $key
+                );
+            }
+        }
 
         return $this->response->setJSON([
             'status' => 'success'
@@ -199,5 +228,13 @@ class RequirementsController extends BaseController
             ->update(['application_status' => 'pending']);
 
         return $this->response->setJSON(['status' => 'success']);
+    }
+
+    private function alreadyQueued($key)
+    {
+        return db_connect()->table('email_queue')
+            ->where('notification_key', $key)
+            ->get()
+            ->getRowArray() !== null;
     }
 }

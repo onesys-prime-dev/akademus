@@ -98,4 +98,19 @@ class PaymentModel extends Model
 
         return $this->update($paymentId, $data);
     }
+
+    public function getWithFeeType(int $paymentId)
+    {
+        return $this->db
+            ->table('payment p')
+            ->select([
+                'p.*',
+                'pft.code AS fee_type_code',
+                'pft.name AS fee_type_name'
+            ])
+            ->join('payment_fee_type pft', 'pft.payment_fee_type_id = p.payment_fee_type_id')
+            ->where('p.payment_id', $paymentId)
+            ->get()
+            ->getRowArray();
+    }
 }
