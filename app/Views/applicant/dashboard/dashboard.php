@@ -55,7 +55,8 @@ elseif ($form_progress >= 100)                       $formBarClass = 'progress-d
 
             <div class="quick-actions">
                 <a href="<?= base_url('requirements') ?>">Upload Documents</a>
-                <a href="">Pay Reservation Fee</a>
+                <a href="<?= base_url('admission-processing-fee') ?>">Pay Admission Fee</a>
+                <a href="<?= base_url('reservation-fee') ?>">Pay Reservation Fee</a>
             </div>
         </div>
     </div>
@@ -134,7 +135,7 @@ elseif ($form_progress >= 100)                       $formBarClass = 'progress-d
             <p>You have been approved for admission.</p>
             <span>Pay the ₱2,000 reservation fee within 5 days to officially secure your slot.</span>
         </div>
-        <a href="" class="pay-now-btn">Pay Now</a>
+        <a href="<?= base_url('reservation-fee') ?>" class="pay-now-btn">Pay Now</a>
     </div>
 
 </div><!-- /.dashboard-container -->
