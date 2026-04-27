@@ -133,7 +133,7 @@ elseif ($form_progress >= 100)                       $formBarClass = 'progress-d
     <div class="payment-notification-container">
         <div class="payment-notification-text-info">
             <p>You have been approved for admission.</p>
-            <span>Pay the ₱2,000 reservation fee within 5 days to officially secure your slot.</span>
+            <span>Pay the ₱<?= number_format($reservation_fee_amount, 2) ?> reservation fee within 5 days to officially secure your slot.</span>
         </div>
         <a href="<?= base_url('reservation-fee') ?>" class="pay-now-btn">Pay Now</a>
     </div>

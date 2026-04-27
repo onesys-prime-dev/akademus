@@ -9,7 +9,9 @@ use App\Models\Application\ApplicationModel;
 use App\Models\Application\PersonalInformationModel;
 use App\Models\Application\FamilyBackgroundModel;
 use App\Models\Application\EducationalBackgroundModel;
+use App\Models\Payment\PaymmentFeeTypeModel;
 use App\Models\FormPageModel;
+use App\Models\Payment\PaymentFeeTypeModel;
 use App\Models\ThemeModel;
 use App\Services\RequirementService;
 use App\Services\ApplicantDocumentService;
@@ -179,6 +181,15 @@ class DashboardController extends BaseController
             $bannerMessage = 'Welcome! Start your application by filling out the applicant form below.';
         }
 
+        $feeModel = new PaymentFeeTypeModel();
+
+        $reservationFee = $feeModel
+            ->where('code', PaymentFeeTypeModel::CODE_RESERVATION)
+            ->where('is_active', 1)
+            ->first();
+
+        $reservationFeeAmount = $reservationFee['amount'] ?? 2000;
+
         $data = [
             'title'            => 'Dashboard',
             'page_content'     => 'applicant/dashboard/dashboard',
@@ -198,6 +209,8 @@ class DashboardController extends BaseController
             // Documents
             'doc_stats'        => $docStats,
             'doc_progress'     => $docProgress,
+            // Payment
+            'reservation_fee_amount' => $reservationFeeAmount
         ];
 
         return view('applicant/main', $data);
