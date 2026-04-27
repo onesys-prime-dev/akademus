@@ -13,6 +13,13 @@ $routes->get('/homepage', 'LandingPage\HomeController::index');     // Home
 $routes->get('/about-us', 'LandingPage\AboutUsController::index');  // About Us
 $routes->get('/features', 'LandingPage\FeaturesController::index'); // Features
 $routes->get('/contact', 'LandingPage\ContactController::index');   // Contact
+
+$routes->get('/systems/akademus', 'LandingPage\SystemsController::akademus');
+$routes->get('/systems/mentora', 'LandingPage\SystemsController::mentora');
+$routes->get('/systems/learnix', 'LandingPage\SystemsController::learnix');
+$routes->get('/systems/sis', 'LandingPage\SystemsController::sis');
+$routes->get('/systems/attendance', 'LandingPage\SystemsController::attendance');
+$routes->get('/systems/otis', 'LandingPage\SystemsController::otis');
 // ------------------------------------------------------------------------- //
 
 // sign and sign up page after clicking the 'Apply Now' Button

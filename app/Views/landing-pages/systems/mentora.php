@@ -7,49 +7,17 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../../assets/css/global.css">
-    <link rel="stylesheet" href="../../assets/css/header.css">
-    <link rel="stylesheet" href="../../assets/css/footer.css">
-    <link rel="stylesheet" href="../../assets/css/systems/mentora.css">
+    <link rel="stylesheet" href="<?= base_url("assets/css/pages/landing-pages/global.css") . '?v=' . time(); ?>">
+    <link rel="stylesheet" href="<?= base_url("assets/css/pages/landing-pages/header.css") . '?v=' . time(); ?>">
+    <link rel="stylesheet" href="<?= base_url("assets/css/pages/landing-pages/footer.css") . '?v=' . time(); ?>">
+    <link rel="stylesheet" href="<?= base_url("assets/css/pages/landing-pages/systems/mentora.css") . '?v=' . time(); ?>">
 </head>
 <body>
-    <!-- ══ MOBILE OVERLAY ══ -->
-    <div class="hp-overlay" id="hpOverlay">
-        <div class="hp-overlay__panel">
-            <button class="hp-overlay__close" id="hpOverlayClose">&#10005;</button>
-            <nav class="hp-overlay__nav">
-                <a href="../homepage.html"     class="hp-overlay__link" onclick="hpCloseMenu()">Home</a>
-                <a href="../about-us.html" class="hp-overlay__link" onclick="hpCloseMenu()">About Us</a>
-                <a href="../features.html" class="hp-overlay__link" onclick="hpCloseMenu()">Features</a>
-                <a href="../contact.html"  class="hp-overlay__link" onclick="hpCloseMenu()">Contact</a>
-            </nav>
-            <a href="https://testing.srv1404227.hstgr.cloud/sign-in" class="hp-overlay__cta">Get Started</a>
-        </div>
-    </div>
-
-    <!-- HEADER -->
-    <header class="header">
-        <div class="header__inner">
-            <a href="../homepage.html" class="header__logo">
-                <img src="../../assets/images/logo_akademus.png" alt="Akademus Logo" class="header__logo-img" />
-                <span class="header__brand">AKADEMUS</span>
-            </a>
-            <nav class="header__nav">
-                <a href="../homepage.html" class="header__link header__link--active">Home</a>
-                <a href="../about-us.html" class="header__link">About Us</a>
-                <a href="../features.html" class="header__link">Features</a>
-                <a href="../contact.html" class="header__link">Contact</a>
-            </nav>
-            <a href="https://testing.srv1404227.hstgr.cloud/sign-in" class="header__cta">Get Started</a>
-            <button class="hamburger" id="hpHamburger" aria-label="Open menu">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
-    </header>
+    <?= view('landing-pages/header.php') ?>
 
     <main class="main">
         <section class="system-hero">
-            <img class="system-hero__bg" src="../../assets/images/systems/mentora/bg.png" alt="Hero Background" />
+            <img class="system-hero__bg" src="<?= base_url("assets/images/systems/mentora/bg.png") ?>" alt="Hero Background" />
         </section>
 
         <section class="system-content">
@@ -57,7 +25,7 @@
             <div class="system-content__banner"></div>
 
             <div class="system-content__overlay">
-                <img class="system-content__overlay-img" src="../../assets/images/systems/mentora/1.png" alt="Content Overlay" />
+                <img class="system-content__overlay-img" src="<?= base_url("assets/images/systems/mentora/1.png") ?>" alt="Content Overlay" />
             </div>
 
             <div class="system-content__info">
@@ -89,7 +57,7 @@
                 <div class="system-content__col">
 
                     <div class="system-content__img">
-                        <img class="system-content__img-img" src="../../assets/images/systems/mentora/2.png" alt="">
+                        <img class="system-content__img-img" src="<?= base_url("assets/images/systems/mentora/2.png") ?>" alt="">
                     </div>
 
                     <div class="system-content__paragraph system-content__paragraph--right">
@@ -97,7 +65,7 @@
                     </div>
 
                     <div class="system-content__col-img-container">
-                        <img class="system-content__col-img" src="../../assets/images/systems/mentora/3.png" alt="">
+                        <img class="system-content__col-img" src="<?= base_url("assets/images/systems/mentora/3.png") ?>" alt="">
                     </div>
 
                 </div>
@@ -122,7 +90,7 @@
 
                     <div class="system-content__col-container-img">
                         <div class="system-content__col-img-container system-content__col-img-container--break">
-                            <img class="system-content__col-img" src="../../assets/images/systems/mentora/4.png" alt="">
+                            <img class="system-content__col-img" src="<?= base_url("assets/images/systems/mentora/4.png") ?>" alt="">
                         </div>
 
                         <div class="system-content__col-container--overlay-1">
@@ -165,10 +133,10 @@
 
                 <div class="system-content__img-container--3">
                     <div class="system-content__img--3--left--overlay">
-                        <img class="system-content__img--3--left" src="../../assets/images/systems/mentora/5.png" alt="">
+                        <img class="system-content__img--3--left" src="<?= base_url("assets/images/systems/mentora/5.png") ?>" alt="">
                     </div>
                     <div class="system-content__img--3--right--overlay">
-                        <img class="system-content__img--3--right" src="../../assets/images/systems/mentora/6.png" alt="">
+                        <img class="system-content__img--3--right" src="<?= base_url("assets/images/systems/mentora/6.png") ?>" alt="">
                     </div>
                 </div>
 
@@ -185,6 +153,7 @@
 
 </body>
 
-<script src="../../assets/js/mobileMenu.js"></script>
+<script src="<?= base_url('assets/js/mobileMenu.js') . '?v=' . time() ?>"></script>
+<script src="<?= base_url('assets/js/page-transition-animation.js') . '?v=' . time() ?>"></script>
 
 </html>

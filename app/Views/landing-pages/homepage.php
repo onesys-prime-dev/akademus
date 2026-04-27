@@ -7,10 +7,10 @@
     <title>Akademus | Home </title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= base_url("assets/css/landing-pages/global.css") . '?v=' . time(); ?>">
-    <link rel="stylesheet" href="<?= base_url("assets/css/landing-pages/header.css") . '?v=' . time(); ?>">
-    <link rel="stylesheet" href="<?= base_url("assets/css/landing-pages/footer.css") . '?v=' . time(); ?>">
-    <link rel="stylesheet" href="<?= base_url("assets/css/landing-pages/homepage.css") . '?v=' . time(); ?>">
+    <link rel="stylesheet" href="<?= base_url("assets/css/pages/landing-pages/global.css") . '?v=' . time(); ?>">
+    <link rel="stylesheet" href="<?= base_url("assets/css/pages/landing-pages/header.css") . '?v=' . time(); ?>">
+    <link rel="stylesheet" href="<?= base_url("assets/css/pages/landing-pages/footer.css") . '?v=' . time(); ?>">
+    <link rel="stylesheet" href="<?= base_url("assets/css/pages/landing-pages/homepage.css") . '?v=' . time(); ?>">
 </head>
 
 <body>
@@ -104,7 +104,7 @@
                     </a>
 
                     <!-- System Card -->
-                    <a class="hp-sys-card" href="systems/mentora.html">
+                    <a class="hp-sys-card" href="<?= base_url('systems/mentora') ?>">
                         <div class="hp-sys-card__line"></div>
                         <h3 class="hp-sys-card__title">Mentora</h3>
                         <p class="hp-sys-card__body">Mentora is a modern Learning Management System designed to help educators deliver structured lessons, manage activities, and monitor student progress. It simplifies teaching workflows while creating an engaging and organized learning experience for students.</p>
@@ -118,7 +118,7 @@
                     </a>
 
                     <!-- System Card -->
-                    <a class="hp-sys-card" href="systems/learnix.html">
+                    <a class="hp-sys-card" href="<?= base_url('systems/learnix') ?>">
                         <div class="hp-sys-card__line"></div>
                         <h3 class="hp-sys-card__title">Learnix</h3>
                         <p class="hp-sys-card__body">Learnix is a game-based learning platform that transforms education into an interactive experience. Through challenges, rewards, and educational games, it increases student engagement while reinforcing key concepts across different subjects.</p>
@@ -160,7 +160,7 @@
                     </a>
 
                     <!-- System Card -->
-                    <a class="hp-sys-card" href="systems/otis.html">
+                    <a class="hp-sys-card" href="<?= base_url('systems/otis') ?>">
                         <div class="hp-sys-card__line"></div>
                         <h3 class="hp-sys-card__title">OTIS</h3>
                         <p class="hp-sys-card__body">OTIS is an operations and tracking system designed to manage internal workflows, tasks, and institutional processes. It enhances coordination, improves transparency, and ensures that daily operations run smoothly across departments.</p>
