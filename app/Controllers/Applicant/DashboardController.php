@@ -9,8 +9,8 @@ use App\Models\Application\ApplicationModel;
 use App\Models\Application\PersonalInformationModel;
 use App\Models\Application\FamilyBackgroundModel;
 use App\Models\Application\EducationalBackgroundModel;
-use App\Models\Payment\PaymmentFeeTypeModel;
 use App\Models\FormPageModel;
+use App\Models\Payment\PaymentModel;
 use App\Models\Payment\PaymentFeeTypeModel;
 use App\Models\ThemeModel;
 use App\Services\RequirementService;
@@ -190,6 +190,36 @@ class DashboardController extends BaseController
 
         $reservationFeeAmount = $reservationFee['amount'] ?? 2000;
 
+        $paymentModel = new PaymentModel();
+
+        $payments = $paymentModel
+            ->select('payment.payment_status, payment_fee_type.code')
+            ->join(
+                'payment_fee_type', 
+                'payment_fee_type.payment_fee_type_id = payment.payment_fee_type_id'
+            )
+            ->where('payment.applicant_id', $applicant['applicant_id'])
+            ->findAll();
+
+        $paidMap = [];
+
+        foreach ($payments as $pay) {
+            if ($pay['payment_status'] === 'PAID') {
+                $paidMap[$pay['code']] = true;
+            }
+        }
+
+        $paymentCheckList = [
+            [
+                'title' => 'Admission Processing Fee',
+                'paid'  => isset($paidMap['ADMISSION_FEE'])
+            ], 
+            [
+                'title' => 'Reservation Fee',
+                'paid'  => isset($paidMap['RESERVATION_FEE'])
+            ]
+        ];
+
         $data = [
             'title'            => 'Dashboard',
             'page_content'     => 'applicant/dashboard/dashboard',
@@ -200,17 +230,21 @@ class DashboardController extends BaseController
             'progress'         => $overallProgress,
             'step_statuses'    => $stepStatuses,
             'banner_message'   => $bannerMessage,
+
             // Form
             'form_pages'       => $formPages,
             'form_completion'  => $formCompletion,
             'form_completed'   => $formPagesCompleted,
             'form_total'       => $formPageCount,
             'form_progress'    => $formProgress,
+
             // Documents
             'doc_stats'        => $docStats,
             'doc_progress'     => $docProgress,
+
             // Payment
-            'reservation_fee_amount' => $reservationFeeAmount
+            'reservation_fee_amount' => $reservationFeeAmount,
+            'paymentCheckList' => $paymentCheckList
         ];
 
         return view('applicant/main', $data);

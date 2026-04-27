@@ -127,6 +127,10 @@ elseif ($form_progress >= 100)                       $formBarClass = 'progress-d
             'allReqs'     => $allReqs,
         ]) ?>
 
+        <?=  view('applicant/dashboard/components/checklist-payment-fees', [
+            'paymentCheckList' => $paymentCheckList
+        ]) ?>
+
     </div><!-- /.checklist-summary-container -->
 
     <!-- ── Payment Notification ── -->
