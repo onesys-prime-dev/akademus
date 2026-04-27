@@ -5,14 +5,15 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'HomeController::index');
+$routes->get('/', 'LandingPage\HomeController::index');
 $routes->get('applynowpage', 'ApplyNow::index');
 
-
-
-//About us
-
-$routes->get('about', 'AboutController::index');
+// -------------------------- LANDING PAGE ROUTES -------------------------- //
+$routes->get('/homepage', 'LandingPage\HomeController::index');     // Home           
+$routes->get('/about-us', 'LandingPage\AboutUsController::index');  // About Us
+$routes->get('/features', 'LandingPage\FeaturesController::index'); // Features
+$routes->get('/contact', 'LandingPage\ContactController::index');   // Contact
+// ------------------------------------------------------------------------- //
 
 // sign and sign up page after clicking the 'Apply Now' Button
 $routes->get('sign-in', 'Auth\AuthController::sign_in');

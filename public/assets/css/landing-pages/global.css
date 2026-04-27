@@ -1,0 +1,321 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+* {
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+/* Focus accessibility */
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
+/* Links */
+a {
+  text-decoration: none;
+}
+
+input,
+select {
+  outline: 0;
+}
+
+button {
+  border: 0;
+  background: none;
+}
+
+img {
+  user-select: none;
+  /* Standard */
+  -webkit-user-select: none;
+  /* Safari */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE/Edge */
+}
+
+
+/* AKADEMUS CSS ANIMATION  */
+
+/* spaceship entering (intro */
+.hp-hero__bg {
+  transform: scale(1.12);
+  opacity: 0;
+}
+
+.hp-hero__card {
+  transform: translateY(45px);
+  opacity: 0;
+}
+
+.anim-hero-bg {
+  animation: heroBgIn 1.3s ease forwards;
+}
+
+.anim-hero-card {
+  animation: heroCardIn .9s ease .35s forwards;
+}
+
+@keyframes heroBgIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes heroCardIn {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+/* scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all .8s ease;
+}
+
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* header scroll effect */
+.header {
+  transition: all .35s ease;
+}
+
+.header-scroll {
+  height: auto;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, .85);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+}
+
+
+/* hover cards */
+.hp-feat-card,
+.hp-sys-card,
+.story__card,
+.mission__box,
+.value-card {
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+
+.hp-feat-card:hover,
+.hp-sys-card:hover,
+.story__card:hover,
+.mission__box:hover,
+.value-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, .12);
+}
+
+
+/* button hover */
+.header__cta,
+.hp-hero__btn {
+  transition: all .25s ease;
+}
+
+.header__cta:hover,
+.hp-hero__btn:hover {
+  transform: translateY(-2px) scale(1.03);
+}
+
+
+/* navbar underline */
+.header__link {
+  position: relative;
+}
+
+.header__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 0%;
+  height: 2px;
+  background: #0040a6;
+  transition: .3s ease;
+}
+
+.header__link:hover::after,
+.header__link--active::after {
+  width: 100%;
+}
+
+
+/* core value icon glow */
+.value-card__icon img {
+  transition: .35s ease;
+}
+
+.value-card:hover .value-card__icon img {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 12px rgba(255, 178, 0, .8));
+}
+
+
+/* mobile optimization*/
+@media(max-width:768px) {
+
+  .reveal {
+    transform: translateY(30px);
+  }
+
+  .hp-feat-card:hover,
+  .hp-sys-card:hover,
+  .story__card:hover,
+  .mission__box:hover,
+  .value-card:hover {
+    transform: none;
+  }
+
+}
+
+/*AKADEMUS PAGE TRANSITION CSS*/
+
+/* body exit */
+body.page-leave {
+  overflow: hidden;
+}
+
+body.page-leave main,
+body.page-leave section,
+body.page-leave footer {
+  animation: pageFadeOut .8s ease forwards;
+}
+
+@keyframes pageFadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(40px);
+    filter: blur(3px);
+  }
+}
+
+
+/* spaceship flight */
+
+.ship-flight {
+  animation: shipFly .95s ease forwards !important;
+}
+
+@keyframes shipFly {
+
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  45% {
+    transform: scale(1.15) translateY(-20px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(.18) translateX(420px) translateY(-220px);
+    opacity: 0;
+  }
+
+}
+
+
+/* fullscreen overlay */
+
+.page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #001a52, #0040a6, #005eff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .55s ease;
+}
+
+.page-transition-overlay.pt-open {
+  opacity: 1;
+}
+
+.page-transition-logo {
+  color: #ffb200;
+  font-size: 56px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  font-family: "Poppins", sans-serif;
+  opacity: 0;
+  transform: translateY(40px);
+  animation: logoRise .8s ease .2s forwards;
+}
+
+@keyframes logoRise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* page loads - fading in */
+
+body {
+  animation: pageLoad .7s ease;
+}
+
+@keyframes pageLoad {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* mobile phone */
+@media(max-width:768px) {
+  .page-transition-logo {
+    font-size: 34px;
+    letter-spacing: 3px;
+  }
+
+  @keyframes shipFly {
+
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    100% {
+      transform: scale(.2) translateX(160px) translateY(-120px);
+      opacity: 0;
+    }
+
+  }
+
+}
