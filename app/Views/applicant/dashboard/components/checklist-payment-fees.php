@@ -19,15 +19,13 @@
                 $done = $item['paid'];
                 if ($done) $doneCount++;
             ?>
-
                 <div class="dashboard-checklist-row <?= $done ? 'checklist-row-done' : '' ?>">
-
+                    
                     <div class="dashboard-checklist-box <?= $done ? 'checklist-box-done' : '' ?>">
                         <?= $done ? '✓' : '' ?>
                     </div>
 
                     <p><?= esc($item['title']) ?></p>
-
                 </div>
 
             <?php endforeach; ?>
