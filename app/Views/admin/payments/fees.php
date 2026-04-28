@@ -79,11 +79,16 @@ $methods = $methods ?? [];
         .fee-input-prefix { font-size: 13px; font-weight: 700; color: #64748b; }
         .fee-input {
             width: 100%;
-            border: 1px solid #cbd5e0; border-radius: 7px;
+            border: 1px solid #cbd5e0; 
+            border-radius: 7px;
             padding: 8px 10px;
-            font-size: 14px; font-weight: 700; color: #1e293b;
+            font-size: 14px; 
+            font-weight: 700; 
+            color: #1e293b;
             font-family: ui-monospace, monospace;
             transition: border-color .15s, box-shadow .15s;
+
+            appearance: textfield;
             -moz-appearance: textfield;
         }
         .fee-input::-webkit-outer-spin-button,
