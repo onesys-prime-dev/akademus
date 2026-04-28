@@ -39,7 +39,7 @@
             <?= $doneCount ?> of <?= count($paymentCheckList) ?> completed
         </span>
 
-        <a href="<?= base_url('admission-processing-fee') ?>" class="continue-dashboard-btn">
+        <a href="<?= base_url('admission-processing-fee') ?>" class="continue-dashboard-btn btn-primary">
             View
         </a>
     </div>
