@@ -3,7 +3,7 @@
     <div class="footer__inner">
         <div class="footer__brand">
             <div class="footer__logo-wrap">
-                <img class="footer__logo-img" src=<?= base_url("assets/images/logo_akademus.png") ?> alt="Akademus Logo" />
+                <img class="footer__logo-img" src="<?= base_url("assets/images/logo_akademus.png") ?>" alt="Akademus Logo" />
                 <span class="footer__logo-name">Akademus</span>
             </div>
             <p class="footer__desc">Akademus is a modern learning platform that provides structured and reliable access to courses and academic resources.</p>
