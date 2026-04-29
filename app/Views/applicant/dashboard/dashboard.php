@@ -63,7 +63,7 @@ $formBar = progressBar($form_progress);
             <div class="quick-actions">
                 <a class="btn-accent" href="<?= base_url('requirements') ?>">Upload Documents</a>
                 <a class="btn-accent" href="<?= base_url('admission-processing-fee') ?>">Pay Admission Fee</a>
-                <a class="btn-accent" href="<?= base_url('reservation-fee') ?>">Pay Reservation Fee</a>
+                <a class="btn-accent btn-reservation" href="<?= base_url('reservation-fee') ?>">Pay Reservation Fee</a>
             </div>
         </div>
     </div>
@@ -126,7 +126,7 @@ $formBar = progressBar($form_progress);
 
         <?= view('applicant/dashboard/components/checklist-documents', [
             'doc_stats'   => $doc_stats,
-            'doc_progress'=> $doc_progress,
+            'doc_progress' => $doc_progress,
             'docBar'      => $docBar,
             'previewReqs' => $previewReqs,
             'uploadedDoc' => $uploadedDoc,
@@ -134,28 +134,28 @@ $formBar = progressBar($form_progress);
             'allReqs'     => $allReqs,
         ]) ?>
 
-        <?=  view('applicant/dashboard/components/checklist-payment-fees', [
+        <?= view('applicant/dashboard/components/checklist-payment-fees', [
             'paymentCheckList' => $paymentCheckList
         ]) ?>
 
     </div><!-- /.checklist-summary-container -->
 
     <!-- ── Payment Notification ── -->
-    <div class="payment-notification-container">
-        <div class="payment-notification-text-info">
-            <p>You have been approved for admission.</p>
-            <span>Pay the ₱<?= number_format($reservation_fee_amount, 2) ?> reservation fee within 5 days to officially secure your slot.</span>
+    <?php if ($showPaymentNotification): ?>
+        <div class="payment-notification-container">
+            <div class="payment-notification-text-info">
+                <p>You have been approved for admission.</p>
+                <span>
+                    Pay the ₱<?= number_format($reservation_fee_amount, 2) ?>
+                    reservation fee within 5 days to officially secure your slot.
+                </span>
+            </div>
+            <a href="<?= base_url('reservation-fee') ?>" class="pay-now-btn">Pay Now</a>
         </div>
-        <a href="<?= base_url('reservation-fee') ?>" class="pay-now-btn">Pay Now</a>
-    </div>
+    <?php endif; ?>
 
 </div><!-- /.dashboard-container -->
 
 <script>
     const paymentNotificationCard = document.querySelector('.payment-notification-container');
-
-    // Show payment notification if applicant is approved but hasn't paid reservation fee
-    <?php if (!$showPaymentNotification): ?>
-        paymentNotificationCard.classList.add('hidden');
-    <?php endif; ?>
 </script>

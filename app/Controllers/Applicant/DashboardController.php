@@ -43,7 +43,7 @@ class DashboardController extends BaseController
             ->get()
             ->getRowArray();
 
-        $appStatus = $application['application_status'] ?? '';
+        $appStatus = strtolower(trim($applicant['application_status'] ?? ''));
 
         /*
         |--------------------------------------------------------------------------
@@ -180,7 +180,7 @@ class DashboardController extends BaseController
                 $uploadedRequired = count(array_filter(
                     $allReqs,
                     fn($r) =>
-                        $r['is_required']
+                    $r['is_required']
                         && isset($uploadedDocs[$r['program_requirement_id']])
                 ));
 
@@ -192,7 +192,7 @@ class DashboardController extends BaseController
                 $uploadedOptional = count(array_filter(
                     $allReqs,
                     fn($r) =>
-                        !$r['is_required']
+                    !$r['is_required']
                         && isset($uploadedDocs[$r['program_requirement_id']])
                 ));
 
@@ -319,7 +319,7 @@ class DashboardController extends BaseController
             // payment
             'reservation_fee_amount'  => $reservationFeeAmount,
             'paymentCheckList'        => $paymentCheckList,
-            'showPaymentNotification' => $showPaymentNotification,
+            'showPaymentNotification' => $showPaymentNotification
         ];
 
         return view('applicant/main', $data);

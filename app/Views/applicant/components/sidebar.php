@@ -1,20 +1,21 @@
 <!-- HOMEPAGE NAVBAR | homepage.php  -->
 <!-- HOMEPAGE NAVBAR | sidebar.php  -->
-<?php 
-    $firstname = session()->get('firstname') ?? 'Applicant';
-    $lastname  = session()->get('lastname')  ?? '';
-    $fullname  = trim($firstname . ' ' . $lastname);
+<?php
+$firstname = session()->get('firstname') ?? 'Applicant';
+$lastname  = session()->get('lastname')  ?? '';
+$fullname  = trim($firstname . ' ' . $lastname);
 
-    // Generate initials from name
-    $initials = strtoupper(substr($firstname, 0, 1) . substr($lastname, 0, 1));
-    if (empty(trim($initials))) $initials = 'AP';
+// Generate initials from name
+$initials = strtoupper(substr($firstname, 0, 1) . substr($lastname, 0, 1));
+if (empty(trim($initials))) $initials = 'AP';
 
-    $applicant_number = session()->get('applicant_number');
+$applicant_number = session()->get('applicant_number');
 
-    // Theme values
-    $app_name    = $theme['app_name']  ?? 'AKADEMUS';
-    $logo_url    = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png');
-    $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') === '1';
+// Theme values
+/** @var array $theme */
+$app_name    = $theme['app_name']  ?? 'AKADEMUS';
+$logo_url    = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png');
+$examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') === '1';
 ?>
 
 <nav>
@@ -37,7 +38,7 @@
         <div class="sidebar-links">
             <div class="group-container">
                 <p>MENU</p>
-                
+
                 <?php $uri = uri_string(); ?>
                 <div class="grouped-links">
                     <a href="<?= base_url('/dashboard') ?>" class="sidebar-nav-link <?= $uri === 'dashboard' ? 'active' : '' ?>">
@@ -57,26 +58,37 @@
                         <span>Tracking Progress</span>
                     </a>
                     <?php if ($examEnabled): ?>
-                    <a href="<?= base_url('/exam-schedule') ?>" class="sidebar-nav-link <?= str_contains($uri, 'exam-schedule') ? 'active' : '' ?>">
-                        <div class="dotted-link"></div>
-                        <span>Exam Schedule</span>
-                    </a>
+                        <a href="<?= base_url('/exam-schedule') ?>" class="sidebar-nav-link <?= str_contains($uri, 'exam-schedule') ? 'active' : '' ?>">
+                            <div class="dotted-link"></div>
+                            <span>Exam Schedule</span>
+                        </a>
                     <?php endif; ?>
                 </div>
             </div>
 
+            <?php $isApproved = strtolower($app_status ?? '') === 'approved'; ?>
+
             <div class="group-container">
-                <p>PAYMENTS</p>
-                <div class="grouped-links">
-                    <a href="<?= base_url('/admission-processing-fee') ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-processing-fee') ? 'active' : '' ?>">
+                <div class="group-title-row">
+                    <p>PAYMENTS</p>
+
+                    <?php if (!$isApproved): ?>
+                        <span class="mini-lock-badge">Locked</span>
+                    <?php endif; ?>
+                </div>
+                <div class="grouped-links <?= !$isApproved ? 'locked-payment' : '' ?>">
+
+                    <a href="<?= $isApproved ? base_url('/admission-processing-fee') : '#' ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-processing-fee') ? 'active' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Admission Processing Fee</span>
                     </a>
-                    <a href="<?= base_url('/reservation-fee') ?>" class="sidebar-nav-link <?= str_contains($uri, 'reservation-fee') ? 'active' : '' ?>">
+
+                    <a href="<?= $isApproved ? base_url('/reservation-fee') : '#' ?>" class="sidebar-nav-link <?= str_contains($uri, 'reservation-fee') ? 'active' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Reservation Fee</span>
                     </a>
                 </div>
+
             </div>
 
             <div class="group-container">

@@ -181,6 +181,58 @@ nav {
                 opacity: 1;
             }
 
+            /* ── Locked Payments Section ───────────────── */
+            .locked-payment {
+                opacity: 0.55;
+                filter: blur(0.4px);
+                position: relative;
+            }
+
+            .locked-payment .sidebar-nav-link {
+                pointer-events: none;
+                cursor: not-allowed;
+            }
+
+            .locked-payment .sidebar-nav-link:hover {
+                background-color: transparent;
+            }
+
+            .locked-payment .dotted-link {
+                background-color: rgba(255,255,255,0.25);
+            }
+
+            .locked-payment span {
+                color: rgba(255,255,255,0.55);
+            }
+
+            .group-title-row{
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                margin-left:20px;
+                margin-right:10px;
+                margin-bottom:6px;
+            }
+
+            .group-title-row{
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                margin:0 0 6px 0;
+                width:100%;
+            }
+
+            .mini-lock-badge{
+                font-size:11px;
+                font-weight:700;
+                padding:4px 10px;
+                border-radius:999px;
+                background:rgba(from var(--accent) r g b / 0.18);
+                border:1px solid rgba(from var(--accent) r g b / 0.55);
+                color:var(--accent);
+                white-space:nowrap;
+            }
+
     .sidebar-bottom {
         width: 100%;
         display: flex;
