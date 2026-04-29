@@ -233,6 +233,64 @@ nav {
                 white-space:nowrap;
             }
 
+            .lock-help-wrap{
+                display:flex;
+                align-items:center;
+                gap:6px;
+                position:relative;
+            }
+
+            .lock-help-btn{
+                width:20px;
+                height:20px;
+                border:none;
+                border-radius:50%;
+                background:rgba(255,255,255,.12);
+                color:#fff;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                cursor:pointer;
+                padding:0;
+            }
+
+            .lock-help-btn:hover{
+                background:rgba(255,255,255,.22);
+            }
+
+            .lock-tooltip{
+                position:absolute;
+                top:30px;
+                right:0;
+                width:190px;
+                padding:10px 12px;
+                border-radius:10px;
+                background:#111827;
+                color:#fff;
+                font-size:12px;
+                line-height:1.4;
+                opacity:0;
+                visibility:hidden;
+                transform:translateY(6px);
+                transition:.2s ease;
+                z-index:999;
+            }
+
+            /* Desktop hover */
+            .lock-help-wrap:hover .lock-tooltip{
+                opacity:1;
+                visibility:visible;
+                transform:translateY(0);
+            }
+
+            /* Mobile click */
+            .lock-help-wrap.show-tip .lock-tooltip{
+                opacity:1;
+                visibility:visible;
+                transform:translateY(0);
+            }
+            /* LOCKED PAYMENT ENDS HERE */
+
     .sidebar-bottom {
         width: 100%;
         display: flex;

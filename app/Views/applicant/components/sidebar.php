@@ -73,7 +73,21 @@ $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') =
                     <p>PAYMENTS</p>
 
                     <?php if (!$isApproved): ?>
-                        <span class="mini-lock-badge">Locked</span>
+                        <div class="lock-help-wrap">
+                            <span class="mini-lock-badge">Locked</span>
+
+                            <button type="button" class="lock-help-btn" onclick="this.parentNode.classList.toggle('show-tip')">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                    <path d="M9.5 9a2.5 2.5 0 1 1 4.2 1.8c-.8.7-1.7 1.2-1.7 2.2"></path>
+                                    <circle cx="12" cy="17" r="1"></circle>
+                                </svg>
+                            </button>
+
+                            <div class="lock-tooltip">
+                                unlocks after admission's approval
+                            </div>
+                        </div>
                     <?php endif; ?>
                 </div>
                 <div class="grouped-links <?= !$isApproved ? 'locked-payment' : '' ?>">
