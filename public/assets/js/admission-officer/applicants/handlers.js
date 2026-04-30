@@ -3,7 +3,8 @@ import {
     fetchApplicationContent,
     fetchApplicants,
     bulkUpdateApplicants,
-    goToApplicant
+    goToApplicant,
+    decideDocument
 } from './api.js';
 
 import {
@@ -206,18 +207,62 @@ export function initProgram() {
 }
 
 export function initDocModal() {
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', async (e) => {
+
+        // open
         const btn = e.target.closest('.ao-view-doc-btn');
         if (btn) {
-            openDocModal(btn.dataset.docUrl, btn.dataset.docName);
+            openDocModal(
+                btn.dataset.docUrl,
+                btn.dataset.docName,
+                btn.dataset.docId,
+                btn.dataset.docStatus
+            );
             return;
         }
 
-        const closeBtn = e.target.closest('#ao-doc-modal-close');
-        if (closeBtn) { closeDocModal(); return; }
+        // close
+        if (e.target.closest('#ao-doc-modal-close')) {
+            closeDocModal();
+            return;
+        }
 
         const modal = document.getElementById('ao-doc-modal');
-        if (modal && e.target === modal) { closeDocModal(); }
+
+        if (modal && e.target === modal) {
+            closeDocModal();
+            return;
+        }
+
+        // verify
+        if (e.target.closest('#ao-doc-verify')) {
+            const id = modal?.dataset.documentId;
+            if (!id) return;
+
+            const res = await decideDocument(id, 'approved');
+
+            if (res.success) {
+                closeDocModal();
+                update({ fullRender: true });
+            }
+
+            return;
+        }
+
+        // reject
+        if (e.target.closest('#ao-doc-reject')) {
+            const id = modal?.dataset.documentId;
+            if (!id) return;
+
+            const res = await decideDocument(id, 'rejected');
+
+            if (res.success) {
+                closeDocModal();
+                update({ fullRender: true });
+            }
+
+            return;
+        }
     });
 
     document.addEventListener('keydown', (e) => {

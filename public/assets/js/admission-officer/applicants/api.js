@@ -66,3 +66,19 @@ export async function bulkUpdateApplicants(ids, status) {
 export function goToApplicant(id) {
     window.location.href = `${baseUrl}admission-officer/detailed-applicant/${id}`;
 }
+
+
+export async function decideDocument(id, status) {
+    const res = await fetch(
+        `${baseUrl}/admission-officer/applicants/document/${id}/decide`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status })
+        }
+    );
+
+    return res.json();
+}

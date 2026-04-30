@@ -41,7 +41,7 @@
 
                     <?php foreach ($categoryRows as $row):
                         $status     = $row['status'] ?? null;
-                        $status     = $status ?: 'pending';
+                        $status     = $status ?: "No Status";
                         $isRequired = (int)($row['required'] ?? 0) === 1;
                         $hasFile    = !empty($row['soft_copy']);
                     ?>
@@ -103,8 +103,10 @@
                         <td class="application-table__cell req-col-action">
                             <?php if ($hasFile): ?>
                                 <button class="ao-view-doc-btn req-view-btn"
+                                    data-doc-id="<?= $row['document_id'] ?>"
                                     data-doc-url="<?= esc(base_url('admission-officer/applicants/document/' . $applicantId . '/' . $row['program_requirement_id'])) ?>"
                                     data-doc-name="<?= esc($row['soft_copy']) ?>"
+                                    data-doc-status="<?= $row['status'] ?>"
                                     title="View document">
                                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
@@ -125,5 +127,5 @@
 
     <?php endif; ?>
 
-    <?= $this->include('admission-officer/components/pagination') ?>
+    
 </div>

@@ -101,6 +101,7 @@ class ApplicantProfileService
 
         $builder = $db->table('program_requirements pr')
             ->select('
+                ad.document_id,
                 pr.program_requirement_id,
                 r.requirement_name as document_name,
                 rc.category_name as category,
