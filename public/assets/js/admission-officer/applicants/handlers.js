@@ -255,6 +255,95 @@ export function initBulkSelect() {
     });
 }
 
+const BULK_ICONS = {
+    approved: `
+        <svg width="20" height="20" viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+        </svg>
+    `,
+    rejected: `
+        <svg width="20" height="20" viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+    `
+};
+
+let bulkPayload = null;
+
+function openBulkModal(applicants, status) {
+    bulkPayload = { applicants, status };
+
+    const overlay = document.getElementById('bulk-modal-overlay');
+    const header = document.getElementById('bulk-modal-header');
+    const icon = document.getElementById('bulk-modal-icon');
+    const title = document.getElementById('bulk-modal-title');
+    const subtitle = document.getElementById('bulk-modal-subtitle');
+    const list = document.getElementById('bulk-modal-list');
+    const submit = document.getElementById('bulk-modal-submit');
+
+    const isApprove = status === 'approved';
+
+    header.className =
+        'decision-modal__header decision-modal__header--' +
+        (isApprove ? 'approve' : 'decline');
+
+    icon.innerHTML = BULK_ICONS[status];
+
+    title.textContent =
+        isApprove
+            ? 'Bulk Approve Applicants'
+            : 'Bulk Reject Applicants';
+
+    subtitle.textContent =
+        `${applicants.length} applicant(s) selected`;
+
+    submit.className =
+        'decision-modal__submit decision-modal__submit--' +
+        (isApprove ? 'approve' : 'decline');
+
+    submit.textContent =
+        isApprove ? 'Approve All' : 'Reject All';
+
+    list.innerHTML = applicants.map((app, i) => `
+        <div class="bulk-modal-item">
+            <span>${i + 1}.</span>
+            <strong>${app.name}</strong>
+        </div>
+    `).join('');
+
+    overlay.classList.add('active');
+}
+
+function closeBulkModal() {
+    document
+        .getElementById('bulk-modal-overlay')
+        ?.classList.remove('active');
+
+    bulkPayload = null;
+}
+
+async function confirmBulkAction() {
+    if (!bulkPayload) return;
+
+    const ids = bulkPayload.applicants.map(a => a.id);
+
+    await bulkUpdateApplicants(ids, bulkPayload.status);
+
+    closeBulkModal();
+    update();
+}
+
 export function initBulkActions() {
     if (state.mode !== 'list') return;
 
@@ -272,25 +361,33 @@ export function initBulkActions() {
             return;
         }
 
-        const ids = getSelectedIds();
-        if (!ids.length) return;
+        const applicants = getSelectedApplicants();
+        if (!applicants.length) return;
 
         if (e.target.closest('.bulk-actions__btn--approve')) {
-            await bulkUpdateApplicants(ids, 'approved');
-            update();
+            openBulkModal(applicants, 'approved');
         }
 
         if (e.target.closest('.bulk-actions__btn--reject')) {
-            await bulkUpdateApplicants(ids, 'rejected');
-            update();
+            openBulkModal(applicants, 'rejected');
         }
     });
 }
 
-function getSelectedIds() {
-    return Array.from(document.querySelectorAll('[data-select]:checked'))
-        .map(cb => cb.closest('[data-row]')?.dataset.id)
-        .filter(Boolean);
+function getSelectedApplicants() {
+    return Array.from(
+        document.querySelectorAll('[data-select]:checked')
+    )
+    .map(cb => {
+        const row = cb.closest('[data-row]');
+        if (!row) return null;
+
+        return {
+            id: row.dataset.id,
+            name: row.dataset.name
+        };
+    })
+    .filter(Boolean);
 }
 
 export function initRowClick() {
@@ -420,3 +517,12 @@ export function init() {
         update();
     }
 }
+
+
+document.addEventListener('click', (e) => {
+    if (e.target.closest('#bulk-modal-close')) closeBulkModal();
+    if (e.target.closest('#bulk-modal-cancel')) closeBulkModal();
+    if (e.target.closest('#bulk-modal-submit')) confirmBulkAction();
+
+    if (e.target.id === 'bulk-modal-overlay') closeBulkModal();
+});

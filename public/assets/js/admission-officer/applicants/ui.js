@@ -69,7 +69,7 @@ export function updateApplicantsTable(applicants) {
     }
 
     tbody.innerHTML = applicants.map(app => `
-        <tr class="applicants-table__row" data-row data-id="${app.applicant_id}">
+        <tr class="applicants-table__row" data-row data-id="${app.applicant_id}" data-name="${escapeHtml(app.applicant_name)}">
 
             <td class="applicants-table__cell applicants-table__cell--checkbox">
                 <input type="checkbox" data-select>
