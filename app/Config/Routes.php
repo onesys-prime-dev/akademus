@@ -181,6 +181,7 @@ $routes->get('admission-officer/dashboard/calendar-data', 'AdmissionOfficer\Dash
 $routes->get('admission-officer/applicants/(:num)',                          'AdmissionOfficer\ApplicantsController::index/$1');
 $routes->get('admission-officer/applicants/fetch-content',                   'AdmissionOfficer\ApplicantsController::fetchContent');
 $routes->get('admission-officer/applicants/document/(:num)/(:num)',          'AdmissionOfficer\ApplicantsController::viewDocument/$1/$2');
+$routes->post('admission-officer/applicants/document/(:num)/decide',        'AdmissionOfficer\ApplicantsController::decideDocument/$1');
 $routes->get('admission-officer/applicants',                     'AdmissionOfficer\ApplicantsController::index');
 $routes->get('admission-officer/applicants/fetch-applicants',    'AdmissionOfficer\ApplicantsController::fetchApplicants');
 $routes->post('admission-officer/applicants/bulk-update',        'AdmissionOfficer\ApplicantsController::bulkUpdate');

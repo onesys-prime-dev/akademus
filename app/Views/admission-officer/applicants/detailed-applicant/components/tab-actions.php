@@ -5,11 +5,6 @@
             <span class="filters-button_count"><?= esc($counts['all'] ?? 0) ?></span>
         </button>
 
-        <button data-filter="in_progress">
-            In-Progress
-            <span class="filters-button_count"><?= esc($counts['in_progress'] ?? 0) ?></span>
-        </button>
-
         <button data-filter="pending">
             Pending
             <span class="filters-button_count"><?= esc($counts['pending'] ?? 0) ?></span>
