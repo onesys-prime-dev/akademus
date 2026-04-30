@@ -275,7 +275,7 @@ nav {
                 height:20px;
                 border:none;
                 border-radius:50%;
-                background:rgba(255,255,255,.12);
+                background:rgba(0, 0, 0, 0.12);
                 color:#fff;
                 display:flex;
                 align-items:center;
@@ -285,7 +285,7 @@ nav {
             }
 
             .lock-help-btn:hover{
-                background:rgba(255,255,255,.22);
+                background:rgba(0, 0, 0, 0.22);
             }
 
             .lock-tooltip{
