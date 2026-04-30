@@ -43,7 +43,7 @@ $formBar = progressBar($form_progress);
     <!-- ── Profile Banner ── -->
     <div class="profile-banner">
         <div class="top-most-span">
-            <span>AKADEMOS · SY 2025–2026</span>
+            <span>AKADEMUS · SY 2025–2026</span>
         </div>
 
         <div class="banner-name-header">
