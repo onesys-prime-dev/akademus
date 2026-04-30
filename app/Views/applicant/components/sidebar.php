@@ -16,6 +16,8 @@ $applicant_number = session()->get('applicant_number');
 $app_name    = $theme['app_name']  ?? 'AKADEMUS';
 $logo_url    = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png');
 $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') === '1';
+
+$isApproved = (new \App\Models\Applicant\ApplicantModel())->getAppStatus('application_status', '') === 'approved';
 ?>
 
 <nav>
@@ -66,40 +68,37 @@ $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') =
                 </div>
             </div>
 
-            <?php $isApproved = strtolower($app_status ?? '') === 'approved'; ?>
-
             <div class="group-container">
                 <div class="group-title-row">
                     <p>PAYMENTS</p>
-
-                    <?php if (!$isApproved): ?>
-                        <div class="lock-help-wrap">
-                            <span class="mini-lock-badge">Locked</span>
-
-                            <button type="button" class="lock-help-btn" onclick="this.parentNode.classList.toggle('show-tip')">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="9"></circle>
-                                    <path d="M9.5 9a2.5 2.5 0 1 1 4.2 1.8c-.8.7-1.7 1.2-1.7 2.2"></path>
-                                    <circle cx="12" cy="17" r="1"></circle>
-                                </svg>
-                            </button>
-
-                            <div class="lock-tooltip">
-                                unlocks after admission's approval
-                            </div>
-                        </div>
-                    <?php endif; ?>
                 </div>
-                <div class="grouped-links <?= !$isApproved ? 'locked-payment' : '' ?>">
+                <div class="grouped-links">
 
-                    <a href="<?= $isApproved ? base_url('/admission-processing-fee') : '#' ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-processing-fee') ? 'active' : '' ?>">
+                    <a href="<?= base_url('/admission-processing-fee') ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-processing-fee') ? 'active' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Admission Processing Fee</span>
                     </a>
 
-                    <a href="<?= $isApproved ? base_url('/reservation-fee') : '#' ?>" class="sidebar-nav-link <?= str_contains($uri, 'reservation-fee') ? 'active' : '' ?>">
+                    <a
+                        href="<?= $isApproved ? base_url('/reservation-fee') : 'javascript:void(0)' ?>"
+                        class="sidebar-nav-link <?= str_contains($uri, 'reservation-fee') ? 'active' : '' ?> <?= !$isApproved ? 'disabled-link' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Reservation Fee</span>
+
+                        <?php if (!$isApproved): ?>
+                            <div class="lock-help-wrap" onclick="this.classList.toggle('show-tip')">
+                                <!-- Lock icon -->
+                                <svg class="lock-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                </svg>
+
+                                <!-- Tooltip -->
+                                <div class="lock-tooltip">
+                                    unlocks after admission's approval
+                                </div>
+                            </div>
+                        <?php endif; ?>
                     </a>
                 </div>
 
@@ -142,3 +141,13 @@ $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') =
         </a>
     </div>
 </nav>
+
+<script>
+    document.addEventListener('click', function(e) {
+        document.querySelectorAll('.lock-help-wrap').forEach(el => {
+            if (!el.contains(e.target)) {
+                el.classList.remove('show-tip');
+            }
+        });
+    });
+</script>

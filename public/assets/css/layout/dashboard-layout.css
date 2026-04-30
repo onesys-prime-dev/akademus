@@ -166,7 +166,7 @@ nav {
                 font-size: 15px;
                 font-weight: 500;
                 color: #FFFFFF;
-                opacity: 0.7;
+                opacity: 0.85;
             }
 
             .sidebar-nav-link.active {
@@ -181,10 +181,40 @@ nav {
                 opacity: 1;
             }
 
+            /* Disabled / Locked link */
+            .sidebar-nav-link.disabled-link {
+                opacity: 0.45;
+                pointer-events: none;       /* cannot click (desktop + mobile) */
+                cursor: not-allowed;
+            }
+
+            /* Remove hover effect */
+            .sidebar-nav-link.disabled-link:hover {
+                background-color: transparent;
+            }
+
+            /* Dim text + dot */
+            .sidebar-nav-link.disabled-link span {
+                opacity: 0.5;
+            }
+
+            .sidebar-nav-link.disabled-link .dotted-link {
+                background-color: rgba(255,255,255,0.25);
+            }
+
+            /* Dim lock icon */
+            .sidebar-nav-link.disabled-link .lock-icon {
+                opacity: 0.6;
+            }
+
+            /* Allow tooltip interaction */
+            .sidebar-nav-link.disabled-link .lock-help-wrap {
+                pointer-events: auto;
+            }
+
             /* ── Locked Payments Section ───────────────── */
             .locked-payment {
                 opacity: 0.55;
-                filter: blur(0.4px);
                 position: relative;
             }
 
@@ -260,12 +290,12 @@ nav {
 
             .lock-tooltip{
                 position:absolute;
-                top:30px;
+                top:10px;
                 right:0;
                 width:190px;
                 padding:10px 12px;
                 border-radius:10px;
-                background:#111827;
+                background: black;
                 color:#fff;
                 font-size:12px;
                 line-height:1.4;
