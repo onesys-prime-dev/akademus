@@ -15,7 +15,7 @@ class ApplicantsController extends BaseController
     protected ApplicantProfileService $applicantProfileService;
     protected NotificationService $notificationService;
 
-    private const DEFAULT_TAB = 'requirements';
+    private const DEFAULT_TAB = 'applicant_form';
 
     public function __construct()
     {
@@ -265,8 +265,10 @@ class ApplicantsController extends BaseController
             $offset
         );
 
+        $viewMap = $this->applicantProfileService->getViewMap();
+
         $initialContent = view(
-            'admission-officer/applicants/detailed-applicant/components/content/' . $activeTab,
+            $viewMap[$activeTab],
             array_merge($payload, [
                 'applicantId' => $applicantId,
                 'activeTab'   => $activeTab,
@@ -290,44 +292,6 @@ class ApplicantsController extends BaseController
             'profile'        => $profile,
             'activeTab'      => $activeTab,
             'initialContent' => $initialContent,
-        ]);
-    }
-
-    public function decideDocument(int $id)
-    {
-        $data = $this->request->getJSON(true);
-
-        $status = $data['status'] ?? null;
-
-        $allowed = ['verified', 'rejected'];
-
-        if (!in_array($status, $allowed, true)) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Invalid status'
-            ]);
-        }
-
-        $db = \Config\Database::connect();
-
-        $updated = $db->table('applicant_documents')
-            ->where('document_id', $id)
-            ->update([
-                'status' => $status,
-                'updated_at' => date('Y-m-d H:i:s')
-            ]);
-
-        if (!$updated) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Failed to update document status'
-            ]);
-        }
-
-        return $this->response->setJSON([
-            'success' => true,
-            'message' => 'Document updated successfully',
-            'status'  => $status
         ]);
     }
 
