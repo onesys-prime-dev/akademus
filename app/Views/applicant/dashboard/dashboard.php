@@ -63,7 +63,11 @@ $formBar = progressBar($form_progress);
             <div class="quick-actions">
                 <a class="btn-accent" href="<?= base_url('requirements') ?>">Upload Documents</a>
                 <a class="btn-accent" href="<?= base_url('admission-processing-fee') ?>">Pay Admission Fee</a>
-                <a class="btn-accent btn-reservation" href="<?= base_url('reservation-fee') ?>">Pay Reservation Fee</a>
+                <?php if ($app_status === 'approved'): ?>
+                    <a class="btn-accent btn-reservation" href="<?= base_url('reservation-fee') ?>">
+                        Pay Reservation Fee
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
     </div>
