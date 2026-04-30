@@ -295,7 +295,7 @@ class DashboardController extends BaseController
             'steps'            => $steps,
             'progress'         => $overallProgress,
             'banner_message'   => $bannerMessage,
-            'step_statuses' => $stepStatuses,
+            'step_statuses'    => $stepStatuses,
 
             // merged shared meta
             'app_status'       => $progressData['app_status'],
