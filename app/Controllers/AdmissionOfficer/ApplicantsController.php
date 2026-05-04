@@ -295,6 +295,44 @@ class ApplicantsController extends BaseController
         ]);
     }
 
+    public function decideDocument(int $id)
+    {
+        $data = $this->request->getJSON(true);
+
+        $status = $data['status'] ?? null;
+
+        $allowed = ['approved', 'rejected'];
+
+        if (!in_array($status, $allowed, true)) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Invalid status'
+            ]);
+        }
+
+        $db = \Config\Database::connect();
+
+        $updated = $db->table('applicant_documents')
+            ->where('document_id', $id)
+            ->update([
+                'status' => $status,
+                'updated_at' => date('Y-m-d H:i:s')
+            ]);
+
+        if (!$updated) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Failed to update document status'
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'success' => true,
+            'message' => 'Document updated successfully',
+            'status'  => $status
+        ]);
+    }
+
     public function viewDocument(int $applicantId, int $requirementId)
     {
         $db  = \Config\Database::connect();

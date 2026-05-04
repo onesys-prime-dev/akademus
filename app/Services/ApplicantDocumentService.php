@@ -82,7 +82,7 @@ class ApplicantDocumentService
         }
 
         $documents = $this->applicantDocumentModel
-            ->select('program_requirement_id, document_name, uploaded_at')
+            ->select('program_requirement_id, document_name, status, uploaded_at')
             ->where('applicant_id', $applicant_id)
             ->whereIn('program_requirement_id', $ids)
             ->findAll();
@@ -92,6 +92,7 @@ class ApplicantDocumentService
         foreach ($documents as $doc) {
             $result[$doc['program_requirement_id']] = [
                 'document_name' => $doc['document_name'],
+                'status'        => $doc['status'],
                 'uploaded_at'   => $doc['uploaded_at']
             ];
         }

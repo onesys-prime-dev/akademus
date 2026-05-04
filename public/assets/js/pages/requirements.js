@@ -106,12 +106,36 @@ function populateForm(formId, data) {
         const label = form.querySelector(`label[for="requirement_${requirementId}"]`);
         if (!label) return;
 
-        label.classList.add('upload-success', 'uploaded');
+        // add different classes for each status
+        // if status is uploaded
+        if (data[requirementId]?.status === 'pending') {
+            label.classList.add('upload-pending', 'uploaded');
 
-        const btn = label.querySelector('.requirement-upload-action');
-        if (btn) {
-            btn.textContent = "Uploaded ✔";
-            btn.classList.add('uploaded-btn');
+            const btn = label.querySelector('.requirement-upload-action');
+            if (btn) {
+                btn.textContent = "Pending Review";
+                btn.classList.add('upload-btn-pending', 'uploaded-btn');
+            }
+        }
+        // if status is approved
+        else if (data[requirementId]?.status === 'approved') {
+            label.classList.add('upload-approved', 'uploaded');
+
+            const btn = label.querySelector('.requirement-upload-action');
+            if (btn) {
+                btn.textContent = "Approved ✔";
+                btn.classList.add('uploaded-btn-approved', 'uploaded-btn');
+            }
+        }
+        // if status is rejected
+        else if (data[requirementId]?.status === 'rejected') {
+            label.classList.add('upload-rejected', 'uploaded');
+
+            const btn = label.querySelector('.requirement-upload-action');
+            if (btn) {
+                btn.textContent = "Rejected";
+                btn.classList.add('upload-btn-rejected', 'uploaded-btn');
+            }
         }
 
         // Show the View button with the correct URL and file name
