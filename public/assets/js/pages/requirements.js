@@ -179,26 +179,25 @@ function updateUploadCounter(formId, formData) {
     const counter = document.querySelector('.upload-counter');
     if (!counter) return;
 
-    const form = document.getElementById(formId);
-    if (!form) return;
-
-    const requiredInputs = form.querySelectorAll('input[type="file"][required]');
-    const totalRequired = requiredInputs.length;
+    const totalRequired = Number(counter.dataset.totalRequired || 0);
 
     if (totalRequired === 0) {
         counter.style.display = 'none';
         return;
     }
 
-    // Count uploaded required docs from formData
-    let uploadedRequired = 0;
-    requiredInputs.forEach(input => {
-        const reqId = input.id.replace('requirement_', '');
-        if (formData && formData[reqId]) uploadedRequired++;
-    });
+    // count every uploaded document
+    const totalUploaded = formData
+        ? Object.keys(formData).length
+        : 0;
 
-    counter.textContent = `${uploadedRequired}/${totalRequired} required uploaded`;
-    counter.classList.toggle('upload-counter--done', uploadedRequired >= totalRequired);
+    counter.textContent =
+        `${totalUploaded}/${totalRequired} required uploaded`;
+
+    counter.classList.toggle(
+        'upload-counter--done',
+        totalUploaded >= totalRequired
+    );
 }
 
 function setupAutoSave(step) {

@@ -52,6 +52,10 @@ class RequirementsController extends BaseController
         $application = $db->table('applications')->where('applicant_id', $applicant_id)->get()->getRowArray();
         $application_status = $application['application_status'] ?? '';
 
+        $requiredDocsVerified = $program_id && $applicant_id
+            ? $this->documentService->allRequiredVerified($applicant_id, $program_id)
+            : false;
+
         return view('applicant/main', [
             'title'              => 'Requirements',
             'page_content'       => 'applicant/requirements/requirements',
@@ -60,6 +64,7 @@ class RequirementsController extends BaseController
             'categories'         => $categories,
             'theme'              => $theme,
             'application_status' => $application_status,
+            'requiredDocsVerified' => $requiredDocsVerified,
         ]);
     }
 
@@ -104,7 +109,7 @@ class RequirementsController extends BaseController
             $requirements = $this->requirementService->getStepRequirements($program_id, $step);
 
             $category_name = $category['category_name'];
-            $category_description = $category['category_description'];
+            $category_description = $category['description'];
         }
 
         $applicant_id = session()->get('applicant_id');
@@ -167,7 +172,9 @@ class RequirementsController extends BaseController
         }
 
         // 🔥 NEW: check completion
-        if ($this->documentService->allRequiredCompleted($applicant_id)) {
+        $program_id = session()->get('selected_program_id') ?? session()->get('program_id');
+
+        if ($this->documentService->allRequiredCompleted($applicant_id, $program_id)) {
 
             $key = "requirements_completed_{$applicant_id}";
 

@@ -2,150 +2,127 @@
 
 namespace App\Services;
 
-use App\Models\RequirementCategoryModel;
-use App\Models\RequirementDocumentModel;
-use App\Models\PresetRequirementCategoryModel;
-
-/**
- * RequirementService
- *
- * Derives document requirements from the requirement categories
- * assigned to a program's preset.
- */
 class RequirementService
 {
-    private $categories   = null;
-    private $requirements = null;
+    private ?array $categories = null;
+    private ?array $requirements = null;
     private $cachedProgId = null;
-
-    private function presetService(): PresetService
-    {
-        static $svc = null;
-        if (!$svc) $svc = new PresetService();
-        return $svc;
-    }
-
-    private function catModel(): RequirementCategoryModel
-    {
-        static $m = null;
-        if (!$m) $m = new RequirementCategoryModel();
-        return $m;
-    }
-
-    private function docModel(): RequirementDocumentModel
-    {
-        static $m = null;
-        if (!$m) $m = new RequirementDocumentModel();
-        return $m;
-    }
-
-    private function prcModel(): PresetRequirementCategoryModel
-    {
-        static $m = null;
-        if (!$m) $m = new PresetRequirementCategoryModel();
-        return $m;
-    }
 
     private function resetIfNeeded($program_id): void
     {
         if ($this->cachedProgId !== $program_id) {
-            $this->categories   = null;
-            $this->requirements = null;
             $this->cachedProgId = $program_id;
+            $this->categories = null;
+            $this->requirements = null;
         }
     }
 
-    /**
-     * Get all requirement categories for a program's preset.
-     * Each element: program_requirement_category_id, category_name,
-     *               category_description, display_order, is_active.
-     */
     public function getCategories($program_id): array
     {
         $this->resetIfNeeded($program_id);
 
-        if ($this->categories !== null) {
-            return $this->categories;
+        if ($this->categories === null) {
+            $this->categories = db_connect()
+                ->table('program_requirement_categories prc')
+                ->select([
+                    'prc.program_requirement_category_id',
+                    'rc.category_name',
+                    'rc.description',
+                    'prc.display_order',
+                    'prc.is_active',
+                ])
+                ->join(
+                    'requirement_categories rc',
+                    'rc.category_id = prc.category_id'
+                )
+                ->where('prc.program_id', $program_id)
+                ->where('prc.is_active', 1)
+                ->where('rc.is_active', 1)
+                ->orderBy('prc.display_order', 'ASC')
+                ->get()
+                ->getResultArray();
         }
-
-        $preset = $this->presetService()->getPresetForProgram($program_id);
-
-        if (!$preset) {
-            $this->categories = [];
-            return [];
-        }
-
-        $rows = $this->prcModel()->getCategoriesForPreset($preset['id']);
-
-        $this->categories = array_values(array_map(function ($row, $index) {
-            return [
-                'program_requirement_category_id' => (int) $row['category_id'],
-                'category_name'                   => $row['category_name'],
-                'category_description'            => $row['description'] ?? '',
-                'display_order'                   => $index + 1,
-                'is_active'                       => 1,
-            ];
-        }, $rows, array_keys($rows)));
 
         return $this->categories;
     }
 
-    /**
-     * Get all requirements (documents) for a program's preset.
-     * Each element: program_requirement_id, program_requirement_category_id,
-     *               requirement_name, requirement_description, is_required,
-     *               requirement_order, is_active.
-     */
     public function getRequirements($program_id): array
     {
         $this->resetIfNeeded($program_id);
 
-        if ($this->requirements !== null) {
-            return $this->requirements;
+        if ($this->requirements === null) {
+            $rows = db_connect()
+                ->table('program_requirements pr')
+                ->select([
+                    'pr.program_requirement_id',
+                    'pr.program_requirement_category_id',
+                    'r.requirement_name',
+                    'r.description',
+                    'pr.is_mandatory',
+                    'pr.display_order',
+                    'pr.is_active',
+                ])
+                ->join(
+                    'requirements r',
+                    'r.requirement_id = pr.requirement_id'
+                )
+                ->join(
+                    'program_requirement_categories prc',
+                    'prc.program_requirement_category_id = pr.program_requirement_category_id'
+                )
+                ->where('prc.program_id', $program_id)
+                ->where('prc.is_active', 1)
+                ->where('pr.is_active', 1)
+                ->where('r.is_active', 1)
+                ->orderBy('prc.display_order', 'ASC')
+                ->orderBy('pr.display_order', 'ASC')
+                ->get()
+                ->getResultArray();
+
+            $this->requirements = array_map(
+                fn($row) => [
+                    // FIXED: real projected ID
+                    'program_requirement_id' => (int) $row['program_requirement_id'],
+
+                    'program_requirement_category_id' =>
+                        (int) $row['program_requirement_category_id'],
+
+                    'requirement_name' =>
+                        $row['requirement_name'],
+
+                    'requirement_description' =>
+                        $row['description'] ?? '',
+
+                    'is_required' =>
+                        (int) $row['is_mandatory'],
+
+                    'requirement_order' =>
+                        (int) $row['display_order'],
+
+                    'is_active' =>
+                        (int) $row['is_active'],
+                ],
+                $rows
+            );
         }
-
-        $categories = $this->getCategories($program_id);
-
-        if (empty($categories)) {
-            $this->requirements = [];
-            return [];
-        }
-
-        $catIds = array_column($categories, 'program_requirement_category_id');
-        $docs   = $this->docModel()->getDocumentsForCategories($catIds);
-
-        $this->requirements = array_values(array_map(function ($doc) {
-            return [
-                'program_requirement_id'          => (int) $doc['requirement_id'],
-                'program_requirement_category_id' => (int) $doc['category_id'],
-                'requirement_name'                => $doc['requirement_name'],
-                'requirement_description'         => $doc['description'] ?? '',
-                'is_required'                     => (int) ($doc['is_required'] ?? 1),
-                'requirement_order'               => (int) $doc['display_order'],
-                'is_active'                       => 1,
-            ];
-        }, $docs));
 
         return $this->requirements;
     }
 
-    /**
-     * Get requirements belonging to the category at step position $step.
-     */
     public function getStepRequirements($program_id, $step): array
     {
         $categories = $this->getCategories($program_id);
-        $category   = $categories[$step - 1] ?? null;
+        $category = $categories[$step - 1] ?? null;
 
         if (!$category) {
             return [];
         }
 
-        $categoryId   = $category['program_requirement_category_id'];
-        $requirements = $this->getRequirements($program_id);
-
-        return array_values(array_filter($requirements, function ($req) use ($categoryId) {
-            return $req['program_requirement_category_id'] == $categoryId;
-        }));
+        return array_values(array_filter(
+            $this->getRequirements($program_id),
+            fn($req) =>
+                $req['program_requirement_category_id']
+                == $category['program_requirement_category_id']
+        ));
     }
 }

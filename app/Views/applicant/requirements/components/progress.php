@@ -13,7 +13,7 @@
                     <?= $index + 1 ?>
                 </div>
 
-                <span><?= esc($category['category_name']) ?></span>
+                <span><?= esc(mb_strimwidth($category['category_name'], 0, 10, '…')) ?></span>
             </div>
 
             <?php if ($index < count($categories) - 1): ?>

@@ -39,11 +39,13 @@ class ApplicantDocumentService
 
             $file->move($uploadPath, $fileName, true);
 
-            $this->applicantDocumentModel->replace([
-                'applicant_id' => $applicant_id,
-                'program_requirement_id' => $program_requirement_id,
-                'document_name' => $fileName
-            ]);
+            db_connect()
+                ->table('applicant_documents')
+                ->replace([
+                    'applicant_id'            => $applicant_id,
+                    'program_requirement_id'  => $program_requirement_id,
+                    'document_name'           => $fileName,
+                ]);
 
             // 🔥 get requirement name
             $requirement = $db->table('program_requirements pr')
@@ -100,44 +102,62 @@ class ApplicantDocumentService
         return $result;
     }
 
-    public function allRequiredCompleted(int $applicant_id): bool
+    public function allRequiredCompleted(int $applicant_id, int $program_id): bool
     {
-        $db = db_connect();
+        $allReqs = (new RequirementService())->getRequirements($program_id);
 
-        // get applicant program
-        $applicant = $db->table('applicants')
-            ->select('program_id')
-            ->where('applicant_id', $applicant_id)
-            ->get()
-            ->getRowArray();
+        if (empty($allReqs)) {
+            return false;
+        }
 
-        if (! $applicant) return false;
+        $uploadedDocs = $this->getStepDocuments($applicant_id, $allReqs);
 
-        $program_id = $applicant['program_id'];
+        $requiredReqs = array_filter(
+            $allReqs,
+            fn($r) => $r['is_required']
+        );
 
-        // all required requirements
-        $required = $db->table('program_requirements pr')
-            ->select('pr.program_requirement_id')
-            ->join('program_requirement_categories prc', 'prc.program_requirement_category_id = pr.program_requirement_category_id')
-            ->where('prc.program_id', $program_id)
-            ->where('pr.is_mandatory', 1)
-            ->get()
-            ->getResultArray();
+        $totalRequired = count($requiredReqs);
 
-        if (empty($required)) return false;
+        $uploadedRequired = count(
+            array_filter(
+                $requiredReqs,
+                fn($r) =>
+                    isset($uploadedDocs[$r['program_requirement_id']])
+            )
+        );
 
-        $requiredIds = array_column($required, 'program_requirement_id');
+        return $totalRequired > 0
+            && $uploadedRequired >= $totalRequired;
+    }
 
-        // uploaded docs
-        $uploaded = $db->table('applicant_documents')
-            ->select('program_requirement_id')
-            ->where('applicant_id', $applicant_id)
-            ->whereIn('program_requirement_id', $requiredIds)
-            ->get()
-            ->getResultArray();
+    public function allRequiredVerified(int $applicant_id, int $program_id): bool
+    {
+        $allReqs = (new RequirementService())->getRequirements($program_id);
 
-        $uploadedIds = array_column($uploaded, 'program_requirement_id');
+        if (empty($allReqs)) {
+            return false;
+        }
 
-        return count($uploadedIds) >= count($requiredIds);
+        $uploadedDocs = $this->getStepDocuments($applicant_id, $allReqs);
+
+        $requiredReqs = array_filter(
+            $allReqs,
+            fn($r) => $r['is_required']
+        );
+
+        $totalRequired = count($requiredReqs);
+
+        $approvedRequired = count(
+            array_filter(
+                $requiredReqs,
+                fn($r) =>
+                    isset($uploadedDocs[$r['program_requirement_id']]) &&
+                    ($uploadedDocs[$r['program_requirement_id']]['status'] ?? null) === 'approved'
+            )
+        );
+
+        return $totalRequired > 0
+            && $approvedRequired >= $totalRequired;
     }
 }

@@ -48,7 +48,7 @@ class ApplicantProfileService
         return $row;
     }
 
-    public function getTabPayload(int $applicantId, string $tab, array $filters = [], int $limit = 10, int $offset = 0): array
+    public function getTabPayload(int $applicantId, string $tab, array $filters = [], int $limit = null, int $offset = 0): array
     {
         return match ($tab) {
             'applicant_form'  => $this->getApplicantFormPayload($applicantId, $filters, $limit, $offset),

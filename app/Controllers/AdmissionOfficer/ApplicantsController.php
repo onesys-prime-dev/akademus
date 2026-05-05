@@ -253,7 +253,7 @@ class ApplicantsController extends BaseController
             'search' => '',
         ];
 
-        $limit  = 10;
+        $limit  = 20;
         $page   = 1;
         $offset = 0;
 
@@ -374,7 +374,7 @@ class ApplicantsController extends BaseController
             ]);
         }
 
-        $limit  = 10;
+        $limit  = 20;
         $offset = ($page - 1) * $limit;
 
         $filters = compact('status', 'search');

@@ -5,18 +5,21 @@ namespace App\Controllers\Admin;
 use App\Models\RequirementCategoryModel;
 use App\Models\RequirementDocumentModel;
 use App\Models\ThemeModel;
+use App\Services\ProgramRequirementSyncService;
 
 class RequirementCategoriesController extends BaseAdminController
 {
     protected $categoryModel;
     protected $docModel;
     protected $themeModel;
+    protected $syncService;
 
     public function __construct()
     {
         $this->categoryModel = new RequirementCategoryModel();
         $this->docModel      = new RequirementDocumentModel();
         $this->themeModel    = new ThemeModel();
+        $this->syncService   = new ProgramRequirementSyncService();
     }
 
     private function theme(): array
@@ -164,16 +167,56 @@ class RequirementCategoriesController extends BaseAdminController
 
     private function saveDocuments(int $categoryId, array $documents): void
     {
+        $seenIds = [];
+
         foreach ($documents as $order => $doc) {
-            if (empty($doc['requirement_name'])) continue;
-            $this->docModel->insert([
+            if (empty($doc['requirement_name'])) {
+                continue;
+            }
+
+            $data = [
                 'category_id'      => $categoryId,
                 'requirement_name' => trim($doc['requirement_name']),
                 'description'      => $doc['description'] ?? null,
                 'is_required'      => !empty($doc['is_required']) ? 1 : 0,
-                'display_order'    => (int)$order,
+                'display_order'    => (int) $order,
                 'is_active'        => 1,
-            ]);
+            ];
+
+            $requirementId = $doc['requirement_id'] ?? null;
+
+            if ($requirementId) {
+                $requirementId = (int) $requirementId;
+
+                $this->docModel->update($requirementId, $data);
+                $seenIds[] = $requirementId;
+
+                // sync is_required -> is_mandatory
+                $this->syncService->syncRequirement($requirementId, $categoryId);
+            } else {
+                $this->docModel->insert($data);
+                $newId = $this->docModel->getInsertID();
+
+                $seenIds[] = $newId;
+
+                $this->syncService->syncRequirement($newId, $categoryId);
+            }
+        }
+
+        $existing = $this->docModel
+            ->where('category_id', $categoryId)
+            ->findAll();
+
+        foreach ($existing as $row) {
+            if (! in_array($row['requirement_id'], $seenIds)) {
+                $this->docModel->update($row['requirement_id'], [
+                    'is_active' => 0,
+                ]);
+
+                $this->syncService->deactivateRequirement(
+                    (int) $row['requirement_id']
+                );
+            }
         }
     }
 }
