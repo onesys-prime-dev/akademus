@@ -140,7 +140,6 @@ class RequirementCategoriesController extends BaseAdminController
         ]);
 
         // Replace documents: delete old, insert new
-        $db->table('requirements')->where('category_id', (int)$categoryId)->delete();
         $this->saveDocuments($categoryId, $this->request->getPost('documents') ?? []);
 
         $db->transComplete();
@@ -167,6 +166,8 @@ class RequirementCategoriesController extends BaseAdminController
 
     private function saveDocuments(int $categoryId, array $documents): void
     {
+        log_message('debug', 'saveDocuments payload: ' . json_encode($documents));
+        
         $seenIds = [];
 
         foreach ($documents as $order => $doc) {

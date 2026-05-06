@@ -114,6 +114,9 @@ $action    = $action    ?? 'create';
                         <?php foreach ($documents as $i => $doc): ?>
                         <div class="doc-row" data-index="<?= $i ?>">
                             <div class="doc-row-fields">
+                                <input type="hidden"
+                                       name="documents[<?= $i ?>][requirement_id]"
+                                       value="<?= esc($doc['requirement_id']) ?>">
                                 <input type="text"
                                        name="documents[<?= $i ?>][requirement_name]"
                                        class="form-input doc-full"
@@ -160,6 +163,9 @@ $action    = $action    ?? 'create';
                 div.dataset.index = i;
                 div.innerHTML = `
                     <div class="doc-row-fields">
+                        <input type="hidden"
+                               name="documents[${i}][requirement_id]"
+                               value="${data.requirement_id || ''}">
                         <input type="text"
                                name="documents[${i}][requirement_name]"
                                class="form-input doc-full"
