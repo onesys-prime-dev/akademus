@@ -15,7 +15,7 @@ class ApplicantsController extends BaseController
     protected ApplicantProfileService $applicantProfileService;
     protected NotificationService $notificationService;
 
-    private const DEFAULT_TAB = 'requirements';
+    private const DEFAULT_TAB = 'applicant_form';
 
     public function __construct()
     {
@@ -253,7 +253,7 @@ class ApplicantsController extends BaseController
             'search' => '',
         ];
 
-        $limit  = 10;
+        $limit  = 20;
         $page   = 1;
         $offset = 0;
 
@@ -265,8 +265,10 @@ class ApplicantsController extends BaseController
             $offset
         );
 
+        $viewMap = $this->applicantProfileService->getViewMap();
+
         $initialContent = view(
-            'admission-officer/applicants/detailed-applicant/components/content/' . $activeTab,
+            $viewMap[$activeTab],
             array_merge($payload, [
                 'applicantId' => $applicantId,
                 'activeTab'   => $activeTab,
@@ -299,7 +301,7 @@ class ApplicantsController extends BaseController
 
         $status = $data['status'] ?? null;
 
-        $allowed = ['verified', 'rejected'];
+        $allowed = ['approved', 'rejected'];
 
         if (!in_array($status, $allowed, true)) {
             return $this->response->setJSON([
@@ -372,7 +374,7 @@ class ApplicantsController extends BaseController
             ]);
         }
 
-        $limit  = 10;
+        $limit  = 20;
         $offset = ($page - 1) * $limit;
 
         $filters = compact('status', 'search');

@@ -97,25 +97,42 @@
         display: flex;
         justify-content: space-between;
         padding: 20px 20px;
-        background: color-mix(in srgb, var(--color-primary) 10%, transparent);
-        color: var(--text-primary);
+        background: color-mix(in srgb, var(--color-warning) 20%, transparent);
         cursor: pointer;
-        border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+        border: 1px solid color-mix(in srgb, var(--color-warning) 60%, transparent);
         border-radius: var(--radius-md);
     }
 
     .upload-field:hover {
-        background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+        background: color-mix(in srgb, var(--color-warning) 30%, transparent);
         transition: 0.3s;
     }
 
-        .uploaded {
+        .upload-pending {
+            background: color-mix(in srgb, var(--primary) 10%, transparent);
+            border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+        }
+
+        .upload-pending:hover {
+            background: color-mix(in srgb, var(--primary) 15%, transparent);
+        }
+
+        .upload-approved {
             background: color-mix(in srgb, var(--color-success) 20%, transparent);
             border: 1px solid color-mix(in srgb, var(--color-success) 60%, transparent);
         }
 
-        .uploaded:hover {
+        .upload-approved:hover {
             background: color-mix(in srgb, var(--color-success) 30%, transparent);
+        }
+
+        .upload-rejected {
+            background: color-mix(in srgb, var(--color-danger) 20%, transparent);
+            border: 1px solid color-mix(in srgb, var(--color-danger) 60%, transparent);
+        }
+
+        .upload-rejected:hover {
+            background: color-mix(in srgb, var(--color-danger) 30%, transparent);
         }
 
     .requirement-upload-info {
@@ -145,35 +162,53 @@
         align-items: center;
         gap: 8px;
         flex-shrink: 0;
-    }
+    }   
 
-    .requirement-upload-action {
-        opacity: 60%;
-    }
-
-        .uploaded-btn {
-            background: color-mix(in srgb, var(--color-success) 60%, transparent);
+        .uploaded-btn-approved {
+            background: color-mix(in srgb, var(--color-success) 60%, transparent) !important;
+            cursor: default;
+            opacity: 60%;
         }
 
-        .uploaded-btn:hover {
-            background: color-mix(in srgb, var(--color-success) 80%, transparent);
+        .uploaded-btn-approved:hover {
+            background: color-mix(in srgb, var(--color-success) 60%, transparent) !important;
+        }
+        
+        .upload-btn-rejected {
+            background: color-mix(in srgb, var(--color-danger) 60%, transparent) !important;
+            opacity: 60%;
+        }
+
+        .upload-btn-rejected:hover {
+            background: color-mix(in srgb, var(--color-danger) 60%, transparent) !important;
+        }
+        
+        .upload-btn-pending {
+            background: color-mix(in srgb, var(--primary) 10%, transparent) !important;
+            border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent) !important;
+            color: var(--primary) !important;
+            opacity: 60%;
+        }
+
+        .upload-btn-pending:hover {
+            background: color-mix(in srgb, var(--primary) 10%, transparent) !important;
         }
 
     .requirement-view-action {
         font-size: 13px;
         font-weight: 600;
-        color: var(--color-primary);
+        color: var(--primary);
         text-decoration: none;
         padding: 8px 14px;
         border-radius: var(--radius-md);
-        border: 1px solid color-mix(in srgb, var(--color-primary) 40%, transparent);
-        background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+        border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent);
+        background: color-mix(in srgb, var(--primary) 8%, transparent);
         transition: background 0.2s;
         white-space: nowrap;
     }
 
     .requirement-view-action:hover {
-        background: color-mix(in srgb, var(--color-primary) 16%, transparent);
+        background: color-mix(in srgb, var(--primary) 16%, transparent);
     }
 
 /* ════════════════════════════════════════════════
@@ -202,7 +237,7 @@
 }
 
 .modal-box {
-    background: var(--color-card);
+    background: var(--bg-card);
     border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
     padding: 40px 36px 32px;

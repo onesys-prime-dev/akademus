@@ -1,7 +1,7 @@
 const {
     baseUrl,
     applicantId = null,
-    activeTab = 'requirements'
+    activeTab = ''
 } = window.applicantsConfig || {};
 
 // optional: export config separately if needed in api.js

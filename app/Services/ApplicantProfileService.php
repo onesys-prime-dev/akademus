@@ -48,20 +48,20 @@ class ApplicantProfileService
         return $row;
     }
 
-    public function getTabPayload(int $applicantId, string $tab, array $filters = [], int $limit = 10, int $offset = 0): array
+    public function getTabPayload(int $applicantId, string $tab, array $filters = [], int $limit = null, int $offset = 0): array
     {
         return match ($tab) {
-            'applicant_form'  => $this->getApplicantFormPayload($applicantId),
+            'applicant_form'  => $this->getApplicantFormPayload($applicantId, $filters, $limit, $offset),
             'requirements'    => $this->getRequirementsPayload($applicantId, $filters, $limit, $offset),
             'exam'            => $this->getExamPayload($applicantId, $filters, $limit, $offset),
             'admission_fee'   => $this->getAdmissionFeePayload($applicantId),
             'reservation_fee' => $this->getReservationFeePayload($applicantId),
             'clearance'       => $this->getClearancePayload($applicantId, $filters, $limit, $offset),
-            default           => $this->getRequirementsPayload($applicantId, $filters, $limit, $offset),
+            default           => '',
         };
     }
 
-    private function getApplicantFormPayload(int $applicantId): array
+    private function getApplicantFormPayload(int $applicantId, array $filters, int $limit, int $offset): array
     {
         $db = \Config\Database::connect();
 

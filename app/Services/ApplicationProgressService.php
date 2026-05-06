@@ -79,6 +79,7 @@ class ApplicationProgressService
         $docStats = [
             'total_required'    => 0,
             'uploaded_required' => 0,
+            'approved_required' => 0,
         ];
 
         if ($programId) {
@@ -88,20 +89,35 @@ class ApplicationProgressService
                 $uploadedDocs = (new ApplicantDocumentService())
                     ->getStepDocuments($applicant['applicant_id'], $allReqs);
 
-                $docStats['total_required'] = count(
-                    array_filter($allReqs, fn($r) => $r['is_required'])
+                $requiredReqs = array_filter(
+                    $allReqs,
+                    fn($r) => $r['is_required']
                 );
+
+                $docStats['total_required'] = count($requiredReqs);
 
                 $docStats['uploaded_required'] = count(
                     array_filter(
-                        $allReqs,
+                        $requiredReqs,
                         fn($r) =>
-                            $r['is_required']
-                            && isset($uploadedDocs[$r['program_requirement_id']])
+                            isset($uploadedDocs[$r['program_requirement_id']])
+                    )
+                );
+
+                $docStats['approved_required'] = count(
+                    array_filter(
+                        $requiredReqs,
+                        fn($r) =>
+                            isset($uploadedDocs[$r['program_requirement_id']]) &&
+                            ($uploadedDocs[$r['program_requirement_id']]['status'] ?? null) === 'approved'
                     )
                 );
             }
         }
+
+        $docsVerified =
+            $docStats['total_required'] > 0 &&
+            $docStats['approved_required'] >= $docStats['total_required'];
 
         $docsComplete =
             $docStats['total_required'] > 0
@@ -158,8 +174,8 @@ class ApplicationProgressService
                 'remarks'  => null,
             ],
             [
-                'title'    => 'Applicant Form Submitted',
-                'subtitle' => 'All basic details successfully submitted.',
+                'title'    => 'Application Form Submitted',
+                'subtitle' => 'Your application details have been successfully submitted.',
                 'date'     => $formSubmitted
                     ? ($application['application_date'] ?? null)
                     : null,
@@ -169,8 +185,8 @@ class ApplicationProgressService
                 'remarks'  => null,
             ],
             [
-                'title'    => 'Documents Submitted',
-                'subtitle' => 'All required files submitted.',
+                'title'    => 'Required Documents Submitted',
+                'subtitle' => 'All required supporting documents have been uploaded.',
                 'date'     => $docsComplete
                     ? ($application['updated_at'] ?? null)
                     : null,
@@ -180,12 +196,12 @@ class ApplicationProgressService
                 'remarks'  => null,
             ],
             [
-                'title'    => 'Document Verification',
-                'subtitle' => 'Admissions staff reviewing your documents.',
-                'date'     => $decisionMade
-                    ? ($applicant['application_date'] ?? null)
+                'title'    => 'Documents Verified',
+                'subtitle' => 'Admissions staff are reviewing and verifying your submitted documents.',
+                'date'     => $docsVerified
+                    ? ($application['updated_at'] ?? null)
                     : null,
-                'status'   => $decisionMade
+                'status'   => $docsVerified
                     ? 'done'
                     : ($docsComplete ? 'active' : 'pending'),
                 'remarks'  => null,

@@ -106,12 +106,36 @@ function populateForm(formId, data) {
         const label = form.querySelector(`label[for="requirement_${requirementId}"]`);
         if (!label) return;
 
-        label.classList.add('upload-success', 'uploaded');
+        // add different classes for each status
+        // if status is uploaded
+        if (data[requirementId]?.status === 'pending') {
+            label.classList.add('upload-pending', 'uploaded');
 
-        const btn = label.querySelector('.requirement-upload-action');
-        if (btn) {
-            btn.textContent = "Uploaded ✔";
-            btn.classList.add('uploaded-btn');
+            const btn = label.querySelector('.requirement-upload-action');
+            if (btn) {
+                btn.textContent = "Pending Review";
+                btn.classList.add('upload-btn-pending', 'uploaded-btn');
+            }
+        }
+        // if status is approved
+        else if (data[requirementId]?.status === 'approved') {
+            label.classList.add('upload-approved', 'uploaded');
+
+            const btn = label.querySelector('.requirement-upload-action');
+            if (btn) {
+                btn.textContent = "Approved ✔";
+                btn.classList.add('uploaded-btn-approved', 'uploaded-btn');
+            }
+        }
+        // if status is rejected
+        else if (data[requirementId]?.status === 'rejected') {
+            label.classList.add('upload-rejected', 'uploaded');
+
+            const btn = label.querySelector('.requirement-upload-action');
+            if (btn) {
+                btn.textContent = "Rejected";
+                btn.classList.add('upload-btn-rejected', 'uploaded-btn');
+            }
         }
 
         // Show the View button with the correct URL and file name
@@ -155,26 +179,25 @@ function updateUploadCounter(formId, formData) {
     const counter = document.querySelector('.upload-counter');
     if (!counter) return;
 
-    const form = document.getElementById(formId);
-    if (!form) return;
-
-    const requiredInputs = form.querySelectorAll('input[type="file"][required]');
-    const totalRequired = requiredInputs.length;
+    const totalRequired = Number(counter.dataset.totalRequired || 0);
 
     if (totalRequired === 0) {
         counter.style.display = 'none';
         return;
     }
 
-    // Count uploaded required docs from formData
-    let uploadedRequired = 0;
-    requiredInputs.forEach(input => {
-        const reqId = input.id.replace('requirement_', '');
-        if (formData && formData[reqId]) uploadedRequired++;
-    });
+    // count every uploaded document
+    const totalUploaded = formData
+        ? Object.keys(formData).length
+        : 0;
 
-    counter.textContent = `${uploadedRequired}/${totalRequired} required uploaded`;
-    counter.classList.toggle('upload-counter--done', uploadedRequired >= totalRequired);
+    counter.textContent =
+        `${totalUploaded}/${totalRequired} required uploaded`;
+
+    counter.classList.toggle(
+        'upload-counter--done',
+        totalUploaded >= totalRequired
+    );
 }
 
 function setupAutoSave(step) {
