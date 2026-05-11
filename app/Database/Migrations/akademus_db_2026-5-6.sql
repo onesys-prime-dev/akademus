@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 14, 2026 at 07:22 AM
+-- Generation Time: May 06, 2026 at 05:57 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -58,8 +58,7 @@ CREATE TABLE `admin_credentials` (
 --
 
 INSERT INTO `admin_credentials` (`id`, `user_id`, `password`, `created_at`) VALUES
-(0, 4, '$2y$10$nCL21uigGtSBjXrJOY03S.eZhbD9g.CLHq3HOyAqkbk4giNC8i/AC', '2026-03-13 04:52:57'),
-(4, 66, '$2y$10$nCL21uigGtSBjXrJOY03S.eZhbD9g.CLHq3HOyAqkbk4giNC8i/AC', '2026-03-10 02:25:12');
+(5, 4, '$2y$10$nCL21uigGtSBjXrJOY03S.eZhbD9g.CLHq3HOyAqkbk4giNC8i/AC', '2026-03-12 20:52:57');
 
 -- --------------------------------------------------------
 
@@ -87,7 +86,8 @@ CREATE TABLE `applicants` (
 
 INSERT INTO `applicants` (`applicant_id`, `user_id`, `program_id`, `applicant_number`, `password`, `temp_password`, `application_status`, `decision_remarks`, `application_date`, `created_at`, `form_step`) VALUES
 (14, 25, 1, 'APP-2026-00014', '$2y$10$MpmI6kSwRiuUnqT.TzJ2AO5xWkIkPO4wTBQddhCPmPI4q89YpwAUW', 0, 'approved', 'Congratulations! Your documents are complete and your application has been approved. Please proceed to the next step.', '2026-03-31 08:45:27', '2026-03-31 08:45:27', 1),
-(15, 26, 1, 'APP-2026-00015', '$2y$10$wQlVjIsDPW3qOoBL//1MQOoUXKzXI0chOYRrqRfrulxlvBMJgy93u', 0, 'pending', NULL, '2026-04-14 04:53:17', '2026-04-14 04:53:17', 1);
+(15, 26, 1, 'APP-2026-00015', '$2y$10$wQlVjIsDPW3qOoBL//1MQOoUXKzXI0chOYRrqRfrulxlvBMJgy93u', 0, 'approved', 'After thorough review, the application has been approved. The applicant may now proceed with enrollment.', '2026-04-14 04:53:17', '2026-04-14 04:53:17', 1),
+(18, 30, 1, 'APP-2026-00018', '$2y$10$0SLp7CEy3h6QWcZVI73Khe8rfnFit.coG5TCiMm37ZVbkRQWQ3hIa', 1, 'approved', 'The application has been declined due to incomplete or missing required documents. Please resubmit with complete requirements.', '2026-04-16 01:01:41', '2026-04-16 01:01:41', 1);
 
 -- --------------------------------------------------------
 
@@ -98,29 +98,21 @@ INSERT INTO `applicants` (`applicant_id`, `user_id`, `program_id`, `applicant_nu
 CREATE TABLE `applicant_documents` (
   `document_id` int(11) NOT NULL,
   `applicant_id` int(11) NOT NULL,
-  `program_requirement_id` int(11) NOT NULL,
+  `program_requirement_id` int(11) DEFAULT NULL,
   `document_name` varchar(255) NOT NULL,
-  `status` enum('pending','verified','rejected') DEFAULT 'pending',
+  `status` enum('pending','approved','rejected') DEFAULT 'pending',
   `verified_by` int(11) DEFAULT NULL,
   `remarks` varchar(255) DEFAULT NULL,
-  `uploaded_at` datetime DEFAULT current_timestamp()
+  `uploaded_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `applicant_documents`
 --
 
-INSERT INTO `applicant_documents` (`document_id`, `applicant_id`, `program_requirement_id`, `document_name`, `status`, `verified_by`, `remarks`, `uploaded_at`) VALUES
-(32, 14, 1, '14_1.png', 'pending', NULL, NULL, '2026-03-31 16:48:06'),
-(34, 14, 2, '14_2.jpg', 'pending', NULL, NULL, '2026-03-31 16:48:27'),
-(35, 14, 3, '14_3.png', 'pending', NULL, NULL, '2026-03-31 16:48:35'),
-(36, 14, 4, '14_4.png', 'pending', NULL, NULL, '2026-03-31 16:48:52'),
-(37, 14, 5, '14_5.png', 'pending', NULL, NULL, '2026-03-31 16:48:56'),
-(38, 14, 6, '14_6.png', 'pending', NULL, NULL, '2026-03-31 16:50:16'),
-(39, 14, 7, '14_7.png', 'pending', NULL, NULL, '2026-03-31 16:50:25'),
-(40, 14, 8, '14_8.png', 'pending', NULL, NULL, '2026-03-31 16:50:31'),
-(41, 14, 9, '14_9.png', 'pending', NULL, NULL, '2026-03-31 16:50:42'),
-(42, 14, 10, '14_10.png', 'pending', NULL, NULL, '2026-03-31 16:50:45');
+INSERT INTO `applicant_documents` (`document_id`, `applicant_id`, `program_requirement_id`, `document_name`, `status`, `verified_by`, `remarks`, `uploaded_at`, `updated_at`) VALUES
+(86, 15, 209, '15_209.png', 'pending', NULL, NULL, '2026-05-06 11:13:56', '2026-05-06 11:13:56');
 
 -- --------------------------------------------------------
 
@@ -145,7 +137,8 @@ CREATE TABLE `applications` (
 --
 
 INSERT INTO `applications` (`application_id`, `applicant_id`, `applicant_type`, `program_id`, `school_year`, `semester`, `application_status`, `application_date`, `updated_at`) VALUES
-(42, 14, 'freshmen', 1, '2025-2026', '1st Semester', 'pending', '2026-03-31 08:46:57', '2026-03-31 08:47:54');
+(42, 14, 'freshmen', 1, '2025-2026', '1st Semester', 'draft', '2026-03-31 08:46:57', '2026-04-24 15:56:31'),
+(43, 15, 'freshmen', 1, '2025-2026', '1st Semester', 'approved', '2026-04-16 00:17:08', '2026-04-28 18:16:40');
 
 -- --------------------------------------------------------
 
@@ -226,7 +219,78 @@ CREATE TABLE `educational_backgrounds` (
 --
 
 INSERT INTO `educational_backgrounds` (`educational_bg_id`, `application_id`, `school_name`, `school_location`, `strand`, `school_year_start`, `school_year_end`, `gwa`, `school_type`, `created_at`, `updated_at`) VALUES
-(37, 42, 'St. Paul University Manila', 'Metro Manila', 'STEM', '0000', NULL, 93.00, 'Private', '2026-03-31 08:46:57', '2026-03-31 08:47:54');
+(37, 42, 'St. Paul University Manila', 'Metro Manila', 'STEM', '0000', NULL, 93.00, 'Private', '2026-03-31 08:46:57', '2026-03-31 08:47:54'),
+(38, 43, '213123', '123123', 'ABM', '0000', NULL, 92.30, 'Public', '2026-04-16 00:17:08', '2026-04-24 07:08:23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `email_queue`
+--
+
+CREATE TABLE `email_queue` (
+  `email_id` int(11) NOT NULL,
+  `to_email` varchar(255) NOT NULL,
+  `type` varchar(100) NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`payload`)),
+  `status` enum('pending','processing','sent','failed') DEFAULT 'pending',
+  `attempts` int(11) DEFAULT 0,
+  `last_attempt_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `related_applicant_id` int(11) DEFAULT NULL,
+  `send_after` datetime DEFAULT NULL,
+  `notification_key` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `email_queue`
+--
+
+INSERT INTO `email_queue` (`email_id`, `to_email`, `type`, `payload`, `status`, `attempts`, `last_attempt_at`, `created_at`, `related_applicant_id`, `send_after`, `notification_key`) VALUES
+(52, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Certificate of Good Moral Character\"}', 'pending', 0, NULL, '2026-04-28 17:54:00', 15, NULL, NULL),
+(53, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Transcript of Records\"}', 'pending', 0, NULL, '2026-04-28 17:54:09', 15, NULL, NULL),
+(54, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Diploma\"}', 'pending', 0, NULL, '2026-04-28 17:54:14', 15, NULL, NULL),
+(55, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Form 137\"}', 'pending', 0, NULL, '2026-04-28 17:54:20', 15, NULL, NULL),
+(56, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Valid Government ID\"}', 'pending', 0, NULL, '2026-04-28 17:54:29', 15, NULL, NULL),
+(57, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Medical Certificate\"}', 'pending', 0, NULL, '2026-04-28 17:54:39', 15, NULL, NULL),
+(58, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"2x2 ID Picture\"}', 'pending', 0, NULL, '2026-04-28 17:55:32', 15, NULL, NULL),
+(59, 'mapula.pauljoshua@gmail.com', 'requirements.completed', '[]', 'pending', 0, NULL, '2026-04-28 17:55:32', 15, NULL, 'requirements_completed_15'),
+(60, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Drug Test Result\"}', 'pending', 0, NULL, '2026-04-28 17:55:44', 15, NULL, NULL),
+(61, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Chest X-ray Result\"}', 'pending', 0, NULL, '2026-04-28 17:55:50', 15, NULL, NULL),
+(62, 'mapula.pauljoshua@gmail.com', 'applicant.approved', '[]', 'pending', 0, NULL, '2026-04-30 14:53:56', 15, NULL, NULL),
+(63, 'mapula.pauljoshua@gmail.com', 'applicant.approved', '[]', 'pending', 0, NULL, '2026-04-30 15:07:08', 15, NULL, NULL),
+(64, 'mapula.pauljoshua@gmail.com', 'applicant.approved', '[]', 'pending', 0, NULL, '2026-04-30 15:20:23', 15, NULL, NULL),
+(65, 'mapula.pauljoshua@gmail.com', 'applicant.approved', '[]', 'pending', 0, NULL, '2026-04-30 15:21:15', 15, NULL, NULL),
+(66, 'mapula.pauljoshua@gmail.com', 'applicant.approved', '[]', 'pending', 0, NULL, '2026-04-30 15:26:52', 15, NULL, NULL),
+(67, 'mapula.pauljoshua@gmail.com', 'applicant.rejected', '[]', 'pending', 0, NULL, '2026-04-30 15:33:13', 15, NULL, NULL),
+(68, 'mapula.pauljoshua@gmail.com', 'applicant.approved', '[]', 'pending', 0, NULL, '2026-04-30 15:34:31', 15, NULL, NULL),
+(69, 'mapula.pauljoshua@gmail.com', 'applicant.approved', '[]', 'pending', 0, NULL, '2026-04-30 16:08:26', 15, NULL, NULL),
+(70, 'testakademusmentora@gmail.com', 'applicant.rejected', '[]', 'pending', 0, NULL, '2026-04-30 16:08:32', 14, NULL, NULL),
+(71, 'mapula.pauljoshua@gmail.com', 'applicant.rejected', '[]', 'pending', 0, NULL, '2026-04-30 16:08:32', 15, NULL, NULL),
+(72, 'ushuay_man@yahoo.com', 'applicant.rejected', '[]', 'pending', 0, NULL, '2026-04-30 16:08:32', 18, NULL, NULL),
+(73, 'testakademusmentora@gmail.com', 'applicant.approved', '[]', 'pending', 0, NULL, '2026-04-30 16:08:40', 14, NULL, NULL),
+(74, 'mapula.pauljoshua@gmail.com', 'applicant.approved', '[]', 'pending', 0, NULL, '2026-04-30 16:08:40', 15, NULL, NULL),
+(75, 'ushuay_man@yahoo.com', 'applicant.approved', '[]', 'pending', 0, NULL, '2026-04-30 16:08:40', 18, NULL, NULL),
+(76, 'mapula.pauljoshua@gmail.com', 'applicant.approved', '[]', 'pending', 0, NULL, '2026-04-30 17:46:49', 15, NULL, NULL),
+(77, 'mapula.pauljoshua@gmail.com', 'applicant.approved', '[]', 'pending', 0, NULL, '2026-04-30 17:47:47', 15, NULL, NULL),
+(78, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Birth Certificate\"}', 'pending', 0, NULL, '2026-05-04 19:39:47', 15, NULL, NULL),
+(79, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Transcript of Records\"}', 'pending', 0, NULL, '2026-05-05 12:31:04', 15, NULL, NULL),
+(80, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Chest X-ray Result\"}', 'pending', 0, NULL, '2026-05-05 13:14:52', 15, NULL, NULL),
+(81, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Document\"}', 'pending', 0, NULL, '2026-05-05 13:14:57', 15, NULL, NULL),
+(82, 'mapula.pauljoshua@gmail.com', 'applicant.approved', '[]', 'pending', 0, NULL, '2026-05-05 13:32:22', 15, NULL, NULL),
+(83, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Document\"}', 'pending', 0, NULL, '2026-05-05 14:16:11', 15, NULL, NULL),
+(84, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Document\"}', 'pending', 0, NULL, '2026-05-05 14:34:24', 15, NULL, NULL),
+(85, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Document\"}', 'pending', 0, NULL, '2026-05-05 14:35:11', 15, NULL, NULL),
+(86, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Form 137\"}', 'pending', 0, NULL, '2026-05-05 14:58:18', 15, NULL, NULL),
+(87, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Document\"}', 'pending', 0, NULL, '2026-05-05 15:03:00', 15, NULL, NULL),
+(88, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Document\"}', 'pending', 0, NULL, '2026-05-05 15:04:27', 15, NULL, NULL),
+(89, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Birth Certificate\"}', 'pending', 0, NULL, '2026-05-05 15:38:23', 15, NULL, NULL),
+(90, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Certificate of Good Moral Character\"}', 'pending', 0, NULL, '2026-05-05 15:39:45', 15, NULL, NULL),
+(91, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Medical Certificate\"}', 'pending', 0, NULL, '2026-05-05 16:01:05', 15, NULL, NULL),
+(92, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Birth Certificate\"}', 'pending', 0, NULL, '2026-05-05 16:03:08', 15, NULL, NULL),
+(93, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Certificate of Good Moral Character\"}', 'pending', 0, NULL, '2026-05-05 16:13:30', 15, NULL, NULL),
+(94, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Birth Certificate\"}', 'pending', 0, NULL, '2026-05-06 10:48:15', 15, NULL, NULL),
+(95, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Birth Certificate\"}', 'pending', 0, NULL, '2026-05-06 11:13:56', 15, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -249,7 +313,9 @@ CREATE TABLE `exam_bookings` (
 
 INSERT INTO `exam_bookings` (`exam_booking_id`, `exam_schedule_id`, `applicant_id`, `status`, `booked_at`, `checked_in_at`) VALUES
 (1, 2, 14, 'attended', '2026-04-13 16:16:56', '2026-04-13 16:17:11'),
-(2, 2, 15, 'cancelled', '2026-04-14 04:53:53', NULL);
+(2, 2, 15, 'cancelled', '2026-04-14 04:53:53', NULL),
+(3, 3, 15, 'cancelled', '2026-04-16 00:15:53', NULL),
+(4, 4, 15, 'cancelled', '2026-04-24 06:43:44', NULL);
 
 -- --------------------------------------------------------
 
@@ -276,7 +342,9 @@ CREATE TABLE `exam_schedules` (
 
 INSERT INTO `exam_schedules` (`exam_schedule_id`, `exam_date`, `start_time`, `end_time`, `location`, `max_slots`, `booked_slots`, `status`, `created_at`, `updated_at`) VALUES
 (1, '2026-03-31', '05:58:00', '16:57:00', 'Malate', 20, 0, 'open', '2026-03-31 08:57:30', '2026-03-31 08:57:30'),
-(2, '2026-04-14', '00:15:00', '17:15:00', 'Circuit Makati, Makati, Metro Manila', 10, 1, 'open', '2026-04-13 16:13:41', '2026-04-13 16:13:41');
+(2, '2026-04-14', '00:15:00', '17:15:00', 'Circuit Makati, Makati, Metro Manila', 10, 1, 'open', '2026-04-13 16:13:41', '2026-04-13 16:13:41'),
+(3, '2026-04-16', '08:19:00', '00:15:00', 'Bonifacio Global City, Taguig', 20, 0, 'open', '2026-04-16 00:15:46', '2026-04-16 00:15:46'),
+(4, '2026-04-24', '14:43:00', '02:43:00', 'Bonifacio Global City, Taguig', 12, 0, 'open', '2026-04-24 06:43:38', '2026-04-24 06:43:38');
 
 -- --------------------------------------------------------
 
@@ -310,7 +378,8 @@ CREATE TABLE `family_backgrounds` (
 --
 
 INSERT INTO `family_backgrounds` (`id`, `application_id`, `father_firstname`, `father_middlename`, `father_lastname`, `father_occupation`, `father_contact_number`, `mother_firstname`, `mother_middlename`, `mother_lastname`, `mother_occupation`, `mother_contact_number`, `guardian_name`, `guardian_relationship`, `guardian_contact_number`, `annual_family_income`, `created_at`, `updated_at`) VALUES
-(37, 42, 'Theodore', 'N', 'Abella', 'Retired', '+639762402857', 'Edelyn ', 'Abella', 'Quimno', 'Hotel Management', '+639762402857', 'Julie May Quimno', 'Guardian', '+639762402857', 'Below 100000', '2026-03-31 08:46:57', '2026-03-31 08:47:31');
+(37, 42, 'Theodore', 'N', 'Abella', 'Retired', '+639762402857', 'Edelyn ', 'Abella', 'Quimno', 'Hotel Management', '+639762402857', 'Julie May Quimno', 'Guardian', '+639762402857', 'Below 100000', '2026-03-31 08:46:57', '2026-03-31 08:47:31'),
+(38, 43, 'Paul', 'Joshua', 'Mapula', '232', '242', 'Paul', 'Joshua', 'Mapula', '', '4242', '21313', 'Guardian', '12313', '1500000-1999999', '2026-04-16 00:17:08', '2026-04-24 07:07:34');
 
 -- --------------------------------------------------------
 
@@ -333,7 +402,28 @@ CREATE TABLE `follow_up_messages` (
 
 INSERT INTO `follow_up_messages` (`message_id`, `applicant_id`, `sender_role`, `message`, `is_read`, `created_at`) VALUES
 (25, 14, 'applicant', 'hello can you review my application thanks', 1, '2026-03-31 08:52:35'),
-(26, 14, 'officer', 'okay', 1, '2026-03-31 08:54:40');
+(26, 14, 'officer', 'okay', 1, '2026-03-31 08:54:40'),
+(27, 15, 'officer', 'Congratulations! Your application has been reviewed. Please proceed with the next enrollment steps.', 1, '2026-04-23 08:51:01'),
+(28, 15, 'officer', 'Please complete your missing requirements as soon as possible.', 1, '2026-04-23 08:54:35'),
+(29, 15, 'officer', 'hello', 1, '2026-04-23 09:54:15'),
+(30, 15, 'officer', 'ad', 1, '2026-04-23 10:38:29'),
+(31, 15, 'officer', 'adad', 1, '2026-04-23 10:40:34'),
+(32, 15, 'officer', '13', 1, '2026-04-23 10:44:06'),
+(33, 15, 'officer', 'asda', 1, '2026-04-23 10:44:43'),
+(34, 15, 'officer', 'asd', 1, '2026-04-23 10:47:38'),
+(35, 15, 'officer', 'ad', 1, '2026-04-23 10:54:50'),
+(36, 15, 'officer', 'asd', 1, '2026-04-23 10:55:17'),
+(37, 15, 'officer', 'Congratulations! Your application has been reviewed. Please proceed with the next enrollment steps.', 1, '2026-04-23 10:56:21'),
+(38, 15, 'officer', 'paul', 1, '2026-04-23 11:08:13'),
+(39, 15, 'officer', 'hello', 1, '2026-04-23 11:09:27'),
+(40, 15, 'officer', 'jasd', 1, '2026-04-23 11:09:53'),
+(41, 15, 'officer', 'asdm', 1, '2026-04-23 11:09:59'),
+(42, 15, 'officer', 'what\'s up', 1, '2026-04-23 11:41:18'),
+(43, 15, 'officer', 'yougu', 1, '2026-04-23 11:41:21'),
+(44, 15, 'officer', 'ads', 1, '2026-04-23 12:00:08'),
+(45, 15, 'officer', 'ajdas', 1, '2026-04-23 12:00:09'),
+(46, 15, 'officer', 'aiudh', 1, '2026-04-23 12:00:09'),
+(47, 15, 'officer', 'wrwi', 1, '2026-04-23 12:00:10');
 
 -- --------------------------------------------------------
 
@@ -449,8 +539,8 @@ CREATE TABLE `form_presets` (
 --
 
 INSERT INTO `form_presets` (`id`, `name`, `description`, `is_global`, `is_active`, `created_at`, `updated_at`) VALUES
-(2, 'Computer Science', '', 0, 1, '2026-03-17 17:24:10', '2026-03-25 08:01:21'),
-(3, 'Information  technology', '', 0, 1, '2026-03-18 00:46:11', '2026-03-25 08:01:46');
+(2, 'Computer Science', '', 0, 1, '2026-03-17 17:24:10', '2026-05-06 11:04:51'),
+(3, 'Information  technology', '', 0, 1, '2026-03-18 00:46:11', '2026-05-06 11:09:40');
 
 -- --------------------------------------------------------
 
@@ -524,6 +614,15 @@ CREATE TABLE `password_resets` (
   `used` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `password_resets`
+--
+
+INSERT INTO `password_resets` (`id`, `email`, `token`, `created_at`, `used`) VALUES
+(3, 'ushuay_man@yahoo.com', '28cbe061bcd9fef04d78a62f0bcfe6e8cb15028cfdf0842281bfbc08f59c8cb0', '2026-04-16 00:54:12', 0),
+(4, 'mapula.pauljoshua@gmail.com', '3a81e23173470a35c565d01d84bcaa59e0436f18ec6c68ed3ed7caeac873762d', '2026-04-16 00:55:08', 0),
+(5, 'mapula.pauljoshua@gmail.com', '2cef80d1cb3167c26b381edea6830945b68c9160e7fb2d4e90f262c882607136', '2026-04-23 08:56:04', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -547,14 +646,6 @@ CREATE TABLE `payment` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `payment`
---
-
-INSERT INTO `payment` (`payment_id`, `applicant_id`, `payment_fee_type_id`, `payment_method_id`, `payment_method_account_id`, `reference_num`, `proof_of_payment`, `amount_paid`, `payment_status`, `payment_date`, `remarks`, `reviewed_by`, `reviewed_at`, `created_at`, `updated_at`) VALUES
-(1, 14, 2, 1, 1, '62462462624626', 'uploads/payments/1776094370_46a8a90f9f7d2a20e4c6.png', 500.00, 'PENDING', NULL, NULL, NULL, NULL, '2026-04-13 15:32:50', '2026-04-13 15:32:50'),
-(2, 15, 1, 1, NULL, '123456789', 'uploads/payments/1776143567_c18a450409e89c2b2b3f.pdf', 12000.00, 'PENDING', NULL, NULL, NULL, NULL, '2026-04-14 05:12:47', '2026-04-14 05:12:47');
 
 -- --------------------------------------------------------
 
@@ -602,7 +693,7 @@ CREATE TABLE `payment_method` (
 --
 
 INSERT INTO `payment_method` (`payment_method_id`, `code`, `name`, `description`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'GCASH', 'GCash', NULL, 1, '2026-04-04 16:53:57', '2026-04-13 08:40:26'),
+(1, 'GCASH', 'GCash', NULL, 1, '2026-04-04 16:53:57', '2026-04-13 21:23:46'),
 (2, 'MAYA', 'Maya', NULL, 1, '2026-04-04 16:53:57', '2026-04-04 16:55:26'),
 (3, 'BDO', 'BDO', NULL, 1, '2026-04-04 17:18:40', '2026-04-04 17:18:40'),
 (4, 'BPI', 'BPI', NULL, 1, '2026-04-04 17:18:40', '2026-04-04 17:18:40');
@@ -652,7 +743,8 @@ CREATE TABLE `personal_informations` (
 --
 
 INSERT INTO `personal_informations` (`id`, `application_id`, `firstname`, `middlename`, `lastname`, `suffix`, `gender`, `date_of_birth`, `place_of_birth`, `citizenship`, `home_address`, `phone_code`, `contact_number`, `email_address`, `created_at`, `updated_at`) VALUES
-(37, 42, 'THEODORE', 'QUIMNO', 'ABELLA', 'Jr.', 'Male', '2004-07-02', 'Digos City', 'Filipino', '9T TOWER TWO ADRIATICO, TWO ADRIATICO MANILA, 9T TOWER TWO ADRIATICO MANILA', '+63', '+639762402857', 'abellatheodore@gmail.com', '2026-03-31 08:46:57', '2026-03-31 08:47:21');
+(37, 42, 'THEODORE', 'QUIMNO', 'ABELLA', 'Jr.', 'Male', '2004-07-02', 'Digos City', 'Filipino', '9T TOWER TWO ADRIATICO, TWO ADRIATICO MANILA, 9T TOWER TWO ADRIATICO MANILA', '+63', '+639762402857', 'abellatheodore@gmail.com', '2026-03-31 08:46:57', '2026-03-31 08:47:21'),
+(38, 43, 'Paul', 'Joshua', 'Mapula', 'Sr.', 'Non-binary', '2026-04-07', '123', '213123', '23123', '+63', '123123', 'mapula.pauljoshua@gmail.com', '2026-04-16 00:17:08', '2026-04-24 07:07:32');
 
 -- --------------------------------------------------------
 
@@ -672,11 +764,14 @@ CREATE TABLE `preset_requirement_categories` (
 --
 
 INSERT INTO `preset_requirement_categories` (`id`, `preset_id`, `requirement_category_id`, `sort_order`) VALUES
-(38, 2, 1, 0),
-(39, 2, 2, 1),
-(40, 2, 3, 2),
-(41, 2, 4, 3),
-(42, 3, 1, 0);
+(121, 2, 13, 0),
+(122, 2, 14, 1),
+(123, 2, 15, 2),
+(124, 2, 16, 3),
+(125, 3, 13, 0),
+(126, 3, 14, 1),
+(127, 3, 15, 2),
+(128, 3, 16, 3);
 
 -- --------------------------------------------------------
 
@@ -697,15 +792,14 @@ CREATE TABLE `preset_sections` (
 --
 
 INSERT INTO `preset_sections` (`id`, `preset_id`, `form_page_id`, `sort_order`, `is_required`) VALUES
-(110, 2, 1, 0, 1),
-(111, 2, 2, 1, 1),
-(112, 2, 3, 2, 1),
-(113, 2, 4, 3, 1),
-(114, 3, 1, 0, 1),
-(115, 3, 2, 1, 1),
-(116, 3, 3, 2, 1),
-(117, 3, 4, 3, 1),
-(118, 3, 9, 4, 1);
+(191, 2, 1, 0, 1),
+(192, 2, 2, 1, 1),
+(193, 2, 3, 2, 1),
+(194, 2, 4, 3, 1),
+(195, 3, 1, 0, 1),
+(196, 3, 2, 1, 1),
+(197, 3, 3, 2, 1),
+(198, 3, 4, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -769,25 +863,26 @@ CREATE TABLE `program_requirements` (
 --
 
 INSERT INTO `program_requirements` (`program_requirement_id`, `program_requirement_category_id`, `requirement_id`, `display_order`, `is_active`, `is_mandatory`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 1, 1, 1, NULL, NULL),
-(2, 1, 2, 2, 1, 1, NULL, NULL),
-(3, 2, 3, 1, 1, 1, NULL, NULL),
-(4, 2, 4, 2, 1, 1, NULL, NULL),
-(5, 2, 5, 3, 1, 0, NULL, NULL),
-(6, 3, 6, 1, 1, 1, NULL, NULL),
-(7, 3, 7, 2, 1, 1, NULL, NULL),
-(8, 4, 8, 1, 1, 0, NULL, NULL),
-(9, 4, 9, 2, 1, 0, NULL, NULL),
-(10, 4, 10, 3, 1, 0, NULL, NULL),
-(11, 5, 8, 1, 1, 1, NULL, NULL),
-(12, 5, 9, 2, 1, 1, NULL, NULL),
-(13, 5, 10, 3, 1, 1, NULL, NULL),
-(14, 6, 3, 1, 1, 1, NULL, NULL),
-(15, 6, 4, 2, 1, 1, NULL, NULL),
-(16, 7, 1, 1, 1, 1, NULL, NULL),
-(17, 7, 2, 2, 1, 1, NULL, '2026-03-17 21:54:01'),
-(18, 8, 6, 1, 1, 0, NULL, NULL),
-(19, 8, 7, 2, 1, 0, NULL, NULL);
+(209, 41, 109, 0, 1, 1, '2026-05-06 11:04:51', '2026-05-06 11:04:51'),
+(210, 41, 110, 1, 1, 1, '2026-05-06 11:04:51', '2026-05-06 11:04:51'),
+(211, 42, 111, 0, 1, 1, '2026-05-06 11:04:51', '2026-05-06 11:04:51'),
+(212, 42, 112, 1, 1, 1, '2026-05-06 11:04:51', '2026-05-06 11:04:51'),
+(213, 42, 113, 2, 1, 1, '2026-05-06 11:04:51', '2026-05-06 11:04:51'),
+(214, 43, 114, 0, 1, 1, '2026-05-06 11:04:51', '2026-05-06 11:04:51'),
+(215, 43, 115, 1, 1, 1, '2026-05-06 11:04:51', '2026-05-06 11:04:51'),
+(216, 44, 116, 0, 1, 1, '2026-05-06 11:04:51', '2026-05-06 11:04:51'),
+(217, 44, 117, 1, 1, 1, '2026-05-06 11:04:51', '2026-05-06 11:04:51'),
+(218, 44, 118, 2, 1, 1, '2026-05-06 11:04:51', '2026-05-06 11:04:51'),
+(219, 45, 109, 0, 1, 1, '2026-05-06 11:09:40', '2026-05-06 11:09:40'),
+(220, 45, 110, 1, 1, 1, '2026-05-06 11:09:40', '2026-05-06 11:09:40'),
+(221, 46, 111, 0, 1, 1, '2026-05-06 11:09:40', '2026-05-06 11:09:40'),
+(222, 46, 112, 1, 1, 1, '2026-05-06 11:09:40', '2026-05-06 11:09:40'),
+(223, 46, 113, 2, 1, 1, '2026-05-06 11:09:40', '2026-05-06 11:09:40'),
+(224, 47, 114, 0, 1, 1, '2026-05-06 11:09:40', '2026-05-06 11:09:40'),
+(225, 47, 115, 1, 1, 1, '2026-05-06 11:09:40', '2026-05-06 11:09:40'),
+(226, 48, 116, 0, 1, 1, '2026-05-06 11:09:40', '2026-05-06 11:09:40'),
+(227, 48, 117, 1, 1, 1, '2026-05-06 11:09:40', '2026-05-06 11:09:40'),
+(228, 48, 118, 2, 1, 1, '2026-05-06 11:09:40', '2026-05-06 11:09:40');
 
 -- --------------------------------------------------------
 
@@ -810,14 +905,14 @@ CREATE TABLE `program_requirement_categories` (
 --
 
 INSERT INTO `program_requirement_categories` (`program_requirement_category_id`, `program_id`, `category_id`, `display_order`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 1, 1, NULL, NULL),
-(2, 1, 2, 2, 1, NULL, NULL),
-(3, 1, 3, 3, 1, NULL, NULL),
-(4, 1, 4, 4, 1, NULL, NULL),
-(5, 2, 4, 4, 1, NULL, NULL),
-(6, 2, 2, 2, 1, NULL, NULL),
-(7, 2, 1, 1, 1, NULL, NULL),
-(8, 2, 3, 3, 1, NULL, NULL);
+(41, 1, 13, 0, 1, '2026-05-06 11:04:51', '2026-05-06 11:04:51'),
+(42, 1, 14, 1, 1, '2026-05-06 11:04:51', '2026-05-06 11:04:51'),
+(43, 1, 15, 2, 1, '2026-05-06 11:04:51', '2026-05-06 11:04:51'),
+(44, 1, 16, 3, 1, '2026-05-06 11:04:51', '2026-05-06 11:04:51'),
+(45, 2, 13, 0, 1, '2026-05-06 11:09:40', '2026-05-06 11:09:40'),
+(46, 2, 14, 1, 1, '2026-05-06 11:09:40', '2026-05-06 11:09:40'),
+(47, 2, 15, 2, 1, '2026-05-06 11:09:40', '2026-05-06 11:09:40'),
+(48, 2, 16, 3, 1, '2026-05-06 11:09:40', '2026-05-06 11:09:40');
 
 -- --------------------------------------------------------
 
@@ -842,16 +937,16 @@ CREATE TABLE `requirements` (
 --
 
 INSERT INTO `requirements` (`requirement_id`, `category_id`, `requirement_name`, `description`, `is_required`, `display_order`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Birth Certificate', 'PSA-issued birth certificate', 1, 1, 1, NULL, NULL),
-(2, 1, 'Certificate of Good Moral Character', 'Issued by previous school', 1, 2, 1, NULL, NULL),
-(3, 2, 'Transcript of Records', 'Official academic transcript', 1, 1, 1, NULL, NULL),
-(4, 2, 'Diploma', 'High school or previous degree diploma', 1, 2, 1, NULL, NULL),
-(5, 2, 'Form 137', 'Secondary school permanent record', 1, 3, 1, NULL, NULL),
-(6, 3, 'Valid Government ID', 'Any government-issued ID (e.g., Passport, UMID)', 1, 1, 1, NULL, NULL),
-(7, 3, '2x2 ID Picture', 'Recent 2x2 photo with white background', 1, 2, 1, NULL, NULL),
-(8, 4, 'Medical Certificate', 'General health clearance from a licensed physician', 1, 1, 1, NULL, NULL),
-(9, 4, 'Chest X-ray Result', 'Recent X-ray result for medical screening', 1, 2, 1, NULL, NULL),
-(10, 4, 'Drug Test Result', 'Laboratory-issued drug test result', 1, 3, 1, NULL, NULL);
+(109, 13, 'Birth Certificate', 'PSA-issued birth certificate', 1, 1, 1, '2026-05-06 10:59:47', '2026-05-06 10:59:47'),
+(110, 13, 'Certificate of Good Moral Character', 'Issued by previous school', 1, 2, 1, '2026-05-06 10:59:47', '2026-05-06 10:59:47'),
+(111, 14, 'Transcript of Records', 'Official academic transcript', 1, 1, 1, '2026-05-06 11:01:58', '2026-05-06 11:01:58'),
+(112, 14, 'Diploma', 'High school or previous degree diploma', 1, 2, 1, '2026-05-06 11:01:58', '2026-05-06 11:01:58'),
+(113, 14, 'Form 137', 'Secondary school permanent record', 1, 3, 1, '2026-05-06 11:01:58', '2026-05-06 11:01:58'),
+(114, 15, 'Valid Government ID', 'Any government-issued ID (e.g., Passport, UMID)', 1, 1, 1, '2026-05-06 11:02:26', '2026-05-06 11:02:26'),
+(115, 15, '2x2 ID Picture', 'Recent 2x2 photo with white background', 1, 2, 1, '2026-05-06 11:02:26', '2026-05-06 11:02:26'),
+(116, 16, 'Medical Certificate', 'General health clearance from a licensed physician', 1, 1, 1, '2026-05-06 11:04:39', '2026-05-06 11:04:39'),
+(117, 16, 'Chest X-ray Result', 'Recent X-ray result for medical screening', 1, 2, 1, '2026-05-06 11:04:39', '2026-05-06 11:04:39'),
+(118, 16, 'Drug Test Result', 'Laboratory-issued drug test result', 1, 3, 1, '2026-05-06 11:04:39', '2026-05-06 11:04:39');
 
 -- --------------------------------------------------------
 
@@ -874,10 +969,10 @@ CREATE TABLE `requirement_categories` (
 --
 
 INSERT INTO `requirement_categories` (`category_id`, `category_name`, `description`, `display_order`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'Personal Documents', 'Basic personal identification documents', 1, 1, NULL, NULL),
-(2, 'Academic Documents', 'Educational background and records', 2, 1, NULL, NULL),
-(3, 'Identification', 'Government-issued IDs for verification', 3, 1, NULL, NULL),
-(4, 'Medical Requirements', 'Health-related documents and clearances', 4, 1, NULL, NULL);
+(13, 'Personal Documents', 'Basic personal identification documents', 10, 1, '2026-05-06 10:59:47', '2026-05-06 10:59:47'),
+(14, 'Academic Documents', 'Educational background and records', 20, 1, '2026-05-06 11:01:58', '2026-05-06 11:01:58'),
+(15, 'Identification', 'Government-issued IDs for verification', 30, 1, '2026-05-06 11:02:26', '2026-05-06 11:02:26'),
+(16, 'Medical Requirements', 'Health-related documents and clearances', 40, 1, '2026-05-06 11:04:39', '2026-05-06 11:04:39');
 
 -- --------------------------------------------------------
 
@@ -898,12 +993,12 @@ CREATE TABLE `theme_settings` (
 --
 
 INSERT INTO `theme_settings` (`id`, `setting_key`, `setting_value`, `created_at`, `updated_at`) VALUES
-(1, 'primary_color', '#0a6640', '2026-03-18 00:08:07', '2026-04-07 17:32:47'),
-(2, 'primary_dark', '#064d30', '2026-03-18 00:08:07', '2026-04-07 17:32:47'),
-(3, 'primary_light', '#0e7a4c', '2026-03-18 00:08:07', '2026-04-07 17:32:47'),
-(4, 'accent_color', '#f5c518', '2026-03-18 00:08:07', '2026-04-07 17:32:47'),
-(5, 'accent_text', '#064d30', '2026-03-18 00:08:07', '2026-04-07 17:32:47'),
-(6, 'sidebar_color', '#064d30', '2026-03-18 00:08:07', '2026-04-07 17:32:47'),
+(1, 'primary_color', '#0040a6', '2026-03-18 00:08:07', '2026-05-04 20:29:03'),
+(2, 'primary_dark', '#002d7a', '2026-03-18 00:08:07', '2026-05-04 20:29:03'),
+(3, 'primary_light', '#1a55c0', '2026-03-18 00:08:07', '2026-05-04 20:29:03'),
+(4, 'accent_color', '#ffb200', '2026-03-18 00:08:07', '2026-05-04 20:29:03'),
+(5, 'accent_text', '#002d7a', '2026-03-18 00:08:07', '2026-05-04 20:29:03'),
+(6, 'sidebar_color', '#002d7a', '2026-03-18 00:08:07', '2026-05-04 20:29:03'),
 (7, 'font_family', 'Sora', '2026-03-18 00:08:07', '2026-03-19 15:32:47'),
 (8, 'border_radius', '22px', '2026-03-18 00:08:07', '2026-03-30 15:24:51'),
 (9, 'app_name', 'St.Paul University Manila', '2026-03-18 00:08:07', '2026-04-07 17:38:55'),
@@ -913,8 +1008,8 @@ INSERT INTO `theme_settings` (`id`, `setting_key`, `setting_value`, `created_at`
 INSERT INTO `theme_settings` (`id`, `setting_key`, `setting_value`, `created_at`, `updated_at`) VALUES
 (12, 'school_year', 'SY 2025-2026', '2026-03-18 00:08:07', '2026-03-18 00:08:07'),
 (13, 'admission_status', 'Open for Applications', '2026-03-18 00:08:07', '2026-03-18 00:08:07'),
-(14, 'preset', 'forest', '2026-03-18 00:08:07', '2026-04-07 17:32:47'),
-(15, 'exam_enabled', '0', '2026-04-13 23:56:07', '2026-04-14 13:13:31');
+(14, 'preset', 'spum-blue', '2026-03-18 00:08:07', '2026-05-04 20:29:03'),
+(15, 'exam_enabled', '1', '2026-04-13 23:56:07', '2026-05-05 16:23:53');
 
 -- --------------------------------------------------------
 
@@ -943,7 +1038,8 @@ INSERT INTO `users` (`user_id`, `firstname`, `lastname`, `email`, `mobile`, `pas
 (24, 'THEODORE', 'ABELLA', 'abellatheodore@gmail.com', NULL, '$2y$10$z7gKQrGtX80bRKU79vRMce5o2kns8dC0MZtj5zfqOBk.S9o500buS', 'admission_officer', '2026-03-31 05:46:48'),
 (25, 'John', 'Doe', 'testakademusmentora@gmail.com', '09762402857', NULL, 'applicant', '2026-03-31 08:45:27'),
 (26, 'Paul', 'Mapula', 'mapula.pauljoshua@gmail.com', '09958541242', NULL, 'applicant', '2026-04-14 04:53:17'),
-(27, 'Paul', 'Mapula', '2022-02519@sanbeda.edu.ph', NULL, '$2y$10$81OPIQ2HKNKVedfA929BDOtUODlHg5iNSF5I6MHnSuRJ91IeInwqu', 'admission_officer', '2026-04-14 05:07:18');
+(27, 'Paul', 'Mapula', '2022-02519@sanbeda.edu.ph', NULL, '$2y$10$81OPIQ2HKNKVedfA929BDOtUODlHg5iNSF5I6MHnSuRJ91IeInwqu', 'admission_officer', '2026-04-14 05:07:18'),
+(30, 'Ethan', 'Nemenzo', 'ushuay_man@yahoo.com', '09958541242', NULL, 'applicant', '2026-04-16 01:01:41');
 
 -- --------------------------------------------------------
 
@@ -1102,6 +1198,14 @@ ALTER TABLE `course_form_fields`
 ALTER TABLE `educational_backgrounds`
   ADD PRIMARY KEY (`educational_bg_id`),
   ADD KEY `fk_education_bg_application` (`application_id`);
+
+--
+-- Indexes for table `email_queue`
+--
+ALTER TABLE `email_queue`
+  ADD PRIMARY KEY (`email_id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `type` (`type`);
 
 --
 -- Indexes for table `exam_bookings`
@@ -1287,22 +1391,28 @@ ALTER TABLE `academic_years`
   MODIFY `year_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `admin_credentials`
+--
+ALTER TABLE `admin_credentials`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `applicants`
 --
 ALTER TABLE `applicants`
-  MODIFY `applicant_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `applicant_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `applicant_documents`
 --
 ALTER TABLE `applicant_documents`
-  MODIFY `document_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `document_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `class_schedules`
@@ -1326,31 +1436,37 @@ ALTER TABLE `course_form_fields`
 -- AUTO_INCREMENT for table `educational_backgrounds`
 --
 ALTER TABLE `educational_backgrounds`
-  MODIFY `educational_bg_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `educational_bg_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+
+--
+-- AUTO_INCREMENT for table `email_queue`
+--
+ALTER TABLE `email_queue`
+  MODIFY `email_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `exam_bookings`
 --
 ALTER TABLE `exam_bookings`
-  MODIFY `exam_booking_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `exam_booking_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `exam_schedules`
 --
 ALTER TABLE `exam_schedules`
-  MODIFY `exam_schedule_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `exam_schedule_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `family_backgrounds`
 --
 ALTER TABLE `family_backgrounds`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `follow_up_messages`
 --
 ALTER TABLE `follow_up_messages`
-  MODIFY `message_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `message_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `form_field_configs`
@@ -1386,13 +1502,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `password_resets`
 --
 ALTER TABLE `password_resets`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `payment_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `payment_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `payment_fee_type`
@@ -1410,19 +1526,19 @@ ALTER TABLE `payment_method`
 -- AUTO_INCREMENT for table `personal_informations`
 --
 ALTER TABLE `personal_informations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `preset_requirement_categories`
 --
 ALTER TABLE `preset_requirement_categories`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
 -- AUTO_INCREMENT for table `preset_sections`
 --
 ALTER TABLE `preset_sections`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=199;
 
 --
 -- AUTO_INCREMENT for table `programs`
@@ -1440,25 +1556,25 @@ ALTER TABLE `program_form_field_overrides`
 -- AUTO_INCREMENT for table `program_requirements`
 --
 ALTER TABLE `program_requirements`
-  MODIFY `program_requirement_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `program_requirement_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=229;
 
 --
 -- AUTO_INCREMENT for table `program_requirement_categories`
 --
 ALTER TABLE `program_requirement_categories`
-  MODIFY `program_requirement_category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `program_requirement_category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `requirements`
 --
 ALTER TABLE `requirements`
-  MODIFY `requirement_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `requirement_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
 
 --
 -- AUTO_INCREMENT for table `requirement_categories`
 --
 ALTER TABLE `requirement_categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `theme_settings`
@@ -1470,7 +1586,7 @@ ALTER TABLE `theme_settings`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- Constraints for dumped tables
@@ -1480,7 +1596,7 @@ ALTER TABLE `users`
 -- Constraints for table `applicant_documents`
 --
 ALTER TABLE `applicant_documents`
-  ADD CONSTRAINT `fk_applicant_doc_requirement` FOREIGN KEY (`program_requirement_id`) REFERENCES `requirements` (`requirement_id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_applicant_doc_requirement` FOREIGN KEY (`program_requirement_id`) REFERENCES `program_requirements` (`program_requirement_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `applications`
@@ -1537,14 +1653,14 @@ ALTER TABLE `preset_sections`
 --
 ALTER TABLE `program_requirements`
   ADD CONSTRAINT `program_requirements_ibfk_1` FOREIGN KEY (`program_requirement_category_id`) REFERENCES `program_requirement_categories` (`program_requirement_category_id`),
-  ADD CONSTRAINT `program_requirements_ibfk_2` FOREIGN KEY (`requirement_id`) REFERENCES `requirements` (`requirement_id`);
+  ADD CONSTRAINT `program_requirements_ibfk_2` FOREIGN KEY (`requirement_id`) REFERENCES `requirements` (`requirement_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `program_requirement_categories`
 --
 ALTER TABLE `program_requirement_categories`
   ADD CONSTRAINT `program_requirement_categories_ibfk_1` FOREIGN KEY (`program_id`) REFERENCES `programs` (`program_id`),
-  ADD CONSTRAINT `program_requirement_categories_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `requirement_categories` (`category_id`);
+  ADD CONSTRAINT `program_requirement_categories_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `requirement_categories` (`category_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `requirements`
