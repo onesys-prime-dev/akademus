@@ -368,6 +368,50 @@
     color: var(--color-danger);
 }
 
+/* ─── Pay Now Button ─── */
+.apf-paynow-row{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:10px;
+}
+
+.apf-paynow-btn{
+    width:fit-content;
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:14px 24px;
+
+    border:none;
+    border-radius:12px;
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--primary-dark)
+    );
+
+    color:#fff;
+    font-size:15px;
+    font-weight:700;
+    font-family:inherit;
+
+    cursor:pointer;
+    transition:.2s ease;
+}
+
+.apf-paynow-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 24px rgba(0,64,166,.25);
+}
+
+.apf-paynow-note{
+    font-size:12px;
+    color:var(--text-muted);
+}
+
 /* ─── Submit row ─── */
 .apf-submit-row {
     display: flex;
