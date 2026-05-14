@@ -117,7 +117,10 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
 
         <!-- ADMISSION PROCESSING FEE - PAY NOW button -->
         <div class="apf-paynow-row">
-            <button type="button" class="apf-paynow-btn">
+            <button
+                type="button"
+                class="apf-paynow-btn"
+                onclick="openCheckoutModal()">
                 <svg width="18" height="18" viewBox="0 0 24 24"
                     fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linecap="round"
@@ -132,6 +135,48 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
             <p class="apf-paynow-note">
                 Secure online checkout powered by SmartPay.
             </p>
+        </div>
+
+        <!-- SMARTPAY CHECKOUT -->
+        <div class="smartpay-modal" id="smartpayModal">
+
+            <div class="smartpay-modal-content">
+
+                <div class="smartpay-header">
+                    <h3>SmartPay Checkout</h3>
+
+                    <button
+                        type="button"
+                        class="smartpay-close"
+                        onclick="closeCheckoutModal()">
+                        &times;
+                    </button>
+                </div>
+
+                <div class="smartpay-body">
+
+                    <div class="smartpay-amount">
+                        ₱<?= number_format((float)($fee['amount'] ?? 0), 2) ?>
+                    </div>
+
+                    <p class="smartpay-subtitle">
+                        Continue securely with SmartPay.
+                    </p>
+
+                    <div class="smartpay-method-preview">
+                        <span id="checkoutMethodName">GCash</span>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="smartpay-proceed-btn"
+                        onclick="simulateCheckout()">
+
+                        Proceed Payment
+                    </button>
+
+                </div>
+            </div>
         </div>
 
         <div class="apf-alert apf-alert--warning">
@@ -287,6 +332,33 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
 
 <script>
     const SUBMIT_URL = "<?= base_url('admission-processing-fee/submit') ?>";
+</script>
+
+<script>
+
+function openCheckoutModal(){
+
+    document
+        .getElementById('smartpayModal')
+        .classList
+        .add('active');
+
+}
+
+function closeCheckoutModal(){
+
+    document
+        .getElementById('smartpayModal')
+        .classList
+        .remove('active');
+
+}
+
+function simulateCheckout(){
+
+    alert('SmartPay checkout will be integrated here.');
+
+}
 </script>
 
 <script src="<?= base_url('assets/js/payment-fees.js') ?>" defer></script>
