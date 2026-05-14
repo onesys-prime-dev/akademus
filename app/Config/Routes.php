@@ -219,3 +219,7 @@ $routes->get('tracking-progress', 'Applicant\TrackingProgressController::index')
 
 // API Route for Groq AI Assistant
 $routes->post('api/groq/chat', 'API\Groq::chat');
+
+// Smart Pay
+$routes->post('/payment/admission-fee', 'Payment\SmartPayController::getAdmissionFeePayment');
+$routes->post('/payment/reservation-fee', 'Payment\SmartPayController::getReservationFeePayment');

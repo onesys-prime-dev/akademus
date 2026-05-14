@@ -157,6 +157,7 @@ class ReservationFeeController extends BaseController
 
             $map[$row['code']] = [
                 'payment_method_id' => (int) $row['payment_method_id'],
+                'code'              => $row['code'],
                 'name'              => $row['name'],
                 'payment_method_account_id' => $row['payment_method_account_id'],
                 'account_number'    => $row['account_number'],
