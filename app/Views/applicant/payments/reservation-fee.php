@@ -52,6 +52,7 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
                 <button
                     class="apf-method-btn <?= $i === 0 ? 'apf-method-btn--active' : '' ?>"
                     data-method-id="<?= $method['payment_method_id'] ?>"
+                    data-method-code="<?= strtolower($method['code']) ?>"
                     data-account-id="<?= $method['payment_method_account_id'] ?? '' ?>"
                     onclick="selectMethod(this)"
                     <?= $isLocked ? 'disabled' : '' ?>>
@@ -363,12 +364,25 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
         button.innerText = 'Creating Checkout...';
 
         try {
+            const activeMethod = document.querySelector('.apf-method-btn--active');
+
+            if (!activeMethod) {
+                throw new Error('No payment method selected.');
+            }
+
+            const paymentMethod = activeMethod.dataset.methodCode;
+
             const response = await fetch(
-                "<?= base_url('smartpay/create-checkout') ?>", {
+                "<?= base_url('payment/reservation-fee') ?>", {
                     method: 'POST',
                     headers: {
+                        'Content-Type': 'application/json',
                         'X-Requested-With': 'XMLHttpRequest'
-                    }
+                    },
+
+                    body: JSON.stringify({
+                        payment_method: paymentMethod
+                    })
                 }
             );
 
@@ -378,11 +392,18 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
 
             const data = await response.json();
 
-            if (data.status === 'success') {
-                // redirect to smartpay checkout URL
-                window.location.href = data.checkout_url;
+            if (data.success) {
+                if (data.data.checkout_url) {
+
+                    window.location.href = data.data.checkout_url;
+
+                } else {
+                    alert(
+                        'Checkout URL not returned by SmartPay.'
+                    );
+                }
             } else {
-                alert('Failed to create SmartPay checkout. Please try again later.');
+                alert(data.message || 'Failed to create SmartPay checkout.');
             }
         } catch (error) {
 
