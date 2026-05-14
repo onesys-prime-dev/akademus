@@ -160,7 +160,7 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
                     </div>
 
                     <p class="smartpay-subtitle">
-                        Continue securely with SmartPay.
+                        Continue with SmartPay.
                     </p>
 
                     <div class="smartpay-method-preview">
@@ -170,7 +170,7 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
                     <button
                         type="button"
                         class="smartpay-proceed-btn"
-                        onclick="simulateCheckout()">
+                        onclick="processSmartPayCheckout(this)">
 
                         Proceed Payment
                     </button>
@@ -334,31 +334,69 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
     const SUBMIT_URL = "<?= base_url('admission-processing-fee/submit') ?>";
 </script>
 
+<!-- SMARTPAY modal -->
 <script>
+    function openCheckoutModal() {
+        // get currently selected method for display in modal
+        const activeMethod = document.querySelector('.apf-method-btn--active');
 
-function openCheckoutModal(){
+        // update checkout modal text
+        if (activeMethod) {
+            document.getElementById('checkoutMethodName').innerText = activeMethod.innerText.trim();
+        }
 
-    document
-        .getElementById('smartpayModal')
-        .classList
-        .add('active');
+        document
+            .getElementById('smartpayModal')
+            .classList
+            .add('active');
+    }
 
-}
+    function closeCheckoutModal() {
+        document
+            .getElementById('smartpayModal')
+            .classList
+            .remove('active');
+    }
 
-function closeCheckoutModal(){
+    async function processSmartPayCheckout(button) {
+        button.disabled = true;
+        button.innerText = 'Creating Checkout...';
 
-    document
-        .getElementById('smartpayModal')
-        .classList
-        .remove('active');
+        try {
+            const response = await fetch(
+                "<?= base_url('smartpay/create-checkout') ?>", {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                }
+            );
 
-}
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
 
-function simulateCheckout(){
+            const data = await response.json();
 
-    alert('SmartPay checkout will be integrated here.');
+            if (data.status === 'success') {
+                // redirect to smartpay checkout URL
+                window.location.href = data.checkout_url;
+            } else {
+                alert('Failed to create SmartPay checkout. Please try again later.');
+            }
+        } catch (error) {
 
-}
+            console.error('Checkout error:', error);
+
+            alert('An error occurred while creating checkout.');
+
+        } finally {
+
+            button.disabled = false;
+            button.innerText = 'Proceed Payment';
+
+        }
+    }
 </script>
 
 <script src="<?= base_url('assets/js/payment-fees.js') ?>" defer></script>
