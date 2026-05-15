@@ -104,7 +104,7 @@ class PaymentService
 
             'gcash', 'maya' => ['Wallet'],
 
-            'card' => ['Card'],
+            'bdo', 'bpi' => ['Card'],
 
             default => throw new \Exception(
                 'Invalid payment method.'
