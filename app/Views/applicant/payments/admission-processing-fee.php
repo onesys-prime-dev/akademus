@@ -392,12 +392,10 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
 
             const data = await response.json();
 
-            console.log(data);
-
             if (data.success) {
                 if (data.data.redirect_url) {
 
-                    // window.location.href = data.data.redirect_url;
+                    window.location.href = data.data.redirect_url;
 
                 } else {
                     alert(
