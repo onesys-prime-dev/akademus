@@ -118,11 +118,15 @@ class PaymentService
         */
 
         $serviceReference =
-            strtoupper($feeTypeCode)
+            (
+                $feeTypeCode === PaymentFeeTypeModel::CODE_ADMISSION
+                    ? 'ADM'
+                    : 'RSV'
+            )
             . '-'
             . $applicantId
             . '-'
-            . time();
+            . substr(time(), -6);
 
         /*
         |--------------------------------------------------------------------------
@@ -154,7 +158,8 @@ class PaymentService
 
             'description' => $paymentFeeType['name'],
 
-            'restrict_channels' => $restrictChannels
+            'restrict_channels' =>
+                json_encode($restrictChannels)
         ];
 
         /*
@@ -175,11 +180,10 @@ class PaymentService
             CURLOPT_POST => true,
 
             CURLOPT_POSTFIELDS =>
-                json_encode($smartpayPayload),
+                $smartpayPayload,
 
             CURLOPT_HTTPHEADER => [
                 'Authorization: Bearer ' . $this->secretKey,
-                'Content-Type: application/json',
                 'Accept: application/json'
             ]
         ]);
