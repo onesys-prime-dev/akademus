@@ -16,11 +16,7 @@ class EmailService
         $email->setMessage($message);
 
         if (!$email->send()) {
-            $error = $email->printDebugger(['headers', 'subject', 'body']);
-            
-            log_message('error', 'EmailService failed: ' . $error);
-
-            echo $error; // 🔥 TEMP: show error in terminal
+            log_message('error', 'EmailService failed: ' . $email->printDebugger(['headers', 'subject', 'body']));
             return false;
         }
 

@@ -118,11 +118,15 @@ class PaymentService
         */
 
         $serviceReference =
-            strtoupper($feeTypeCode)
+            (
+                $feeTypeCode === PaymentFeeTypeModel::CODE_ADMISSION
+                    ? 'ADM'
+                    : 'RSV'
+            )
             . '-'
             . $applicantId
             . '-'
-            . time();
+            . substr(time(), -6);
 
         /*
         |--------------------------------------------------------------------------
@@ -134,12 +138,7 @@ class PaymentService
 
             'service_reference' => $serviceReference,
 
-            'amount' => number_format(
-                $paymentFeeType['amount'],
-                2,
-                '.',
-                ''
-            ),
+            'amount' => (float) $paymentFeeType['amount'],
 
             'customer_email' => $user['email'],
 
@@ -154,7 +153,7 @@ class PaymentService
 
             'description' => $paymentFeeType['name'],
 
-            'restrict_channels' => $restrictChannels
+            'restrict_channels' => json_encode($restrictChannels),
         ];
 
         /*
@@ -162,6 +161,8 @@ class PaymentService
         | Call Smartpay API
         |--------------------------------------------------------------------------
         */
+
+        $jsonPayload = json_encode($smartpayPayload);
 
         $curl = curl_init();
 
@@ -174,13 +175,12 @@ class PaymentService
 
             CURLOPT_POST => true,
 
-            CURLOPT_POSTFIELDS =>
-                json_encode($smartpayPayload),
+            CURLOPT_POSTFIELDS => $jsonPayload,
 
             CURLOPT_HTTPHEADER => [
                 'Authorization: Bearer ' . $this->secretKey,
                 'Content-Type: application/json',
-                'Accept: application/json'
+                'Accept: application/json',
             ]
         ]);
 
@@ -233,6 +233,8 @@ class PaymentService
         |--------------------------------------------------------------------------
         */
 
+        log_message('debug', 'SmartPay HTTP ' . $httpCode . ' response: ' . json_encode($decodedResponse));
+
         if ($httpCode >= 400) {
 
             throw new \Exception(
@@ -272,7 +274,7 @@ class PaymentService
                 ?? null,
 
             'checkout_url' =>
-                $decodedResponse['data']['checkout_url']
+                $decodedResponse['data']['redirect_url']
                 ?? null
         ];
     }
