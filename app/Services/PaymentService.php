@@ -138,12 +138,7 @@ class PaymentService
 
             'service_reference' => $serviceReference,
 
-            'amount' => number_format(
-                $paymentFeeType['amount'],
-                2,
-                '.',
-                ''
-            ),
+            'amount' => (float) $paymentFeeType['amount'],
 
             'customer_email' => $user['email'],
 
@@ -158,8 +153,7 @@ class PaymentService
 
             'description' => $paymentFeeType['name'],
 
-            'restrict_channels' =>
-                json_encode($restrictChannels)
+            'restrict_channels' => json_encode($restrictChannels),
         ];
 
         /*
@@ -167,6 +161,8 @@ class PaymentService
         | Call Smartpay API
         |--------------------------------------------------------------------------
         */
+
+        $jsonPayload = json_encode($smartpayPayload);
 
         $curl = curl_init();
 
@@ -179,12 +175,12 @@ class PaymentService
 
             CURLOPT_POST => true,
 
-            CURLOPT_POSTFIELDS =>
-                $smartpayPayload,
+            CURLOPT_POSTFIELDS => $jsonPayload,
 
             CURLOPT_HTTPHEADER => [
                 'Authorization: Bearer ' . $this->secretKey,
-                'Accept: application/json'
+                'Content-Type: application/json',
+                'Accept: application/json',
             ]
         ]);
 
@@ -237,6 +233,8 @@ class PaymentService
         |--------------------------------------------------------------------------
         */
 
+        log_message('debug', 'SmartPay HTTP ' . $httpCode . ' response: ' . json_encode($decodedResponse));
+
         if ($httpCode >= 400) {
 
             throw new \Exception(
@@ -276,7 +274,7 @@ class PaymentService
                 ?? null,
 
             'checkout_url' =>
-                $decodedResponse['data']['checkout_url']
+                $decodedResponse['data']['redirect_url']
                 ?? null
         ];
     }
