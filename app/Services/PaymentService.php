@@ -104,7 +104,7 @@ class PaymentService
 
             'gcash', 'maya' => ['Wallet'],
 
-            'card' => ['Card'],
+            'bdo', 'bpi' => ['Card'],
 
             default => throw new \Exception(
                 'Invalid payment method.'
@@ -262,18 +262,11 @@ class PaymentService
 
             'smartpay_response' => $decodedResponse,
 
-            /*
-            |--------------------------------------------------------------------------
-            | IMPORTANT:
-            | Adjust depending on actual Smartpay response
-            |--------------------------------------------------------------------------
-            */
-
             'reference_number' =>
                 $decodedResponse['data']['reference_number']
                 ?? null,
 
-            'checkout_url' =>
+            'redirect_url' =>
                 $decodedResponse['data']['redirect_url']
                 ?? null
         ];

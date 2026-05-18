@@ -393,9 +393,9 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
             const data = await response.json();
 
             if (data.success) {
-                if (data.data.checkout_url) {
+                if (data.data.redirect_url) {
 
-                    window.location.href = data.data.checkout_url;
+                    window.location.href = data.data.redirect_url;
 
                 } else {
                     alert(
