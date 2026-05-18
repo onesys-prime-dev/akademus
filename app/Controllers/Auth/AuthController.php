@@ -300,7 +300,12 @@ class AuthController extends BaseController
             ]);
 
             $resetUrl = base_url('reset-password/' . $token);
-            EmailService::sendPasswordReset($email, $resetUrl);
+
+            try {
+                EmailService::sendPasswordReset($email, $resetUrl);
+            } catch (\Throwable $e) {
+                log_message('error', 'Password reset email error: ' . $e->getMessage());
+            }
         }
 
         return $this->response->setJSON([

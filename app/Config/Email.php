@@ -11,17 +11,17 @@ class Email extends BaseConfig
         parent::__construct();
 
         // Load from .env with fallback values
-        $this->fromEmail = env('email.fromEmail');
-        $this->fromName  = env('email.fromName');
+        $this->fromEmail  = env('email.fromEmail', '');
+        $this->fromName   = env('email.fromName', '');
 
-        $this->protocol  = env('email.protocol');
+        $this->protocol   = env('email.protocol', 'smtp');
 
-        $this->SMTPHost  = env('email.SMTPHost');
-        $this->SMTPUser  = env('email.SMTPUser');
-        $this->SMTPPass  = env('email.SMTPPass');
-        $this->SMTPPort  = (int) env('email.SMTPPort');
-        $this->SMTPTimeout = (int) env('email.SMTPTimeout');
-        $this->SMTPCrypto = env('email.SMTPCrypto');
+        $this->SMTPHost   = env('email.SMTPHost', '');
+        $this->SMTPUser   = env('email.SMTPUser', '');
+        $this->SMTPPass   = env('email.SMTPPass', '');
+        $this->SMTPPort   = (int) env('email.SMTPPort', 465);
+        $this->SMTPTimeout = (int) env('email.SMTPTimeout', 5);
+        $this->SMTPCrypto = env('email.SMTPCrypto', 'ssl');
     }
 
     public string $fromEmail;
