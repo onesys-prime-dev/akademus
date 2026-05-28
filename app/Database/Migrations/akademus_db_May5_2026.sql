@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 06, 2026 at 05:57 AM
+-- Generation Time: May 25, 2026 at 08:25 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -87,7 +87,8 @@ CREATE TABLE `applicants` (
 INSERT INTO `applicants` (`applicant_id`, `user_id`, `program_id`, `applicant_number`, `password`, `temp_password`, `application_status`, `decision_remarks`, `application_date`, `created_at`, `form_step`) VALUES
 (14, 25, 1, 'APP-2026-00014', '$2y$10$MpmI6kSwRiuUnqT.TzJ2AO5xWkIkPO4wTBQddhCPmPI4q89YpwAUW', 0, 'approved', 'Congratulations! Your documents are complete and your application has been approved. Please proceed to the next step.', '2026-03-31 08:45:27', '2026-03-31 08:45:27', 1),
 (15, 26, 1, 'APP-2026-00015', '$2y$10$wQlVjIsDPW3qOoBL//1MQOoUXKzXI0chOYRrqRfrulxlvBMJgy93u', 0, 'approved', 'After thorough review, the application has been approved. The applicant may now proceed with enrollment.', '2026-04-14 04:53:17', '2026-04-14 04:53:17', 1),
-(18, 30, 1, 'APP-2026-00018', '$2y$10$0SLp7CEy3h6QWcZVI73Khe8rfnFit.coG5TCiMm37ZVbkRQWQ3hIa', 1, 'approved', 'The application has been declined due to incomplete or missing required documents. Please resubmit with complete requirements.', '2026-04-16 01:01:41', '2026-04-16 01:01:41', 1);
+(18, 30, 1, 'APP-2026-00018', '$2y$10$0SLp7CEy3h6QWcZVI73Khe8rfnFit.coG5TCiMm37ZVbkRQWQ3hIa', 1, 'approved', 'The application has been declined due to incomplete or missing required documents. Please resubmit with complete requirements.', '2026-04-16 01:01:41', '2026-04-16 01:01:41', 1),
+(19, 31, 1, 'APP-2026-00019', '$2y$10$b1nP6M4Jspg.79lexCJMHOCKhQ0sZYMWnYjg8rAtN6WQtoTYEPEHu', 0, 'pending', NULL, '2026-05-06 16:49:19', '2026-05-06 08:49:19', 1);
 
 -- --------------------------------------------------------
 
@@ -112,7 +113,17 @@ CREATE TABLE `applicant_documents` (
 --
 
 INSERT INTO `applicant_documents` (`document_id`, `applicant_id`, `program_requirement_id`, `document_name`, `status`, `verified_by`, `remarks`, `uploaded_at`, `updated_at`) VALUES
-(86, 15, 209, '15_209.png', 'pending', NULL, NULL, '2026-05-06 11:13:56', '2026-05-06 11:13:56');
+(86, 15, 209, '15_209.png', 'pending', NULL, NULL, '2026-05-06 11:13:56', '2026-05-06 11:13:56'),
+(87, 19, 209, '19_209.jpg', 'rejected', NULL, NULL, '2026-05-06 16:49:56', '2026-05-06 16:53:01'),
+(89, 19, 210, '19_210.jpg', 'approved', NULL, NULL, '2026-05-06 16:49:59', '2026-05-06 16:52:54'),
+(90, 19, 211, '19_211.jpg', 'pending', NULL, NULL, '2026-05-06 16:50:06', '2026-05-06 16:50:06'),
+(91, 19, 213, '19_213.jpg', 'pending', NULL, NULL, '2026-05-06 16:50:17', '2026-05-06 16:50:17'),
+(92, 19, 212, '19_212.jpg', 'pending', NULL, NULL, '2026-05-06 16:50:24', '2026-05-06 16:50:24'),
+(93, 19, 214, '19_214.jpg', 'pending', NULL, NULL, '2026-05-06 16:50:33', '2026-05-06 16:50:33'),
+(94, 19, 215, '19_215.jpg', 'pending', NULL, NULL, '2026-05-06 16:50:48', '2026-05-06 16:50:48'),
+(95, 19, 216, '19_216.jpg', 'pending', NULL, NULL, '2026-05-06 16:50:55', '2026-05-06 16:50:55'),
+(96, 19, 217, '19_217.jpg', 'pending', NULL, NULL, '2026-05-06 16:51:10', '2026-05-06 16:51:10'),
+(97, 19, 218, '19_218.jpg', 'pending', NULL, NULL, '2026-05-06 16:51:24', '2026-05-06 16:51:24');
 
 -- --------------------------------------------------------
 
@@ -290,7 +301,19 @@ INSERT INTO `email_queue` (`email_id`, `to_email`, `type`, `payload`, `status`, 
 (92, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Birth Certificate\"}', 'pending', 0, NULL, '2026-05-05 16:03:08', 15, NULL, NULL),
 (93, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Certificate of Good Moral Character\"}', 'pending', 0, NULL, '2026-05-05 16:13:30', 15, NULL, NULL),
 (94, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Birth Certificate\"}', 'pending', 0, NULL, '2026-05-06 10:48:15', 15, NULL, NULL),
-(95, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Birth Certificate\"}', 'pending', 0, NULL, '2026-05-06 11:13:56', 15, NULL, NULL);
+(95, 'mapula.pauljoshua@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Birth Certificate\"}', 'pending', 0, NULL, '2026-05-06 11:13:56', 15, NULL, NULL),
+(96, 'joshbaquiano@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Birth Certificate\"}', 'pending', 0, NULL, '2026-05-06 16:49:56', 19, NULL, NULL),
+(97, 'joshbaquiano@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Certificate of Good Moral Character\"}', 'pending', 0, NULL, '2026-05-06 16:49:59', 19, NULL, NULL),
+(98, 'joshbaquiano@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Certificate of Good Moral Character\"}', 'pending', 0, NULL, '2026-05-06 16:49:59', 19, NULL, NULL),
+(99, 'joshbaquiano@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Transcript of Records\"}', 'pending', 0, NULL, '2026-05-06 16:50:06', 19, NULL, NULL),
+(100, 'joshbaquiano@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Form 137\"}', 'pending', 0, NULL, '2026-05-06 16:50:17', 19, NULL, NULL),
+(101, 'joshbaquiano@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Diploma\"}', 'pending', 0, NULL, '2026-05-06 16:50:24', 19, NULL, NULL),
+(102, 'joshbaquiano@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Valid Government ID\"}', 'pending', 0, NULL, '2026-05-06 16:50:33', 19, NULL, NULL),
+(103, 'joshbaquiano@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"2x2 ID Picture\"}', 'pending', 0, NULL, '2026-05-06 16:50:48', 19, NULL, NULL),
+(104, 'joshbaquiano@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Medical Certificate\"}', 'pending', 0, NULL, '2026-05-06 16:50:55', 19, NULL, NULL),
+(105, 'joshbaquiano@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Chest X-ray Result\"}', 'pending', 0, NULL, '2026-05-06 16:51:10', 19, NULL, NULL),
+(106, 'joshbaquiano@gmail.com', 'requirements.uploaded', '{\"requirement_name\":\"Drug Test Result\"}', 'pending', 0, NULL, '2026-05-06 16:51:24', 19, NULL, NULL),
+(107, 'joshbaquiano@gmail.com', 'requirements.completed', '[]', 'pending', 0, NULL, '2026-05-06 16:51:24', 19, NULL, 'requirements_completed_19');
 
 -- --------------------------------------------------------
 
@@ -647,6 +670,15 @@ CREATE TABLE `payment` (
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `payment`
+--
+
+INSERT INTO `payment` (`payment_id`, `applicant_id`, `payment_fee_type_id`, `payment_method_id`, `payment_method_account_id`, `reference_num`, `proof_of_payment`, `amount_paid`, `payment_status`, `payment_date`, `remarks`, `reviewed_by`, `reviewed_at`, `created_at`, `updated_at`) VALUES
+(1, 14, 2, 1, 1, '62462462624626', 'uploads/payments/1776094370_46a8a90f9f7d2a20e4c6.png', 500.00, 'PENDING', NULL, NULL, NULL, NULL, '2026-04-13 15:32:50', '2026-04-13 15:32:50'),
+(2, 15, 1, 1, NULL, '123456789', 'uploads/payments/1776143567_c18a450409e89c2b2b3f.pdf', 12000.00, 'PENDING', NULL, NULL, NULL, NULL, '2026-04-14 05:12:47', '2026-04-14 05:12:47'),
+(11, 16, 1, 1, NULL, '4123465', 'uploads/payments/1777456210_e303be0019b702b822bc.jpg', 12000.00, 'PAID', '2026-04-29 17:50:20', NULL, 29, '2026-04-29 17:50:20', '2026-04-29 17:50:10', '2026-04-29 17:50:20');
+
 -- --------------------------------------------------------
 
 --
@@ -693,10 +725,11 @@ CREATE TABLE `payment_method` (
 --
 
 INSERT INTO `payment_method` (`payment_method_id`, `code`, `name`, `description`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'GCASH', 'GCash', NULL, 1, '2026-04-04 16:53:57', '2026-04-13 21:23:46'),
+(1, 'GCASH', 'GCash', NULL, 1, '2026-04-04 16:53:57', '2026-05-15 10:05:45'),
 (2, 'MAYA', 'Maya', NULL, 1, '2026-04-04 16:53:57', '2026-04-04 16:55:26'),
 (3, 'BDO', 'BDO', NULL, 1, '2026-04-04 17:18:40', '2026-04-04 17:18:40'),
-(4, 'BPI', 'BPI', NULL, 1, '2026-04-04 17:18:40', '2026-04-04 17:18:40');
+(4, 'BPI', 'BPI', NULL, 0, '2026-04-04 17:18:40', '2026-05-15 09:42:35'),
+(10, 'METROBANK', 'Metrobank', NULL, 1, '2026-05-15 09:40:48', '2026-05-15 10:07:39');
 
 -- --------------------------------------------------------
 
@@ -712,6 +745,17 @@ CREATE TABLE `payment_method_account` (
   `is_active` tinyint(1) DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `payment_method_account`
+--
+
+INSERT INTO `payment_method_account` (`payment_method_account_id`, `payment_method_id`, `account_number`, `account_name`, `is_active`, `created_at`) VALUES
+(0, 10, '123', 'Metrobank', 1, '2026-05-15 09:40:48'),
+(0, 10, '12', 'Metrobank', 1, '2026-05-15 09:40:53'),
+(0, 10, '123', 'Metrobank', 1, '2026-05-15 09:40:56'),
+(0, 1, '09123456789', 'GCash', 1, '2026-05-15 10:05:45'),
+(0, 10, '1234', 'Metrobank', 1, '2026-05-15 10:07:39');
 
 -- --------------------------------------------------------
 
@@ -917,6 +961,27 @@ INSERT INTO `program_requirement_categories` (`program_requirement_category_id`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `remember_me_tokens`
+--
+
+CREATE TABLE `remember_me_tokens` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `expires_at` datetime NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `remember_me_tokens`
+--
+
+INSERT INTO `remember_me_tokens` (`id`, `user_id`, `token`, `expires_at`, `created_at`) VALUES
+(0, 31, '1c6798a1f215fa9f5e103b71394b1e6b0174f021eaa3d8de6e99b9a57b8ab806', '2026-05-19 17:17:29', '2026-05-19 17:16:29');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `requirements`
 --
 
@@ -973,6 +1038,33 @@ INSERT INTO `requirement_categories` (`category_id`, `category_name`, `descripti
 (14, 'Academic Documents', 'Educational background and records', 20, 1, '2026-05-06 11:01:58', '2026-05-06 11:01:58'),
 (15, 'Identification', 'Government-issued IDs for verification', 30, 1, '2026-05-06 11:02:26', '2026-05-06 11:02:26'),
 (16, 'Medical Requirements', 'Health-related documents and clearances', 40, 1, '2026-05-06 11:04:39', '2026-05-06 11:04:39');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `smartpay_transactions`
+--
+
+CREATE TABLE `smartpay_transactions` (
+  `smartpay_transaction_id` bigint(20) UNSIGNED NOT NULL,
+  `payment_id` int(10) UNSIGNED NOT NULL,
+  `reference_number` varchar(100) NOT NULL,
+  `service_reference` varchar(100) DEFAULT NULL,
+  `merchant` varchar(150) DEFAULT NULL,
+  `merchant_service` varchar(150) DEFAULT NULL,
+  `payment_channel` varchar(100) DEFAULT NULL,
+  `amount` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `customer_fee` decimal(10,2) DEFAULT 0.00,
+  `channel_fee` decimal(10,2) DEFAULT 0.00,
+  `customer_email` varchar(150) DEFAULT NULL,
+  `customer_mobile` varchar(30) DEFAULT NULL,
+  `customer_name` varchar(150) DEFAULT NULL,
+  `payment_status` varchar(50) DEFAULT 'PENDING',
+  `settlement_status` varchar(50) DEFAULT 'PENDING',
+  `gateway_response` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`gateway_response`)),
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1034,12 +1126,13 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `firstname`, `lastname`, `email`, `mobile`, `password`, `role`, `created_at`) VALUES
 (4, 'Akademus', 'Admin', 'admin@akademus.edu.ph', '09000000000', NULL, 'admin', '2026-03-13 04:52:57'),
-(11, 'Josh', 'Baquiano', 'joshbaquiano@gmail.com', '09123456789', NULL, 'applicant', '2026-03-17 07:45:01'),
 (24, 'THEODORE', 'ABELLA', 'abellatheodore@gmail.com', NULL, '$2y$10$z7gKQrGtX80bRKU79vRMce5o2kns8dC0MZtj5zfqOBk.S9o500buS', 'admission_officer', '2026-03-31 05:46:48'),
 (25, 'John', 'Doe', 'testakademusmentora@gmail.com', '09762402857', NULL, 'applicant', '2026-03-31 08:45:27'),
 (26, 'Paul', 'Mapula', 'mapula.pauljoshua@gmail.com', '09958541242', NULL, 'applicant', '2026-04-14 04:53:17'),
 (27, 'Paul', 'Mapula', '2022-02519@sanbeda.edu.ph', NULL, '$2y$10$81OPIQ2HKNKVedfA929BDOtUODlHg5iNSF5I6MHnSuRJ91IeInwqu', 'admission_officer', '2026-04-14 05:07:18'),
-(30, 'Ethan', 'Nemenzo', 'ushuay_man@yahoo.com', '09958541242', NULL, 'applicant', '2026-04-16 01:01:41');
+(30, 'Ethan', 'Nemenzo', 'ushuay_man@yahoo.com', '09958541242', NULL, 'applicant', '2026-04-16 01:01:41'),
+(31, 'Josh', 'Baquiano', 'joshbaquiano@gmail.com', '09123456789', NULL, 'applicant', '2026-05-06 08:49:19'),
+(32, 'Josh', 'Baquiano', 'jbaquiano@gmail.com', NULL, '$2y$10$LOXla3OL4ppcct0tF/4b5.H/dvikr1QRTBfi13Je8jXQSWsiq00Ny', 'admission_officer', '2026-05-06 08:52:07');
 
 -- --------------------------------------------------------
 
@@ -1367,6 +1460,14 @@ ALTER TABLE `requirement_categories`
   ADD PRIMARY KEY (`category_id`);
 
 --
+-- Indexes for table `smartpay_transactions`
+--
+ALTER TABLE `smartpay_transactions`
+  ADD PRIMARY KEY (`smartpay_transaction_id`),
+  ADD UNIQUE KEY `uniq_reference_number` (`reference_number`),
+  ADD KEY `idx_payment_id` (`payment_id`);
+
+--
 -- Indexes for table `theme_settings`
 --
 ALTER TABLE `theme_settings`
@@ -1400,13 +1501,13 @@ ALTER TABLE `admin_credentials`
 -- AUTO_INCREMENT for table `applicants`
 --
 ALTER TABLE `applicants`
-  MODIFY `applicant_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `applicant_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `applicant_documents`
 --
 ALTER TABLE `applicant_documents`
-  MODIFY `document_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `document_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- AUTO_INCREMENT for table `applications`
@@ -1442,7 +1543,7 @@ ALTER TABLE `educational_backgrounds`
 -- AUTO_INCREMENT for table `email_queue`
 --
 ALTER TABLE `email_queue`
-  MODIFY `email_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `email_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT for table `exam_bookings`
@@ -1520,7 +1621,7 @@ ALTER TABLE `payment_fee_type`
 -- AUTO_INCREMENT for table `payment_method`
 --
 ALTER TABLE `payment_method`
-  MODIFY `payment_method_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `payment_method_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `personal_informations`
@@ -1577,6 +1678,12 @@ ALTER TABLE `requirement_categories`
   MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
+-- AUTO_INCREMENT for table `smartpay_transactions`
+--
+ALTER TABLE `smartpay_transactions`
+  MODIFY `smartpay_transaction_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `theme_settings`
 --
 ALTER TABLE `theme_settings`
@@ -1586,7 +1693,7 @@ ALTER TABLE `theme_settings`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- Constraints for dumped tables
@@ -1667,6 +1774,12 @@ ALTER TABLE `program_requirement_categories`
 --
 ALTER TABLE `requirements`
   ADD CONSTRAINT `requirements_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `requirement_categories` (`category_id`);
+
+--
+-- Constraints for table `smartpay_transactions`
+--
+ALTER TABLE `smartpay_transactions`
+  ADD CONSTRAINT `fk_smartpay_payment` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`payment_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

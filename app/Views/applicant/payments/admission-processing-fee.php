@@ -89,7 +89,7 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
     <!-- ── Step 1: Send Payment ───────────────────────────────────── -->
     <div class="apf-section card">
         <div class="apf-section__header">
-            <div class="apf-step-badge">Step 1</div>
+            <div class="apf-step-badge">Option 1</div>
             <h3 class="apf-section__title">Send Your Payment</h3>
         </div>
 
@@ -197,7 +197,7 @@ $badge = $status ? ($statusConfig[$status] ?? null) : null;
     <?php if (! $isLocked): ?>
         <div class="apf-section card">
             <div class="apf-section__header">
-                <div class="apf-step-badge">Step 2</div>
+                <div class="apf-step-badge">Option 2</div>
                 <h3 class="apf-section__title">Upload Proof of Payment</h3>
             </div>
 
