@@ -30,10 +30,10 @@ $routes->get('sign-up', 'Auth\AuthController::sign_up');
 $routes->post('sign-up/register', 'Auth\AuthController::register');
 $routes->post('sign-in/login', 'Auth\AuthController::login');
 
-$routes->get ('logout',                  'Auth\AuthController::logout');
+$routes->get('logout',                  'Auth\AuthController::logout');
 $routes->post('change-password',         'Auth\AuthController::changePassword');
 $routes->post('forgot-password',         'Auth\AuthController::forgotPassword');
-$routes->get ('reset-password/(:segment)','Auth\AuthController::showResetForm/$1');
+$routes->get('reset-password/(:segment)', 'Auth\AuthController::showResetForm/$1');
 $routes->post('reset-password',          'Auth\AuthController::processReset');
 
 $routes->get('success', 'Auth\AuthController::success');
@@ -51,7 +51,7 @@ $routes->post('applicant-form/get-drafts', 'Applicant\ApplicantFormController::g
 $routes->get('tracking-progress', 'Applicant\TrackingProgressController::index');
 
 // Applicant Exam Schedule (only accessible when exam_enabled = 1)
-$routes->get ('exam-schedule',        'Applicant\ExamScheduleController::index');
+$routes->get('exam-schedule',        'Applicant\ExamScheduleController::index');
 $routes->post('exam-schedule/book',   'Applicant\ExamScheduleController::book');
 $routes->post('exam-schedule/cancel', 'Applicant\ExamScheduleController::cancel');
 
@@ -71,7 +71,7 @@ $routes->post('admin/login', 'ThemeController::adminLoginPost');
 $routes->get('admin/logout', 'ThemeController::adminLogout');
 
 // Admin User Management
-$routes->get ('admin/users',                          'Admin\UsersController::index');
+$routes->get('admin/users',                          'Admin\UsersController::index');
 $routes->post('admin/users/store',                    'Admin\UsersController::store');
 $routes->post('admin/users/(:num)/update',            'Admin\UsersController::update/$1');
 $routes->post('admin/users/(:num)/reset-password',    'Admin\UsersController::resetPassword/$1');
@@ -92,6 +92,12 @@ $routes->post('admission-processing-fee/submit', 'Payment\AdmissionProcessingFee
 $routes->get('reservation-fee',         'Payment\ReservationFeeController::index');
 $routes->post('reservation-fee/submit', 'Payment\ReservationFeeController::store');
 
+// SMART PAY Webhook
+$routes->post(
+    'smartpay/webhook',
+    'Payment\SmartpayWebhookController::index'
+);
+
 // Admin — fee amount settings only (no payment review)
 $routes->get('admin/payment-fees',                        'Admin\PaymentFeesController::fees');
 $routes->post('admin/payment-fees/update/(:num)',          'Admin\PaymentFeesController::updateFee/$1');
@@ -106,7 +112,7 @@ $routes->get('admission-officer/payments/(:num)/proof',    'AdmissionOfficer\Pay
 // ----------------------------------------------------------------------------- //
 
 // Admin System Settings
-$routes->get ('admin/settings',      'Admin\SettingsController::index');
+$routes->get('admin/settings',      'Admin\SettingsController::index');
 $routes->post('admin/settings/save', 'Admin\SettingsController::save');
 
 
@@ -117,8 +123,8 @@ $routes->get('faq', 'Applicant\FaqController::index');
 $routes->get('tuition-fee-calculator', 'Applicant\TuitionFeeCalculatorController::tuitionCalculator');
 
 // Admin Form Field Manager
-$routes->get ('admin/form-fields',                     'Admin\FormFields::index');
-$routes->get ('admin/form-fields/page-data',           'Admin\FormFields::pageData');
+$routes->get('admin/form-fields',                     'Admin\FormFields::index');
+$routes->get('admin/form-fields/page-data',           'Admin\FormFields::pageData');
 $routes->post('admin/form-fields/save',                'Admin\FormFields::save');
 $routes->post('admin/form-fields/reset',               'Admin\FormFields::reset');
 
@@ -140,20 +146,20 @@ $routes->get('admin/presets/(:num)/delete',      'Admin\PresetsController::delet
 $routes->get('admin/presets/(:num)/json',        'Admin\PresetsController::getPresetJson/$1');
 
 // Admin Requirement Categories Manager
-$routes->get ('admin/requirement-categories',                        'Admin\RequirementCategoriesController::index');
-$routes->get ('admin/requirement-categories/create',                 'Admin\RequirementCategoriesController::create');
+$routes->get('admin/requirement-categories',                        'Admin\RequirementCategoriesController::index');
+$routes->get('admin/requirement-categories/create',                 'Admin\RequirementCategoriesController::create');
 $routes->post('admin/requirement-categories/store',                  'Admin\RequirementCategoriesController::store');
-$routes->get ('admin/requirement-categories/(:num)/edit',            'Admin\RequirementCategoriesController::edit/$1');
+$routes->get('admin/requirement-categories/(:num)/edit',            'Admin\RequirementCategoriesController::edit/$1');
 $routes->post('admin/requirement-categories/(:num)/update',          'Admin\RequirementCategoriesController::update/$1');
-$routes->get ('admin/requirement-categories/(:num)/delete',          'Admin\RequirementCategoriesController::delete/$1');
+$routes->get('admin/requirement-categories/(:num)/delete',          'Admin\RequirementCategoriesController::delete/$1');
 
 // Admin Program Management (CRUD)
-$routes->get ('admin/programs',                  'Admin\CoursesController::index');
-$routes->get ('admin/programs/create',           'Admin\CoursesController::create');
+$routes->get('admin/programs',                  'Admin\CoursesController::index');
+$routes->get('admin/programs/create',           'Admin\CoursesController::create');
 $routes->post('admin/programs/create',           'Admin\CoursesController::create');
-$routes->get ('admin/programs/(:num)/edit',      'Admin\CoursesController::edit/$1');
+$routes->get('admin/programs/(:num)/edit',      'Admin\CoursesController::edit/$1');
 $routes->post('admin/programs/(:num)/edit',      'Admin\CoursesController::edit/$1');
-$routes->get ('admin/programs/(:num)/delete',    'Admin\CoursesController::delete/$1');
+$routes->get('admin/programs/(:num)/delete',    'Admin\CoursesController::delete/$1');
 
 // Admin Program-Preset Management
 $routes->get('admin/programs/presets',           'Admin\ProgramPresetsController::index');
@@ -167,9 +173,9 @@ $routes->post('admin/programs/assign-preset',    'Admin\ProgramPresetsController
 $routes->get('api/presets/program/(:num)',       'Admin\PresetsController::getFormPagesForApplicant/$1');
 
 // Admission Officer Auth
-$routes->get ('admission-officer/login',  'AdmissionOfficer\AuthController::login');
+$routes->get('admission-officer/login',  'AdmissionOfficer\AuthController::login');
 $routes->post('admission-officer/login',  'AdmissionOfficer\AuthController::loginPost');
-$routes->get ('admission-officer/logout', 'AdmissionOfficer\AuthController::logout');
+$routes->get('admission-officer/logout', 'AdmissionOfficer\AuthController::logout');
 
 // Admission Officer Dashboard
 $routes->get('admission-officer/dashboard',             'AdmissionOfficer\DashboardController::index');
@@ -200,18 +206,18 @@ $routes->post('admission-officer/exam-schedule/bookings/check-in/(:num)', 'Admis
 $routes->post('admission-officer/exam-schedule/bookings/cancel/(:num)', 'AdmissionOfficer\ExamScheduleController::cancelBooking/$1');
 
 // Admission Officer Follow-Up Messages
-$routes->get ('admission-officer/follow-up',                        'AdmissionOfficer\FollowUpController::index');
-$routes->get ('admission-officer/follow-up/(:num)',                  'AdmissionOfficer\FollowUpController::conversation/$1');
+$routes->get('admission-officer/follow-up',                        'AdmissionOfficer\FollowUpController::index');
+$routes->get('admission-officer/follow-up/(:num)',                  'AdmissionOfficer\FollowUpController::conversation/$1');
 $routes->post('admission-officer/follow-up/send',                    'AdmissionOfficer\FollowUpController::send');
-$routes->get ('admission-officer/follow-up/messages',                'AdmissionOfficer\FollowUpController::fetchMessages');
-$routes->get ('admission-officer/follow-up/conversations',           'AdmissionOfficer\FollowUpController::fetchConversations');
-$routes->get ('admission-officer/follow-up/unread-count',            'AdmissionOfficer\FollowUpController::unreadCount');
+$routes->get('admission-officer/follow-up/messages',                'AdmissionOfficer\FollowUpController::fetchMessages');
+$routes->get('admission-officer/follow-up/conversations',           'AdmissionOfficer\FollowUpController::fetchConversations');
+$routes->get('admission-officer/follow-up/unread-count',            'AdmissionOfficer\FollowUpController::unreadCount');
 
 // Applicant Follow-Up Messages
-$routes->get ('follow-up-messages',             'Applicant\FollowUpController::index');
+$routes->get('follow-up-messages',             'Applicant\FollowUpController::index');
 $routes->post('follow-up-messages/send',        'Applicant\FollowUpController::send');
-$routes->get ('follow-up-messages/fetch',       'Applicant\FollowUpController::fetchMessages');
-$routes->get ('follow-up-messages/unread-count','Applicant\FollowUpController::unreadCount');
+$routes->get('follow-up-messages/fetch',       'Applicant\FollowUpController::fetchMessages');
+$routes->get('follow-up-messages/unread-count', 'Applicant\FollowUpController::unreadCount');
 // Tracking Progress
 $routes->get('tracking-progress', 'Applicant\TrackingProgressController::index');
 

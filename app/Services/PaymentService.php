@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Applicant\ApplicantModel;
+
+use App\Models\Payment\PaymentModel;
 use App\Models\Payment\PaymentFeeTypeModel;
 use App\Models\User\UserModel;
 
@@ -12,6 +14,8 @@ class PaymentService
     protected $paymentFeeTypeModel;
     protected $userModel;
 
+    protected $paymentModel;
+    protected $smartPayTransactionModel
     /*
     |--------------------------------------------------------------------------
     | Smartpay Configuration
@@ -245,10 +249,84 @@ class PaymentService
 
         /*
         |--------------------------------------------------------------------------
-        | TODO:
-        | Save transaction to database
+        | Create payment record
         |--------------------------------------------------------------------------
         */
+
+        $paymentId = $this->paymentModel->insert([
+
+            'applicant_id' => $applicantId,
+
+            'payment_fee_type_id' =>
+                $paymentFeeType['payment_fee_type_id'],
+
+            'reference_num' =>
+                $serviceReference,
+
+            'amount_paid' =>
+                $paymentFeeType['amount'],
+
+            'payment_status' => 'PENDING',
+
+            'payment_date' => null,
+
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Save SmartPay transaction
+        |--------------------------------------------------------------------------
+        */
+
+        $this->smartpayTransactionModel->insert([
+
+            'payment_id' => $paymentId,
+
+            'reference_number' =>
+                $decodedResponse['data']['reference_number']
+                ?? null,
+
+            'service_reference' =>
+                $serviceReference,
+
+            'merchant' =>
+                $decodedResponse['data']['merchant']
+                ?? null,
+
+            'merchant_service' =>
+                $decodedResponse['data']['merchant_service']
+                ?? null,
+
+            'payment_channel' =>
+                $paymentMethod,
+
+            'amount' =>
+                $paymentFeeType['amount'],
+
+            'customer_email' =>
+                $user['email'],
+
+            'customer_mobile' =>
+                $user['mobile'] ?? null,
+
+            'customer_name' =>
+                trim(
+                    $user['firstname']
+                    . ' '
+                    . $user['lastname']
+                ),
+
+            'payment_status' => 'PENDING',
+
+            'settlement_status' => 'PENDING',
+
+            'gateway_response' =>
+                json_encode($decodedResponse),
+
+            'created_at' =>
+                date('Y-m-d H:i:s'),
+        ]);
 
         /*
         |--------------------------------------------------------------------------
