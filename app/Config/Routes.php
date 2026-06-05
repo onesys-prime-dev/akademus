@@ -11,8 +11,9 @@ $routes->get('applynowpage', 'ApplyNow::index');
 
 
 //About us
-
-$routes->get('about', 'AboutController::index');
+$routes->get('about',    'AboutController::index');
+$routes->get('contact',  'ContactController::index');
+$routes->get('features', 'FeaturesController::index');
 
 // sign and sign up page after clicking the 'Apply Now' Button
 $routes->get('sign-in', 'Auth\AuthController::sign_in');
