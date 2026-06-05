@@ -7,6 +7,7 @@ use App\Controllers\BaseController;
 
 use App\Services\RequirementService;
 use App\Services\ApplicantDocumentService;
+use App\Services\NotificationService;
 
 use App\Models\ThemeModel;
 
@@ -14,11 +15,12 @@ class RequirementsController extends BaseController
 {
     protected $requirementService;
     protected $documentService;
-
+    protected $notificationService;
 
     public function __construct() {
         $this->requirementService = new RequirementService();
         $this->documentService = new ApplicantDocumentService();
+        $this->notificationService = new NotificationService();
     }
 
     public function index() {
@@ -50,6 +52,10 @@ class RequirementsController extends BaseController
         $application = $db->table('applications')->where('applicant_id', $applicant_id)->get()->getRowArray();
         $application_status = $application['application_status'] ?? '';
 
+        $requiredDocsVerified = $program_id && $applicant_id
+            ? $this->documentService->allRequiredVerified($applicant_id, $program_id)
+            : false;
+
         return view('applicant/main', [
             'title'              => 'Requirements',
             'page_content'       => 'applicant/requirements/requirements',
@@ -58,6 +64,7 @@ class RequirementsController extends BaseController
             'categories'         => $categories,
             'theme'              => $theme,
             'application_status' => $application_status,
+            'requiredDocsVerified' => $requiredDocsVerified,
         ]);
     }
 
@@ -102,7 +109,7 @@ class RequirementsController extends BaseController
             $requirements = $this->requirementService->getStepRequirements($program_id, $step);
 
             $category_name = $category['category_name'];
-            $category_description = $category['category_description'];
+            $category_description = $category['description'];
         }
 
         $applicant_id = session()->get('applicant_id');
@@ -151,7 +158,36 @@ class RequirementsController extends BaseController
 
         $files = $this->request->getFiles();
 
-        $this->documentService->insertDocuments($applicant_id, $files);
+        $uploaded = $this->documentService->insertDocuments($applicant_id, $files);
+
+        // 🔥 trigger per document
+        foreach ($uploaded as $doc) {
+            $this->notificationService->trigger(
+                'requirements.uploaded',
+                $applicant_id,
+                [
+                    'requirement_name' => $doc['requirement_name']
+                ]
+            );
+        }
+
+        // 🔥 NEW: check completion
+        $program_id = session()->get('selected_program_id') ?? session()->get('program_id');
+
+        if ($this->documentService->allRequiredCompleted($applicant_id, $program_id)) {
+
+            $key = "requirements_completed_{$applicant_id}";
+
+            if (! $this->alreadyQueued($key)) {
+
+                $this->notificationService->trigger(
+                    'requirements.completed',
+                    $applicant_id,
+                    [],
+                    $key
+                );
+            }
+        }
 
         return $this->response->setJSON([
             'status' => 'success'
@@ -199,5 +235,13 @@ class RequirementsController extends BaseController
             ->update(['application_status' => 'pending']);
 
         return $this->response->setJSON(['status' => 'success']);
+    }
+
+    private function alreadyQueued($key)
+    {
+        return db_connect()->table('email_queue')
+            ->where('notification_key', $key)
+            ->get()
+            ->getRowArray() !== null;
     }
 }

@@ -13,8 +13,13 @@
 
         <div class="documents-progress-container">
             <div class="documents-progress-bar">
-                <div class="documents-current-progress <?= $docBarClass ?>"
-                     style="width:<?= $doc_progress ?>%"></div>
+                <div
+                    class="documents-current-progress"
+                    style="
+                        width: <?= esc($docBar['width']) ?>;
+                        background-color: <?= esc($docBar['color']) ?>;
+                    "
+                ></div>
             </div>
             <div class="documents-progress-legend-container">
                 <div class="document-progress-legend">
@@ -98,7 +103,7 @@
 
     <div class="bottom-dashboard-container">
         <span class="checklist-completed-container"><?= $doc_progress ?>% Completed</span>
-        <a href="<?= base_url('requirements') ?>" class="continue-dashboard-btn">
+        <a href="<?= base_url('requirements') ?>" class="continue-dashboard-btn btn-primary">
             <?= $doc_progress >= 100 ? 'Review' : 'Upload' ?>
         </a>
     </div>

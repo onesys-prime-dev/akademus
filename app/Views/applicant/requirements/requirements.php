@@ -136,7 +136,7 @@
 </div>
 
 <!-- Passed / Approved Modal -->
-<div id="req-passed-modal" class="req-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="req-passed-title" hidden>
+<div id="req-passed-modal" class="req-modal-backdrop <?= $requiredDocsVerified ? '' : 'hidden' ?>" role="dialog" aria-modal="true" aria-labelledby="req-passed-title" <?= $requiredDocsVerified ? '' : 'hidden' ?>>
     <div class="req-modal">
         <div class="req-modal__icon req-modal__icon--success">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"

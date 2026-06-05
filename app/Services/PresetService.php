@@ -6,6 +6,7 @@ use App\Models\PresetModel;
 use App\Models\PresetSectionModel;
 use App\Models\ProgramModel;
 use App\Models\FormPageModel;
+use App\Services\ProgramRequirementProjectionService;
 
 class PresetService
 {
@@ -110,7 +111,17 @@ class PresetService
             'is_active'   => 1,
         ];
 
-        return $this->presetModel->createPresetWithSections($presetData, $formPageIds, $categoryIds);
+        $presetId = $this->presetModel->createPresetWithSections(
+            $presetData,
+            $formPageIds,
+            $categoryIds
+        );
+
+        // rebuild projection for programs already using this preset
+        (new ProgramRequirementProjectionService())
+            ->rebuildForPreset((int) $presetId);
+
+        return $presetId;
     }
 
     /**
@@ -124,7 +135,19 @@ class PresetService
             'is_global'   => $isGlobal ? 1 : 0,
         ];
 
-        return $this->presetModel->updatePresetWithSections($presetId, $presetData, $formPageIds, $categoryIds);
+        $ok = $this->presetModel->updatePresetWithSections(
+            $presetId,
+            $presetData,
+            $formPageIds,
+            $categoryIds
+        );
+
+        if ($ok) {
+            (new ProgramRequirementProjectionService())
+                ->rebuildForPreset((int) $presetId);
+        }
+
+        return $ok;
     }
 
     /**
@@ -145,10 +168,17 @@ class PresetService
      */
     public function assignPresetToProgram($programId, $presetId)
     {
-        return \Config\Database::connect()
+        $ok = \Config\Database::connect()
             ->table('programs')
             ->where('program_id', (int)$programId)
             ->update(['preset_id' => (int)$presetId]);
+
+        if ($ok) {
+            (new ProgramRequirementProjectionService())
+                ->rebuildForProgram((int)$programId);
+        }
+
+        return $ok;
     }
 
     /**

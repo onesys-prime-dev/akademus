@@ -1,20 +1,23 @@
 <!-- HOMEPAGE NAVBAR | homepage.php  -->
 <!-- HOMEPAGE NAVBAR | sidebar.php  -->
-<?php 
-    $firstname = session()->get('firstname') ?? 'Applicant';
-    $lastname  = session()->get('lastname')  ?? '';
-    $fullname  = trim($firstname . ' ' . $lastname);
+<?php
+$firstname = session()->get('firstname') ?? 'Applicant';
+$lastname  = session()->get('lastname')  ?? '';
+$fullname  = trim($firstname . ' ' . $lastname);
 
-    // Generate initials from name
-    $initials = strtoupper(substr($firstname, 0, 1) . substr($lastname, 0, 1));
-    if (empty(trim($initials))) $initials = 'AP';
+// Generate initials from name
+$initials = strtoupper(substr($firstname, 0, 1) . substr($lastname, 0, 1));
+if (empty(trim($initials))) $initials = 'AP';
 
-    $applicant_number = session()->get('applicant_number');
+$applicant_number = session()->get('applicant_number');
 
-    // Theme values
-    $app_name    = $theme['app_name']  ?? 'AKADEMUS';
-    $logo_url    = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png');
-    $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') === '1';
+// Theme values
+/** @var array $theme */
+$app_name    = $theme['app_name']  ?? 'AKADEMUS';
+$logo_url    = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png');
+$examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') === '1';
+
+$isApproved = (new \App\Models\Applicant\ApplicantModel())->getAppStatus('application_status', '') === 'approved';
 ?>
 
 <nav>
@@ -37,7 +40,7 @@
         <div class="sidebar-links">
             <div class="group-container">
                 <p>MENU</p>
-                
+
                 <?php $uri = uri_string(); ?>
                 <div class="grouped-links">
                     <a href="<?= base_url('/dashboard') ?>" class="sidebar-nav-link <?= $uri === 'dashboard' ? 'active' : '' ?>">
@@ -57,26 +60,48 @@
                         <span>Tracking Progress</span>
                     </a>
                     <?php if ($examEnabled): ?>
-                    <a href="<?= base_url('/exam-schedule') ?>" class="sidebar-nav-link <?= str_contains($uri, 'exam-schedule') ? 'active' : '' ?>">
-                        <div class="dotted-link"></div>
-                        <span>Exam Schedule</span>
-                    </a>
+                        <a href="<?= base_url('/exam-schedule') ?>" class="sidebar-nav-link <?= str_contains($uri, 'exam-schedule') ? 'active' : '' ?>">
+                            <div class="dotted-link"></div>
+                            <span>Exam Schedule</span>
+                        </a>
                     <?php endif; ?>
                 </div>
             </div>
 
             <div class="group-container">
-                <p>PAYMENTS</p>
+                <div class="group-title-row">
+                    <p>PAYMENTS</p>
+                </div>
                 <div class="grouped-links">
+
                     <a href="<?= base_url('/admission-processing-fee') ?>" class="sidebar-nav-link <?= str_contains($uri, 'admission-processing-fee') ? 'active' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Admission Processing Fee</span>
                     </a>
-                    <a href="<?= base_url('/reservation-fee') ?>" class="sidebar-nav-link <?= str_contains($uri, 'reservation-fee') ? 'active' : '' ?>">
+
+                    <a
+                        href="<?= $isApproved ? base_url('/reservation-fee') : 'javascript:void(0)' ?>"
+                        class="sidebar-nav-link <?= str_contains($uri, 'reservation-fee') ? 'active' : '' ?> <?= !$isApproved ? 'disabled-link' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Reservation Fee</span>
+
+                        <?php if (!$isApproved): ?>
+                            <div class="lock-help-wrap" onclick="this.classList.toggle('show-tip')">
+                                <!-- Lock icon -->
+                                <svg class="lock-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                </svg>
+
+                                <!-- Tooltip -->
+                                <div class="lock-tooltip">
+                                    unlocks after admission's approval
+                                </div>
+                            </div>
+                        <?php endif; ?>
                     </a>
                 </div>
+
             </div>
 
             <div class="group-container">
@@ -116,3 +141,13 @@
         </a>
     </div>
 </nav>
+
+<script>
+    document.addEventListener('click', function(e) {
+        document.querySelectorAll('.lock-help-wrap').forEach(el => {
+            if (!el.contains(e.target)) {
+                el.classList.remove('show-tip');
+            }
+        });
+    });
+</script>

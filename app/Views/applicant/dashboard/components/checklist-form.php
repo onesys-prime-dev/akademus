@@ -14,8 +14,13 @@
         <?php if ($form_total > 0): ?>
         <div class="documents-progress-container">
             <div class="documents-progress-bar">
-                <div class="documents-current-progress <?= $formBarClass ?>"
-                     style="width:<?= $form_progress ?>%"></div>
+                <div
+                    class="documents-current-progress"
+                    style="
+                        width: <?= esc($formBar['width']) ?>;
+                        background-color: <?= esc($formBar['color']) ?>;
+                    "
+                ></div>
             </div>
         </div>
         <?php endif; ?>
@@ -43,7 +48,7 @@
 
     <div class="bottom-dashboard-container">
         <span class="checklist-completed-container"><?= $form_completed ?> of <?= $form_total ?> completed</span>
-        <a href="<?= base_url('applicant-form') ?>" class="continue-dashboard-btn">
+        <a href="<?= base_url('applicant-form') ?>" class="continue-dashboard-btn btn-primary">
             <?= $form_completed >= $form_total && $form_total > 0 ? 'Review' : 'Continue' ?>
         </a>
     </div>

@@ -172,7 +172,7 @@
 
 .step-line {
     flex: 1;
-    height: 2px;
+    height: 1px;
     background-color: var(--border-muted);
 }
 
@@ -187,6 +187,7 @@
     border-radius: 100%;
     font-size: 13px;
     font-weight: 600;
+    color: rgba(0, 0, 0, 0.2);
 }
 
 .step-bottom .left-line,
@@ -203,19 +204,21 @@
 }
 
 /* Step states */
-.step-bar-done        { background-color: var(--primary); }
-.step-bar-inprogress  { background-color: var(--accent);  }
+.step-bar-done        { background-color: rgba(49, 166, 70, 0.35); }
+.step-bar-inprogress  { background-color: rgba(255, 178, 0, 0.35);  }
 
-.step-line-done       { background-color: var(--primary); }
-.step-line-inprogress { background-color: var(--accent);  }
+.step-line-done       { background-color: #31a646 }
+.step-line-inprogress { background-color: #ffb200;  }
 
 .step-circle-done {
-    background-color: var(--primary);
-    color: #ffffff;
+    border: 1px solid #31a646;
+    background-color: rgba(49, 166, 70, 0.15);
+    color: #31a646;
 }
 .step-circle-inprogress {
-    background-color: var(--accent);
-    color: var(--accent-text);
+    border: 1px solid #ffb200;
+    background-color: rgba(255, 178, 0, 0.15);
+    color: #ffb200;
 }
 
 .step-label-done {
@@ -296,14 +299,13 @@
 }
 
 .documents-current-progress {
-    height: 10px;
-    border-radius: 10px;
-    background-color: var(--border-muted);
-    transition: width 0.4s ease;
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    transition:
+        width 0.4s ease,
+        background-color 0.4s ease;
 }
-
-.documents-current-progress.progress-inprogress { background-color: var(--accent);  }
-.documents-current-progress.progress-done       { background-color: var(--primary); }
 
 .documents-progress-legend-container {
     display: flex;

@@ -41,15 +41,16 @@
                     <!-- Trigger button (styled to match the existing select) -->
                     <div id="prog-trigger" style="
                         display:flex;align-items:center;justify-content:space-between;
-                        padding:0 16px;height:44px;
-                        border:1.5px solid rgba(255,255,255,0.3);
-                        border-radius:10px;cursor:pointer;
-                        background:rgba(255,255,255,0.25);backdrop-filter:blur(6px);
+                        padding:0 16px;height:45px;
+                        border:1px solid #D9D9D9;
+                        border-radius:22px;cursor:pointer;
+                        background:rgba(255, 255, 255, 0.6);
                         user-select:none;font-size:14px;
+                        opacity:60%;
                     ">
-                        <span id="prog-display" style="color:rgba(255,255,255,0.55);">Select a Program</span>
+                        <span id="prog-display" style="color:rgb(104, 104, 104, 0.65);font-weight:500;font-size:14px;">Select a Program</span>
                         <svg id="prog-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                             stroke="rgba(255,255,255,0.55)" stroke-width="2.5"
+                             stroke="rgba(37, 37, 37, 0.55)" stroke-width="2.5"
                              style="flex-shrink:0;transition:transform .2s;">
                             <polyline points="6 9 12 15 18 9"/>
                         </svg>

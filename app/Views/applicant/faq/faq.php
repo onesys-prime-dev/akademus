@@ -580,9 +580,16 @@ async function sendMessage(text = null) {
     showTyping();
 
     try {
-        const res = await fetch(FAQ_GROQ_URL, {
+        const res = await fetch('<?= base_url('api/groq/chat') ?>', {
             method: 'POST',
+<<<<<<< HEAD
             headers: { 'Content-Type': 'application/json' },
+=======
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+>>>>>>> shuay-branch
             body: JSON.stringify({
                 messages: [
                     { role: 'system', content: SYSTEM_PROMPT },
@@ -590,6 +597,8 @@ async function sendMessage(text = null) {
                 ]
             })
         });
+
+        if (!res.ok) throw new Error('Server error');
 
         const data = await res.json();
         removeTyping();

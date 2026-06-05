@@ -97,7 +97,7 @@ $fields = get_field_configs(4);
                                 <input type="number" name="school_year_start"
                                        placeholder="<?= esc(field_placeholder($fields, 'school_year_start', 'e.g. 2024')) ?>"
                                        value="<?= esc($data['school_year_start'] ?? '') ?>"
-                                       min="2000" max="2099" style="width:90px;"
+                                       min="2000" max="2099"
                                        <?= field_required($fields, 'school_year_start') ? 'required' : '' ?>>
                                 <?php endif; ?>
                                 <?php if (field_visible($fields, 'school_year_start') && field_visible($fields, 'school_year_end')): ?>
@@ -107,7 +107,7 @@ $fields = get_field_configs(4);
                                 <input type="number" name="school_year_end"
                                        placeholder="<?= esc(field_placeholder($fields, 'school_year_end', 'e.g. 2025')) ?>"
                                        value="<?= esc($data['school_year_end'] ?? '') ?>"
-                                       min="2000" max="2099" style="width:90px;"
+                                       min="2000" max="2099"
                                        <?= field_required($fields, 'school_year_end') ? 'required' : '' ?>>
                                 <?php endif; ?>
                             </div>

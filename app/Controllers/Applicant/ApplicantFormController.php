@@ -11,9 +11,17 @@ use App\Models\Application\FamilyBackgroundModel;
 use App\Models\Application\EducationalBackgroundModel;
 use App\Models\FormPageModel;
 use App\Models\ThemeModel;
+use App\Services\NotificationService;
 
 class ApplicantFormController extends BaseController
 {
+    protected NotificationService $notificationService;
+
+    public function __construct()
+    {
+        $this->notificationService = new NotificationService();
+    }
+    
     private function getEnabledPages(): array
     {
         $programId = session()->get('selected_program_id');
@@ -220,6 +228,10 @@ class ApplicantFormController extends BaseController
         $isLastStep = ($step === count($pages));
         if ($isLastStep && $action === 'submit') {
             $applicationModel->update($applicationId, ['application_status' => 'pending']);
+
+            $this->notificationService->trigger('application.submitted', $applicantId, [
+                'application_id' => $applicationId,
+            ]);
         }
 
         // When program is selected on step 1, store it in session so presets load correctly

@@ -8,6 +8,7 @@ use App\Models\Payment\PaymentModel;
 use App\Models\Payment\PaymentFeeTypeModel;
 use App\Models\Payment\PaymentMethodModel;
 use App\Models\Payment\PaymentMethodAccountModel;
+use App\Services\NotificationService;
 
 class AdmissionProcessingFeeController extends BaseController
 {
@@ -15,6 +16,7 @@ class AdmissionProcessingFeeController extends BaseController
     protected $methodModel;
     protected $accountModel;
     protected $feeModel;
+    protected $notificationService;
 
     // const FEE_AMOUNT = 500.00;
 
@@ -24,6 +26,7 @@ class AdmissionProcessingFeeController extends BaseController
         $this->methodModel  = new PaymentMethodModel();
         $this->accountModel = new PaymentMethodAccountModel();
         $this->feeModel     = new PaymentFeeTypeModel();
+        $this->notificationService = new NotificationService();
     }
 
     public function admissionProcessingFee()
@@ -170,6 +173,8 @@ class AdmissionProcessingFeeController extends BaseController
             @unlink($uploadDir . $newFileName);
             return $this->jsonError('Could not record your payment. Please try again.');
         }
+
+        $this->notificationService->trigger('admission_fee.pending', $applicantId, ['reference_num' => $referenceNum]);
 
         return $this->jsonSuccess(
             'Your payment has been submitted and is awaiting verification by the finance office.'

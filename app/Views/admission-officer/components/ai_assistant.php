@@ -1,4 +1,8 @@
 <!-- AKADEMUS | Admission Officer AI Assistant Widget -->
+<?php 
+    $groqKey = env('api.groqKey');
+    $groqURL = env('api.groqURL');
+?>
 
 <style>
 .ao-fab {
@@ -215,8 +219,6 @@
 </div>
 
 <script>
-const AO_GROQ_URL = '<?= base_url('api/groq/officer') ?>';
-
 const AO_SCHOOL   = '<?= esc($theme['app_name'] ?? 'the school') ?>';
 const AO_YEAR     = '<?= esc($theme['school_year'] ?? '') ?>';
 const AO_STATUS   = '<?= esc($theme['admission_status'] ?? 'Open') ?>';
@@ -296,9 +298,18 @@ async function aoSend(text = null) {
     aoShowTyping();
 
     try {
-        const res = await fetch(AO_GROQ_URL, {
+        btn.disabled = true;
+
+        const res = await fetch('<?= base_url('api/groq/chat') ?>', {
             method: 'POST',
+<<<<<<< HEAD
             headers: { 'Content-Type': 'application/json' },
+=======
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+>>>>>>> shuay-branch
             body: JSON.stringify({
                 messages: [
                     { role: 'system', content: AO_SYSTEM },
@@ -307,16 +318,22 @@ async function aoSend(text = null) {
             })
         });
 
+        if (!res.ok) throw new Error('Server error');
+
         const data = await res.json();
         aoRemoveTyping();
 
-        const reply = data.choices?.[0]?.message?.content ?? "Sorry, I couldn't process that. Please try again.";
+        const reply =
+            data.choices?.[0]?.message?.content ||
+            data.error?.message ||
+            "Sorry, I couldn't process that.";
+
         aoAppend('bot', aoEsc(reply).replace(/\n/g, '<br>'));
         aoHistory.push({ role: 'assistant', content: reply });
 
-    } catch {
+    } catch (err) {
         aoRemoveTyping();
-        aoAppend('bot', 'Connection issue. Please check your internet and try again.');
+        aoAppend('bot', 'Connection issue. Please try again.');
     } finally {
         btn.disabled = false;
         input.focus();
