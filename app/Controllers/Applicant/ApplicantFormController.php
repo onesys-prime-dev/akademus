@@ -48,8 +48,17 @@ class ApplicantFormController extends BaseController
         return $map[$pageId] ?? [];
     }
 
+    private function requireLogin(): void
+    {
+        if (!session()->get('logged_in')) {
+            redirect()->to('sign-in')->send();
+            exit;
+        }
+    }
+
     public function index()
     {
+        $this->requireLogin();
         $applicantId = session()->get('applicant_id');
 
         // Restore program from any existing application (draft or submitted)
@@ -101,6 +110,7 @@ class ApplicantFormController extends BaseController
 
     public function getStep(int $step)
     {
+        $this->requireLogin();
         $pages    = $this->getEnabledPages();
         $maxSteps = count($pages);
 
@@ -157,6 +167,7 @@ class ApplicantFormController extends BaseController
 
     public function updateForm(int $step)
     {
+        $this->requireLogin();
         $data   = $this->request->getPost();
         $action = $data['action'] ?? 'draft';
 

@@ -8,6 +8,14 @@ class ApplicantDocumentService
 {
     protected $applicantDocumentModel;
 
+    private const ALLOWED_MIME_TYPES = [
+        'application/pdf',
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/webp',
+    ];
+
     public function __construct() {
         $this->applicantDocumentModel = new ApplicantDocumentModel();
     }
@@ -20,12 +28,16 @@ class ApplicantDocumentService
         $uploadPath = WRITEPATH . "uploads/applicants/{$applicant_id}/";
 
         if (!is_dir($uploadPath)) {
-            mkdir($uploadPath, 0777, true);
+            mkdir($uploadPath, 0755, true);
         }
 
         foreach ($files['documents'] as $program_requirement_id => $file) {
 
             if (!$file->isValid() || $file->getError() == 4) {
+                continue;
+            }
+
+            if (!in_array($file->getMimeType(), self::ALLOWED_MIME_TYPES, true)) {
                 continue;
             }
 

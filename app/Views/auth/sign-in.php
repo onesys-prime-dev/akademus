@@ -7,6 +7,7 @@
         action="<?= base_url('sign-in/login') ?>"
         method="post"
     >
+        <?= csrf_field() ?>
         <div class="input-container">
             <div class="input-field">
                 <label for="email">EMAIL ADDRESS</label>
