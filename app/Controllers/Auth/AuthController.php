@@ -230,6 +230,12 @@ class AuthController extends BaseController
             ]);
         }
 
+        if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) {
+            $db->table('applicants')
+                ->where('applicant_id', $user['applicant_id'])
+                ->update(['password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT)]);
+        }
+
         session()->set([
             'user_id'          => $user['user_id'],
             'firstname'        => $user['firstname'],
@@ -255,16 +261,16 @@ class AuthController extends BaseController
             $rememberTokenModel->insert([
                 'user_id'    => $user['user_id'],
                 'token'      => hash('sha256', $token),
-                'expires_at' => date('Y-m-d H:i:s', time() + 60), // testing only
+                'expires_at' => date('Y-m-d H:i:s', time() + (30 * 24 * 60 * 60)),
             ]);
 
             setcookie(
                 'remember_token',
                 $token,
-                time() + 60, // testing only
+                time() + (30 * 24 * 60 * 60),
                 '/',
                 '',
-                false,
+                ENVIRONMENT === 'production',
                 true
             );
         }

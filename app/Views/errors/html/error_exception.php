@@ -34,7 +34,7 @@ $errorId = uniqid('error', true);
             <p>
                 <?= nl2br(esc($exception->getMessage())) ?>
                 <a href="https://www.duckduckgo.com/?q=<?= urlencode($title . ' ' . preg_replace('#\'.*\'|".*"#Us', '', $exception->getMessage())) ?>"
-                   rel="noreferrer" target="_blank">search &rarr;</a>
+                   rel="noopener noreferrer" target="_blank">search &rarr;</a>
             </p>
         </div>
     </div>
@@ -64,7 +64,7 @@ $errorId = uniqid('error', true);
 
     <?= nl2br(esc($prevException->getMessage())) ?>
     <a href="https://www.duckduckgo.com/?q=<?= urlencode($prevException::class . ' ' . preg_replace('#\'.*\'|".*"#Us', '', $prevException->getMessage())) ?>"
-       rel="noreferrer" target="_blank">search &rarr;</a>
+       rel="noopener noreferrer" target="_blank">search &rarr;</a>
     <?= esc(clean_path($prevException->getFile()) . ':' . $prevException->getLine()) ?>
     </pre>
 

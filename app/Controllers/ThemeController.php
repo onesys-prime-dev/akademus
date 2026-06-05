@@ -44,6 +44,12 @@ class ThemeController extends BaseController
             return redirect()->back()->with('error', 'Invalid credentials');
         }
 
+        if (password_needs_rehash($user['admin_password'], PASSWORD_DEFAULT)) {
+            $db->table('admin_credentials')
+                ->where('user_id', $user['user_id'])
+                ->update(['password' => password_hash($password, PASSWORD_DEFAULT)]);
+        }
+
         session()->set([
             'admin_logged_in' => true,
             'admin_id'        => $user['user_id'],
@@ -123,7 +129,7 @@ class ThemeController extends BaseController
             return $this->response->setJSON(['status' => 'success', 'message' => 'Theme saved!']);
         }
 
-        return redirect()->to('admin/theme')->with('saved', true);
+        return redirect()->to('admin/theme')->with('saved', '1');
     }
 
     // ── Theme Preview (iframe) ────────────────────────────────

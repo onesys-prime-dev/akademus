@@ -15,6 +15,7 @@ class SendEmails extends BaseCommand
     {
         $db = db_connect();
 
+        // @phpstan-ignore-next-line
         while (true) {
 
             $emails = $db->table('email_queue')

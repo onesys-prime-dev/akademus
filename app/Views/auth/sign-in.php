@@ -8,7 +8,6 @@
         method="post"
     >
         <?= csrf_field() ?>
-        method="post">
         <div class="input-container">
             <div class="input-field">
                 <label for="email">EMAIL ADDRESS</label>

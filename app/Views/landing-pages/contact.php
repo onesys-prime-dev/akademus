@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="<?= base_url("assets/css/pages/landing-pages/header.css") . '?v=' . time(); ?>">
     <link rel="stylesheet" href="<?= base_url("assets/css/pages/landing-pages/footer.css") . '?v=' . time(); ?>">
     <link rel="stylesheet" href="<?= base_url("assets/css/pages/landing-pages/contact.css") . '?v=' . time(); ?>">
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js" integrity="sha256-BS9pFqIbpb4UA2ZDnoG4StETY8hN+6KgbyCMe0pvbV8=" crossorigin="anonymous"></script>
     <script>
         (function(){
             emailjs.init({ publicKey: "mOcc2uSM1tqbRywYU" });

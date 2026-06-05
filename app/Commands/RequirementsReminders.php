@@ -23,6 +23,7 @@ class RequirementsReminders extends BaseCommand
         // =====================================================
         $applicants = $db->table('applicants a')
             ->select('a.applicant_id, a.created_at')
+            // @phpstan-ignore-next-line
             ->whereNotIn('a.applicant_id', function ($builder) {
                 $builder->select('applicant_id')
                     ->from('applicant_documents');

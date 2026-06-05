@@ -46,7 +46,7 @@ class PresetSectionModel extends Model
         foreach ($sections as $order => $sectionId) {
             $this->where('preset_id', $presetId)
                 ->where('id', $sectionId)
-                ->update(['sort_order' => $order]);
+                ->update(null, ['sort_order' => $order]);
         }
     }
 }

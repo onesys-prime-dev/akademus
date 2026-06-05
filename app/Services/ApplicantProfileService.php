@@ -82,11 +82,11 @@ class ApplicantProfileService
 
         $educational = $db->table('educational_backgrounds')
             ->where('application_id', $applicationId)
-            ->get()->getResultArray() ?? [];
+            ->get()->getResultArray();
 
         $family = $db->table('family_backgrounds')
             ->where('application_id', $applicationId)
-            ->get()->getResultArray() ?? [];
+            ->get()->getResultArray();
 
         return [
             'personal'    => $personal,
@@ -272,42 +272,6 @@ class ApplicantProfileService
             ->getResultArray();
 
         return $this->normalizeCounts($results);
-    }
-
-    private function getExamStatusCounts(int $applicantId, array $filters = []): array
-    {
-        return [];
-    }
-
-    private function getReservationFeeStatusCounts(int $applicantId, array $filters = []): array
-    {
-        return [];
-    }
-
-    private function getClearanceStatusCounts(int $applicantId, array $filters = []): array
-    {
-        return [];
-        /*
-        $db = \Config\Database::connect();
-
-        $builder = $db->table('clearances c')
-            ->select('c.status, COUNT(*) as total')
-            ->where('c.applicant_id', $applicantId);
-
-        if (!empty($filters['search'])) {
-            $builder->groupStart()
-                ->like('c.clearance_name', $filters['search'])
-                ->orLike('c.status', $filters['search'])
-                ->groupEnd();
-        }
-
-        $results = $builder
-            ->groupBy('c.status')
-            ->get()
-            ->getResultArray();
-
-        return $this->normalizeCounts($results);
-        */
     }
 
     private function normalizeCounts(array $results): array
