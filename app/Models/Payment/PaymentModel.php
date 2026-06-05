@@ -15,6 +15,7 @@ class PaymentModel extends Model
         'payment_method_id',
         'payment_method_account_id',
         'reference_num',
+        'smartpay_checkout_id',
         'proof_of_payment',
         'amount_paid',
         'payment_status',
@@ -42,6 +43,20 @@ class PaymentModel extends Model
             ->where('p.applicant_id', $applicantId)
             ->where('pft.code', $feeTypeCode)
             ->whereIn('p.payment_status', [self::STATUS_PAID, self::STATUS_PROCESSING])
+            ->countAllResults();
+
+        return $count > 0;
+    }
+
+    // Blocks new SmartPay checkouts when a non-rejected payment already exists
+    public function hasActiveForFeeType(int $applicantId, string $feeTypeCode): bool
+    {
+        $count = $this->db
+            ->table('payment p')
+            ->join('payment_fee_type pft', 'pft.payment_fee_type_id = p.payment_fee_type_id')
+            ->where('p.applicant_id', $applicantId)
+            ->where('pft.code', $feeTypeCode)
+            ->whereIn('p.payment_status', [self::STATUS_PENDING, self::STATUS_PROCESSING, self::STATUS_PAID])
             ->countAllResults();
 
         return $count > 0;

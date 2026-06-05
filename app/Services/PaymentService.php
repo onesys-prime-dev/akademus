@@ -4,12 +4,16 @@ namespace App\Services;
 
 use App\Models\Applicant\ApplicantModel;
 use App\Models\Payment\PaymentFeeTypeModel;
+use App\Models\Payment\PaymentMethodModel;
+use App\Models\Payment\PaymentModel;
 use App\Models\User\UserModel;
 
 class PaymentService
 {
     protected $applicantModel;
     protected $paymentFeeTypeModel;
+    protected $paymentMethodModel;
+    protected $paymentModel;
     protected $userModel;
 
     /*
@@ -23,17 +27,13 @@ class PaymentService
 
     public function __construct()
     {
-        $this->applicantModel = new ApplicantModel();
+        $this->applicantModel      = new ApplicantModel();
         $this->paymentFeeTypeModel = new PaymentFeeTypeModel();
-        $this->userModel = new UserModel();
+        $this->paymentMethodModel  = new PaymentMethodModel();
+        $this->paymentModel        = new PaymentModel();
+        $this->userModel           = new UserModel();
 
-        /*
-        |--------------------------------------------------------------------------
-        | Sandbox Configuration
-        |--------------------------------------------------------------------------
-        */
-
-        $this->baseUrl = 'https://api-sandbox.smartpay.ph/';
+        $this->baseUrl   = 'https://api-sandbox.smartpay.ph/';
         $this->secretKey = env('SMARTPAY_SECRET_KEY');
     }
 
@@ -45,37 +45,49 @@ class PaymentService
 
         /*
         |--------------------------------------------------------------------------
-        | Get payment method
+        | Validate payment method and map to SmartPay channel
         |--------------------------------------------------------------------------
         */
 
-        $paymentMethod = strtolower(
-            trim($payload['payment_method'])
-        );
+        $paymentMethod = strtolower(trim($payload['payment_method']));
+
+        $restrictChannels = match ($paymentMethod) {
+            'gcash', 'maya' => ['Wallet'],
+            'bdo',  'bpi'  => ['Card'],
+            default => throw new \InvalidArgumentException('Invalid payment method.'),
+        };
 
         /*
         |--------------------------------------------------------------------------
-        | Fetch applicant
+        | Look up DB method row BEFORE hitting the SmartPay API
+        | — payment_method_id is NOT NULL in the schema; fail loudly now
         |--------------------------------------------------------------------------
         */
 
-        $applicant = $this->applicantModel
-            ->find($applicantId);
+        $methodRow = $this->paymentMethodModel
+            ->where('code', strtoupper($paymentMethod))
+            ->where('is_active', 1)
+            ->first();
 
-        if (!$applicant) {
-            throw new \Exception('Applicant not found.');
+        if (! $methodRow) {
+            throw new \Exception('Selected payment method is not currently available.');
         }
 
         /*
         |--------------------------------------------------------------------------
-        | Fetch user
+        | Fetch applicant and user
         |--------------------------------------------------------------------------
         */
 
-        $user = $this->userModel
-            ->find($applicant['user_id']);
+        $applicant = $this->applicantModel->find($applicantId);
 
-        if (!$user) {
+        if (! $applicant) {
+            throw new \Exception('Applicant not found.');
+        }
+
+        $user = $this->userModel->find($applicant['user_id']);
+
+        if (! $user) {
             throw new \Exception('User not found.');
         }
 
@@ -90,185 +102,130 @@ class PaymentService
             ->where('is_active', 1)
             ->first();
 
-        if (!$paymentFeeType) {
+        if (! $paymentFeeType) {
             throw new \Exception('Payment fee type not found.');
         }
 
         /*
         |--------------------------------------------------------------------------
-        | Map payment method to Smartpay channels
+        | Guard: block if a non-rejected payment already exists for this fee
+        | Prevents duplicate checkouts from double-clicks or browser back
         |--------------------------------------------------------------------------
         */
 
-        $restrictChannels = match ($paymentMethod) {
-
-            'gcash', 'maya' => ['Wallet'],
-
-            'bdo', 'bpi' => ['Card'],
-
-            default => throw new \Exception(
-                'Invalid payment method.'
-            )
-        };
+        if ($this->paymentModel->hasActiveForFeeType($applicantId, $feeTypeCode)) {
+            throw new \Exception('You already have an active or approved payment for this fee.');
+        }
 
         /*
         |--------------------------------------------------------------------------
-        | Generate unique service reference
+        | Generate an opaque, random service reference
+        | — does NOT leak applicant_id or timestamp
         |--------------------------------------------------------------------------
         */
 
-        $serviceReference =
-            (
-                $feeTypeCode === PaymentFeeTypeModel::CODE_ADMISSION
-                    ? 'ADM'
-                    : 'RSV'
-            )
-            . '-'
-            . $applicantId
-            . '-'
-            . substr(time(), -6);
+        $prefix           = $feeTypeCode === PaymentFeeTypeModel::CODE_ADMISSION ? 'ADM' : 'RSV';
+        $serviceReference = $prefix . '-' . bin2hex(random_bytes(8));
 
         /*
         |--------------------------------------------------------------------------
-        | Build Smartpay payload
+        | Build SmartPay payload
+        | NOTE: restrict_channels must be a plain array, NOT json_encode()'d
         |--------------------------------------------------------------------------
         */
 
         $smartpayPayload = [
-
             'service_reference' => $serviceReference,
-
-            'amount' => (float) $paymentFeeType['amount'],
-
-            'customer_email' => $user['email'],
-
-            'customer_name' =>
-                trim(
-                    $user['firstname']
-                    . ' '
-                    . $user['lastname']
-                ),
-
-            'customer_mobile' => $user['mobile'] ?? '',
-
-            'description' => $paymentFeeType['name'],
-
-            'restrict_channels' => json_encode($restrictChannels),
+            'amount'            => (float) $paymentFeeType['amount'],
+            'customer_email'    => $user['email'],
+            'customer_name'     => trim($user['firstname'] . ' ' . $user['lastname']),
+            'customer_mobile'   => $user['mobile'] ?? '',
+            'description'       => $paymentFeeType['name'],
+            'restrict_channels' => $restrictChannels,
+            'webhook_url'       => base_url('payment/webhook/smartpay'),
         ];
 
         /*
         |--------------------------------------------------------------------------
-        | Call Smartpay API
+        | Call SmartPay API
         |--------------------------------------------------------------------------
         */
-
-        $jsonPayload = json_encode($smartpayPayload);
 
         $curl = curl_init();
 
         curl_setopt_array($curl, [
-
-            CURLOPT_URL =>
-                $this->baseUrl . 'paymentRequest',
-
+            CURLOPT_URL            => $this->baseUrl . 'paymentRequest',
             CURLOPT_RETURNTRANSFER => true,
-
-            CURLOPT_POST => true,
-
-            CURLOPT_POSTFIELDS => $jsonPayload,
-
-            CURLOPT_HTTPHEADER => [
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => json_encode($smartpayPayload),
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_TIMEOUT        => 30,
+            CURLOPT_HTTPHEADER     => [
                 'Authorization: Bearer ' . $this->secretKey,
                 'Content-Type: application/json',
                 'Accept: application/json',
-            ]
+            ],
         ]);
 
         $response = curl_exec($curl);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Handle CURL errors
-        |--------------------------------------------------------------------------
-        */
-
         if (curl_errno($curl)) {
-
             $error = curl_error($curl);
-
             curl_close($curl);
-
-            throw new \Exception(
-                'Smartpay CURL Error: ' . $error
-            );
+            log_message('error', '[SmartPay] cURL error for ' . $serviceReference . ': ' . $error);
+            throw new \Exception('Could not reach the payment provider. Please try again.');
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Get HTTP status
-        |--------------------------------------------------------------------------
-        */
-
-        $httpCode = curl_getinfo(
-            $curl,
-            CURLINFO_HTTP_CODE
-        );
-
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Decode response
-        |--------------------------------------------------------------------------
-        */
+        $decodedResponse = json_decode($response, true);
 
-        $decodedResponse = json_decode(
-            $response,
-            true
-        );
-
-        /*
-        |--------------------------------------------------------------------------
-        | Handle Smartpay API errors
-        |--------------------------------------------------------------------------
-        */
-
-        log_message('debug', 'SmartPay HTTP ' . $httpCode . ' response: ' . json_encode($decodedResponse));
+        log_message('info', '[SmartPay] HTTP ' . $httpCode . ' — ref: ' . $serviceReference);
 
         if ($httpCode >= 400) {
-
             throw new \Exception(
-                $decodedResponse['message']
-                ?? 'Smartpay API request failed.'
+                $decodedResponse['message'] ?? 'Payment provider rejected the request.'
             );
         }
 
         /*
         |--------------------------------------------------------------------------
-        | TODO:
-        | Save transaction to database
+        | Save PENDING record so the admission officer can see the payment
         |--------------------------------------------------------------------------
         */
 
+        $smartpayCheckoutId = $decodedResponse['data']['reference_number'] ?? null;
+
+        try {
+            $this->paymentModel->insert([
+                'applicant_id'         => $applicantId,
+                'payment_fee_type_id'  => (int) $paymentFeeType['payment_fee_type_id'],
+                'payment_method_id'    => (int) $methodRow['payment_method_id'],
+                'reference_num'        => $serviceReference,
+                'smartpay_checkout_id' => $smartpayCheckoutId,
+                'amount_paid'          => (float) $paymentFeeType['amount'],
+                'payment_status'       => PaymentModel::STATUS_PENDING,
+            ]);
+        } catch (\Throwable $e) {
+            log_message('critical',
+                '[SmartPay] DB insert failed for ' . $serviceReference . ': ' . $e->getMessage()
+            );
+            throw new \Exception(
+                'Payment initiated but could not be recorded. '
+                . 'Contact support with reference: ' . $serviceReference
+            );
+        }
+
         /*
         |--------------------------------------------------------------------------
-        | Return response
+        | Return only what the frontend needs — no internal payload details
         |--------------------------------------------------------------------------
         */
 
         return [
-
-            'smartpay_request' => $smartpayPayload,
-
-            'smartpay_response' => $decodedResponse,
-
-            'reference_number' =>
-                $decodedResponse['data']['reference_number']
-                ?? null,
-
-            'redirect_url' =>
-                $decodedResponse['data']['redirect_url']
-                ?? null
+            'reference_number' => $smartpayCheckoutId,
+            'redirect_url'     => $decodedResponse['data']['redirect_url'] ?? null,
         ];
     }
 }
