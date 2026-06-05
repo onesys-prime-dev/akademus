@@ -215,8 +215,7 @@
 </div>
 
 <script>
-const AO_GROQ_KEY = 'secret';
-const AO_GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const AO_GROQ_URL = '<?= base_url('api/groq/officer') ?>';
 
 const AO_SCHOOL   = '<?= esc($theme['app_name'] ?? 'the school') ?>';
 const AO_YEAR     = '<?= esc($theme['school_year'] ?? '') ?>';
@@ -299,18 +298,12 @@ async function aoSend(text = null) {
     try {
         const res = await fetch(AO_GROQ_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${AO_GROQ_KEY}`
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                model: 'llama-3.1-8b-instant',
                 messages: [
                     { role: 'system', content: AO_SYSTEM },
                     ...aoHistory
-                ],
-                temperature: 0.5,
-                max_tokens: 512
+                ]
             })
         });
 

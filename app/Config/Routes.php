@@ -158,6 +158,10 @@ $routes->post('admin/programs/assign-preset',    'Admin\ProgramPresetsController
 // API Endpoints
 $routes->get('api/presets/program/(:num)',       'Admin\PresetsController::getFormPagesForApplicant/$1');
 
+// Groq AI proxy — keeps API key server-side
+$routes->post('api/groq/applicant', 'Api\GroqProxyController::applicantChat');
+$routes->post('api/groq/officer',   'Api\GroqProxyController::officerChat');
+
 // Admission Officer Auth
 $routes->get ('admission-officer/login',  'AdmissionOfficer\AuthController::login');
 $routes->post('admission-officer/login',  'AdmissionOfficer\AuthController::loginPost');

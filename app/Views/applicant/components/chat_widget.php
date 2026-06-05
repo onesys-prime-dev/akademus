@@ -246,9 +246,7 @@ function toggleChatWidget() {
     if (badge) badge.remove();
 }
 
-// ── Groq config — same key as faq.php ──
-const W_GROQ_KEY = 'secret';  
-const W_GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const W_GROQ_URL = '<?= base_url('api/groq/applicant') ?>';
 
 const W_SCHOOL_NAME      = '<?= esc($theme['app_name']         ?? 'the school') ?>';
 const W_SCHOOL_YEAR      = '<?= esc($theme['school_year']      ?? '') ?>';
@@ -325,18 +323,12 @@ async function wSendMessage(text = null) {
     try {
         const res = await fetch(W_GROQ_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${W_GROQ_KEY}`
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                model: 'llama-3.1-8b-instant',
                 messages: [
                     { role: 'system', content: W_SYSTEM },
                     ...wHistory
-                ],
-                temperature: 0.2,
-                max_tokens: 256
+                ]
             })
         });
 
