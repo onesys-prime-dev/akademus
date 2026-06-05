@@ -15,10 +15,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* scroll reveal */
-    const reveals = document.querySelectorAll(
-        ".hp-feat-card, .hp-sys-card, .story__card, .mission__box, .value-card, .history__row, .contact-card, .contact-map, .contact-form, .contact-hero__content"
-    );
+    /* scroll reveal — hp-feat-card excluded; it's always immediately visible */
+    const revealSelector = ".hp-sys-card, .story__card, .mission__box, .value-card, .history__row, .contact-card, .contact-map, .contact-form, .contact-hero__content";
+
+    const reveals = document.querySelectorAll(revealSelector);
 
     const observer = new IntersectionObserver((entries)=>{
         entries.forEach((entry,index)=>{

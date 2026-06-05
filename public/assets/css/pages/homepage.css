@@ -313,7 +313,8 @@
    FEATURED CARDS  (Figma: 3 cols, 523px wide, 703px tall, rounded-20px)
    ════════════════════════════════════════════════ */
 .hp-featured__cards {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: clamp(16px, 2.1vw, 40px);
     padding: 0 clamp(20px, 3.5vw, 68px);
     max-width: 1920px;
@@ -322,8 +323,6 @@
     z-index: 1;
 }
 .hp-feat-card {
-    flex: 1;
-    min-width: 0;
     position: relative;
     border-radius: 20px;
     overflow: hidden;
@@ -578,8 +577,16 @@
     .hp-header__inner { height: 90px; }
     .hp-header__logo-img { width: 60px; height: 60px; }
 
-    .hp-featured__cards { flex-direction: column; }
-    .hp-feat-card { height: clamp(320px, 60vw, 520px); }
+    /* Featured — single column on tablet */
+    .hp-featured__cards { grid-template-columns: 1fr; }
+    .hp-feat-card { height: clamp(220px, 50vw, 400px); }
+
+    /* Cancel scroll-reveal hiding on tablet */
+    .hp-sys-card.reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
 
     .hp-other__grid { grid-template-columns: repeat(2, 1fr); }
     .hp-sys-card { height: auto; min-height: 300px; }
@@ -610,9 +617,15 @@
     /* Hide deco shapes on small screens */
     .hp-deco { display: none; }
 
-    /* Featured */
-    .hp-featured__cards { flex-direction: column; }
-    .hp-feat-card { height: clamp(280px, 70vw, 450px); }
+    /* Featured — shorter cards on mobile */
+    .hp-feat-card { height: 220px; }
+
+    /* Cancel scroll-reveal hiding on mobile */
+    .hp-sys-card.reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
 
     /* Other systems */
     .hp-other__grid { grid-template-columns: 1fr; }

@@ -238,7 +238,7 @@
             });
         });
     </script>
-    <script src="<?= base_url('assets/js/page-animation.js') ?>"></script>
-    <script src="<?= base_url('assets/js/page-transition-animation.js') ?>"></script>
+    <script src="<?= base_url('assets/js/page-animation.js') ?>?v=<?= time() ?>"></script>
+    <script src="<?= base_url('assets/js/page-transition-animation.js') ?>?v=<?= time() ?>"></script>
 </body>
 </html>
