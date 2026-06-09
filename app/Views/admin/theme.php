@@ -224,6 +224,16 @@
 <?php
 $csrfToken = csrf_token();
 $csrfHash  = csrf_hash();
+
+$logo = $theme['logo_url'] ?? '';
+
+$logoSrc = '';
+
+if (!empty($logo)) {
+    $logoSrc = str_starts_with($logo, 'http') || str_starts_with($logo, 'data:image')
+        ? $logo
+        : base_url($logo);
+}
 ?>
 
 <div class="toast" id="toast">Theme saved & applied to portal</div>
@@ -265,8 +275,11 @@ $csrfHash  = csrf_hash();
                 <div class="form-group">
                     <label class="form-label">Upload Logo Image <span class="tag-new">NEW</span></label>
                     <div class="upload-zone" id="upload-zone" onclick="document.getElementById('logo_file').click()">
-                        <?php if (!empty($theme['logo_url'])): ?>
-                            <img src="<?= esc($theme['logo_url']) ?>" style="width:48px;height:48px;object-fit:contain;border-radius:8px;margin-bottom:4px;" />
+                        <?php if (!empty($logoSrc)): ?>
+                            <img
+                                src="<?= esc($logoSrc, 'attr') ?>"
+                                style="width:48px;height:48px;object-fit:contain;border-radius:8px;margin-bottom:4px;"
+                            >
                             <div style="font-size:10px;color:#5a6a85;">Click to change</div>
                         <?php else: ?>
                             <div id="upload-placeholder">
@@ -541,18 +554,49 @@ function init() {
         state.admission_status = e.target.value; updatePreview();
     });
 
-    document.getElementById('logo_file').addEventListener('change', e => {
+    document.getElementById('logo_file').addEventListener('change', async e => {
+
         const file = e.target.files[0];
+
         if (!file) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-            state.logo_url = ev.target.result;
-            document.getElementById('logo_url').value = ev.target.result;
-            updatePreview();
-            document.getElementById('upload-zone').innerHTML =
-                `<img src="${ev.target.result}" style="width:48px;height:48px;object-fit:contain;border-radius:8px;margin-bottom:4px;"><div style="font-size:10px;color:#5a6a85;">Click to change</div>`;
-        };
-        reader.readAsDataURL(file);
+
+        const formData = new FormData();
+
+        formData.append(CSRF_NAME, CSRF_HASH);
+        formData.append('logo_file', file);
+
+        try {
+
+            const response = await fetch('<?= base_url('admin/theme/upload-logo') ?>', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.status === 'success') {
+
+                state.logo_url = data.logo_url;
+
+                document.getElementById('logo_url').value = data.logo_path;
+
+                document.getElementById('upload-zone').innerHTML = `
+                    <img
+                        src="${data.logo_url}"
+                        style="width:48px;height:48px;object-fit:contain;border-radius:8px;margin-bottom:4px;"
+                    >
+                    <div style="font-size:10px;color:#5a6a85;">
+                        Click to change
+                    </div>
+                `;
+
+                updatePreview();
+            }
+
+        } catch (err) {
+            alert('Upload failed');
+        }
+
     });
 }
 

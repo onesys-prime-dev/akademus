@@ -103,18 +103,34 @@
 .nav-admin-role { font-size: 10px; color: rgba(255,255,255,0.3); }
 </style>
 
+<?php
+$adminLogoPath = $theme['logo_url'] ?? '';
+
+$adminLogoSrc = '';
+
+if (!empty($adminLogoPath)) {
+    $adminLogoSrc = str_starts_with($adminLogoPath, 'http') || str_starts_with($adminLogoPath, 'data:image')
+        ? $adminLogoPath
+        : base_url($adminLogoPath);
+}
+
+$adminLogoText = strtoupper(substr($theme['logo_text'] ?? $theme['app_name'] ?? 'AK', 0, 2));
+?>
+
 <nav class="admin-nav">
 
     <!-- Brand -->
     <a href="<?= base_url('admin/theme') ?>" class="nav-brand">
         <div class="nav-brand-logo">
-            <?php if (!empty($theme['logo_url'])): ?>
-                <img src="<?= base_url(esc($theme['logo_url'])) ?>"
-                     alt="<?= esc($theme['app_name'] ?? 'Logo') ?>"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
-                <span style="display:none"><?= strtoupper(substr($theme['logo_text'] ?? $theme['app_name'] ?? 'AK', 0, 2)) ?></span>
+            <?php if (!empty($adminLogoSrc)): ?>
+                <img
+                    src="<?= esc($adminLogoSrc, 'attr') ?>"
+                    alt="<?= esc($theme['app_name'] ?? 'Logo', 'attr') ?>"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"
+                >
+                <span style="display:none"><?= esc($adminLogoText) ?></span>
             <?php else: ?>
-                <?= strtoupper(substr($theme['logo_text'] ?? $theme['app_name'] ?? 'AK', 0, 2)) ?>
+                <?= esc($adminLogoText) ?>
             <?php endif; ?>
         </div>
         <div class="nav-brand-text">

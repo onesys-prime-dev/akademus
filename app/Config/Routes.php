@@ -82,6 +82,7 @@ $routes->get('admin/theme',            'ThemeController::index');
 $routes->post('admin/theme/save',      'ThemeController::save');
 $routes->get('admin/theme/json',       'ThemeController::getThemeJson');
 $routes->get('admin/theme/preview',    'ThemeController::preview');
+$routes->post('admin/theme/upload-logo', 'ThemeController::uploadLogo');
 
 
 // -------------------------------- PAYMENT FEES ------------------------------ //
