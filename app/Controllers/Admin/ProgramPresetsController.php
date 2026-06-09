@@ -30,7 +30,7 @@ class ProgramPresetsController extends BaseAdminController
             'programs'  => $programs,
             'presets'   => $presets,
             'presetMap' => $presetMap,
-            'theme'     => (new ThemeModel())->getAllSettings() ?? [],
+            'theme'     => (new ThemeModel())->getAllSettings(),
             'title'     => 'Program Assignments',
         ]);
     }

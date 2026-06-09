@@ -48,20 +48,20 @@ class ApplicantProfileService
         return $row;
     }
 
-    public function getTabPayload(int $applicantId, string $tab, array $filters = [], int $limit = 10, int $offset = 0): array
+    public function getTabPayload(int $applicantId, string $tab, array $filters = [], int $limit = null, int $offset = 0): array
     {
         return match ($tab) {
-            'applicant_form'  => $this->getApplicantFormPayload($applicantId),
+            'applicant_form'  => $this->getApplicantFormPayload($applicantId, $filters, $limit, $offset),
             'requirements'    => $this->getRequirementsPayload($applicantId, $filters, $limit, $offset),
             'exam'            => $this->getExamPayload($applicantId, $filters, $limit, $offset),
             'admission_fee'   => $this->getAdmissionFeePayload($applicantId),
             'reservation_fee' => $this->getReservationFeePayload($applicantId),
             'clearance'       => $this->getClearancePayload($applicantId, $filters, $limit, $offset),
-            default           => $this->getRequirementsPayload($applicantId, $filters, $limit, $offset),
+            default           => '',
         };
     }
 
-    private function getApplicantFormPayload(int $applicantId): array
+    private function getApplicantFormPayload(int $applicantId, array $filters, int $limit, int $offset): array
     {
         $db = \Config\Database::connect();
 
@@ -82,11 +82,11 @@ class ApplicantProfileService
 
         $educational = $db->table('educational_backgrounds')
             ->where('application_id', $applicationId)
-            ->get()->getResultArray() ?? [];
+            ->get()->getResultArray();
 
         $family = $db->table('family_backgrounds')
             ->where('application_id', $applicationId)
-            ->get()->getResultArray() ?? [];
+            ->get()->getResultArray();
 
         return [
             'personal'    => $personal,
@@ -101,6 +101,7 @@ class ApplicantProfileService
 
         $builder = $db->table('program_requirements pr')
             ->select('
+                ad.document_id,
                 pr.program_requirement_id,
                 r.requirement_name as document_name,
                 rc.category_name as category,
@@ -271,42 +272,6 @@ class ApplicantProfileService
             ->getResultArray();
 
         return $this->normalizeCounts($results);
-    }
-
-    private function getExamStatusCounts(int $applicantId, array $filters = []): array
-    {
-        return [];
-    }
-
-    private function getReservationFeeStatusCounts(int $applicantId, array $filters = []): array
-    {
-        return [];
-    }
-
-    private function getClearanceStatusCounts(int $applicantId, array $filters = []): array
-    {
-        return [];
-        /*
-        $db = \Config\Database::connect();
-
-        $builder = $db->table('clearances c')
-            ->select('c.status, COUNT(*) as total')
-            ->where('c.applicant_id', $applicantId);
-
-        if (!empty($filters['search'])) {
-            $builder->groupStart()
-                ->like('c.clearance_name', $filters['search'])
-                ->orLike('c.status', $filters['search'])
-                ->groupEnd();
-        }
-
-        $results = $builder
-            ->groupBy('c.status')
-            ->get()
-            ->getResultArray();
-
-        return $this->normalizeCounts($results);
-        */
     }
 
     private function normalizeCounts(array $results): array

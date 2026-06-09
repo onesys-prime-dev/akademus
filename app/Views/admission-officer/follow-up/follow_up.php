@@ -345,7 +345,7 @@
                 <span>Applicant #<?= esc($activeApplicant['applicant_number'] ?? '') ?></span>
             </div>
             <a href="<?= base_url('admission-officer/detailed-applicant/' . (int)$activeApplicant['applicant_id']) ?>"
-               class="fo-view-applicant-btn" target="_blank">
+               class="fo-view-applicant-btn" target="_blank" rel="noopener noreferrer">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
                 </svg>

@@ -1,13 +1,7 @@
 <?php
 // dashboard/dashboard.php
 
-$steps = [
-    1 => 'Account',
-    2 => 'Form',
-    3 => 'Documents',
-    4 => 'Verified',
-    5 => 'Enrolled',
-];
+$steps = $steps ?? [];
 
 // Preview first 4 requirements in the document checklist
 $allReqs     = $doc_stats['all_requirements'];
@@ -20,15 +14,28 @@ $moreCount = count(array_filter(
     fn($r) => !isset($uploadedDoc[$r['program_requirement_id']])
 ));
 
-// Document progress bar CSS class
-$docBarClass = '';
-if ($doc_progress > 0 && $doc_progress < 100)       $docBarClass = 'progress-inprogress';
-elseif ($doc_progress >= 100)                        $docBarClass = 'progress-done';
+function progressBar(int $percent): array
+{
+    $percent = max(0, min(100, $percent));
 
-// Form progress bar CSS class
-$formBarClass = '';
-if ($form_progress > 0 && $form_progress < 100)      $formBarClass = 'progress-inprogress';
-elseif ($form_progress >= 100)                       $formBarClass = 'progress-done';
+    // interpolate yellow -> green
+    $start = [255, 178, 0];
+    $end   = [49, 166, 70];
+
+    $ratio = $percent / 100;
+
+    $r = (int) round($start[0] + (($end[0] - $start[0]) * $ratio));
+    $g = (int) round($start[1] + (($end[1] - $start[1]) * $ratio));
+    $b = (int) round($start[2] + (($end[2] - $start[2]) * $ratio));
+
+    return [
+        'width' => $percent . '%',
+        'color' => "rgba($r, $g, $b, 0.35)",
+    ];
+}
+
+$docBar  = progressBar($doc_progress);
+$formBar = progressBar($form_progress);
 ?>
 
 <div class="dashboard-container">
@@ -36,7 +43,7 @@ elseif ($form_progress >= 100)                       $formBarClass = 'progress-d
     <!-- ── Profile Banner ── -->
     <div class="profile-banner">
         <div class="top-most-span">
-            <span>AKADEMOS · SY 2025–2026</span>
+            <span>AKADEMUS · SY 2025–2026</span>
         </div>
 
         <div class="banner-name-header">
@@ -54,8 +61,13 @@ elseif ($form_progress >= 100)                       $formBarClass = 'progress-d
             </div>
 
             <div class="quick-actions">
-                <a href="<?= base_url('requirements') ?>">Upload Documents</a>
-                <a href="">Pay Reservation Fee</a>
+                <a class="btn-accent" href="<?= base_url('requirements') ?>">Upload Documents</a>
+                <a class="btn-accent" href="<?= base_url('admission-processing-fee') ?>">Pay Admission Fee</a>
+                <?php if ($app_status === 'approved'): ?>
+                    <a class="btn-accent btn-reservation" href="<?= base_url('reservation-fee') ?>">
+                        Pay Reservation Fee
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -91,7 +103,7 @@ elseif ($form_progress >= 100)                       $formBarClass = 'progress-d
                                 <?= $status === 'done' ? '✓' : $num ?>
                             </div>
 
-                            <?php if ($num === 5): ?>
+                            <?php if ($num === count($steps)): ?>
                                 <div class="step-line right-line"></div>
                             <?php else: ?>
                                 <div class="step-line <?= $lineClass ?>"></div>
@@ -113,28 +125,41 @@ elseif ($form_progress >= 100)                       $formBarClass = 'progress-d
             'form_completed'  => $form_completed,
             'form_total'      => $form_total,
             'form_progress'   => $form_progress,
-            'formBarClass'    => $formBarClass,
+            'formBar'         => $formBar,
         ]) ?>
 
         <?= view('applicant/dashboard/components/checklist-documents', [
             'doc_stats'   => $doc_stats,
-            'doc_progress'=> $doc_progress,
-            'docBarClass' => $docBarClass,
+            'doc_progress' => $doc_progress,
+            'docBar'      => $docBar,
             'previewReqs' => $previewReqs,
             'uploadedDoc' => $uploadedDoc,
             'moreCount'   => $moreCount,
             'allReqs'     => $allReqs,
         ]) ?>
 
+        <?= view('applicant/dashboard/components/checklist-payment-fees', [
+            'paymentCheckList' => $paymentCheckList
+        ]) ?>
+
     </div><!-- /.checklist-summary-container -->
 
     <!-- ── Payment Notification ── -->
-    <div class="payment-notification-container">
-        <div class="payment-notification-text-info">
-            <p>You have been approved for admission.</p>
-            <span>Pay the ₱2,000 reservation fee within 5 days to officially secure your slot.</span>
+    <?php if ($showPaymentNotification): ?>
+        <div class="payment-notification-container">
+            <div class="payment-notification-text-info">
+                <p>You have been approved for admission.</p>
+                <span>
+                    Pay the ₱<?= number_format($reservation_fee_amount, 2) ?>
+                    reservation fee within 5 days to officially secure your slot.
+                </span>
+            </div>
+            <a href="<?= base_url('reservation-fee') ?>" class="pay-now-btn">Pay Now</a>
         </div>
-        <a href="" class="pay-now-btn">Pay Now</a>
-    </div>
+    <?php endif; ?>
 
 </div><!-- /.dashboard-container -->
+
+<script>
+    const paymentNotificationCard = document.querySelector('.payment-notification-container');
+</script>

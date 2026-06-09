@@ -1,60 +1,60 @@
 /* assets/css/components/buttons.css */
 
 .btn-primary {
-    padding: 12px 24px;
-    border: var(--border-default);
-    border-radius: var(--radius-md);
-    background: var(--primary);
+    padding: 12px 24px !important;
+    border: var(--border-default) !important;
+    border-radius: var(--radius-md) !important;
+    background: var(--primary) !important;
     color: var(--text-inverse);
-    font-weight: 600;
-    cursor: pointer;
-    user-select: none;        /* Standard */
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none;    /* Firefox */
-    -ms-user-select: none;     /* IE/Edge */
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    user-select: none !important;        /* Standard */
+    -webkit-user-select: none !important; /* Safari */
+    -moz-user-select: none !important;    /* Firefox */
+    -ms-user-select: none !important;     /* IE/Edge */
 }
 
 .btn-accent {
-    padding: 12px 24px;
-    border: var(--border-default);
-    border-radius: var(--radius-md);
-    background: var(--accent);
-    color: color-mix(in srgb, var(--text-primary) 75%, transparent);
-    font-weight: 600;
-    cursor: pointer;
-    user-select: none;        /* Standard */
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none;    /* Firefox */
-    -ms-user-select: none;     /* IE/Edge */
+    padding: 12px 24px !important;
+    border: var(--border-default) !important;
+    border-radius: var(--radius-md) !important;
+    background: var(--accent) !important;
+    color: var(--primary);
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    user-select: none !important;        /* Standard */
+    -webkit-user-select: none !important; /* Safari */
+    -moz-user-select: none !important;    /* Firefox */
+    -ms-user-select: none !important;     /* IE/Edge */
 }
 
 .btn-secondary {
-    padding: 12px 24px;
-    border: 1px solid var(--border-muted);
-    border-radius: var(--radius-md);
-    background: var(--color-default);
-    color: var(--text-primary);
-    font-weight: 600;
-    cursor: pointer;
-    user-select: none;        /* Standard */
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none;    /* Firefox */
-    -ms-user-select: none;     /* IE/Edge */
+    padding: 12px 24px !important;
+    border: 1px solid var(--border-muted) !important;
+    border-radius: var(--radius-md) !important;
+    background: var(--color-default) !important;
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    user-select: none !important;        /* Standard */
+    -webkit-user-select: none !important; /* Safari */
+    -moz-user-select: none !important;    /* Firefox */
+    -ms-user-select: none !important;     /* IE/Edge */
 }
 
 .btn-primary:hover {
-    background: var(--primary-dark);
-    transition: 0.2s;
+    background: var(--primary-dark) !important;
+    transition: 0.2s !important;
 }
 
 .btn-accent:hover {
-    background: color-mix(in srgb, var(--accent) 92%, black);
-    transition: 0.2s;
+    background: color-mix(in srgb, var(--accent) 92%, black) !important;
+    transition: 0.2s !important;
 }
 
 .btn-secondary:hover {
-    background: var(--color-default-hover);
-    transition: 0.2s;
+    background: var(--color-default-hover) !important;
+    transition: 0.2s !important;
 }
 
 .btn-disabled {

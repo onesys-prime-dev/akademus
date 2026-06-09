@@ -15,8 +15,11 @@
             <div class="requirements-section__header-top">
                 <h3><?= esc($category_name) ?></h3>
                 <?php if (($total_required ?? 0) > 0): ?>
-                    <span class="upload-counter <?= ($uploaded_required ?? 0) >= ($total_required ?? 0) ? 'upload-counter--done' : '' ?>">
-                        <?= (int)($uploaded_required ?? 0) ?>/<?= (int)($total_required ?? 0) ?> required uploaded
+                    <span
+                        class="upload-counter <?= ($total_uploaded ?? 0) >= ($total_required ?? 0) ? 'upload-counter--done' : '' ?>"
+                        data-total-required="<?= (int) $total_required ?>"
+                    >
+                        <?= (int)($total_uploaded ?? 0) ?>/<?= (int)($total_required ?? 0) ?> required uploaded
                     </span>
                 <?php endif; ?>
             </div>

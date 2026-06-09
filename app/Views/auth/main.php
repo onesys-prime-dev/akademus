@@ -27,6 +27,10 @@
 
 <link rel="stylesheet" href="<?= base_url('assets/css/pages/auth.css') . '?v=' . time(); ?>">
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+<meta name="csrf-token" content="<?= csrf_hash() ?>">
+<script>
+(function(){var _f=window.fetch;window.fetch=function(u,o){o=o||{};if(o.method&&o.method.toUpperCase()!=='GET'){var t=document.querySelector('meta[name="csrf-token"]');if(t){o.headers=o.headers||{};if(o.headers instanceof Headers){o.headers.set('X-CSRF-TOKEN',t.content);}else{o.headers['X-CSRF-TOKEN']=t.content;}}}return _f.call(this,u,o);};})();
+</script>
 </head>
 <body>
 
@@ -267,7 +271,9 @@
             if (!opt) return;
             value.value           = opt.dataset.value;
             display.textContent   = opt.dataset.name;
-            display.style.color   = '#fff';
+            display.style.color   = '#000000';
+            display.style.fontWeight = '600';
+            display.style.fontSize = '13px';
             const err = document.getElementById('prog-error');
             if (err) err.style.display = 'none';
             trigger.style.border  = '';

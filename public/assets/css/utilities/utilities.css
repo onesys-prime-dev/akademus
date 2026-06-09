@@ -1,2 +1,2 @@
-.hidden { display: none; }
+.hidden { display: none !important; }
 .no-color { background-color: transparent !important; }

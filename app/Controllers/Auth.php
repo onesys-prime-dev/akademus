@@ -238,6 +238,13 @@ class Auth extends BaseController
             ]);
         }
 
+        if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) {
+            $db = \Config\Database::connect();
+            $db->table('applicants')
+                ->where('applicant_id', $user['applicant_id'])
+                ->update(['password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT)]);
+        }
+
         session()->set([
             'user_id'          => $user['user_id'],
             'firstname'        => $user['firstname'],

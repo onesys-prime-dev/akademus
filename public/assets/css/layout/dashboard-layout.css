@@ -166,7 +166,7 @@ nav {
                 font-size: 15px;
                 font-weight: 500;
                 color: #FFFFFF;
-                opacity: 0.7;
+                opacity: 0.85;
             }
 
             .sidebar-nav-link.active {
@@ -180,6 +180,146 @@ nav {
             .sidebar-nav-link.active span {
                 opacity: 1;
             }
+
+            /* Disabled / Locked link */
+            .sidebar-nav-link.disabled-link {
+                opacity: 0.45;
+                pointer-events: none;       /* cannot click (desktop + mobile) */
+                cursor: not-allowed;
+            }
+
+            /* Remove hover effect */
+            .sidebar-nav-link.disabled-link:hover {
+                background-color: transparent;
+            }
+
+            /* Dim text + dot */
+            .sidebar-nav-link.disabled-link span {
+                opacity: 0.5;
+            }
+
+            .sidebar-nav-link.disabled-link .dotted-link {
+                background-color: rgba(255,255,255,0.25);
+            }
+
+            /* Dim lock icon */
+            .sidebar-nav-link.disabled-link .lock-icon {
+                opacity: 0.6;
+            }
+
+            /* Allow tooltip interaction */
+            .sidebar-nav-link.disabled-link .lock-help-wrap {
+                pointer-events: auto;
+            }
+
+            /* ── Locked Payments Section ───────────────── */
+            .locked-payment {
+                opacity: 0.55;
+                position: relative;
+            }
+
+            .locked-payment .sidebar-nav-link {
+                pointer-events: none;
+                cursor: not-allowed;
+            }
+
+            .locked-payment .sidebar-nav-link:hover {
+                background-color: transparent;
+            }
+
+            .locked-payment .dotted-link {
+                background-color: rgba(255,255,255,0.25);
+            }
+
+            .locked-payment span {
+                color: rgba(255,255,255,0.55);
+            }
+
+            .group-title-row{
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                margin-left:20px;
+                margin-right:10px;
+                margin-bottom:6px;
+            }
+
+            .group-title-row{
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                margin:0 0 6px 0;
+                width:100%;
+            }
+
+            .mini-lock-badge{
+                font-size:11px;
+                font-weight:700;
+                padding:4px 10px;
+                border-radius:999px;
+                background:rgba(from var(--accent) r g b / 0.18);
+                border:1px solid rgba(from var(--accent) r g b / 0.55);
+                color:var(--accent);
+                white-space:nowrap;
+            }
+
+            .lock-help-wrap{
+                display:flex;
+                align-items:center;
+                gap:6px;
+                position:relative;
+            }
+
+            .lock-help-btn{
+                width:20px;
+                height:20px;
+                border:none;
+                border-radius:50%;
+                background:rgba(0, 0, 0, 0.12);
+                color:#fff;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                cursor:pointer;
+                padding:0;
+            }
+
+            .lock-help-btn:hover{
+                background:rgba(0, 0, 0, 0.22);
+            }
+
+            .lock-tooltip{
+                position:absolute;
+                top:10px;
+                right:0;
+                width:190px;
+                padding:10px 12px;
+                border-radius:10px;
+                background: black;
+                color:#fff;
+                font-size:12px;
+                line-height:1.4;
+                opacity:0;
+                visibility:hidden;
+                transform:translateY(6px);
+                transition:.2s ease;
+                z-index:999;
+            }
+
+            /* Desktop hover */
+            .lock-help-wrap:hover .lock-tooltip{
+                opacity:1;
+                visibility:visible;
+                transform:translateY(0);
+            }
+
+            /* Mobile click */
+            .lock-help-wrap.show-tip .lock-tooltip{
+                opacity:1;
+                visibility:visible;
+                transform:translateY(0);
+            }
+            /* LOCKED PAYMENT ENDS HERE */
 
     .sidebar-bottom {
         width: 100%;

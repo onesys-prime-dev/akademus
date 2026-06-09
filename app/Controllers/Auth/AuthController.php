@@ -4,7 +4,7 @@ namespace App\Controllers\Auth;
 
 use App\Controllers\BaseController;
 
-use App\Models\Applicant\ApplicantsViewModel;
+use App\Models\Auth\RememberTokenModel;
 use App\Models\Program\ProgramModel;
 use App\Models\ThemeModel;
 use App\Services\EmailService;
@@ -40,7 +40,7 @@ class AuthController extends BaseController
         $programModel = new ProgramModel();
         $programs     = $programModel->findAll();
 
-        $programs = array_map(function($program) {
+        $programs = array_map(function ($program) {
             return [
                 'id'   => $program['program_id'],
                 'name' => $program['program_name'],
@@ -176,7 +176,6 @@ class AuthController extends BaseController
                 'status'   => 'success',
                 'redirect' => base_url('success')
             ]);
-
         } catch (\Exception $e) {
             $db->transRollback();
             log_message('error', 'Registration failed: ' . $e->getMessage());
@@ -188,11 +187,11 @@ class AuthController extends BaseController
     }
 
     public function login()
-{
-    $db = \Config\Database::connect();
+    {
+        $db = \Config\Database::connect();
 
-    $builder = $db->table('applicants a');
-    $builder->select('
+        $builder = $db->table('applicants a');
+        $builder->select('
         a.applicant_id,
         u.user_id,
         a.program_id,
@@ -210,50 +209,79 @@ class AuthController extends BaseController
         a.created_at
     ');
 
-    $builder->join('users u', 'a.user_id = u.user_id');
-    $builder->join('programs p', 'a.program_id = p.program_id');
+        $builder->join('users u', 'a.user_id = u.user_id');
+        $builder->join('programs p', 'a.program_id = p.program_id');
 
-    $builder->where('u.email', $this->request->getPost('email'));
+        $builder->where('u.email', $this->request->getPost('email'));
 
-    $user = $builder->get()->getRowArray();
+        $user = $builder->get()->getRowArray();
 
-    if (!$user) {
-        return $this->response->setJSON([
-            'status'  => 'error',
-            'message' => 'User not found'
+        if (!$user) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'User not found'
+            ]);
+        }
+
+        if (!password_verify($this->request->getPost('password'), $user['password'])) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'Invalid email or password'
+            ]);
+        }
+
+        if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) {
+            $db->table('applicants')
+                ->where('applicant_id', $user['applicant_id'])
+                ->update(['password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT)]);
+        }
+
+        session()->set([
+            'user_id'          => $user['user_id'],
+            'firstname'        => $user['firstname'],
+            'lastname'         => $user['lastname'],
+            'email'            => $user['email'],
+            'role'             => $user['role'],
+            'applicant_number' => $user['applicant_number'],
+            'applicant_id'     => $user['applicant_id'],
+            'program_id'       => $user['program_id'],
+            'program_name'     => $user['program_name'],
+            'temp_password'    => (bool) $user['temp_password'],
+            'logged_in'        => true
         ]);
+
+        $remember = $this->request->getPost('remember_me');
+
+        if ($remember) {
+
+            $token = bin2hex(random_bytes(32));
+
+            $rememberTokenModel = new RememberTokenModel();
+
+            $rememberTokenModel->insert([
+                'user_id'    => $user['user_id'],
+                'token'      => hash('sha256', $token),
+                'expires_at' => date('Y-m-d H:i:s', time() + (30 * 24 * 60 * 60)),
+            ]);
+
+            setcookie(
+                'remember_token',
+                $token,
+                time() + (30 * 24 * 60 * 60),
+                '/',
+                '',
+                ENVIRONMENT === 'production',
+                true
+            );
+        }
+
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'status'   => 'success',
+                'redirect' => base_url('dashboard'),
+            ]);
+        }
     }
-
-    if (!password_verify($this->request->getPost('password'), $user['password'])) {
-        return $this->response->setJSON([
-            'status'  => 'error',
-            'message' => 'Invalid email or password'
-        ]);
-    }
-
-    session()->set([
-        'user_id'          => $user['user_id'],
-        'firstname'        => $user['firstname'],
-        'lastname'         => $user['lastname'],
-        'email'            => $user['email'],
-        'role'             => $user['role'],
-        'applicant_number' => $user['applicant_number'],
-        'applicant_id'     => $user['applicant_id'],
-        'program_id'       => $user['program_id'],
-        'program_name'     => $user['program_name'],
-        'temp_password'    => (bool) $user['temp_password'],
-        'logged_in'        => true
-    ]);
-
-    if ($this->request->isAJAX()) {
-        return $this->response->setJSON([
-            'status'   => 'success',
-            'redirect' => base_url('dashboard'),
-        ]);
-    }
-
-    return redirect()->to('/dashboard');
-}
 
     public function forgotPassword()
     {
@@ -278,7 +306,12 @@ class AuthController extends BaseController
             ]);
 
             $resetUrl = base_url('reset-password/' . $token);
-            EmailService::sendPasswordReset($email, $resetUrl);
+
+            try {
+                EmailService::sendPasswordReset($email, $resetUrl);
+            } catch (\Throwable $e) {
+                log_message('error', 'Password reset email error: ' . $e->getMessage());
+            }
         }
 
         return $this->response->setJSON([
@@ -390,7 +423,17 @@ class AuthController extends BaseController
 
     public function logout()
     {
+        if (isset($_COOKIE['remember_token'])) {
+            $token = $_COOKIE['remember_token'];
+
+            $rememberModel = new \App\Models\Auth\RememberTokenModel();
+            $rememberModel->where('token', hash('sha256', $token))->delete();
+
+            setcookie('remember_token', '', time() - 3600, '/');
+        }
+
         session()->destroy();
+
         return redirect()->to('/sign-in');
     }
 }

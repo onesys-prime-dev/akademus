@@ -35,6 +35,12 @@ class AuthController extends BaseController
             return redirect()->back()->with('error', 'Invalid credentials');
         }
 
+        if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) {
+            $db->table('users')
+                ->where('user_id', $user['user_id'])
+                ->update(['password' => password_hash($password, PASSWORD_DEFAULT)]);
+        }
+
         session()->set([
             'ao_logged_in' => true,
             'ao_id'        => $user['user_id'],

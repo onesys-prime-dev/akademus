@@ -178,7 +178,7 @@ $action   = $action   ?? 'create';
                     <label class="form-label">Requirement Categories *</label>
                     <p class="form-help" style="margin-bottom:12px;">
                         Select which document categories apply to this preset. Each selected category becomes a step in the applicant's requirements checklist.
-                        <a href="<?= base_url('admin/requirement-categories') ?>" target="_blank" style="color:var(--primary);">Manage categories →</a>
+                        <a href="<?= base_url('admin/requirement-categories') ?>" target="_blank" rel="noopener noreferrer" style="color:var(--primary);">Manage categories →</a>
                     </p>
                     <div class="section-list">
                         <?php if (!empty($requirementCategories)): ?>

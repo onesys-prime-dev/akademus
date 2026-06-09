@@ -110,12 +110,12 @@ $statusConfig = [
                         View Full
                     </div>
                 </div>
-                <a href="<?= esc($proofUrl) ?>" target="_blank" class="pr-proof-open-link">
+                <a href="<?= esc($proofUrl) ?>" target="_blank" rel="noopener noreferrer" class="pr-proof-open-link">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                     Open in new tab
                 </a>
                 <?php else: ?>
-                <a href="<?= esc($proofUrl) ?>" target="_blank" class="pr-proof-file-btn">
+                <a href="<?= esc($proofUrl) ?>" target="_blank" rel="noopener noreferrer" class="pr-proof-file-btn">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                     <div>
                         <div style="font-weight:700;font-size:13px;">View PDF</div>

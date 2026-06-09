@@ -8,6 +8,7 @@ use App\Models\Payment\PaymentModel;
 use App\Models\Payment\PaymentFeeTypeModel;
 use App\Models\Payment\PaymentMethodModel;
 use App\Models\Payment\PaymentMethodAccountModel;
+use App\Services\NotificationService;
 
 class ReservationFeeController extends BaseController
 {
@@ -15,6 +16,7 @@ class ReservationFeeController extends BaseController
     protected $methodModel;
     protected $accountModel;
     protected $feeModel;
+    protected $notificationService;
 
     public function __construct()
     {
@@ -22,6 +24,7 @@ class ReservationFeeController extends BaseController
         $this->methodModel  = new PaymentMethodModel();
         $this->accountModel = new PaymentMethodAccountModel();
         $this->feeModel     = new PaymentFeeTypeModel();
+        $this->notificationService = new NotificationService();
     }
 
     public function index()
@@ -138,6 +141,8 @@ class ReservationFeeController extends BaseController
             return $this->jsonError('Could not record your payment. Please try again.');
         }
 
+        $this->notificationService->trigger('reservation_fee.pending', $applicantId, ['reference_num' => $referenceNum]);
+
         return $this->jsonSuccess(
             'Reservation fee submitted successfully.'
         );
@@ -152,6 +157,7 @@ class ReservationFeeController extends BaseController
 
             $map[$row['code']] = [
                 'payment_method_id' => (int) $row['payment_method_id'],
+                'code'              => $row['code'],
                 'name'              => $row['name'],
                 'payment_method_account_id' => $row['payment_method_account_id'],
                 'account_number'    => $row['account_number'],

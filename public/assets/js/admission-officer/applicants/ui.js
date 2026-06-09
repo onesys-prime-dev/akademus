@@ -69,7 +69,7 @@ export function updateApplicantsTable(applicants) {
     }
 
     tbody.innerHTML = applicants.map(app => `
-        <tr class="applicants-table__row" data-row data-id="${app.applicant_id}">
+        <tr class="applicants-table__row" data-row data-id="${app.applicant_id}" data-name="${escapeHtml(app.applicant_name)}">
 
             <td class="applicants-table__cell applicants-table__cell--checkbox">
                 <input type="checkbox" data-select>
@@ -88,7 +88,7 @@ export function updateApplicantsTable(applicants) {
             </td>
 
             <td class="applicants-table__cell">
-                ${escapeHtml(app.applicant_type || '-')}
+                ${escapeHtml(app.applicant_type || '')}
             </td>
 
             <td class="applicants-table__cell">
@@ -180,7 +180,10 @@ function ensureDocModal() {
     modal.style.cssText = [
         'display:none',
         'position:fixed',
-        'top:0', 'left:0', 'right:0', 'bottom:0',
+        'top:0',
+        'left:0',
+        'right:0',
+        'bottom:0',
         'z-index:99999',
         'background:rgba(0,0,0,0.65)',
         'align-items:center',
@@ -188,26 +191,106 @@ function ensureDocModal() {
     ].join(';');
 
     modal.innerHTML = `
-        <div style="background:#fff;border-radius:10px;width:92%;max-width:860px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.25);">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid #eee;flex-shrink:0;">
-                <span id="ao-doc-modal-title" style="font-weight:600;font-size:14px;color:#222;max-width:80%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
-                <button id="ao-doc-modal-close" style="background:none;border:none;cursor:pointer;font-size:26px;color:#666;line-height:1;padding:0 4px;">&times;</button>
+        <div style="
+            background:#fff;
+            border-radius:14px;
+            width:92%;
+            max-width:860px;
+            max-height:90vh;
+            display:flex;
+            flex-direction:column;
+            overflow:hidden;
+            box-shadow:0 8px 32px rgba(0,0,0,.25);
+        ">
+
+            <!-- header -->
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                padding:14px 20px;
+                border-bottom:1px solid #eee;
+                flex-shrink:0;
+            ">
+                <span
+                    id="ao-doc-modal-title"
+                    style="
+                        font-weight:600;
+                        font-size:14px;
+                        color:#222;
+                        max-width:80%;
+                        overflow:hidden;
+                        text-overflow:ellipsis;
+                        white-space:nowrap;
+                    "
+                ></span>
+
+                <button
+                    id="ao-doc-modal-close"
+                    style="
+                        background:none;
+                        border:none;
+                        cursor:pointer;
+                        font-size:26px;
+                        color:#666;
+                        line-height:1;
+                        padding:0 4px;
+                    "
+                >&times;</button>
             </div>
-            <div id="ao-doc-modal-body" style="flex:1;overflow:auto;min-height:480px;display:flex;align-items:center;justify-content:center;padding:8px;"></div>
-        </div>`;
+
+            <!-- body -->
+            <div
+                id="ao-doc-modal-body"
+                style="
+                    flex:1;
+                    overflow:auto;
+                    min-height:480px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    padding:8px;
+                    background:#f8fafc;
+                "
+            ></div>
+
+            <!-- footer -->
+            <div
+                id="ao-doc-modal-footer"
+                style="
+                    display:flex;
+                    justify-content:flex-end;
+                    align-items:center;
+                    gap:12px;
+                    padding:16px 20px;
+                    border-top:1px solid #eee;
+                    background:#fff;
+                    flex-shrink:0;
+                "
+            ></div>
+
+        </div>
+    `;
 
     document.body.appendChild(modal);
 }
 
-export function openDocModal(url, filename) {
+export function openDocModal(url, filename, documentId, status = 'pending') {
     ensureDocModal();
 
     const modal = document.getElementById('ao-doc-modal');
     const title = document.getElementById('ao-doc-modal-title');
     const body  = document.getElementById('ao-doc-modal-body');
+    const footer = document.getElementById('ao-doc-modal-footer');
+
+    modal.dataset.documentId = documentId;
+
+    modal.dataset.documentId = documentId;
+    modal.dataset.status = status;
 
     title.textContent = filename || 'Document Preview';
     body.innerHTML = '';
+    footer.innerHTML = renderDocFooter(status);
 
     const ext     = (filename || '').split('.').pop().toLowerCase();
     const isImage = ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(ext);
@@ -236,6 +319,79 @@ export function openDocModal(url, filename) {
 
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+}
+
+function renderDocFooter(status) {
+    if (status === 'approved') {
+        return `
+            <div style="
+                display:inline-flex;
+                align-items:center;
+                gap:8px;
+                padding:10px 14px;
+                border-radius:999px;
+                background:#dcfce7;
+                color:#166534;
+                font-size:14px;
+                font-weight:700;
+            ">
+                ✓ &nbsp Approved
+            </div>
+        `;
+    }
+
+    if (status === 'rejected') {
+        return `
+            <div style="
+                display:inline-flex;
+                align-items:center;
+                gap:8px;
+                padding:10px 14px;
+                border-radius:999px;
+                background:#fee2e2;
+                color:#991b1b;
+                font-size:14px;
+                font-weight:700;
+            ">
+                ✕ &nbsp Rejected
+            </div>
+        `;
+    }
+
+    return `
+        <button
+            id="ao-doc-reject"
+            style="
+                border:none;
+                border-radius:10px;
+                padding:12px 18px;
+                font-size:14px;
+                font-weight:600;
+                cursor:pointer;
+                background:#fee2e2;
+                color:#b91c1c;
+            "
+        >
+            Reject
+        </button>
+
+        <button
+            id="ao-doc-verify"
+            style="
+                border:none;
+                border-radius:10px;
+                padding:12px 18px;
+                font-size:14px;
+                font-weight:600;
+                cursor:pointer;
+                background:#16a34a;
+                color:#fff;
+                box-shadow:0 4px 10px rgba(22,163,74,.18);
+            "
+        >
+            Verify
+        </button>
+    `;
 }
 
 export function closeDocModal() {

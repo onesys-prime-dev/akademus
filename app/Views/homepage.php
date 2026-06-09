@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css') . '?v=' . time(); ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/base/reset.css') . '?v=' . time(); ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/pages/homepage.css') . '?v=' . time(); ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/global.css') ?>">
 </head>
 <body>
 
@@ -17,10 +18,9 @@
             <button class="hp-overlay__close" id="hpOverlayClose">&#10005;</button>
             <nav class="hp-overlay__nav">
                 <a href="#home"     class="hp-overlay__link" onclick="hpCloseMenu()">Home</a>
-                <a href="<?= base_url('about') ?>" class="hp-overlay__link">About Us</a>
-                <a href="#featured" class="hp-overlay__link" onclick="hpCloseMenu()">Features</a>
-                <a href="#services" class="hp-overlay__link" onclick="hpCloseMenu()">Services</a>
-                <a href="#contact"  class="hp-overlay__link" onclick="hpCloseMenu()">Contact</a>
+                <a href="<?= base_url('about') ?>"    class="hp-overlay__link">About Us</a>
+                <a href="<?= base_url('features') ?>" class="hp-overlay__link">Features</a>
+                <a href="<?= base_url('contact') ?>"  class="hp-overlay__link">Contact</a>
             </nav>
             <a href="<?= base_url('sign-in') ?>" class="hp-overlay__cta">Get Started</a>
         </div>
@@ -36,11 +36,10 @@
                     <span class="hp-header__brand">AKADEMUS</span>
                 </a>
                 <nav class="hp-header__nav">
-                    <a href="#home"                          class="hp-header__link hp-header__link--active">Home</a>
-                    <a href="<?= base_url('about') ?>"       class="hp-header__link">About Us</a>
-                    <a href="#featured"                      class="hp-header__link">Features</a>
-                    <a href="#services"                      class="hp-header__link">Services</a>
-                    <a href="#contact"                       class="hp-header__link">Contact</a>
+                    <a href="#home"                           class="hp-header__link hp-header__link--active">Home</a>
+                    <a href="<?= base_url('about') ?>"        class="hp-header__link">About Us</a>
+                    <a href="<?= base_url('features') ?>"     class="hp-header__link">Features</a>
+                    <a href="<?= base_url('contact') ?>"      class="hp-header__link">Contact</a>
                 </nav>
                 <a href="<?= base_url('sign-in') ?>" class="hp-header__cta">Get Started</a>
                 <button class="hp-hamburger" id="hpHamburger" aria-label="Open menu">
@@ -239,5 +238,7 @@
             });
         });
     </script>
+    <script src="<?= base_url('assets/js/page-animation.js') ?>?v=<?= time() ?>"></script>
+    <script src="<?= base_url('assets/js/page-transition-animation.js') ?>?v=<?= time() ?>"></script>
 </body>
 </html>

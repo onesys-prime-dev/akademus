@@ -11,9 +11,17 @@ use App\Models\Application\FamilyBackgroundModel;
 use App\Models\Application\EducationalBackgroundModel;
 use App\Models\FormPageModel;
 use App\Models\ThemeModel;
+use App\Services\NotificationService;
 
 class ApplicantFormController extends BaseController
 {
+    protected NotificationService $notificationService;
+
+    public function __construct()
+    {
+        $this->notificationService = new NotificationService();
+    }
+    
     private function getEnabledPages(): array
     {
         $programId = session()->get('selected_program_id');
@@ -48,8 +56,17 @@ class ApplicantFormController extends BaseController
         return $map[$pageId] ?? [];
     }
 
+    private function requireLogin(): void
+    {
+        if (!session()->get('logged_in')) {
+            redirect()->to('sign-in')->send();
+            exit;
+        }
+    }
+
     public function index()
     {
+        $this->requireLogin();
         $applicantId = session()->get('applicant_id');
 
         // Restore program from any existing application (draft or submitted)
@@ -101,6 +118,7 @@ class ApplicantFormController extends BaseController
 
     public function getStep(int $step)
     {
+        $this->requireLogin();
         $pages    = $this->getEnabledPages();
         $maxSteps = count($pages);
 
@@ -157,6 +175,7 @@ class ApplicantFormController extends BaseController
 
     public function updateForm(int $step)
     {
+        $this->requireLogin();
         $data   = $this->request->getPost();
         $action = $data['action'] ?? 'draft';
 
@@ -209,6 +228,10 @@ class ApplicantFormController extends BaseController
         $isLastStep = ($step === count($pages));
         if ($isLastStep && $action === 'submit') {
             $applicationModel->update($applicationId, ['application_status' => 'pending']);
+
+            $this->notificationService->trigger('application.submitted', $applicantId, [
+                'application_id' => $applicationId,
+            ]);
         }
 
         // When program is selected on step 1, store it in session so presets load correctly

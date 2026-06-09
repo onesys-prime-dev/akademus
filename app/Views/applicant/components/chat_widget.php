@@ -109,8 +109,8 @@
 }
 .w-msg.bot  .w-msg-bubble { background: #fff; color: #1a202c; border: 1.5px solid #e2e8f0; border-bottom-left-radius: 3px; }
 .w-msg.user .w-msg-bubble {
-  background: var(--primary-color);
-  color: #000;
+  background: var(--primary-dark);
+  color: #ffffff;
   border: 1px solid #e2e8f0;
 }
 .w-quick-replies { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
@@ -247,9 +247,6 @@ function toggleChatWidget() {
 }
 
 // ── Groq config — same key as faq.php ──
-const W_GROQ_KEY = 'secret';  
-const W_GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
-
 const W_SCHOOL_NAME      = '<?= esc($theme['app_name']         ?? 'the school') ?>';
 const W_SCHOOL_YEAR      = '<?= esc($theme['school_year']      ?? '') ?>';
 const W_ADMISSION_STATUS = '<?= esc($theme['admission_status'] ?? 'Open for Applications') ?>';
@@ -323,22 +320,25 @@ async function wSendMessage(text = null) {
     wShowTyping();
 
     try {
-        const res = await fetch(W_GROQ_URL, {
+        const res = await fetch('<?= base_url('api/groq/chat') ?>', {
             method: 'POST',
+<<<<<<< HEAD
+            headers: { 'Content-Type': 'application/json' },
+=======
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${W_GROQ_KEY}`
+                'X-Requested-With': 'XMLHttpRequest'
             },
+>>>>>>> shuay-branch
             body: JSON.stringify({
-                model: 'llama-3.1-8b-instant',
                 messages: [
                     { role: 'system', content: W_SYSTEM },
                     ...wHistory
-                ],
-                temperature: 0.2,
-                max_tokens: 256
+                ]
             })
         });
+
+        if (!res.ok) throw new Error('Server error');
 
         const data = await res.json();
         wRemoveTyping();

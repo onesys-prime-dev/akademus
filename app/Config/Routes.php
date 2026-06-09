@@ -5,14 +5,27 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'HomeController::index');
+$routes->get('/', 'LandingPage\HomeController::index');
 $routes->get('applynowpage', 'ApplyNow::index');
 
+// -------------------------- LANDING PAGE ROUTES -------------------------- //
+$routes->get('/homepage', 'LandingPage\HomeController::index');     // Home           
+$routes->get('/about-us', 'LandingPage\AboutUsController::index');  // About Us
+$routes->get('/features', 'LandingPage\FeaturesController::index'); // Features
+$routes->get('/contact', 'LandingPage\ContactController::index');   // Contact
 
 
 //About us
-
-$routes->get('about', 'AboutController::index');
+$routes->get('about',    'AboutController::index');
+$routes->get('contact',  'ContactController::index');
+$routes->get('features', 'FeaturesController::index');
+$routes->get('/systems/akademus', 'LandingPage\SystemsController::akademus');
+$routes->get('/systems/mentora', 'LandingPage\SystemsController::mentora');
+$routes->get('/systems/learnix', 'LandingPage\SystemsController::learnix');
+$routes->get('/systems/sis', 'LandingPage\SystemsController::sis');
+$routes->get('/systems/attendance', 'LandingPage\SystemsController::attendance');
+$routes->get('/systems/otis', 'LandingPage\SystemsController::otis');
+// ------------------------------------------------------------------------- //
 
 // sign and sign up page after clicking the 'Apply Now' Button
 $routes->get('sign-in', 'Auth\AuthController::sign_in');
@@ -158,6 +171,10 @@ $routes->post('admin/programs/assign-preset',    'Admin\ProgramPresetsController
 // API Endpoints
 $routes->get('api/presets/program/(:num)',       'Admin\PresetsController::getFormPagesForApplicant/$1');
 
+// Groq AI proxy — keeps API key server-side
+$routes->post('api/groq/applicant', 'Api\GroqProxyController::applicantChat');
+$routes->post('api/groq/officer',   'Api\GroqProxyController::officerChat');
+
 // Admission Officer Auth
 $routes->get ('admission-officer/login',  'AdmissionOfficer\AuthController::login');
 $routes->post('admission-officer/login',  'AdmissionOfficer\AuthController::loginPost');
@@ -173,6 +190,7 @@ $routes->get('admission-officer/dashboard/calendar-data', 'AdmissionOfficer\Dash
 $routes->get('admission-officer/applicants/(:num)',                          'AdmissionOfficer\ApplicantsController::index/$1');
 $routes->get('admission-officer/applicants/fetch-content',                   'AdmissionOfficer\ApplicantsController::fetchContent');
 $routes->get('admission-officer/applicants/document/(:num)/(:num)',          'AdmissionOfficer\ApplicantsController::viewDocument/$1/$2');
+$routes->post('admission-officer/applicants/document/(:num)/decide',        'AdmissionOfficer\ApplicantsController::decideDocument/$1');
 $routes->get('admission-officer/applicants',                     'AdmissionOfficer\ApplicantsController::index');
 $routes->get('admission-officer/applicants/fetch-applicants',    'AdmissionOfficer\ApplicantsController::fetchApplicants');
 $routes->post('admission-officer/applicants/bulk-update',        'AdmissionOfficer\ApplicantsController::bulkUpdate');
@@ -207,3 +225,11 @@ $routes->get ('follow-up-messages/unread-count','Applicant\FollowUpController::u
 $routes->get('tracking-progress', 'Applicant\TrackingProgressController::index');
 
 // (duplicate route removed — handled by Payment\AdmissionProcessingFeeController above)
+
+// API Route for Groq AI Assistant
+$routes->post('api/groq/chat', 'API\Groq::chat');
+
+// Smart Pay
+$routes->post('/payment/admission-fee',        'Payment\SmartPayController::getAdmissionFeePayment');
+$routes->post('/payment/reservation-fee',      'Payment\SmartPayController::getReservationFeePayment');
+$routes->post('/payment/webhook/smartpay',     'Payment\SmartPayController::webhook');

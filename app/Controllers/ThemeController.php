@@ -44,6 +44,12 @@ class ThemeController extends BaseController
             return redirect()->back()->with('error', 'Invalid credentials');
         }
 
+        if (password_needs_rehash($user['admin_password'], PASSWORD_DEFAULT)) {
+            $db->table('admin_credentials')
+                ->where('user_id', $user['user_id'])
+                ->update(['password' => password_hash($password, PASSWORD_DEFAULT)]);
+        }
+
         session()->set([
             'admin_logged_in' => true,
             'admin_id'        => $user['user_id'],
@@ -103,6 +109,15 @@ class ThemeController extends BaseController
         // Handle logo upload
         $logo = $this->request->getFile('logo_file');
         if ($logo && $logo->isValid() && !$logo->hasMoved()) {
+            $valid = $this->validate([
+                'logo_file' => 'is_image[logo_file]|mime_in[logo_file,image/jpeg,image/png,image/gif,image/webp]|max_size[logo_file,2048]',
+            ]);
+            if (!$valid) {
+                if ($this->request->isAJAX()) {
+                    return $this->response->setJSON(['status' => 'error', 'message' => 'Logo must be a JPEG, PNG, GIF, or WebP image under 2 MB.'])->setStatusCode(422);
+                }
+                return redirect()->back()->with('error', 'Logo must be a JPEG, PNG, GIF, or WebP image under 2 MB.');
+            }
             $newName = $logo->getRandomName();
             $logo->move(FCPATH . 'assets/images/logos', $newName);
             $data['logo_url'] = 'assets/images/logos/' . $newName;
@@ -114,7 +129,7 @@ class ThemeController extends BaseController
             return $this->response->setJSON(['status' => 'success', 'message' => 'Theme saved!']);
         }
 
-        return redirect()->to('admin/theme')->with('saved', true);
+        return redirect()->to('admin/theme')->with('saved', '1');
     }
 
     // ── Theme Preview (iframe) ────────────────────────────────
