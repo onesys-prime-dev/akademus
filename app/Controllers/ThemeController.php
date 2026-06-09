@@ -140,4 +140,29 @@ class ThemeController extends BaseController
         $theme = $this->themeModel->getAllSettings();
         return $this->response->setJSON($theme);
     }
+
+    public function uploadLogo()
+    {
+        $file = $this->request->getFile('logo_file');
+
+        if (!$file || !$file->isValid()) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Invalid file'
+            ]);
+        }
+
+        $newName = $file->getRandomName();
+
+        $file->move(
+            FCPATH . 'assets/images/logos',
+            $newName
+        );
+
+        return $this->response->setJSON([
+            'status' => 'success',
+            'logo_path' => 'assets/images/logos/' . $newName,
+            'logo_url'  => base_url('assets/images/logos/' . $newName)
+        ]);
+    }
 }
