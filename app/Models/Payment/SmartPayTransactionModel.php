@@ -1,4 +1,3 @@
-```php id="7jlwm4"
 <?php
 
 namespace App\Models\Payment;
@@ -44,4 +43,3 @@ class SmartPayTransactionModel extends Model
 
     protected $returnType = 'array';
 }
-```

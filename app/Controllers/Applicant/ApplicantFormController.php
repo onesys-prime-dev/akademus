@@ -295,16 +295,14 @@ class ApplicantFormController extends BaseController
 
     private function updateEducationalBackground($data, $applicationId, $action)
     {
-        $schoolYear = preg_split('/\s*-\s*/', $data['school_year'] ?? '');
-
         return (new EducationalBackgroundModel())
             ->where('application_id', $applicationId)
             ->set([
                 'school_name'       => $data['school_name']     ?? null,
                 'school_location'   => $data['school_location'] ?? null,
                 'strand'            => $data['strand']          ?? null,
-                'school_year_start' => $schoolYear[0]           ?? null,
-                'school_year_end'   => $schoolYear[1]           ?? null,
+                'school_year_start' => $data['school_year_start'] ?? null,
+                'school_year_end'   => $data['school_year_end']   ?? null,
                 'gwa'               => $data['gwa']             ?? null,
                 'school_type'       => $data['school_type']     ?? null,
             ])->update();

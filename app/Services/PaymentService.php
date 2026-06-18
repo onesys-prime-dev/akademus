@@ -15,7 +15,7 @@ class PaymentService
     protected $userModel;
 
     protected $paymentModel;
-    protected $smartPayTransactionModel
+    protected $smartPayTransactionModel;
     /*
     |--------------------------------------------------------------------------
     | Smartpay Configuration

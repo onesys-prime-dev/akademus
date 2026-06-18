@@ -1,4 +1,3 @@
-```php
 <?php
 
 namespace App\Controllers\Payment;
@@ -131,4 +130,3 @@ class SmartpayWebhookController extends BaseController
         ]);
     }
 }
-```

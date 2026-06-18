@@ -89,7 +89,7 @@ $fields = get_field_configs(4);
                         <?php if (field_visible($fields, 'school_year_start') || field_visible($fields, 'school_year_end')): ?>
                         <div class="application-form-input-field medium-field">
                             <label class="category-text-color">
-                                SCHOOL YEAR
+                                School Year
                                 <?php if (field_required($fields, 'school_year_start')): ?><span class="required-field">*</span><?php endif; ?>
                             </label>
                             <div style="display:flex; gap:6px; align-items:center;">
