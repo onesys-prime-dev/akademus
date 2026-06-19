@@ -8,6 +8,12 @@
     gap: 16px;
 }
 
+.calc-header {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 24px;
+}
+
 .calc-header.card h2 {
     font-size: 18px;
     font-weight: 700;
@@ -26,6 +32,12 @@
     grid-template-columns: 1fr 400px;
     gap: 16px;
     align-items: stretch;
+}
+
+.calc-left-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 24px;
 }
 
 /* SUBJECT LIST */

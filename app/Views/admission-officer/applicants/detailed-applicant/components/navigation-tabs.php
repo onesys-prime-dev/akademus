@@ -12,15 +12,15 @@ $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') =
         <span class="application-tabs__label">Requirements</span>
     </div>
 
+    <div class="application-tabs__item <?= $activeTab === 'admission_fee' ? 'application-tabs__item--active' : '' ?>" data-tab="admission_fee">
+        <span class="application-tabs__label">Admission Processing Fee</span>
+    </div>
+
     <?php if ($examEnabled): ?>
     <div class="application-tabs__item <?= $activeTab === 'exam' ? 'application-tabs__item--active' : '' ?>" data-tab="exam">
         <span class="application-tabs__label">Exam</span>
     </div>
     <?php endif; ?>
-
-    <div class="application-tabs__item <?= $activeTab === 'admission_fee' ? 'application-tabs__item--active' : '' ?>" data-tab="admission_fee">
-        <span class="application-tabs__label">Admission Processing Fee</span>
-    </div>
 
     <div class="application-tabs__item <?= $activeTab === 'reservation_fee' ? 'application-tabs__item--active' : '' ?>" data-tab="reservation_fee">
         <span class="application-tabs__label">Reservation Fee</span>

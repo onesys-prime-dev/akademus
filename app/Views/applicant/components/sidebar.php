@@ -60,9 +60,24 @@ $isApproved = (new \App\Models\Applicant\ApplicantModel())->getAppStatus('applic
                         <span>Tracking Progress</span>
                     </a>
                     <?php if ($examEnabled): ?>
-                        <a href="<?= base_url('/exam-schedule') ?>" class="sidebar-nav-link <?= str_contains($uri, 'exam-schedule') ? 'active' : '' ?>">
+                        <a
+                            href="<?= $isApproved ? base_url('/exam-schedule') : 'javascript:void(0)' ?>"
+                            class="sidebar-nav-link <?= str_contains($uri, 'exam-schedule') ? 'active' : '' ?> <?= !$isApproved ? 'disabled-link' : '' ?>">
                             <div class="dotted-link"></div>
                             <span>Exam Schedule</span>
+
+                            <?php if (!$isApproved): ?>
+                                <div class="lock-help-wrap" onclick="this.classList.toggle('show-tip')">
+                                    <svg class="lock-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+
+                                    <div class="lock-tooltip">
+                                        unlocks after admission approval
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </a>
                     <?php endif; ?>
                 </div>
