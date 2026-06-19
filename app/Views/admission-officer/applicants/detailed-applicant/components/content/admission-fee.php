@@ -2,9 +2,29 @@
 $payment = $payment ?? null;
 
 $statusConfig = [
-    'PENDING'  => ['label' => 'Pending',  'cls' => 'pr-status--pending',  'icon' => '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'],
-    'PAID'     => ['label' => 'Approved', 'cls' => 'pr-status--approved', 'icon' => '<polyline points="20 6 9 17 4 12"/>'],
-    'REJECTED' => ['label' => 'Rejected', 'cls' => 'pr-status--rejected', 'icon' => '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'],
+    'PENDING' => [
+        'label' => 'Pending',
+        'cls'   => 'pr-status--pending',
+        'icon'  => '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'
+    ],
+
+    'PROCESSING' => [
+        'label' => 'Processing',
+        'cls'   => 'pr-status--processing',
+        'icon'  => '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>'
+    ],
+
+    'PAID' => [
+        'label' => 'Approved',
+        'cls'   => 'pr-status--approved',
+        'icon'  => '<polyline points="20 6 9 17 4 12"/>'
+    ],
+
+    'REJECTED' => [
+        'label' => 'Rejected',
+        'cls'   => 'pr-status--rejected',
+        'icon'  => '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'
+    ],
 ];
 ?>
 <?php echo view('admission-officer/applicants/detailed-applicant/components/content/_payment_styles') ?>
@@ -22,10 +42,22 @@ $statusConfig = [
     </div>
 
 <?php else:
-    $st         = $payment['payment_status'];
-    $cfg        = $statusConfig[$st] ?? ['label' => $st, 'cls' => 'pr-status--pending', 'icon' => ''];
-    $isPending  = $st === 'PENDING';
-    $ext        = strtolower(pathinfo($payment['proof_of_payment'] ?? '', PATHINFO_EXTENSION));
+    $st  = $payment['payment_status'];
+    $cfg = $statusConfig[$st] ?? [
+        'label' => $st,
+        'cls'   => 'pr-status--pending',
+        'icon'  => ''
+    ];
+
+    $paymentSource = strtoupper($payment['payment_source'] ?? 'COUNTER');
+
+    $isCounter = $paymentSource === 'COUNTER';
+    $isOnline  = $paymentSource === 'ONLINE';
+
+    $isPending = $st === 'PENDING' && $isCounter;
+    $isProcessing = $st === 'PROCESSING';
+
+    $ext = strtolower(pathinfo($payment['proof_of_payment'] ?? '', PATHINFO_EXTENSION));
     $isImage    = in_array($ext, ['jpg','jpeg','png','gif','webp']);
     $proofUrl   = $payment['proof_of_payment']
         ? base_url('admission-officer/payments/' . $payment['payment_id'] . '/proof')
@@ -34,7 +66,7 @@ $statusConfig = [
 ?>
 
     <!-- ── Status Banner ── -->
-    <div class="pr-status-banner pr-status-banner--<?= $st === 'PAID' ? 'approved' : ($st === 'REJECTED' ? 'rejected' : 'pending') ?>">
+    <div class="pr-status-banner pr-status-banner--<?= $st === 'PAID' ? 'approved' : ($st === 'REJECTED' ? 'rejected' : ($st === 'PROCESSING' ? 'processing' : 'pending')) ?>">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><?= $cfg['icon'] ?></svg>
         <span><?= esc($cfg['label']) ?> &mdash; Admission Processing Fee</span>
         <?php if (! empty($payment['reviewed_at'])): ?>
@@ -64,14 +96,59 @@ $statusConfig = [
                     <div class="pr-info-sub"><?= esc(date('g:i A', strtotime($payment['created_at']))) ?></div>
                     <?php endif; ?>
                 </div>
+                
+                <?php if ($isCounter): ?>
+                    <div class="pr-info-item">
+                        <div class="pr-info-label">Receipt / Reference Number</div>
+                        <div class="pr-info-value pr-info-value--mono">
+                            <?= esc($payment['reference_num'] ?? '—') ?>
+                        </div>
+                    </div>
+                
+                <?php else: ?>
+                    <div class="pr-info-item">
+                        <div class="pr-info-label">Service Reference</div>
+                        <div class="pr-info-value pr-info-value--mono">
+                            <?= esc($payment['reference_num'] ?? '—') ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
                 <div class="pr-info-item">
-                    <div class="pr-info-label">Reference Number</div>
-                    <div class="pr-info-value pr-info-value--mono"><?= esc($payment['reference_num'] ?? '—') ?></div>
+                    <div class="pr-info-label">Payment Source</div>
+                    <div class="pr-info-value">
+                        <?= $isCounter ? 'University Cashier Office' : 'Online Payment' ?>
+                    </div>
                 </div>
-                <div class="pr-info-item">
-                    <div class="pr-info-label">Payment Method</div>
-                    <div class="pr-info-value"><?= esc($payment['method_name'] ?? '—') ?></div>
-                </div>
+
+                <?php if ($isOnline): ?>
+                    <div class="pr-info-item">
+                        <div class="pr-info-label">Payment Method</div>
+                        <div class="pr-info-value"><?= esc($payment['method_name'] ?? '—') ?></div>
+                    </div>
+
+                    <div class="pr-info-item">
+                        <div class="pr-info-label">Gateway</div>
+                        <div class="pr-info-value"><?= esc($payment['gateway_name'] ?? 'SMARTPAY') ?></div>
+                    </div>
+
+                    <div class="pr-info-item">
+                        <div class="pr-info-label">Gateway Reference</div>
+                        <div class="pr-info-value pr-info-value--mono">
+                            <?= esc($payment['gateway_reference'] ?? $payment['external_reference'] ?? '—') ?>
+                        </div>
+                    </div>
+
+                    <div class="pr-info-item">
+                        <div class="pr-info-label">Gateway Status</div>
+                        <div class="pr-info-value"><?= esc($payment['gateway_status'] ?? '—') ?></div>
+                    </div>
+
+                    <div class="pr-info-item">
+                        <div class="pr-info-label">Settlement Status</div>
+                        <div class="pr-info-value"><?= esc($payment['settlement_status'] ?? '—') ?></div>
+                    </div>
+                <?php endif; ?>
+
                 <?php if (! empty($payment['account_name'])): ?>
                 <div class="pr-info-item">
                     <div class="pr-info-label">Account Name</div>
@@ -99,33 +176,42 @@ $statusConfig = [
 
         <!-- Right: Proof -->
         <div class="pr-proof-col">
-            <div class="pr-section-label">Proof of Payment</div>
+            <div class="pr-section-label">
+                <?= $isCounter ? 'Proof of Payment' : 'Online Payment Status' ?>
+            </div>
 
-            <?php if ($proofUrl): ?>
-                <?php if ($isImage): ?>
-                <div class="pr-proof-thumb" data-lightbox data-src="<?= esc($proofUrl) ?>">
-                    <img src="<?= esc($proofUrl) ?>" alt="Proof of Payment">
-                    <div class="pr-proof-thumb__overlay">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                        View Full
+            <?php if ($isCounter): ?>
+                <?php if ($proofUrl): ?>
+                    <?php if ($isImage): ?>
+                    <div class="pr-proof-thumb" data-lightbox data-src="<?= esc($proofUrl) ?>">
+                        <img src="<?= esc($proofUrl) ?>" alt="Proof of Payment">
+                        <div class="pr-proof-thumb__overlay">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            View Full
+                        </div>
                     </div>
-                </div>
-                <a href="<?= esc($proofUrl) ?>" target="_blank" class="pr-proof-open-link">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                    Open in new tab
-                </a>
+                    <a href="<?= esc($proofUrl) ?>" target="_blank" class="pr-proof-open-link">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        Open in new tab
+                    </a>
+                    <?php else: ?>
+                    <a href="<?= esc($proofUrl) ?>" target="_blank" class="pr-proof-file-btn">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <div>
+                            <div style="font-weight:700;font-size:13px;">View PDF</div>
+                            <div style="font-size:11px;opacity:.7;margin-top:1px;">Click to open</div>
+                        </div>
+                    </a>
+                    <?php endif; ?>
                 <?php else: ?>
-                <a href="<?= esc($proofUrl) ?>" target="_blank" class="pr-proof-file-btn">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                    <div>
-                        <div style="font-weight:700;font-size:13px;">View PDF</div>
-                        <div style="font-size:11px;opacity:.7;margin-top:1px;">Click to open</div>
-                    </div>
-                </a>
+                    <div class="pr-proof-none">No file attached</div>
                 <?php endif; ?>
             <?php else: ?>
-                <div class="pr-proof-none">No file attached</div>
+                <div class="pr-proof-none">
+                    Online payment is verified through SmartPay webhook. No uploaded proof is required.
+                </div>
             <?php endif; ?>
+
         </div>
 
     </div><!-- /.pr-layout -->

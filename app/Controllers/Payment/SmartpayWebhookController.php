@@ -3,9 +3,8 @@
 namespace App\Controllers\Payment;
 
 use App\Controllers\BaseController;
-
 use App\Models\Payment\PaymentModel;
-use App\Models\Payment\SmartpayTransactionModel;
+use App\Models\Payment\PaymentGatewayTransactionModel;
 use App\Models\Payment\PaymentWebhookLogModel;
 
 class SmartpayWebhookController extends BaseController
@@ -14,119 +13,144 @@ class SmartpayWebhookController extends BaseController
     {
         $payload = $this->request->getJSON(true);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Save webhook log
-        |--------------------------------------------------------------------------
-        */
+        if (! is_array($payload)) {
+            return $this->response
+                ->setStatusCode(400)
+                ->setJSON([
+                    'success' => false,
+                    'message' => 'Invalid webhook payload.',
+                ]);
+        }
+
+        $referenceNumber = $payload['reference_number'] ?? null;
 
         $webhookLogModel = new PaymentWebhookLogModel();
 
-        $webhookLogModel->insert([
-
-            'gateway' => 'SMARTPAY',
-
-            'reference_number' =>
-                $payload['reference_number']
-                ?? null,
-
-            'payload' =>
-                json_encode($payload),
-
-            'status' => 'RECEIVED',
+        $webhookLogId = $webhookLogModel->insert([
+            'gateway'          => 'SMARTPAY',
+            'reference_number' => $referenceNumber,
+            'payload'          => json_encode($payload),
+            'status'           => 'RECEIVED',
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Find transaction
-        |--------------------------------------------------------------------------
-        */
+        $gatewayTransactionModel = new PaymentGatewayTransactionModel();
 
-        $smartpayTransactionModel =
-            new SmartpayTransactionModel();
+        $transaction = $gatewayTransactionModel
+            ->where('gateway_name', 'SMARTPAY')
+            ->where('gateway_reference', $referenceNumber)
+            ->first();
 
-        $transaction =
-            $smartpayTransactionModel
-                ->where(
-                    'reference_number',
-                    $payload['reference_number'] ?? ''
-                )
-                ->first();
+        if (! $transaction) {
+            if ($webhookLogId) {
+                $webhookLogModel->update($webhookLogId, [
+                    'status' => 'TRANSACTION_NOT_FOUND',
+                ]);
+            }
 
-        if (!$transaction) {
-
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Transaction not found.'
-            ]);
+            return $this->response
+                ->setStatusCode(404)
+                ->setJSON([
+                    'success' => false,
+                    'message' => 'Transaction not found.',
+                ]);
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Update SmartPay transaction
-        |--------------------------------------------------------------------------
-        */
+        $gatewayStatus = strtoupper($payload['payment_status'] ?? 'PENDING');
 
-        $smartpayTransactionModel
-            ->update(
-                $transaction['smartpay_transaction_id'],
-                [
-
-                    'payment_status' =>
-                        $payload['payment_status']
-                        ?? 'PENDING',
-
-                    'settlement_status' =>
-                        $payload['settlement_status']
-                        ?? 'PENDING',
-
-                    'webhook_received_at' =>
-                        date('Y-m-d H:i:s'),
-
-                    'updated_at' =>
-                        date('Y-m-d H:i:s'),
-                ]
-            );
-
-        /*
-        |--------------------------------------------------------------------------
-        | Sync payment table
-        |--------------------------------------------------------------------------
-        */
-
-        $paymentStatus = match (
-            strtoupper(
-                $payload['payment_status'] ?? ''
-            )
-        ) {
-
-            'SUCCESS' => 'PAID',
+        $paymentStatus = match ($gatewayStatus) {
+            'SUCCESS',
+            'PAID',
+            'COMPLETED' => PaymentModel::STATUS_PAID,
 
             'FAILED',
-            'EXPIRED' => 'REJECTED',
+            'EXPIRED',
+            'CANCELLED' => PaymentModel::STATUS_REJECTED,
 
-            default => 'PROCESSING',
+            default => PaymentModel::STATUS_PROCESSING,
         };
+
+        if ($paymentStatus === PaymentModel::STATUS_PROCESSING) {
+            log_message('warning', 'Unknown SmartPay payment status: ' . $gatewayStatus);
+        }
 
         $paymentModel = new PaymentModel();
 
-        $paymentModel->update(
-            $transaction['payment_id'],
-            [
-
-                'payment_status' =>
-                    $paymentStatus,
-
-                'payment_date' =>
-                    date('Y-m-d H:i:s'),
-
-                'updated_at' =>
-                    date('Y-m-d H:i:s'),
-            ]
+        $currentPayment = $paymentModel->find(
+            $transaction['payment_id']
         );
 
+        if (
+            $currentPayment &&
+            $currentPayment['payment_status'] === PaymentModel::STATUS_PAID
+        ) {
+            if ($webhookLogId) {
+                $webhookLogModel->update($webhookLogId, [
+                    'status' => 'ALREADY_PAID',
+                ]);
+            }
+
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Payment already marked as paid.',
+            ]);
+        }
+
+        $db = db_connect();
+        $db->transStart();
+
+        $now = date('Y-m-d H:i:s');
+
+        $gatewayUpdate = [
+            'gateway_status'      => $gatewayStatus,
+            'settlement_status'   => $payload['settlement_status'] ?? 'PENDING',
+            'webhook_received_at' => $now,
+            'webhook_payload'     => json_encode($payload),
+        ];
+
+        if (
+            $paymentStatus === PaymentModel::STATUS_PAID &&
+            empty($transaction['paid_at'])
+        ) {
+            $gatewayUpdate['paid_at'] = $now;
+        }
+
+        $gatewayTransactionModel->update(
+            $transaction['gateway_transaction_id'],
+            $gatewayUpdate
+        );
+
+        $paymentData = [
+            'payment_status' => $paymentStatus,
+        ];
+
+        if ($paymentStatus === PaymentModel::STATUS_PAID) {
+            $paymentData['payment_date'] = $now;
+        }
+
+        $paymentModel->update(
+            $transaction['payment_id'],
+            $paymentData
+        );
+
+        if ($webhookLogId) {
+            $webhookLogModel->update($webhookLogId, [
+                'status' => 'PROCESSED',
+            ]);
+        }
+
+        $db->transComplete();
+
+        if (! $db->transStatus()) {
+            return $this->response
+                ->setStatusCode(500)
+                ->setJSON([
+                    'success' => false,
+                    'message' => 'Could not process webhook.',
+                ]);
+        }
+
         return $this->response->setJSON([
-            'success' => true
+            'success' => true,
         ]);
     }
 }

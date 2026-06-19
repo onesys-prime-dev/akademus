@@ -14,7 +14,9 @@ class PaymentModel extends Model
         'payment_fee_type_id',
         'payment_method_id',
         'payment_method_account_id',
+        'payment_source',
         'reference_num',
+        'external_reference',
         'proof_of_payment',
         'amount_paid',
         'payment_status',
@@ -34,14 +36,18 @@ class PaymentModel extends Model
     const STATUS_REJECTED   = 'REJECTED';
 
     // check if applicant already paid or not
-    public function hasPaidOrProcessing(int $applicantId, string $feeTypeCode): bool
+    public function hasActivePayment(int $applicantId, string $feeTypeCode): bool
     {
         $count = $this->db
             ->table('payment p')
             ->join('payment_fee_type pft', 'pft.payment_fee_type_id = p.payment_fee_type_id')
             ->where('p.applicant_id', $applicantId)
             ->where('pft.code', $feeTypeCode)
-            ->whereIn('p.payment_status', [self::STATUS_PAID, self::STATUS_PROCESSING])
+            ->whereIn('p.payment_status', [
+                self::STATUS_PENDING,
+                self::STATUS_PROCESSING,
+                self::STATUS_PAID,
+            ])
             ->countAllResults();
 
         return $count > 0;
@@ -106,7 +112,8 @@ class PaymentModel extends Model
             ->select([
                 'p.*',
                 'pft.code AS fee_type_code',
-                'pft.name AS fee_type_name'
+                'pft.name AS fee_type_name',
+                'p.payment_source',
             ])
             ->join('payment_fee_type pft', 'pft.payment_fee_type_id = p.payment_fee_type_id')
             ->where('p.payment_id', $paymentId)

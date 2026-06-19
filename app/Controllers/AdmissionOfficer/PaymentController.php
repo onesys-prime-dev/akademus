@@ -43,6 +43,13 @@ class PaymentController extends BaseController
             ]);
         }
 
+        if (($payment['payment_source'] ?? 'COUNTER') !== 'COUNTER') {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Online payments are verified automatically through SmartPay.',
+            ]);
+        }
+
         if ($payment['payment_status'] !== PaymentModel::STATUS_PENDING) {
             return $this->response->setJSON([
                 'success' => false,
@@ -101,6 +108,13 @@ class PaymentController extends BaseController
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Payment record not found.'
+            ]);
+        }
+
+        if (($payment['payment_source'] ?? 'COUNTER') !== 'COUNTER') {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Online payments are verified automatically through SmartPay.',
             ]);
         }
 

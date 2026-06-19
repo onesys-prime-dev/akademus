@@ -89,6 +89,7 @@ $routes->post('admin/theme/upload-logo', 'ThemeController::uploadLogo');
 // Applicant — submit payments
 $routes->get('admission-processing-fee',         'Payment\AdmissionProcessingFeeController::admissionProcessingFee');
 $routes->post('admission-processing-fee/submit', 'Payment\AdmissionProcessingFeeController::store');
+$routes->get('admission-processing-fee/proof/(:num)', 'Payment\AdmissionProcessingFeeController::proofFile/$1');
 
 $routes->get('reservation-fee',         'Payment\ReservationFeeController::index');
 $routes->post('reservation-fee/submit', 'Payment\ReservationFeeController::store');
