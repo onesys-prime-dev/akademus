@@ -94,9 +94,9 @@ class RequirementsReminders extends BaseCommand
     private function getLevel(int $elapsedSeconds)
     {
         $levels = [
-            1 => 1,    // 2 hours
-            2 => 2,   // 1 day
-            3 => 3,   // 3 days
+            1 => 2 * 3600,    // 2 hours
+            2 => 24 * 3600,   // 1 day
+            3 => 72 * 3600,   // 3 days
         ];
 
         asort($levels);
