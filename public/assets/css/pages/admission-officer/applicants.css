@@ -351,3 +351,5 @@
 .decision-modal__submit--decline { background: #dc2626; }
 .decision-modal__submit:hover    { opacity: 0.88; }
 .decision-modal__submit:disabled { opacity: 0.55; cursor: not-allowed; }
+
+

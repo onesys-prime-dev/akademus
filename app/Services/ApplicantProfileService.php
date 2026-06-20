@@ -173,6 +173,11 @@ class ApplicantProfileService
                 'es.max_slots',
                 'es.booked_slots',
                 'es.status       AS schedule_status',
+                'eb.result_status',
+                'eb.score',
+                'eb.result_remarks',
+                'eb.result_recorded_at',
+                'eb.result_recorded_by',
             ])
             ->join('exam_schedules es', 'es.exam_schedule_id = eb.exam_schedule_id')
             ->where('eb.applicant_id', $applicantId)

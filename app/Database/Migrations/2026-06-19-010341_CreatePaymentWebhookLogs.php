@@ -8,6 +8,10 @@ class CreatePaymentWebhookLogs extends Migration
 {
     public function up()
     {
+        if ($this->db->tableExists('payment_webhook_logs')) {
+            return;
+        }
+
         $this->forge->addField([
             'webhook_log_id' => [
                 'type'           => 'BIGINT',
@@ -47,7 +51,7 @@ class CreatePaymentWebhookLogs extends Migration
         $this->forge->addKey('reference_number');
         $this->forge->addKey('status');
 
-        $this->forge->createTable('payment_webhook_logs');
+        $this->forge->createTable('payment_webhook_logs', true);
     }
 
     public function down()

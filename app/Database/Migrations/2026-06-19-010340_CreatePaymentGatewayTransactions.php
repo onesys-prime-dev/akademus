@@ -8,6 +8,10 @@ class CreatePaymentGatewayTransactions extends Migration
 {
     public function up()
     {
+        if ($this->db->tableExists('payment_gateway_transactions')) {
+            return;
+        }
+
         $this->forge->addField([
             'gateway_transaction_id' => [
                 'type'           => 'BIGINT',
@@ -104,7 +108,7 @@ class CreatePaymentGatewayTransactions extends Migration
             'CASCADE'
         );
 
-        $this->forge->createTable('payment_gateway_transactions');
+        $this->forge->createTable('payment_gateway_transactions', true);
     }
 
     public function down()

@@ -131,6 +131,12 @@ class ExamScheduleController extends BaseController
                 'eb.status AS booking_status',
                 'eb.booked_at',
                 'eb.checked_in_at',
+
+                'eb.result_status',
+                'eb.score',
+                'eb.result_remarks',
+                'eb.result_recorded_at',
+
                 'es.exam_schedule_id',
                 'es.exam_date',
                 'es.start_time',

@@ -206,6 +206,10 @@ $routes->post('admission-officer/exam-schedule/update/(:num)',          'Admissi
 $routes->post('admission-officer/exam-schedule/delete/(:num)',          'AdmissionOfficer\ExamScheduleController::delete/$1');
 $routes->post('admission-officer/exam-schedule/bookings/check-in/(:num)', 'AdmissionOfficer\ExamScheduleController::checkIn/$1');
 $routes->post('admission-officer/exam-schedule/bookings/cancel/(:num)', 'AdmissionOfficer\ExamScheduleController::cancelBooking/$1');
+$routes->post(
+    'admission-officer/exam-bookings/(:num)/result',
+    'AdmissionOfficer\ApplicantsController::saveExamResult/$1'
+);
 
 // Admission Officer Follow-Up Messages
 $routes->get('admission-officer/follow-up',                        'AdmissionOfficer\FollowUpController::index');

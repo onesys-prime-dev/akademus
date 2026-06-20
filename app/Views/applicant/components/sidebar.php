@@ -18,6 +18,7 @@ $logo_url    = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('
 $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') === '1';
 
 $isApproved = (new \App\Models\Applicant\ApplicantModel())->getAppStatus('application_status', '') === 'approved';
+$examPassed = (new \App\Models\ExamBookingModel())->getResultStatus('result_status', '') === 'PASSED';
 ?>
 
 <nav>
@@ -95,12 +96,12 @@ $isApproved = (new \App\Models\Applicant\ApplicantModel())->getAppStatus('applic
                     </a>
 
                     <a
-                        href="<?= $isApproved ? base_url('/reservation-fee') : 'javascript:void(0)' ?>"
-                        class="sidebar-nav-link <?= str_contains($uri, 'reservation-fee') ? 'active' : '' ?> <?= !$isApproved ? 'disabled-link' : '' ?>">
+                        href="<?= $examPassed ? base_url('/reservation-fee') : 'javascript:void(0)' ?>"
+                        class="sidebar-nav-link <?= str_contains($uri, 'reservation-fee') ? 'active' : '' ?> <?= !$examPassed ? 'disabled-link' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Reservation Fee</span>
 
-                        <?php if (!$isApproved): ?>
+                        <?php if (!$examPassed): ?>
                             <div class="lock-help-wrap" onclick="this.classList.toggle('show-tip')">
                                 <!-- Lock icon -->
                                 <svg class="lock-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
@@ -110,7 +111,7 @@ $isApproved = (new \App\Models\Applicant\ApplicantModel())->getAppStatus('applic
 
                                 <!-- Tooltip -->
                                 <div class="lock-tooltip">
-                                    unlocks after admission's approval
+                                    unlocks after passing the entrance examination
                                 </div>
                             </div>
                         <?php endif; ?>

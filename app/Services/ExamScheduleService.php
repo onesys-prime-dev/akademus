@@ -341,4 +341,28 @@ class ExamScheduleService
                 ->countAllResults(false),
         ];
     }
+
+    public function saveResult(
+        int $bookingId,
+        string $resultStatus,
+        ?float $score,
+        ?string $remarks,
+        int $recordedBy
+    ): bool {
+        $allowed = ['PASSED', 'FAILED', 'PENDING'];
+
+        if (! in_array($resultStatus, $allowed, true)) {
+            return false;
+        }
+
+        return $this->db->table('exam_bookings')
+            ->where('exam_booking_id', $bookingId)
+            ->update([
+                'result_status'      => $resultStatus,
+                'score'              => $score,
+                'result_remarks'     => $remarks,
+                'result_recorded_at' => date('Y-m-d H:i:s'),
+                'result_recorded_by' => $recordedBy,
+            ]);
+    }
 }

@@ -66,6 +66,10 @@ $bookingStatusLabels = [
 #es-toast { position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:99999;box-shadow:0 8px 24px rgba(0,0,0,.15);transition:opacity .25s;opacity:0;pointer-events:none; }
 #es-toast.success { background:#15803d;color:#fff; }
 #es-toast.error   { background:#b91c1c;color:#fff; }
+
+.es-badge--result-pending { background:#f1f5f9; color:#64748b; }
+.es-badge--result-passed  { background:#dcfce7; color:#15803d; }
+.es-badge--result-failed  { background:#fee2e2; color:#b91c1c; }
 </style>
 
 <div class="es-page">
@@ -117,6 +121,60 @@ $bookingStatusLabels = [
                 </div>
                 <?php endif; ?>
             </div>
+
+            <?php
+                $resultStatus = strtoupper($booking['result_status'] ?? 'PENDING');
+
+                $resultMap = [
+                    'PENDING' => ['label' => 'Pending Result', 'cls' => 'es-badge--result-pending'],
+                    'PASSED'  => ['label' => 'Passed', 'cls' => 'es-badge--result-passed'],
+                    'FAILED'  => ['label' => 'Failed', 'cls' => 'es-badge--result-failed'],
+                ];
+
+                $resultBadge = $resultMap[$resultStatus] ?? $resultMap['PENDING'];
+            ?>
+
+            <?php if ($booking['booking_status'] === 'attended'): ?>
+                <hr class="es-divider">
+
+                <div class="es-card__title" style="margin-bottom:14px;">
+                    Exam Result
+                </div>
+
+                <div class="es-detail-grid">
+                    <div class="es-detail-item">
+                        <label>Result Status</label>
+                        <span>
+                            <span class="es-badge <?= $resultBadge['cls'] ?>">
+                                <?= esc($resultBadge['label']) ?>
+                            </span>
+                        </span>
+                    </div>
+
+                    <?php if (! empty($booking['score'])): ?>
+                        <div class="es-detail-item">
+                            <label>Score</label>
+                            <span><?= esc($booking['score']) ?></span>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (! empty($booking['result_recorded_at'])): ?>
+                        <div class="es-detail-item">
+                            <label>Result Recorded</label>
+                            <span>
+                                <?= esc(date('M j, Y g:i A', strtotime($booking['result_recorded_at']))) ?>
+                            </span>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (! empty($booking['result_remarks'])): ?>
+                        <div class="es-detail-item" style="grid-column:1/-1;">
+                            <label>Remarks</label>
+                            <span><?= esc($booking['result_remarks']) ?></span>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
 
             <?php if ($canCancel): ?>
             <hr class="es-divider">
