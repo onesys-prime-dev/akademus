@@ -96,7 +96,7 @@ $routes->post('reservation-fee/submit', 'Payment\ReservationFeeController::store
 
 // SMART PAY Webhook
 $routes->post(
-    'smartpay/webhook',
+    'api/smartpay/payment-webhook',
     'Payment\SmartpayWebhookController::index'
 );
 
