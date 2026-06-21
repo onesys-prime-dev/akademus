@@ -96,137 +96,139 @@ $hasExistingPayment = ! empty($existing_payment);
         </div>
     <?php endif; ?>
 
-    <!-- ── Step 1: Send Payment ───────────────────────────────────── -->
-    <div
-        class="apf-section <?= $activeTab === 'online-payment' ? 'apf-section--active' : '' ?> card"
-        data-apf-section="online-payment">
-        <div class="apf-section__header">
-            <div class="apf-step-badge">Online</div>
-            <h3 class="apf-section__title">Select Payment Methods</h3>
-        </div>
+    <?php if (! $isLocked): ?>
+        <!-- ── Step 1: Send Payment ───────────────────────────────────── -->
+        <div
+            class="apf-section <?= $activeTab === 'online-payment' ? 'apf-section--active' : '' ?> card"
+            data-apf-section="online-payment">
+            <div class="apf-section__header">
+                <div class="apf-step-badge">Online</div>
+                <h3 class="apf-section__title">Select Payment Methods</h3>
+            </div>
 
-        <!-- Payment Method Tabs — rendered from DB via controller -->
-        <div class="apf-methods" id="paymentMethods">
-            <?php foreach ($payment_methods as $i => $method): ?>
+            <!-- Payment Method Tabs — rendered from DB via controller -->
+            <div class="apf-methods" id="paymentMethods">
+                <?php foreach ($payment_methods as $i => $method): ?>
+                    <button
+                        class="apf-method-btn <?= $i === 0 ? 'apf-method-btn--active' : '' ?>"
+                        data-method-id="<?= $method['payment_method_id'] ?>"
+                        data-method-code="<?= strtolower($method['code']) ?>"
+                        data-account-id="<?= $method['payment_method_account_id'] ?? '' ?>"
+                        onclick="selectMethod(this)"
+                        <?= $isLocked ? 'disabled' : '' ?>
+                    >
+                        <img
+                            src="<?= base_url('assets/images/payment-methods/' . $method['code'] . '.png') ?>"
+                            alt="<?= esc($method['name']) ?>"
+                            class="apf-method-btn__icon">
+
+                        <?= esc($method['name']) ?>
+
+                        <input type="radio">
+                    </button>
+                <?php endforeach; ?>
+            </div>
+
+            <div class="apf-payment-info">
+                <div class="apf-payment-info__method-label" id="methodLabel"></div>
+                <div class="apf-info-grid">
+                    <div class="apf-info-row">
+                        <span class="apf-info-row__key">Account / Number</span>
+                        <span class="apf-info-row__value" id="infoAccountNumber">–</span>
+                    </div>
+                    <div class="apf-info-row">
+                        <span class="apf-info-row__key">Account Name</span>
+                        <span class="apf-info-row__value" id="infoAccountName">–</span>
+                    </div>
+                    <div class="apf-info-row">
+                        <span class="apf-info-row__key">Amount</span>
+                        <span class="apf-info-row__value">₱<?= number_format((float)($fee['amount'] ?? 0), 2) ?></span>
+                    </div>
+                    <div class="apf-info-row">
+                        <span class="apf-info-row__key">Reference / Note</span>
+                        <!-- FIX: was missing the ADMFEE- prefix in the dynamic version -->
+                        <span class="apf-info-row__value">ADMFEE-#<?= esc($applicant_number) ?></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMISSION PROCESSING FEE - PAY NOW button -->
+            <div class="apf-paynow-row">
                 <button
-                    class="apf-method-btn <?= $i === 0 ? 'apf-method-btn--active' : '' ?>"
-                    data-method-id="<?= $method['payment_method_id'] ?>"
-                    data-method-code="<?= strtolower($method['code']) ?>"
-                    data-account-id="<?= $method['payment_method_account_id'] ?? '' ?>"
-                    onclick="selectMethod(this)"
-                    <?= $isLocked ? 'disabled' : '' ?>
-                >
-                    <img
-                        src="<?= base_url('assets/images/payment-methods/' . $method['code'] . '.png') ?>"
-                        alt="<?= esc($method['name']) ?>"
-                        class="apf-method-btn__icon">
+                    type="button"
+                    class="apf-paynow-btn"
+                    onclick="openCheckoutModal()">
+                    <svg width="18" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                        <line x1="2" y1="10" x2="22" y2="10"></line>
+                    </svg>
 
-                    <?= esc($method['name']) ?>
-
-                    <input type="radio">
+                    Pay Now
                 </button>
-            <?php endforeach; ?>
-        </div>
 
-        <div class="apf-payment-info">
-            <div class="apf-payment-info__method-label" id="methodLabel"></div>
-            <div class="apf-info-grid">
-                <div class="apf-info-row">
-                    <span class="apf-info-row__key">Account / Number</span>
-                    <span class="apf-info-row__value" id="infoAccountNumber">–</span>
-                </div>
-                <div class="apf-info-row">
-                    <span class="apf-info-row__key">Account Name</span>
-                    <span class="apf-info-row__value" id="infoAccountName">–</span>
-                </div>
-                <div class="apf-info-row">
-                    <span class="apf-info-row__key">Amount</span>
-                    <span class="apf-info-row__value">₱<?= number_format((float)($fee['amount'] ?? 0), 2) ?></span>
-                </div>
-                <div class="apf-info-row">
-                    <span class="apf-info-row__key">Reference / Note</span>
-                    <!-- FIX: was missing the ADMFEE- prefix in the dynamic version -->
-                    <span class="apf-info-row__value">ADMFEE-#<?= esc($applicant_number) ?></span>
+                <p class="apf-paynow-note">
+                    Secure online checkout powered by SmartPay.
+                </p>
+            </div>
+
+            <!-- SMARTPAY CHECKOUT -->
+            <div class="smartpay-modal" id="smartpayModal">
+
+                <div class="smartpay-modal-content">
+
+                    <div class="smartpay-header">
+                        <h3>SmartPay Checkout</h3>
+
+                        <button
+                            type="button"
+                            class="smartpay-close"
+                            onclick="closeCheckoutModal()">
+                            &times;
+                        </button>
+                    </div>
+
+                    <div class="smartpay-body">
+
+                        <div class="smartpay-amount">
+                            ₱<?= number_format((float)($fee['amount'] ?? 0), 2) ?>
+                        </div>
+
+                        <p class="smartpay-subtitle">
+                            Continue with SmartPay.
+                        </p>
+
+                        <div class="smartpay-method-preview">
+                            <span id="checkoutMethodName">GCash</span>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="smartpay-proceed-btn"
+                            onclick="processSmartPayCheckout(this)">
+
+                            Proceed Payment
+                        </button>
+
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- ADMISSION PROCESSING FEE - PAY NOW button -->
-        <div class="apf-paynow-row">
-            <button
-                type="button"
-                class="apf-paynow-btn"
-                onclick="openCheckoutModal()">
-                <svg width="18" height="18" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <rect x="2" y="5" width="20" height="14" rx="2"></rect>
-                    <line x1="2" y1="10" x2="22" y2="10"></line>
+            <div class="apf-alert apf-alert--warning">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
                 </svg>
-
-                Pay Now
-            </button>
-
-            <p class="apf-paynow-note">
-                Secure online checkout powered by SmartPay.
-            </p>
-        </div>
-
-        <!-- SMARTPAY CHECKOUT -->
-        <div class="smartpay-modal" id="smartpayModal">
-
-            <div class="smartpay-modal-content">
-
-                <div class="smartpay-header">
-                    <h3>SmartPay Checkout</h3>
-
-                    <button
-                        type="button"
-                        class="smartpay-close"
-                        onclick="closeCheckoutModal()">
-                        &times;
-                    </button>
-                </div>
-
-                <div class="smartpay-body">
-
-                    <div class="smartpay-amount">
-                        ₱<?= number_format((float)($fee['amount'] ?? 0), 2) ?>
-                    </div>
-
-                    <p class="smartpay-subtitle">
-                        Continue with SmartPay.
-                    </p>
-
-                    <div class="smartpay-method-preview">
-                        <span id="checkoutMethodName">GCash</span>
-                    </div>
-
-                    <button
-                        type="button"
-                        class="smartpay-proceed-btn"
-                        onclick="processSmartPayCheckout(this)">
-
-                        Proceed Payment
-                    </button>
-
-                </div>
+                <span>
+                    Important: Include <strong>ADMFEE-#<?= esc($applicant_number) ?></strong> as your
+                    payment reference or remarks so the finance office can match your payment.
+                </span>
             </div>
         </div>
-
-        <div class="apf-alert apf-alert--warning">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="12" />
-                <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-            <span>
-                Important: Include <strong>ADMFEE-#<?= esc($applicant_number) ?></strong> as your
-                payment reference or remarks so the finance office can match your payment.
-            </span>
-        </div>
-    </div>
+    <?php endif; ?>
 
     <!-- ── Option 2: By the counter ───────────────────────────────────── -->
     <?php if (! $isLocked): ?>
