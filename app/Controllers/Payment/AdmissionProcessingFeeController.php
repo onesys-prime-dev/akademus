@@ -29,7 +29,7 @@ class AdmissionProcessingFeeController extends BaseController
         $this->notificationService = new NotificationService();
     }
 
-    public function admissionProcessingFee()
+    public function index()
     {
         helper('theme');
 
@@ -182,6 +182,42 @@ class AdmissionProcessingFeeController extends BaseController
         );
     }
 
+    public function proofFile(int $paymentId)
+    {
+        $applicantId = (int) session()->get('applicant_id');
+
+        $payment = $this->paymentModel->find($paymentId);
+
+        if (
+            ! $payment ||
+            (int) $payment['applicant_id'] !== $applicantId ||
+            empty($payment['proof_of_payment'])
+        ) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        return $this->serveProofFile($payment['proof_of_payment']);
+    }
+
+    private function serveProofFile(string $proofPath)
+    {
+        $filePath = WRITEPATH . $proofPath;
+
+        if (! file_exists($filePath)) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $mime = mime_content_type($filePath);
+
+        return $this->response
+            ->setHeader('Content-Type', $mime)
+            ->setHeader(
+                'Content-Disposition',
+                'inline; filename="' . basename($filePath) . '"'
+            )
+            ->setBody(file_get_contents($filePath));
+    }
+
     private function buildMethodsMap(array $rows): array
     {
         $map = [];
@@ -222,41 +258,5 @@ class AdmissionProcessingFeeController extends BaseController
             ->setStatusCode($statusCode)
             ->setContentType('application/json')
             ->setJSON(['success' => false, 'message' => $message]);
-    }
-
-    public function proofFile(int $paymentId)
-    {
-        $applicantId = (int) session()->get('applicant_id');
-
-        $payment = $this->paymentModel->find($paymentId);
-
-        if (
-            ! $payment ||
-            (int) $payment['applicant_id'] !== $applicantId ||
-            empty($payment['proof_of_payment'])
-        ) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        }
-
-        return $this->serveProofFile($payment['proof_of_payment']);
-    }
-
-    private function serveProofFile(string $proofPath)
-    {
-        $filePath = WRITEPATH . $proofPath;
-
-        if (! file_exists($filePath)) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        }
-
-        $mime = mime_content_type($filePath);
-
-        return $this->response
-            ->setHeader('Content-Type', $mime)
-            ->setHeader(
-                'Content-Disposition',
-                'inline; filename="' . basename($filePath) . '"'
-            )
-            ->setBody(file_get_contents($filePath));
     }
 }
