@@ -22,7 +22,10 @@ class SmartpayWebhookController extends BaseController
                 ]);
         }
 
-        $referenceNumber = $payload['reference_number'] ?? null;
+        $referenceNumber =
+            $payload['reference_number']
+            ?? $payload['data']['reference_number']
+            ?? null;
 
         $webhookLogModel = new PaymentWebhookLogModel();
 
@@ -55,7 +58,14 @@ class SmartpayWebhookController extends BaseController
                 ]);
         }
 
-        $gatewayStatus = strtoupper($payload['payment_status'] ?? 'PENDING');
+        $gatewayStatus = strtoupper(
+            $payload['payment_status']
+            ?? $payload['status']
+            ?? $payload['transaction_status']
+            ?? $payload['data']['payment_status']
+            ?? $payload['data']['status']
+            ?? 'PENDING'
+        );
 
         $paymentStatus = match ($gatewayStatus) {
             'SUCCESS',
@@ -100,9 +110,27 @@ class SmartpayWebhookController extends BaseController
 
         $now = date('Y-m-d H:i:s');
 
+        $paidAt =
+            $payload['paid_at']
+            ?? $payload['data']['paid_at']
+            ?? null;
+
         $gatewayUpdate = [
             'gateway_status'      => $gatewayStatus,
-            'settlement_status'   => $payload['settlement_status'] ?? 'PENDING',
+            'settlement_status'   =>
+                $payload['settlement_status']
+                ?? $payload['data']['settlement_status']
+                ?? 'PENDING',
+            'customer_fee'        =>
+                $payload['customer_fee']
+                ?? $payload['data']['customer_fee']
+                ?? null,
+            'gateway_fee'         =>
+                $payload['channel_fee']
+                ?? $payload['gateway_fee']
+                ?? $payload['data']['channel_fee']
+                ?? $payload['data']['gateway_fee']
+                ?? null,
             'webhook_received_at' => $now,
             'webhook_payload'     => json_encode($payload),
         ];
@@ -111,7 +139,7 @@ class SmartpayWebhookController extends BaseController
             $paymentStatus === PaymentModel::STATUS_PAID &&
             empty($transaction['paid_at'])
         ) {
-            $gatewayUpdate['paid_at'] = $now;
+            $gatewayUpdate['paid_at'] = $paidAt ?: $now;
         }
 
         $gatewayTransactionModel->update(
@@ -124,7 +152,7 @@ class SmartpayWebhookController extends BaseController
         ];
 
         if ($paymentStatus === PaymentModel::STATUS_PAID) {
-            $paymentData['payment_date'] = $now;
+            $paymentData['payment_date'] = $paidAt ?: $now;
         }
 
         $paymentModel->update(
