@@ -23,7 +23,11 @@ foreach ([1000, 500, 200, 100, 50, 20, 10, 5, 2, 1] as $s) {
 }
 $axisMax  = ceil($maxCount / $step) * $step;
 $axisMax  = max($axisMax, 1);
-$gridSteps = 5;
+
+// With few applicants (axisMax small), forcing 5 gridlines produces fractional
+// steps that round to duplicate labels (e.g. "1, 1, 1, 0, 0"). Use one gridline
+// per unit instead so every label is a distinct whole number.
+$gridSteps = $axisMax <= 5 ? (int) $axisMax : 5;
 $gridStep  = $axisMax / $gridSteps;
 
 // Grid y positions (top to bottom = max to 0)
