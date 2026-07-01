@@ -29,7 +29,7 @@ class AdmissionProcessingFeeController extends BaseController
         $this->notificationService = new NotificationService();
     }
 
-    public function admissionProcessingFee()
+    public function index()
     {
         helper('theme');
 
@@ -80,7 +80,7 @@ class AdmissionProcessingFeeController extends BaseController
         $applicantId = (int) session()->get('applicant_id');
 
         //   If the applicant already has a PAID or PROCESSING record
-        if ($this->paymentModel->hasPaidOrProcessing($applicantId, PaymentFeeTypeModel::CODE_ADMISSION)) {
+        if ($this->paymentModel->hasActivePayment($applicantId, PaymentFeeTypeModel::CODE_ADMISSION)) {
             return $this->jsonError(
                 'You have already submitted a payment that is being processed or has been approved.'
             );
@@ -163,6 +163,7 @@ class AdmissionProcessingFeeController extends BaseController
             'payment_fee_type_id'       => $feeTypeId,
             'payment_method_id'         => $paymentMethodId,
             'payment_method_account_id' => $paymentMethodAccountId,
+            'payment_source'            => 'COUNTER',
             'reference_num'             => $referenceNum,
             'proof_of_payment'          => $proofPath,
             'amount_paid'               => $fee['amount'],
@@ -179,6 +180,42 @@ class AdmissionProcessingFeeController extends BaseController
         return $this->jsonSuccess(
             'Your payment has been submitted and is awaiting verification by the finance office.'
         );
+    }
+
+    public function proofFile(int $paymentId)
+    {
+        $applicantId = (int) session()->get('applicant_id');
+
+        $payment = $this->paymentModel->find($paymentId);
+
+        if (
+            ! $payment ||
+            (int) $payment['applicant_id'] !== $applicantId ||
+            empty($payment['proof_of_payment'])
+        ) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        return $this->serveProofFile($payment['proof_of_payment']);
+    }
+
+    private function serveProofFile(string $proofPath)
+    {
+        $filePath = WRITEPATH . $proofPath;
+
+        if (! file_exists($filePath)) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $mime = mime_content_type($filePath);
+
+        return $this->response
+            ->setHeader('Content-Type', $mime)
+            ->setHeader(
+                'Content-Disposition',
+                'inline; filename="' . basename($filePath) . '"'
+            )
+            ->setBody(file_get_contents($filePath));
     }
 
     private function buildMethodsMap(array $rows): array

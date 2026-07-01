@@ -362,4 +362,52 @@ window.applicantsConfig = <?= json_encode([
 })();
 </script>
 
+<script>
+function openExamResultModal() {
+    document.getElementById('examResultModal').classList.add('active');
+}
+
+function closeExamResultModal() {
+    document.getElementById('examResultModal').classList.remove('active');
+}
+
+async function submitExamResult() {
+    const bookingId = document.getElementById('examBookingId').value;
+    const status = document.getElementById('resultStatus').value;
+    const score = document.getElementById('resultScore').value;
+    const remarks = document.getElementById('resultRemarks').value;
+    const error = document.getElementById('examResultError');
+
+    error.textContent = '';
+
+    if (!status) {
+        error.textContent = 'Result status is required.';
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('result_status', status);
+    formData.append('score', score);
+    formData.append('result_remarks', remarks);
+
+    const response = await fetch(`<?= base_url('admission-officer/exam-bookings') ?>/${bookingId}/result`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+        error.textContent = data.message || 'Failed to save result.';
+        return;
+    }
+
+    closeExamResultModal();
+    location.reload();
+}
+</script>
+
 <script type="module" src="<?= base_url('assets/js/admission-officer/applicants/main.js') ?>?v=<?= time() ?>"></script>

@@ -427,4 +427,52 @@ class ApplicantsController extends BaseController
             'counts'  => $payload['counts'] ?? [],
         ]);
     }
+
+    public function saveExamResult(int $bookingId)
+    {
+        if (! session()->get('ao_logged_in')) {
+            return $this->response->setStatusCode(401)->setJSON([
+                'success' => false,
+                'message' => 'Unauthorized.',
+            ]);
+        }
+
+        $resultStatus = strtoupper(trim($this->request->getPost('result_status') ?? ''));
+        $scoreRaw     = $this->request->getPost('score');
+        $remarks      = trim($this->request->getPost('result_remarks') ?? '');
+        $recordedBy   = (int) session()->get('ao_id');
+
+        if (! in_array($resultStatus, ['PENDING', 'PASSED', 'FAILED'], true)) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Result status is required.',
+            ]);
+        }
+
+        $score = $scoreRaw !== '' && $scoreRaw !== null
+            ? (float) $scoreRaw
+            : null;
+
+        $service = new \App\Services\ExamScheduleService();
+
+        $saved = $service->saveResult(
+            $bookingId,
+            $resultStatus,
+            $score,
+            $remarks !== '' ? $remarks : null,
+            $recordedBy
+        );
+
+        if (! $saved) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Failed to save exam result.',
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'success' => true,
+            'message' => 'Exam result saved successfully.',
+        ]);
+    }
 }

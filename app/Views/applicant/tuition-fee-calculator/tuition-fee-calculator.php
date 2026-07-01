@@ -13,7 +13,7 @@
 
         <!-- LEFT: Subject Selector -->
         <div class="calc-left">
-            <div class="card">
+            <div class="calc-left-card card">
                 <div class="calc-section-title">Select Subjects</div>
                 <div class="calc-section-sub">Click a subject to add it. Adjust units using the +/− controls.</div>
 

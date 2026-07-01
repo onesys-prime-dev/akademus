@@ -7,10 +7,16 @@ use App\Controllers\BaseController;
 use App\Models\Auth\RememberTokenModel;
 use App\Models\Program\ProgramModel;
 use App\Models\ThemeModel;
-use App\Services\EmailService;
+use App\Services\NotificationService;
 
 class AuthController extends BaseController
 {
+    protected NotificationService $notificationService;
+
+    public function __construct()
+    {
+        $this->notificationService = new NotificationService();
+    }
 
     public function sign_in()
     {
@@ -166,10 +172,9 @@ class AuthController extends BaseController
 
             $db->transComplete();
 
-            EmailService::sendWelcomeEmail(
-                $this->request->getPost('email'),
-                $tempPassword
-            );
+            $this->notificationService->trigger('auth.welcome', $applicantId, [
+                'temp_password' => $tempPassword
+            ]);
 
             session()->setFlashdata('applicant_number', $applicantNumber);
             return $this->response->setJSON([
@@ -308,9 +313,12 @@ class AuthController extends BaseController
             $resetUrl = base_url('reset-password/' . $token);
 
             try {
-                EmailService::sendPasswordReset($email, $resetUrl);
+                $this->notificationService->trigger('auth.password_reset', $user['user_id'], [
+                    'email' => $email,
+                    'reset_url' => $resetUrl
+                ]);
             } catch (\Throwable $e) {
-                log_message('error', 'Password reset email error: ' . $e->getMessage());
+                log_message('error', 'Password reset notification error: ' . $e->getMessage());
             }
         }
 

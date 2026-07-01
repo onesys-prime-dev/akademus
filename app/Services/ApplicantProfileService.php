@@ -173,6 +173,11 @@ class ApplicantProfileService
                 'es.max_slots',
                 'es.booked_slots',
                 'es.status       AS schedule_status',
+                'eb.result_status',
+                'eb.score',
+                'eb.result_remarks',
+                'eb.result_recorded_at',
+                'eb.result_recorded_by',
             ])
             ->join('exam_schedules es', 'es.exam_schedule_id = eb.exam_schedule_id')
             ->where('eb.applicant_id', $applicantId)
@@ -201,7 +206,9 @@ class ApplicantProfileService
         return $db->table('payment p')
             ->select([
                 'p.payment_id',
+                'p.payment_source',
                 'p.reference_num',
+                'p.external_reference',
                 'p.amount_paid',
                 'p.payment_status',
                 'p.payment_date',
@@ -210,17 +217,28 @@ class ApplicantProfileService
                 'p.reviewed_by',
                 'p.reviewed_at',
                 'p.created_at',
+
                 'pm.name  AS method_name',
                 'pft.name AS fee_type_name',
                 'pma.account_number',
                 'pma.account_name',
+
+                'pgt.gateway_name',
+                'pgt.gateway_reference',
+                'pgt.gateway_status',
+                'pgt.settlement_status',
+                'pgt.checkout_url',
+                'pgt.paid_at',
+                'pgt.webhook_received_at',
+
                 'u.firstname AS reviewer_firstname',
                 'u.lastname  AS reviewer_lastname',
             ])
-            ->join('payment_method pm',         'pm.payment_method_id = p.payment_method_id',                   'left')
-            ->join('payment_fee_type pft',       'pft.payment_fee_type_id = p.payment_fee_type_id',             'left')
+            ->join('payment_method pm', 'pm.payment_method_id = p.payment_method_id', 'left')
+            ->join('payment_fee_type pft', 'pft.payment_fee_type_id = p.payment_fee_type_id', 'left')
             ->join('payment_method_account pma', 'pma.payment_method_account_id = p.payment_method_account_id', 'left')
-            ->join('users u',                    'u.user_id = p.reviewed_by',                                   'left')
+            ->join('payment_gateway_transactions pgt', 'pgt.payment_id = p.payment_id', 'left')
+            ->join('users u', 'u.user_id = p.reviewed_by', 'left')
             ->where('p.applicant_id', $applicantId)
             ->where('pft.code', $feeCode)
             ->orderBy('p.created_at', 'DESC')

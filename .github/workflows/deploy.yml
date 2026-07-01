@@ -6,6 +6,10 @@ on:
       - main
       - staging
 
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -19,12 +23,31 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          echo "StrictHostKeyChecking=no" >> ~/.ssh/config
+
+          cat > ~/.ssh/config <<EOF
+          Host *
+            IdentityFile ~/.ssh/id_ed25519
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+            ConnectTimeout 30
+            ServerAliveInterval 30
+            ServerAliveCountMax 3
+          EOF
 
       - name: 🚀 Deploy
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "bash ~/deploy.sh production"
-          elif [ "${{ github.ref }}" = "refs/heads/staging" ]; then
-            ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "bash ~/deploy.sh testing"
-          fi
+          for i in 1 2 3 4 5; do
+            echo "SSH deploy attempt $i..."
+
+            if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+              ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "bash ~/deploy.sh production" && exit 0
+            elif [ "${{ github.ref }}" = "refs/heads/staging" ]; then
+              ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "bash ~/deploy.sh testing" && exit 0
+            fi
+
+            echo "SSH failed. Retrying in 20 seconds..."
+            sleep 20
+          done
+
+          echo "Deploy failed after 5 SSH attempts."
+          exit 1

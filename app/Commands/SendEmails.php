@@ -54,6 +54,20 @@ class SendEmails extends BaseCommand
 
                     switch ($email['type']) {
 
+                        case 'auth.welcome':
+                            $success = EmailService::sendWelcomeEmail(
+                                $email['to_email'],
+                                $payload['temp_password'] ?? ''
+                            );
+                            break;
+
+                        case 'auth.password_reset':
+                            $success = EmailService::sendPasswordReset(
+                                $email['to_email'],
+                                $payload['reset_url'] ?? ''
+                            );
+                            break;
+
                         case 'applicant.approved':
                             $success = EmailService::sendApplicationApproved($email['to_email']);
                             break;

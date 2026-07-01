@@ -27,9 +27,15 @@
 $authPages    = ['signin', 'signup', 'success'];
 $portalPages  = ['dashboard', 'appform', 'documents', 'track'];
 $isAuthPage   = in_array($page, $authPages);
-$logoUrl      = !empty($theme['logo_url'])
-                    ? base_url(esc($theme['logo_url']))
-                    : base_url('assets/images/logo_akademus.png');
+$logoPath = $theme['logo_url'] ?? '';
+
+$logoUrl = !empty($logoPath)
+    ? (
+        str_starts_with($logoPath, 'http')
+        ? $logoPath
+        : base_url($logoPath)
+    )
+    : base_url('assets/images/logo_akademus.png');
 $appName      = esc($theme['app_name'] ?? 'AKADEMUS');
 ?>
 
@@ -111,8 +117,19 @@ window.addEventListener('message', function(e) {
     }
     // Update logo & app name if they changed
     if (t.logo_url !== undefined) {
+
+        let logoSrc = t.logo_url;
+
+        if (
+            logoSrc &&
+            !logoSrc.startsWith('http') &&
+            !logoSrc.startsWith('data:')
+        ) {
+            logoSrc = '<?= base_url() ?>' + '/' + logoSrc;
+        }
+
         document.querySelectorAll('.preview-logo-img').forEach(function(el) {
-            el.src = t.logo_url || '<?= base_url('assets/images/logo_akademus.png') ?>';
+            el.src = logoSrc || '<?= base_url('assets/images/logo_akademus.png') ?>';
         });
     }
     if (t.app_name !== undefined) {

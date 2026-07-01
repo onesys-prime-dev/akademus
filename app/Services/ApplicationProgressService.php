@@ -151,6 +151,9 @@ class ApplicationProgressService
                     'es.exam_date',
                     'es.start_time',
                     'es.location',
+                    'eb.checked_in_at',
+                    'eb.result_status',
+                    'eb.result_remarks',
                 ])
                 ->join(
                     'exam_schedules es',
@@ -209,27 +212,62 @@ class ApplicationProgressService
         ];
 
         if ($examEnabled) {
+            $examResult = strtoupper($examBooking['result_status'] ?? 'PENDING');
+
             if ($examBooking) {
                 $examDate = date('M j, Y', strtotime($examBooking['exam_date']));
                 $examTime = $examBooking['start_time']
                     ? date('g:i A', strtotime($examBooking['start_time']))
                     : '';
 
+                $examVenue = $examBooking['location'] ?? 'TBA';
+
+                $examTitle = match ($examResult) {
+                    'PASSED' => 'Entrance Examination Passed',
+                    'FAILED' => 'Entrance Examination Failed',
+                    default => 'Entrance Examination',
+                };
+
+                $examSubtitle = match (true) {
+                    $examResult === 'PASSED' =>
+                        'You passed the entrance examination. Please wait for the final admission decision.',
+
+                    $examResult === 'FAILED' =>
+                        'Your entrance examination result has been released. Please check your email or contact admissions for next steps.',
+
+                    $examBooking['booking_status'] === 'attended' =>
+                        'You have completed the exam. Your result is currently being reviewed.',
+
+                    $examBooking['booking_status'] === 'booked' =>
+                        'Your exam is scheduled on '
+                        . $examDate
+                        . ($examTime ? ' at ' . $examTime : '')
+                        . ' • '
+                        . $examVenue,
+
+                    default =>
+                        'Your entrance examination status is being updated.',
+                };
+
                 $steps[] = [
-                    'title' => $examDate . ($examTime ? ' at ' . $examTime : ''),
-                    'subtitle' => 'Venue: ' . ($examBooking['location'] ?? 'TBA'),
+                    'title' => $examTitle,
+                    'subtitle' => $examSubtitle,
                     'date' => $examBooking['booking_status'] === 'attended'
-                        ? $examBooking['booked_at']
+                        ? $examBooking['checked_in_at'] ?? $examBooking['booked_at']
                         : null,
-                    'status' => $examBooking['booking_status'] === 'attended'
-                        ? 'done'
-                        : 'active',
-                    'remarks' => null,
+                    'status' => match (true) {
+                        $examResult === 'PASSED' => 'done',
+                        $examResult === 'FAILED' => 'rejected',
+                        $examBooking['booking_status'] === 'attended' => 'active',
+                        $examBooking['booking_status'] === 'booked' => 'active',
+                        default => 'pending',
+                    },
+                    'remarks' => $examBooking['result_remarks'] ?? null,
                 ];
             } else {
                 $steps[] = [
                     'title' => 'Entrance Examination',
-                    'subtitle' => 'Your exam schedule will be assigned by the admissions office.',
+                    'subtitle' => 'Please book your entrance examination schedule once available.',
                     'date' => null,
                     'status' => 'pending',
                     'remarks' => null,
