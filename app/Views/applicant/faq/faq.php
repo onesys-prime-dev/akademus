@@ -582,14 +582,10 @@ async function sendMessage(text = null) {
     try {
         const res = await fetch('<?= base_url('api/groq/chat') ?>', {
             method: 'POST',
-<<<<<<< HEAD
-            headers: { 'Content-Type': 'application/json' },
-=======
             headers: {
                 'Content-Type': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest'
             },
->>>>>>> shuay-branch
             body: JSON.stringify({
                 messages: [
                     { role: 'system', content: SYSTEM_PROMPT },
