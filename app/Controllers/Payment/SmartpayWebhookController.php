@@ -11,6 +11,15 @@ class SmartpayWebhookController extends BaseController
 {
     public function index()
     {
+        $rawBody   = $this->request->getBody();
+        $signature = $this->request->getHeaderLine('X-SmartPay-Signature');
+        $expected  = 'sha256=' . hash_hmac('sha256', $rawBody, env('SMARTPAY_SECRET_KEY'));
+
+        if (! hash_equals($expected, $signature)) {
+            log_message('warning', '[SmartPay] Webhook rejected — invalid signature.');
+            return $this->response->setStatusCode(401)->setJSON(['success' => false]);
+        }
+
         $payload = $this->request->getJSON(true);
 
         if (! is_array($payload)) {

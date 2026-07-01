@@ -580,15 +580,18 @@ function init() {
 
                 document.getElementById('logo_url').value = data.logo_path;
 
-                document.getElementById('upload-zone').innerHTML = `
-                    <img
-                        src="${data.logo_url}"
-                        style="width:48px;height:48px;object-fit:contain;border-radius:8px;margin-bottom:4px;"
-                    >
-                    <div style="font-size:10px;color:#5a6a85;">
-                        Click to change
-                    </div>
-                `;
+                const uploadZone = document.getElementById('upload-zone');
+                uploadZone.innerHTML = '';
+
+                const img = document.createElement('img');
+                img.src = data.logo_url;
+                img.style.cssText = 'width:48px;height:48px;object-fit:contain;border-radius:8px;margin-bottom:4px;';
+                uploadZone.appendChild(img);
+
+                const label = document.createElement('div');
+                label.style.cssText = 'font-size:10px;color:#5a6a85;';
+                label.textContent = 'Click to change';
+                uploadZone.appendChild(label);
 
                 updatePreview();
             }

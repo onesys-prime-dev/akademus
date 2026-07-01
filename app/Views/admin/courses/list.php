@@ -29,7 +29,7 @@
                         <tr>
                             <td><strong><?= esc($course['code']) ?></strong></td>
                             <td><?= esc($course['name']) ?></td>
-                            <td><?= substr($course['description'], 0, 50) ?>...</td>
+                            <td><?= esc(substr($course['description'], 0, 50)) ?>...</td>
                             <td>
                                 <span class="badge bg-<?= $course['is_active'] ? 'success' : 'secondary' ?>">
                                     <?= $course['is_active'] ? 'Active' : 'Inactive' ?>
