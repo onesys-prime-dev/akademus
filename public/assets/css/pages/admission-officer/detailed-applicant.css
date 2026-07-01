@@ -77,6 +77,16 @@
     background: #eef2ff;
 }
 
+.decision-btn--revision {
+    background: #fff;
+    color: #c2410c;
+    border-color: #fed7aa;
+}
+
+.decision-btn--revision:hover {
+    background: #fff7ed;
+}
+
 /* ── Decision badge (shown after decision is made) ── */
 .decision-badge {
     display: inline-flex;
@@ -100,6 +110,12 @@
     border: 1.5px solid #fca5a5;
 }
 
+.decision-badge--revision {
+    background: #fff7ed;
+    color: #c2410c;
+    border: 1.5px solid #fed7aa;
+}
+
 /* ── Remarks banner (below top actions) ── */
 .decision-remarks-banner {
     display: flex;
@@ -120,6 +136,12 @@
     background: #fff5f5;
     border-color: #fca5a5;
     color: #dc2626;
+}
+
+.decision-remarks-banner--revision {
+    background: #fff7ed;
+    border-color: #fed7aa;
+    color: #c2410c;
 }
 
 .decision-remarks-banner__icon {
@@ -158,6 +180,45 @@
 
 .decision-modal__submit--message:hover {
     opacity: 0.88;
+}
+
+/* ── Revision modal header/submit ── */
+.decision-modal__header--revision {
+    background: #fff7ed;
+    border-bottom: 1px solid #fed7aa;
+}
+
+.decision-modal__submit--revision {
+    background: #c2410c;
+}
+
+.decision-modal__submit--revision:hover {
+    opacity: 0.88;
+}
+
+/* ── Revision step checklist ── */
+.revision-step-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+}
+
+.revision-step-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #374151;
+    cursor: pointer;
+}
+
+.revision-step-item input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
 }
 
 

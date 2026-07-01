@@ -31,7 +31,10 @@ class ApplicantProfileService
                 CONCAT(u.lastname, ", ", u.firstname) as applicant_name,
                 u.user_id,
                 u.email,
-                p.program_name
+                p.program_name,
+                ap.application_status as form_status,
+                ap.revision_note,
+                ap.revision_pages
             ')
             ->join('users u', 'u.user_id = a.user_id')
             ->join('programs p', 'p.program_id = a.program_id')

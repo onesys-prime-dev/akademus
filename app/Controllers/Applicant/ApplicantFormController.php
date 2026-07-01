@@ -16,6 +16,7 @@ use App\Services\NotificationService;
 class ApplicantFormController extends BaseController
 {
     protected NotificationService $notificationService;
+    private ?string $stepValidationError = null;
 
     public function __construct()
     {
@@ -138,7 +139,14 @@ class ApplicantFormController extends BaseController
             ->where('applicant_id', $applicantId)
             ->first();
 
-        $isSubmitted = $application && !in_array($application['application_status'], ['draft']);
+        $revisionPageIds = [];
+        if ($application && $application['application_status'] === 'needs_revision') {
+            $revisionPageIds = json_decode($application['revision_pages'] ?? '[]', true) ?: [];
+        }
+
+        $isSubmitted = $application
+            && !in_array($application['application_status'], ['draft'])
+            && !($application['application_status'] === 'needs_revision' && in_array($pageId, $revisionPageIds, true));
 
         if ($application) {
             $formData = $this->getFormDataForPage($pageId, $application['application_id']);
@@ -186,21 +194,29 @@ class ApplicantFormController extends BaseController
         $applicantId      = session()->get('applicant_id');
         $applicationModel = new ApplicationModel();
 
-        // Block edits on already-submitted applications
-        $application = $applicationModel
+        $existingApplication = $applicationModel
             ->where('applicant_id', $applicantId)
-            ->where('application_status', 'draft')
             ->first();
 
-        if (!$application && $applicationModel->where('applicant_id', $applicantId)->first()) {
-            // Application exists but is no longer a draft — reject the save
+        $isDraft = $existingApplication && $existingApplication['application_status'] === 'draft';
+
+        $revisionPageIds = [];
+        if ($existingApplication && $existingApplication['application_status'] === 'needs_revision') {
+            $revisionPageIds = json_decode($existingApplication['revision_pages'] ?? '[]', true) ?: [];
+        }
+        $isRevisableStep = $existingApplication
+            && $existingApplication['application_status'] === 'needs_revision'
+            && in_array($pageId, $revisionPageIds, true);
+
+        // Block edits on already-submitted applications, except for steps flagged for revision
+        if ($existingApplication && !$isDraft && !$isRevisableStep) {
             return $this->response->setJSON([
                 'status'  => 'error',
                 'message' => 'Your application has already been submitted and cannot be edited.',
             ]);
         }
 
-        if (!$application) {
+        if (!$existingApplication) {
             $applicationId = $applicationModel->insert([
                 'applicant_id'       => $applicantId,
                 'applicant_type'     => $data['applicant_type'] ?? null,
@@ -213,20 +229,22 @@ class ApplicantFormController extends BaseController
             (new FamilyBackgroundModel())->insert(['application_id'    => $applicationId]);
             (new EducationalBackgroundModel())->insert(['application_id'=> $applicationId]);
         } else {
-            $applicationId = $application['application_id'];
+            $applicationId = $existingApplication['application_id'];
         }
 
         // Route to correct model using page_id, NOT step position
         $result = match($pageId) {
-            1 => $this->updateApplication($data, $applicationId, $action),           // Application Type
+            1 => $this->updateApplication($data, $applicationId, $action, $isRevisableStep), // Application Type
             2 => $this->updatePersonalInformation($data, $applicationId),            // Personal Information
             3 => $this->updateFamilyBackground($data, $applicationId),               // Family Background
             4 => $this->updateEducationalBackground($data, $applicationId, $action), // Educational Background
             default => true,
         };
 
+        // A revision-mode step is only ever autosaved (action stays 'draft' client-side),
+        // but guard defensively against finalizing submission mid-revision anyway.
         $isLastStep = ($step === count($pages));
-        if ($isLastStep && $action === 'submit') {
+        if ($isLastStep && $action === 'submit' && !$isRevisableStep) {
             $applicationModel->update($applicationId, ['application_status' => 'pending']);
 
             $this->notificationService->trigger('application.submitted', $applicantId, [
@@ -246,20 +264,55 @@ class ApplicantFormController extends BaseController
 
         return $this->response->setJSON([
             'status'  => $result ? 'success' : 'error',
-            'message' => $result ? 'Step saved successfully' : 'Failed to save step',
+            'message' => $result ? 'Step saved successfully' : ($this->stepValidationError ?? 'Failed to save step'),
             'reload'  => $reload,
         ]);
     }
 
-    private function updateApplication($data, $applicationId, $action)
+    public function resubmit()
     {
-        return (new ApplicationModel())->update($applicationId, [
-            'applicant_type'     => $data['applicant_type'] ?? null,
-            'program_id'         => $data['program_id']     ?? null,
-            'school_year'        => $data['school_year']    ?? null,
-            'semester'           => $data['semester']       ?? null,
-            'application_status' => $action === 'submit' ? 'pending' : 'draft',
+        $this->requireLogin();
+        $applicantId = session()->get('applicant_id');
+
+        $applicationModel = new ApplicationModel();
+        $application = $applicationModel->where('applicant_id', $applicantId)->first();
+
+        if (!$application || $application['application_status'] !== 'needs_revision') {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'There is no pending revision to resubmit.',
+            ]);
+        }
+
+        $applicationModel->update($application['application_id'], [
+            'application_status' => 'pending',
+            'revision_note'      => null,
+            'revision_pages'     => null,
         ]);
+
+        $this->notificationService->trigger('application.submitted', $applicantId, [
+            'application_id' => $application['application_id'],
+        ]);
+
+        return $this->response->setJSON(['status' => 'success']);
+    }
+
+    private function updateApplication($data, $applicationId, $action, bool $preserveStatus = false)
+    {
+        $fields = [
+            'applicant_type' => $data['applicant_type'] ?? null,
+            'program_id'     => $data['program_id']     ?? null,
+            'school_year'    => $data['school_year']    ?? null,
+            'semester'       => $data['semester']       ?? null,
+        ];
+
+        // While a revision is in progress, autosaving page 1 must not stomp
+        // 'needs_revision' back to 'draft'/'pending'.
+        if (!$preserveStatus) {
+            $fields['application_status'] = $action === 'submit' ? 'pending' : 'draft';
+        }
+
+        return (new ApplicationModel())->update($applicationId, $fields);
     }
 
     private function updatePersonalInformation($data, $applicationId)
@@ -306,6 +359,18 @@ class ApplicantFormController extends BaseController
 
     private function updateEducationalBackground($data, $applicationId, $action)
     {
+        $yearError = $this->validateSchoolYears($data['school_year_start'] ?? '', $data['school_year_end'] ?? '');
+        if ($yearError !== null) {
+            $this->stepValidationError = $yearError;
+            return false;
+        }
+
+        $gwaError = $this->validateGwa($data['gwa'] ?? '');
+        if ($gwaError !== null) {
+            $this->stepValidationError = $gwaError;
+            return false;
+        }
+
         return (new EducationalBackgroundModel())
             ->where('application_id', $applicationId)
             ->set([
@@ -317,6 +382,51 @@ class ApplicantFormController extends BaseController
                 'gwa'               => $data['gwa']             ?? null,
                 'school_type'       => $data['school_type']     ?? null,
             ])->update();
+    }
+
+    /**
+     * Returns an error message if the given school year start/end are invalid,
+     * or null if they're valid (or left blank, e.g. an in-progress draft).
+     */
+    private function validateSchoolYears($start, $end): ?string
+    {
+        if ($start === '' && $end === '') {
+            return null;
+        }
+
+        $currentYear = (int) date('Y');
+
+        foreach ([$start, $end] as $value) {
+            if ($value === '') {
+                continue;
+            }
+            if (!ctype_digit((string) $value) || (int) $value < 2000 || (int) $value > $currentYear) {
+                return 'School year must be between 2000 and ' . $currentYear . '.';
+            }
+        }
+
+        if ($start !== '' && $end !== '' && (int) $end <= (int) $start) {
+            return 'School year end must be after the start year.';
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns an error message if the given GWA is invalid, or null if it's
+     * valid (or left blank, e.g. an in-progress draft).
+     */
+    private function validateGwa($gwa): ?string
+    {
+        if ($gwa === '') {
+            return null;
+        }
+
+        if (!is_numeric($gwa) || (float) $gwa < 60 || (float) $gwa > 100) {
+            return 'General average (GWA) must be between 60 and 100.';
+        }
+
+        return null;
     }
 
     private function lightenHex(string $hex, float $amount = 0.88): string

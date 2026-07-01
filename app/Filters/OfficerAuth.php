@@ -10,7 +10,7 @@ class OfficerAuth implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
-        $path = ltrim($request->getUri()->getPath(), '/');
+        $path = ltrim($request->getPath(), '/');
 
         // Allow the login page itself through
         if ($path === 'admission-officer/login') {

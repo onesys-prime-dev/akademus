@@ -20,6 +20,21 @@ class ApplicationProgressService
         $decisionRemarks = $applicant['decision_remarks'] ?? null;
         $appStatus       = $application['application_status'] ?? '';
 
+        // ── Revision request ──────────────────────
+        $revisionRequested = $appStatus === 'needs_revision';
+        $revisionNote      = $application['revision_note'] ?? null;
+        $revisionPageIds   = $revisionRequested
+            ? (json_decode($application['revision_pages'] ?? '[]', true) ?: [])
+            : [];
+
+        $revisionPageTitles = [];
+        if ($revisionPageIds) {
+            $revisionPageTitles = array_column(
+                (new FormPageModel())->whereIn('id', $revisionPageIds)->orderBy('sort_order', 'ASC')->findAll(),
+                'title'
+            );
+        }
+
         // ── Program ID ─────────────────────────────
         $programId = $application['program_id']
             ?? $applicant['program_id']
@@ -182,9 +197,9 @@ class ApplicationProgressService
                 'date'     => $formSubmitted
                     ? ($application['application_date'] ?? null)
                     : null,
-                'status'   => $formComplete
-                    ? 'done'
-                    : ($formPagesCompleted > 0 ? 'active' : 'pending'),
+                'status'   => $revisionRequested
+                    ? 'active'
+                    : ($formComplete ? 'done' : ($formPagesCompleted > 0 ? 'active' : 'pending')),
                 'remarks'  => null,
             ],
             [
@@ -306,14 +321,18 @@ class ApplicationProgressService
         ];
 
         return [
-            'steps'            => $steps,
-            'app_status'       => $applicantStatus,
-            'decision_remarks' => $decisionRemarks,
-            'form_complete'    => $formComplete,
-            'form_submitted'   => $formSubmitted,
-            'docs_complete'    => $docsComplete,
-            'exam_enabled'     => $examEnabled,
-            'exam_booking'     => $examBooking,
+            'steps'              => $steps,
+            'app_status'         => $applicantStatus,
+            'form_status'        => $appStatus,
+            'decision_remarks'   => $decisionRemarks,
+            'revision_requested' => $revisionRequested,
+            'revision_note'      => $revisionNote,
+            'revision_pages'     => $revisionPageTitles,
+            'form_complete'      => $formComplete,
+            'form_submitted'     => $formSubmitted,
+            'docs_complete'      => $docsComplete,
+            'exam_enabled'       => $examEnabled,
+            'exam_booking'       => $examBooking,
         ];
     }
 }

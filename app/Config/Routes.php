@@ -51,6 +51,7 @@ $routes->get('applicant-form', 'Applicant\ApplicantFormController::index');
 $routes->get('applicant-form/step/(:num)', 'Applicant\ApplicantFormController::getStep/$1');
 $routes->post('applicant-form/update/(:num)', 'Applicant\ApplicantFormController::updateForm/$1');
 $routes->post('applicant-form/get-drafts', 'Applicant\ApplicantFormController::getSavedDraft');
+$routes->post('applicant-form/resubmit', 'Applicant\ApplicantFormController::resubmit');
 
 // tracking progress
 $routes->get('tracking-progress', 'Applicant\TrackingProgressController::index');
@@ -206,6 +207,7 @@ $routes->post('admission-officer/applicants/bulk-update',        'AdmissionOffic
 $routes->get('admission-officer/detailed-applicant/(:num)',         'AdmissionOfficer\ApplicantsController::profile/$1');
 $routes->get('admission-officer/detailed-applicant/fetch-content',  'AdmissionOfficer\ApplicantsController::fetchContent');
 $routes->post('admission-officer/applicants/(:num)/decide',         'AdmissionOfficer\ApplicantsController::decide/$1');
+$routes->post('admission-officer/applicants/(:num)/request-revision', 'AdmissionOfficer\ApplicantsController::requestRevision/$1');
 
 // Admission Officer Exam Schedule
 $routes->get('admission-officer/exam-schedule',                         'AdmissionOfficer\ExamScheduleController::index');

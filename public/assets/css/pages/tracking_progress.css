@@ -232,6 +232,15 @@
     color: #dc2626;
 }
 
+.tp-status-card--revision {
+    background: #fff7ed;
+    border-color: #fed7aa;
+}
+
+.tp-status-card--revision .tp-status-title {
+    color: #c2410c;
+}
+
 /* Rejected icon */
 .tp-icon--rejected {
     background: rgba(220, 38, 38, 0.15);
@@ -280,6 +289,11 @@
     border-color: #fca5a5;
 }
 
+.tp-remarks-card--revision {
+    background: #fff7ed;
+    border-color: #fed7aa;
+}
+
 .tp-remarks-header {
     display: flex;
     align-items: center;
@@ -297,6 +311,46 @@
 
 .tp-remarks-card--rejected .tp-remarks-header {
     color: #dc2626;
+}
+
+.tp-remarks-card--revision .tp-remarks-header {
+    color: #c2410c;
+}
+
+.tp-remarks-cta-link,
+.tp-remarks-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1.5px solid #c2410c;
+}
+
+.tp-remarks-cta-link {
+    background: #fff;
+    color: #c2410c;
+}
+
+.tp-remarks-cta-link:hover {
+    background: #fff7ed;
+}
+
+.tp-remarks-cta-btn {
+    background: #c2410c;
+    color: #fff;
+}
+
+.tp-remarks-cta-btn:hover {
+    opacity: 0.88;
+}
+
+.tp-remarks-cta-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .tp-remarks-body {

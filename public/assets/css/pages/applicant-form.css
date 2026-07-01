@@ -491,6 +491,14 @@
     gap: 6px;
 }
 
+/* The class's own `display: flex` above otherwise wins over the browser's
+   default `[hidden] { display: none }` rule, since an author class selector
+   beats the UA attribute-selector default — so toggling the `hidden`
+   attribute alone would never actually hide this label. */
+.form-readonly-label[hidden] {
+    display: none;
+}
+
 /* Disable pointer-events on locked containers so nothing is interactable */
 .form-locked {
     pointer-events: none;

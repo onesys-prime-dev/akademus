@@ -153,6 +153,83 @@ class ApplicantsController extends BaseController
         ]);
     }
 
+    public function requestRevision(int $applicantId)
+    {
+        $pageIds = $this->request->getPost('page_ids');
+        $note    = trim($this->request->getPost('note') ?? '');
+
+        if (empty($pageIds) || !is_array($pageIds) || $note === '' || !$applicantId) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Select at least one step and provide a note.',
+            ]);
+        }
+
+        $pageIds = array_values(array_unique(array_map('intval', $pageIds)));
+
+        $db = \Config\Database::connect();
+
+        $application = $db->table('applications')
+            ->where('applicant_id', $applicantId)
+            ->orderBy('application_date', 'DESC')
+            ->get()
+            ->getRowArray();
+
+        if (!$application) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'No submitted application found.',
+            ]);
+        }
+
+        if (!in_array($application['application_status'], ['pending', 'needs_revision'], true)) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'This application cannot be sent back for revision in its current state.',
+            ]);
+        }
+
+        $updated = $db->table('applications')
+            ->where('application_id', $application['application_id'])
+            ->update([
+                'application_status' => 'needs_revision',
+                'revision_note'      => $note,
+                'revision_pages'     => json_encode($pageIds),
+            ]);
+
+        if (!$updated) {
+            log_message('error', 'Failed to set needs_revision for application ID: ' . $application['application_id']);
+
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Failed to save revision request.',
+            ]);
+        }
+
+        $pageTitles = (new \App\Models\FormPageModel())
+            ->whereIn('id', $pageIds)
+            ->orderBy('sort_order', 'ASC')
+            ->findColumn('title');
+
+        $stepList    = implode(', ', $pageTitles ?: []);
+        $messageBody = "Your application requires revision on: {$stepList}.\n\n" . $note;
+
+        (new \App\Models\FollowUpMessageModel())->insert([
+            'applicant_id' => $applicantId,
+            'sender_role'  => 'officer',
+            'message'      => $messageBody,
+            'is_read'      => 0,
+            'created_at'   => date('Y-m-d H:i:s'),
+        ]);
+
+        $this->notificationService->trigger('followup.new_message', $applicantId, ['message' => $messageBody]);
+
+        return $this->response->setJSON([
+            'success' => true,
+            'message' => 'Revision requested successfully.',
+        ]);
+    }
+
     public function bulkUpdate()
     {
         $data = $this->request->getJSON(true);
@@ -292,6 +369,7 @@ class ApplicantsController extends BaseController
             'profile'        => $profile,
             'activeTab'      => $activeTab,
             'initialContent' => $initialContent,
+            'formPages'      => (new \App\Models\FormPageModel())->getEnabledOrdered(),
         ]);
     }
 

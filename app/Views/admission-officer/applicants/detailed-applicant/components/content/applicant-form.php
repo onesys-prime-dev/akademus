@@ -78,12 +78,17 @@
                                     Family Member <?= $i + 1 ?>
                                 </div>
 
+                                <?php
+                                    // Force a new row at the start of each Father/Mother/Guardian
+                                    // group so they don't run on mid-row from the group before it.
+                                    $groupStartKeys = ['father_firstname', 'mother_firstname', 'guardian_name'];
+                                ?>
                                 <div class="profile-grid">
                                     <?php foreach ($member as $key => $value): ?>
                                         <?php if (in_array($key, ['id', 'application_id', 'created_at', 'updated_at'])) continue; ?>
                                         <?php if ($value === null || $value === '') continue; ?>
 
-                                        <div class="info-card">
+                                        <div class="info-card<?= in_array($key, $groupStartKeys) ? ' info-card--group-start' : '' ?>">
                                             <label><?= esc(ucwords(str_replace('_', ' ', $key))) ?></label>
                                             <div><?= esc($value) ?></div>
                                         </div>
@@ -148,6 +153,14 @@
     border-radius:12px;
     padding:14px;
     transition:.2s ease;
+}
+
+/* Pins this card to column 1, which pushes it (and everything after it)
+   onto a new row in the auto-placement grid above — used so each Father/
+   Mother/Guardian group in Family Background always starts its own row
+   instead of running on mid-row from whichever group came before it. */
+.info-card--group-start{
+    grid-column:1;
 }
 
 .info-card:hover{
