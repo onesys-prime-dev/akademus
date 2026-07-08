@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\LoginThrottle;
 use App\Models\ThemeModel;
 use App\Models\UserModel;
 
@@ -26,6 +27,16 @@ class ThemeController extends BaseController
 
     public function adminLoginPost()
     {
+        if (LoginThrottle::tooManyAttempts('admin')) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setStatusCode(429)->setJSON([
+                    'status'  => 'error',
+                    'message' => LoginThrottle::retryMessage(),
+                ]);
+            }
+            return redirect()->back()->with('error', LoginThrottle::retryMessage());
+        }
+
         $email    = $this->request->getPost('email');
         $password = $this->request->getPost('password');
 

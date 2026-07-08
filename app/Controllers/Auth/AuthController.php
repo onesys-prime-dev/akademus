@@ -4,6 +4,7 @@ namespace App\Controllers\Auth;
 
 use App\Controllers\BaseController;
 
+use App\Libraries\LoginThrottle;
 use App\Models\Auth\RememberTokenModel;
 use App\Models\Program\ProgramModel;
 use App\Models\ThemeModel;
@@ -193,6 +194,13 @@ class AuthController extends BaseController
 
     public function login()
     {
+        if (LoginThrottle::tooManyAttempts('applicant')) {
+            return $this->response->setStatusCode(429)->setJSON([
+                'status'  => 'error',
+                'message' => LoginThrottle::retryMessage(),
+            ]);
+        }
+
         $db = \Config\Database::connect();
 
         $builder = $db->table('applicants a');

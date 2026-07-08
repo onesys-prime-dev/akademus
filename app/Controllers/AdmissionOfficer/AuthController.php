@@ -3,6 +3,7 @@
 namespace App\Controllers\AdmissionOfficer;
 
 use App\Controllers\BaseController;
+use App\Libraries\LoginThrottle;
 use App\Models\ThemeModel;
 
 class AuthController extends BaseController
@@ -19,6 +20,16 @@ class AuthController extends BaseController
 
     public function loginPost()
     {
+        if (LoginThrottle::tooManyAttempts('officer')) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setStatusCode(429)->setJSON([
+                    'status'  => 'error',
+                    'message' => LoginThrottle::retryMessage(),
+                ]);
+            }
+            return redirect()->back()->with('error', LoginThrottle::retryMessage());
+        }
+
         $email    = $this->request->getPost('email');
         $password = $this->request->getPost('password');
 
