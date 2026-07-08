@@ -68,7 +68,7 @@
 }
 
 .progress-circle-active {
-    background-color: var(--accent);
+    background-color: var(--progress-active);
     color: var(--accent-text);
 }
 
@@ -85,7 +85,7 @@
 }
 
 .progress-line-active {
-    background-color: var(--accent);
+    background-color: var(--progress-active);
 }
 
 .progress-line-done {

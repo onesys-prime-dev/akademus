@@ -91,6 +91,8 @@ $routes->post('admin/theme/save',      'ThemeController::save');
 $routes->get('admin/theme/json',       'ThemeController::getThemeJson');
 $routes->get('admin/theme/preview',    'ThemeController::preview');
 $routes->post('admin/theme/upload-logo', 'ThemeController::uploadLogo');
+$routes->post('admin/theme/presets/save',          'ThemeController::saveCustomPreset');
+$routes->post('admin/theme/presets/delete/(:num)', 'ThemeController::deleteCustomPreset/$1');
 
 
 // -------------------------------- PAYMENT FEES ------------------------------ //

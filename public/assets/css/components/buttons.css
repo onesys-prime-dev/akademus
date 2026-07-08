@@ -4,8 +4,8 @@
     padding: 12px 24px !important;
     border: var(--border-default) !important;
     border-radius: var(--radius-md) !important;
-    background: var(--primary) !important;
-    color: var(--text-inverse);
+    background: var(--button-primary-bg) !important;
+    color: var(--button-primary-text);
     font-weight: 600 !important;
     cursor: pointer !important;
     user-select: none !important;        /* Standard */
@@ -18,8 +18,8 @@
     padding: 12px 24px !important;
     border: var(--border-default) !important;
     border-radius: var(--radius-md) !important;
-    background: var(--accent) !important;
-    color: var(--primary);
+    background: var(--button-accent-bg) !important;
+    color: var(--button-accent-text);
     font-weight: 600 !important;
     cursor: pointer !important;
     user-select: none !important;        /* Standard */

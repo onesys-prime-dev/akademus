@@ -150,8 +150,8 @@
 }
 
 .tp-icon--active {
-    background: rgba(255, 178, 0, 0.15);
-    border: 2px solid #ffb200;
+    background: rgba(from var(--progress-active) r g b / 0.15);
+    border: 2px solid var(--progress-active);
 }
 
 .tp-icon--pending {
@@ -209,7 +209,7 @@
 }
 
 .tp-step-date--active {
-    color: #ffb200;
+    color: var(--progress-active);
     font-weight: 600;
 }
 

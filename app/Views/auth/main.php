@@ -4,10 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Akademus | <?= $title ?></title>
-<?php $favicon = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/favicons/favicon-32x32.png'); ?>
-<link rel="icon" type="image/png" sizes="32x32" href="<?= $favicon ?>">
-<link rel="icon" type="image/png" sizes="16x16" href="<?= !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/favicons/favicon-16x16.png') ?>">
-<link rel="apple-touch-icon" sizes="180x180" href="<?= !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/favicons/favicon-180x180.png') ?>">
+<?= theme_favicon_tags() ?>
 
 <link href="https://fonts.googleapis.com/css2?family=<?= urlencode($theme['font_family'] ?? 'Poppins') ?>:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -552,5 +549,9 @@
         servicesTrigger.classList.toggle('open');
     });
 </script>
+
+<?php if (!empty($isPreview)): ?>
+    <?= view('admin/_preview_runtime') ?>
+<?php endif; ?>
 </body>
 </html>

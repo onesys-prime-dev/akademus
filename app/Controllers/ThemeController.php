@@ -4,15 +4,32 @@ namespace App\Controllers;
 
 use App\Libraries\LoginThrottle;
 use App\Models\ThemeModel;
+use App\Models\ThemePresetModel;
 use App\Models\UserModel;
 
 class ThemeController extends BaseController
 {
     protected ThemeModel $themeModel;
+    protected ThemePresetModel $themePresetModel;
+
+    /**
+     * The color fields a preset (built-in or custom) carries — also the
+     * fields accepted by the custom-preset save endpoint.
+     */
+    public const PRESET_COLOR_FIELDS = [
+        'primary_color', 'primary_dark', 'primary_light',
+        'accent_color', 'accent_text',
+        'sidebar_color', 'sidebar_active_color',
+        'banner_bg_color', 'banner_box_color',
+        'button_primary_bg', 'button_primary_text',
+        'button_accent_bg', 'button_accent_text',
+        'header_text_color', 'progress_active_color',
+    ];
 
     public function __construct()
     {
-        $this->themeModel = new ThemeModel();
+        $this->themeModel       = new ThemeModel();
+        $this->themePresetModel = new ThemePresetModel();
     }
 
     // ── Admin Login Page ──────────────────────────────────────
@@ -88,9 +105,10 @@ class ThemeController extends BaseController
             return redirect()->to('admin/login');
         }
 
-        $data['theme']    = $this->themeModel->getAllSettings();
-        $data['title']    = 'Theme Customizer';
-        $data['saved']    = session()->getFlashdata('saved');
+        $data['theme']         = $this->themeModel->getAllSettings();
+        $data['title']         = 'Theme Customizer';
+        $data['saved']         = session()->getFlashdata('saved');
+        $data['customPresets'] = $this->themePresetModel->getAll();
 
         return view('admin/theme', $data);
     }
@@ -101,13 +119,11 @@ class ThemeController extends BaseController
             return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
         }
 
-        $allowed = [
-            'primary_color', 'primary_dark', 'primary_light',
-            'accent_color', 'accent_text', 'sidebar_color',
+        $allowed = array_merge(self::PRESET_COLOR_FIELDS, [
             'font_family', 'border_radius',
             'app_name', 'logo_text', 'logo_url',
             'school_year', 'admission_status', 'preset',
-        ];
+        ]);
 
         $data = [];
         foreach ($allowed as $key) {
@@ -146,16 +162,47 @@ class ThemeController extends BaseController
     // ── Theme Preview (iframe) ────────────────────────────────
     public function preview()
     {
+        if (!session()->get('admin_logged_in')) {
+            return redirect()->to('admin/login');
+        }
+
         $page    = $this->request->getGet('page') ?? 'dashboard';
-        $allowed = ['dashboard', 'signin', 'signup', 'appform', 'documents', 'track', 'success'];
-        if (!in_array($page, $allowed)) {
+        $allowed = [
+            'dashboard', 'appform', 'documents', 'track', 'exam',
+            'admission-fee', 'reservation-fee', 'faq', 'followup', 'tuition-calc',
+            'signin', 'signup', 'success',
+        ];
+        if (!in_array($page, $allowed, true)) {
             $page = 'dashboard';
         }
 
-        $data['theme'] = $this->themeModel->getAllSettings();
-        $data['page']  = $page;
+        $built = (new \App\Services\ThemePreviewDataService())->build($page);
 
-        return view('admin/theme-preview', $data);
+        // A few real partials (sidebar, applicant-form step-1) read applicant
+        // identity straight from session() rather than $data. Swap in the fake
+        // persona for just this render, then restore whatever was there before —
+        // net effect is zero persistence beyond this single response.
+        $sessionKeys = array_keys(\App\Services\ThemePreviewDataService::SESSION_PERSONA);
+        $original    = [];
+        foreach ($sessionKeys as $key) {
+            $original[$key] = session()->get($key);
+        }
+        session()->set(\App\Services\ThemePreviewDataService::SESSION_PERSONA);
+
+        $data = $built['data'];
+        $data['isPreview'] = true;
+
+        $html = view($built['view'], $data);
+
+        foreach ($sessionKeys as $key) {
+            if ($original[$key] === null) {
+                session()->remove($key);
+            } else {
+                session()->set($key, $original[$key]);
+            }
+        }
+
+        return $this->response->setBody($html);
     }
 
     /**
@@ -204,5 +251,46 @@ class ThemeController extends BaseController
             'logo_path' => 'assets/images/logos/' . $newName,
             'logo_url'  => base_url('assets/images/logos/' . $newName)
         ]);
+    }
+
+    // ── Custom Presets ────────────────────────────────────────
+    public function saveCustomPreset()
+    {
+        if (!session()->get('admin_logged_in')) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
+        }
+
+        $rules = ['name' => 'required|max_length[100]'];
+        foreach (self::PRESET_COLOR_FIELDS as $field) {
+            $rules[$field] = 'required|regex_match[/^#[0-9a-fA-F]{3,8}$/]';
+        }
+
+        if (!$this->validate($rules)) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'A preset name and 15 valid hex colors are required.',
+            ])->setStatusCode(422);
+        }
+
+        $data = ['name' => $this->request->getPost('name')];
+        foreach (self::PRESET_COLOR_FIELDS as $field) {
+            $data[$field] = $this->request->getPost($field);
+        }
+
+        $id = $this->themePresetModel->createPreset($data);
+        $data['id'] = $id;
+
+        return $this->response->setJSON(['status' => 'success', 'preset' => $data]);
+    }
+
+    public function deleteCustomPreset($id)
+    {
+        if (!session()->get('admin_logged_in')) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
+        }
+
+        $this->themePresetModel->delete((int) $id);
+
+        return $this->response->setJSON(['status' => 'success']);
     }
 }

@@ -6,7 +6,7 @@
 .profile-banner {
     width: 100%;
     height: fit-content;
-    background-color: var(--primary);
+    background-color: var(--banner-bg);
     border-radius: 15px;
     display: flex;
     flex-direction: column;
@@ -52,7 +52,7 @@
 .profile-banner-applicant-id-box {
     width: fit-content;
     padding: 8px 16px 14px;
-    background-color: var(--primary-light);
+    background-color: var(--banner-box-bg);
     border-radius: 10px;
     border: 1px solid color-mix(in srgb, var(--text-inverse) 30%, transparent);
     display: flex;
@@ -81,14 +81,12 @@
 
 .lower-profile-banner .quick-actions a {
     text-decoration: none;
-    color: var(--accent-text);
     font-size: 13px;
     font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 10px 18px;
-    background-color: var(--accent);
     border-radius: 8px;
     white-space: nowrap;
 }
@@ -205,10 +203,10 @@
 
 /* Step states */
 .step-bar-done        { background-color: rgba(49, 166, 70, 0.35); }
-.step-bar-inprogress  { background-color: rgba(255, 178, 0, 0.35);  }
+.step-bar-inprogress  { background-color: rgba(from var(--progress-active) r g b / 0.35);  }
 
 .step-line-done       { background-color: #31a646 }
-.step-line-inprogress { background-color: #ffb200;  }
+.step-line-inprogress { background-color: var(--progress-active);  }
 
 .step-circle-done {
     border: 1px solid #31a646;
@@ -216,9 +214,9 @@
     color: #31a646;
 }
 .step-circle-inprogress {
-    border: 1px solid #ffb200;
-    background-color: rgba(255, 178, 0, 0.15);
-    color: #ffb200;
+    border: 1px solid var(--progress-active);
+    background-color: rgba(from var(--progress-active) r g b / 0.15);
+    color: var(--progress-active);
 }
 
 .step-label-done {
@@ -226,7 +224,7 @@
     font-weight: 700 !important;
 }
 .step-label-inprogress {
-    color: var(--accent) !important;
+    color: var(--progress-active) !important;
     font-weight: 600 !important;
 }
 

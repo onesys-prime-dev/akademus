@@ -93,14 +93,14 @@ nav {
         width: 100%;
         margin-top: 16px;
         padding: 16px;
-        background-color: rgba(from var(--accent) r g b / 0.4);
+        background-color: rgba(from var(--sidebar-active) r g b / 0.4);
         border-radius: 10px;
-        border: 1px solid var(--accent);
+        border: 1px solid var(--sidebar-active);
         display: flex;
         flex-direction: column;
         gap: 6px;
         white-space: nowrap;
-        text-shadow: 0 0 10px rgba(from var(--accent) r g b / 0.4);
+        text-shadow: 0 0 10px rgba(from var(--sidebar-active) r g b / 0.4);
     }
 
         .applicant-id-box span {
@@ -112,7 +112,7 @@ nav {
         .applicant-id-box p {
             font-size: 24px;
             font-weight: 700;
-            color: var(--accent);
+            color: var(--sidebar-active);
             white-space: nowrap;
         }
 
@@ -174,7 +174,7 @@ nav {
             }
 
             .sidebar-nav-link.active .dotted-link {
-                background-color: var(--accent);
+                background-color: var(--sidebar-active);
             }
 
             .sidebar-nav-link.active span {
@@ -257,9 +257,9 @@ nav {
                 font-weight:700;
                 padding:4px 10px;
                 border-radius:999px;
-                background:rgba(from var(--accent) r g b / 0.18);
-                border:1px solid rgba(from var(--accent) r g b / 0.55);
-                color:var(--accent);
+                background:rgba(from var(--sidebar-active) r g b / 0.18);
+                border:1px solid rgba(from var(--sidebar-active) r g b / 0.55);
+                color:var(--sidebar-active);
                 white-space:nowrap;
             }
 
@@ -342,7 +342,7 @@ nav {
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: var(--accent);
+            background-color: var(--sidebar-active);
             border-radius: 100%;
             color: var(--accent-text);
             font-weight: 700;
@@ -372,7 +372,7 @@ nav {
         .sidebar-bottom a {
             text-decoration: none;
             padding: 6px 20px;
-            background-color: var(--accent);
+            background-color: var(--sidebar-active);
             border-radius: 8px;
         }
 
@@ -412,7 +412,7 @@ nav {
             height: fit-content;
             font-size: 22px;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--header-text);
             line-height: normal;
         }
 
