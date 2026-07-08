@@ -77,6 +77,7 @@ export function updateApplicantsTable(applicants) {
 
             <td class="applicants-table__cell">
                 ${escapeHtml(app.applicant_name)}
+                ${app.is_fast_track == 1 ? '<span class="status-badge status-badge--fast-track" style="margin-left:6px;">Fast Track</span>' : ''}
             </td>
 
             <td class="applicants-table__cell">

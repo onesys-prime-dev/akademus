@@ -3,6 +3,7 @@
 namespace App\Controllers\AdmissionOfficer;
 
 use App\Controllers\BaseController;
+use App\Libraries\EncryptedFileStorage;
 use App\Models\ThemeModel;
 use App\Models\ProgramModel;
 use App\Services\ApplicantService;
@@ -429,12 +430,12 @@ class ApplicantsController extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        $mime = mime_content_type($filePath);
+        $mime = $doc['mime_type'] ?? 'application/octet-stream';
 
         return $this->response
             ->setHeader('Content-Type', $mime)
             ->setHeader('Content-Disposition', 'inline; filename="' . esc($doc['document_name']) . '"')
-            ->setBody(file_get_contents($filePath));
+            ->setBody(EncryptedFileStorage::read($filePath));
     }
 
     public function fetchContent()

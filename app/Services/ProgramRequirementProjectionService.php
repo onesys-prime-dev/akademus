@@ -76,6 +76,7 @@ class ProgramRequirementProjectionService
                     'display_order'                   => $reqIndex,
                     'is_active'                       => 1,
                     'is_mandatory'                    => $req['is_required'],
+                    'is_fast_track_required'          => $req['is_fast_track_required'],
                     'created_at'                      => date('Y-m-d H:i:s'),
                     'updated_at'                      => date('Y-m-d H:i:s'),
                 ]);

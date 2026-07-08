@@ -88,6 +88,10 @@ class SendEmails extends BaseCommand
                             $success = EmailService::sendAdmissionFeePendingNotification($email['to_email'], $payload['reference_num'] ?? '');
                             break;
 
+                        case 'fast_track_fee.pending':
+                            $success = EmailService::sendFastTrackFeePendingNotification($email['to_email'], $payload['reference_num'] ?? '');
+                            break;
+
                         case 'reservation_fee.pending':
                             $success = EmailService::sendReservationFeePendingNotification($email['to_email'], $payload['reference_num'] ?? '');
                             break;

@@ -176,12 +176,13 @@ class RequirementCategoriesController extends BaseAdminController
             }
 
             $data = [
-                'category_id'      => $categoryId,
-                'requirement_name' => trim($doc['requirement_name']),
-                'description'      => $doc['description'] ?? null,
-                'is_required'      => !empty($doc['is_required']) ? 1 : 0,
-                'display_order'    => (int) $order,
-                'is_active'        => 1,
+                'category_id'             => $categoryId,
+                'requirement_name'        => trim($doc['requirement_name']),
+                'description'             => $doc['description'] ?? null,
+                'is_required'             => !empty($doc['is_required']) ? 1 : 0,
+                'is_fast_track_required'  => !empty($doc['is_fast_track_required']) ? 1 : 0,
+                'display_order'           => (int) $order,
+                'is_active'               => 1,
             ];
 
             $requirementId = $doc['requirement_id'] ?? null;

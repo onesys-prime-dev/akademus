@@ -14,7 +14,7 @@ $isSubmittedPHP = !empty($is_submitted);
             </svg>
         </div>
         <h3 id="af-modal-title" class="af-modal__title">Submit Application?</h3>
-        <p class="af-modal__body">
+        <p id="af-modal-body" class="af-modal__body">
             Please make sure all your details are correct before submitting.
             <strong>Once submitted, you will no longer be able to edit your application.</strong>
         </p>
@@ -81,6 +81,9 @@ $isSubmittedPHP = !empty($is_submitted);
     // ── State ────────────────────────────────────────────────────────────────
     // Start from server-rendered value; may be updated after each AJAX step load.
     let formIsSubmitted = <?= $isSubmittedPHP ? 'true' : 'false' ?>;
+    // Whether the applicant checked "Apply via Fast Track" on step 1 — updated from
+    // every loadForm() response since it's read off the `applications` row, not the step.
+    let isFastTrack = false;
 
     const formProgressH4Text   = document.getElementById('form-progress-h4-text');
     const backBtn              = document.getElementById('back-btn');
@@ -130,6 +133,7 @@ $isSubmittedPHP = !empty($is_submitted);
             // once the applicant has submitted at all, we don't want the Save & Continue/
             // Submit Form wizard buttons to reappear just because one step is editable.
             const stepIsSubmitted = !!data.is_submitted;
+            isFastTrack = !!data.is_fast_track;
 
             if (stepIsSubmitted && !formIsSubmitted) {
                 formIsSubmitted = true;
@@ -349,15 +353,32 @@ $isSubmittedPHP = !empty($is_submitted);
             if (saveAndContinueBtn) { saveAndContinueBtn.classList.add('hidden'); }
             if (submitFormBtn)      { submitFormBtn.classList.add('hidden'); }
         } else {
+            // A Fast Track applicant can finalize right after step 2 (Personal
+            // Information) instead of waiting for the last step.
+            const isFastTrackFinalizeStep = isFastTrack && currentStep === 2;
+
             if (backBtn)            { backBtn.classList.toggle('hidden', currentStep === 1); }
             if (nextBtn)            { nextBtn.classList.add('hidden'); }
             if (saveAndContinueBtn) { saveAndContinueBtn.classList.toggle('hidden', currentStep === maxSteps); }
-            if (submitFormBtn)      { submitFormBtn.classList.toggle('hidden', currentStep !== maxSteps); }
+            if (submitFormBtn)      { submitFormBtn.classList.toggle('hidden', !(currentStep === maxSteps || isFastTrackFinalizeStep)); }
         }
     }
 
     // ── Modal helpers ────────────────────────────────────────────────────────
-    function openModal() {
+    function openModal(isFastTrackPartial = false) {
+        const titleEl = document.getElementById('af-modal-title');
+        const bodyEl  = document.getElementById('af-modal-body');
+
+        if (isFastTrackPartial) {
+            titleEl.textContent = 'Submit Initial Application?';
+            bodyEl.innerHTML = 'This submits your Application Type and Personal Information only. ' +
+                '<strong>Family Background and Educational Background can still be completed later</strong> from your Dashboard.';
+        } else {
+            titleEl.textContent = 'Submit Application?';
+            bodyEl.innerHTML = 'Please make sure all your details are correct before submitting. ' +
+                '<strong>Once submitted, you will no longer be able to edit your application.</strong>';
+        }
+
         submitModal.removeAttribute('hidden');
         document.body.style.overflow = 'hidden';
         modalConfirmBtn.focus();
@@ -428,7 +449,7 @@ $isSubmittedPHP = !empty($is_submitted);
     if (submitFormBtn) {
         submitFormBtn.addEventListener('click', () => {
             if (!checkAllFields(currentStep)) return;
-            openModal();
+            openModal(isFastTrack && currentStep === 2);
         });
     }
 
@@ -452,9 +473,16 @@ $isSubmittedPHP = !empty($is_submitted);
             }
 
             try {
+                // Scope this resubmit to the step actually being viewed — resolving
+                // this one page must not clear a revision still flagged on another step.
+                const pageId = enabledPages[currentStep - 1]?.id;
+                const body = new URLSearchParams();
+                if (pageId !== undefined) body.set('page_id', pageId);
+
                 const res  = await fetch('<?= base_url('applicant-form/resubmit') ?>', {
                     method: 'POST',
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body,
                 });
                 const data = await res.json();
                 if (data.status === 'success') {

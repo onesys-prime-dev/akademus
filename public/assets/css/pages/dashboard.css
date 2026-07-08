@@ -645,6 +645,339 @@
     opacity: 0.85;
 }
 
+/* ============================================================
+   REVISION NOTIFICATION (persistent banner)
+   ============================================================ */
+.revision-notification-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background-color: #b45309;
+    border-radius: 14px;
+    margin: 8px 0 20px;
+    gap: 16px;
+}
+
+.revision-notification-text-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.revision-notification-text-info p {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-inverse);
+}
+
+.revision-notification-text-info span {
+    font-size: 12px;
+    font-weight: 400;
+    color: color-mix(in srgb, var(--text-inverse) 80%, transparent);
+}
+
+.revision-notification-container .revision-now-btn {
+    text-decoration: none;
+    color: #b45309;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 28px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+}
+
+.revision-notification-container .revision-now-btn:hover {
+    opacity: 0.85;
+}
+
+/* ============================================================
+   REVISION POPUP MODAL
+   ============================================================ */
+.revision-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(2px);
+}
+
+.revision-modal-backdrop[hidden] {
+    display: none;
+}
+
+.revision-modal {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+    padding: 36px 32px 28px;
+    max-width: 440px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+    animation: revision-modal-in 0.2s ease;
+}
+
+@keyframes revision-modal-in {
+    from { opacity: 0; transform: translateY(12px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+.revision-modal__icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, #b45309 12%, transparent);
+    color: #b45309;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.revision-modal__title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: var(--font), sans-serif;
+    margin: 0;
+}
+
+.revision-modal__body {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-secondary, #6b7280);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.revision-modal__note {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-primary);
+    background-color: #fef3c7;
+    border-radius: 8px;
+    padding: 10px 14px;
+    line-height: 1.5;
+    margin: 0;
+    width: 100%;
+    text-align: left;
+}
+
+.revision-modal__actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: 4px;
+}
+
+.revision-modal__btn {
+    flex: 1;
+    padding: 11px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font), sans-serif;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s, background-color 0.2s;
+}
+
+.revision-modal__btn--cancel {
+    background-color: var(--bg-muted, #f3f4f6);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default, #e5e7eb);
+}
+
+.revision-modal__btn--cancel:hover {
+    background-color: #e8e9ec;
+}
+
+.revision-modal__btn--confirm {
+    background-color: #b45309;
+    color: #ffffff;
+}
+
+.revision-modal__btn--confirm:hover {
+    opacity: 0.9;
+}
+
+/* ============================================================
+   FAST TRACK NOTIFICATION (persistent banner) — reuses the same
+   layout as .revision-notification-container, own color (primary blue)
+   ============================================================ */
+.fast-track-notification-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background-color: var(--primary);
+    border-radius: 14px;
+    margin: 8px 0 20px;
+    gap: 16px;
+}
+
+.fast-track-notification-text-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.fast-track-notification-text-info p {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-inverse);
+}
+
+.fast-track-notification-text-info span {
+    font-size: 12px;
+    font-weight: 400;
+    color: color-mix(in srgb, var(--text-inverse) 80%, transparent);
+}
+
+.fast-track-notification-container .fast-track-now-btn {
+    text-decoration: none;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 28px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+}
+
+.fast-track-notification-container .fast-track-now-btn:hover {
+    opacity: 0.85;
+}
+
+/* ============================================================
+   FAST TRACK POPUP MODAL
+   ============================================================ */
+.fast-track-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(2px);
+}
+
+.fast-track-modal-backdrop[hidden] {
+    display: none;
+}
+
+.fast-track-modal {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+    padding: 36px 32px 28px;
+    max-width: 440px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+    animation: revision-modal-in 0.2s ease;
+}
+
+.fast-track-modal__icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.fast-track-modal__title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: var(--font), sans-serif;
+    margin: 0;
+}
+
+.fast-track-modal__body {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-secondary, #6b7280);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.fast-track-modal__actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: 4px;
+}
+
+.fast-track-modal__btn {
+    flex: 1;
+    padding: 11px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font), sans-serif;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s, background-color 0.2s;
+}
+
+.fast-track-modal__btn--cancel {
+    background-color: var(--bg-muted, #f3f4f6);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default, #e5e7eb);
+}
+
+.fast-track-modal__btn--cancel:hover {
+    background-color: #e8e9ec;
+}
+
+.fast-track-modal__btn--confirm {
+    background-color: var(--primary);
+    color: #ffffff;
+}
+
+.fast-track-modal__btn--confirm:hover {
+    opacity: 0.9;
+}
+
 
 /* ============================================================
    RESPONSIVE — TABLET (≤ 1024 px)

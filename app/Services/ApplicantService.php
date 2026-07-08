@@ -69,7 +69,8 @@ class ApplicantService
                 CONCAT(UPPER(LEFT(ass.applicant_type, 1)), LOWER(SUBSTRING(ass.applicant_type, 2))) as applicant_type,
                 p.program_code as program,
                 a.application_status as status,
-                a.created_at as date_added
+                a.created_at as date_added,
+                ass.is_fast_track
             ")
             ->orderBy('a.created_at', 'DESC')
             ->limit($limit, $offset)

@@ -19,6 +19,7 @@ class ApplicationProgressService
         $applicantStatus = $applicant['application_status'] ?? 'pending';
         $decisionRemarks = $applicant['decision_remarks'] ?? null;
         $appStatus       = $application['application_status'] ?? '';
+        $isFastTrack     = !empty($application['is_fast_track']);
 
         // ── Revision request ──────────────────────
         $revisionRequested = $appStatus === 'needs_revision';
@@ -89,6 +90,26 @@ class ApplicationProgressService
 
         $formSubmitted = $application
             && !in_array($appStatus, ['draft', '']);
+
+        // ── Fast Track deferred pages ──────────────
+        // Family Background / Educational Background were never required to reach
+        // "pending" for a Fast Track applicant — surface which ones are still unfilled
+        // so the dashboard can remind them, the same way revision_pages does.
+        $pendingFastTrackPages = [];
+        if ($isFastTrack && $formSubmitted) {
+            $incompleteIds = array_keys(array_filter(
+                $formCompletion,
+                fn($done, $pageId) => !$done && in_array($pageId, [3, 4], true),
+                ARRAY_FILTER_USE_BOTH
+            ));
+
+            if ($incompleteIds) {
+                $pendingFastTrackPages = array_column(
+                    (new FormPageModel())->whereIn('id', $incompleteIds)->orderBy('sort_order', 'ASC')->findAll(),
+                    'title'
+                );
+            }
+        }
 
         // ── Document Completion ───────────────────
         $docStats = [
@@ -199,7 +220,7 @@ class ApplicationProgressService
                     : null,
                 'status'   => $revisionRequested
                     ? 'active'
-                    : ($formComplete ? 'done' : ($formPagesCompleted > 0 ? 'active' : 'pending')),
+                    : (($isFastTrack ? $formSubmitted : $formComplete) ? 'done' : ($formPagesCompleted > 0 ? 'active' : 'pending')),
                 'remarks'  => null,
             ],
             [
@@ -333,6 +354,8 @@ class ApplicationProgressService
             'docs_complete'      => $docsComplete,
             'exam_enabled'       => $examEnabled,
             'exam_booking'       => $examBooking,
+            'is_fast_track'      => $isFastTrack,
+            'pending_fast_track_pages' => $pendingFastTrackPages,
         ];
     }
 }

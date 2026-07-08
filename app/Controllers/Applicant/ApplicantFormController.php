@@ -70,17 +70,61 @@ class ApplicantFormController extends BaseController
         $this->requireLogin();
         $applicantId = session()->get('applicant_id');
 
+        $application = $applicantId
+            ? (new ApplicationModel())->where('applicant_id', $applicantId)->first()
+            : null;
+
         // Restore program from any existing application (draft or submitted)
-        if ($applicantId && !session()->get('selected_program_id')) {
-            $application = (new ApplicationModel())
-                ->where('applicant_id', $applicantId)
-                ->first();
-            if ($application && !empty($application['program_id'])) {
-                session()->set('selected_program_id', (int)$application['program_id']);
-            }
+        if ($application && !session()->get('selected_program_id') && !empty($application['program_id'])) {
+            session()->set('selected_program_id', (int)$application['program_id']);
+        }
+
+        // Brand-new applicant, hasn't picked a path yet — send them to the chooser
+        // before they ever see the step wizard.
+        if (!$application && session()->get('fast_track_choice') === null) {
+            return redirect()->to('applicant-form/choose-path');
         }
 
         return $this->renderLayout(1);
+    }
+
+    public function choosePath()
+    {
+        $this->requireLogin();
+        $applicantId = session()->get('applicant_id');
+
+        // Already has an application — nothing left to choose, skip straight into the wizard.
+        $hasApplication = $applicantId
+            && (new ApplicationModel())->where('applicant_id', $applicantId)->first();
+
+        if ($hasApplication) {
+            return redirect()->to('applicant-form');
+        }
+
+        $themeModel = new ThemeModel();
+        $theme      = $themeModel->getAllSettings();
+        $theme['primary_soft'] = $this->lightenHex($theme['primary_color'] ?? '#0040a6', 0.88);
+
+        $fastTrackFee = (new \App\Models\Payment\PaymentFeeTypeModel())
+            ->where('code', 'FAST_TRACK_FEE')
+            ->first();
+
+        return view('applicant/main', [
+            'title'                 => 'Choose Your Application Path',
+            'page_content'          => 'applicant/applicant-form/choose-path',
+            'theme'                 => $theme,
+            'fast_track_fee_amount' => $fastTrackFee['amount'] ?? 1000,
+        ]);
+    }
+
+    public function submitChoosePath()
+    {
+        $this->requireLogin();
+
+        $path = $this->request->getPost('path');
+        session()->set('fast_track_choice', $path === 'fast_track');
+
+        return redirect()->to('applicant-form');
     }
 
     private function isSubmitted(): bool
@@ -144,9 +188,17 @@ class ApplicantFormController extends BaseController
             $revisionPageIds = json_decode($application['revision_pages'] ?? '[]', true) ?: [];
         }
 
+        // Family Background (3) and Educational Background (4) stay editable indefinitely
+        // for a Fast Track applicant — they were never required to reach 'pending' in the
+        // first place, so there's nothing to "lock" once the initial pages are submitted.
+        $isDeferredPage = $application
+            && !empty($application['is_fast_track'])
+            && in_array($pageId, [3, 4], true);
+
         $isSubmitted = $application
             && !in_array($application['application_status'], ['draft'])
-            && !($application['application_status'] === 'needs_revision' && in_array($pageId, $revisionPageIds, true));
+            && !($application['application_status'] === 'needs_revision' && in_array($pageId, $revisionPageIds, true))
+            && !$isDeferredPage;
 
         if ($application) {
             $formData = $this->getFormDataForPage($pageId, $application['application_id']);
@@ -163,17 +215,20 @@ class ApplicantFormController extends BaseController
             $viewFile = 'applicant/applicant-form/steps/step-generic';
         }
 
+        $viewData = [
+            'step_num' => $step,      // position: 1,2,3,4 — used for form id
+            'page_id'  => $pageId,    // actual DB id — used for field configs
+            'data'     => $formData,  // pre-populate fields server-side
+        ];
+
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([
                 'title'        => 'Applicant Information Form',
                 'step_num'     => $step,
                 'page_id'      => $pageId,
                 'is_submitted' => $isSubmitted,
-                'form'         => view($viewFile, [
-                    'step_num' => $step,      // position: 1,2,3,4 — used for form id
-                    'page_id'  => $pageId,    // actual DB id — used for field configs
-                    'data'     => $formData,  // pre-populate fields server-side
-                ]),
+                'is_fast_track' => !empty($application['is_fast_track']),
+                'form'         => view($viewFile, $viewData),
                 'formData'     => $formData,
             ]);
         }
@@ -208,8 +263,15 @@ class ApplicantFormController extends BaseController
             && $existingApplication['application_status'] === 'needs_revision'
             && in_array($pageId, $revisionPageIds, true);
 
-        // Block edits on already-submitted applications, except for steps flagged for revision
-        if ($existingApplication && !$isDraft && !$isRevisableStep) {
+        // Family/Educational Background stay editable indefinitely for a Fast Track
+        // applicant — they were deferred, not "submitted then locked".
+        $isDeferredStep = $existingApplication
+            && !empty($existingApplication['is_fast_track'])
+            && in_array($pageId, [3, 4], true);
+
+        // Block edits on already-submitted applications, except for steps flagged for
+        // revision or deferred Fast Track steps.
+        if ($existingApplication && !$isDraft && !$isRevisableStep && !$isDeferredStep) {
             return $this->response->setJSON([
                 'status'  => 'error',
                 'message' => 'Your application has already been submitted and cannot be edited.',
@@ -222,6 +284,9 @@ class ApplicantFormController extends BaseController
                 'applicant_type'     => $data['applicant_type'] ?? null,
                 'program_id'         => $data['program_id']     ?? null,
                 'sy_semester'        => $data['sy_semester']    ?? null,
+                // Decided on the Choose Your Path screen before the wizard was ever
+                // reached (ApplicantFormController::submitChoosePath()), not from this POST.
+                'is_fast_track'      => session()->get('fast_track_choice') ? 1 : 0,
                 'application_status' => $action === 'submit' ? 'pending' : 'draft',
             ]);
 
@@ -241,10 +306,16 @@ class ApplicantFormController extends BaseController
             default => true,
         };
 
+        $isFastTrack = $existingApplication
+            ? !empty($existingApplication['is_fast_track'])
+            : (bool) session()->get('fast_track_choice');
+
+        // A Fast Track applicant finalizes right after Personal Information (page 2) —
+        // Family/Educational Background are deferred, not required to reach "pending".
         // A revision-mode step is only ever autosaved (action stays 'draft' client-side),
         // but guard defensively against finalizing submission mid-revision anyway.
-        $isLastStep = ($step === count($pages));
-        if ($isLastStep && $action === 'submit' && !$isRevisableStep) {
+        $isFinalizingStep = $isFastTrack ? ($pageId === 2) : ($step === count($pages));
+        if ($isFinalizingStep && $action === 'submit' && !$isRevisableStep) {
             $applicationModel->update($applicationId, ['application_status' => 'pending']);
 
             $this->notificationService->trigger('application.submitted', $applicantId, [
@@ -273,6 +344,7 @@ class ApplicantFormController extends BaseController
     {
         $this->requireLogin();
         $applicantId = session()->get('applicant_id');
+        $pageId      = $this->request->getPost('page_id');
 
         $applicationModel = new ApplicationModel();
         $application = $applicationModel->where('applicant_id', $applicantId)->first();
@@ -282,6 +354,23 @@ class ApplicantFormController extends BaseController
                 'status'  => 'error',
                 'message' => 'There is no pending revision to resubmit.',
             ]);
+        }
+
+        // A per-step "Submit" only resolves the step it was clicked from — clear that
+        // one page out of the flagged list and only close out the whole revision once
+        // none remain. The page-less call (tracking page's "Resubmit Application") is a
+        // deliberate "I've addressed everything" action and always closes it out fully.
+        if ($pageId !== null) {
+            $revisionPageIds = json_decode($application['revision_pages'] ?? '[]', true) ?: [];
+            $revisionPageIds = array_values(array_diff($revisionPageIds, [(int) $pageId]));
+
+            if ($revisionPageIds !== []) {
+                $applicationModel->update($application['application_id'], [
+                    'revision_pages' => json_encode($revisionPageIds),
+                ]);
+
+                return $this->response->setJSON(['status' => 'success']);
+            }
         }
 
         $applicationModel->update($application['application_id'], [
@@ -304,6 +393,8 @@ class ApplicantFormController extends BaseController
             'program_id'     => $data['program_id']     ?? null,
             'school_year'    => $data['school_year']    ?? null,
             'semester'       => $data['semester']       ?? null,
+            // is_fast_track is decided once on the Choose Your Path screen and set at
+            // insert time (see updateForm()) — not resubmitted from this form anymore.
         ];
 
         // While a revision is in progress, autosaving page 1 must not stomp

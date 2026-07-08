@@ -247,6 +247,13 @@ class DashboardController extends BaseController
 
         $reservationFeeAmount = $reservationFee['amount'] ?? 2000;
 
+        $fastTrackFee = (new PaymentFeeTypeModel())
+            ->where('code', PaymentFeeTypeModel::CODE_FAST_TRACK)
+            ->where('is_active', 1)
+            ->first();
+
+        $fastTrackFeeAmount = $fastTrackFee['amount'] ?? 1000;
+
         $payments = (new PaymentModel())
             ->select('payment.payment_status, payment_fee_type.code')
             ->join(
@@ -264,6 +271,8 @@ class DashboardController extends BaseController
             }
         }
 
+        $isFastTrack = $progressData['is_fast_track'];
+
         $paymentCheckList = [
             [
                 'title' => 'Admission Processing Fee',
@@ -274,6 +283,13 @@ class DashboardController extends BaseController
                 'paid'  => isset($paidMap['RESERVATION_FEE']),
             ],
         ];
+
+        if ($isFastTrack) {
+            $paymentCheckList[] = [
+                'title' => 'Fast Track Fee',
+                'paid'  => isset($paidMap['FAST_TRACK_FEE']),
+            ];
+        }
 
         $showPaymentNotification =
             $appStatus === 'approved'
@@ -298,13 +314,18 @@ class DashboardController extends BaseController
             'step_statuses'    => $stepStatuses,
 
             // merged shared meta
-            'app_status'       => $progressData['app_status'],
-            'decision_remarks' => $progressData['decision_remarks'],
-            'form_complete'    => $progressData['form_complete'],
-            'form_submitted'   => $progressData['form_submitted'],
-            'docs_complete'    => $progressData['docs_complete'],
-            'exam_enabled'     => $progressData['exam_enabled'],
-            'exam_booking'     => $progressData['exam_booking'],
+            'app_status'         => $progressData['app_status'],
+            'decision_remarks'   => $progressData['decision_remarks'],
+            'form_complete'      => $progressData['form_complete'],
+            'form_submitted'     => $progressData['form_submitted'],
+            'docs_complete'      => $progressData['docs_complete'],
+            'exam_enabled'       => $progressData['exam_enabled'],
+            'exam_booking'       => $progressData['exam_booking'],
+            'revision_requested' => $progressData['revision_requested'],
+            'revision_note'      => $progressData['revision_note'],
+            'revision_pages'     => $progressData['revision_pages'],
+            'is_fast_track'         => $isFastTrack,
+            'pending_fast_track_pages' => $progressData['pending_fast_track_pages'],
 
             // checklist cards
             'form_pages'       => $formPages,
@@ -318,6 +339,8 @@ class DashboardController extends BaseController
 
             // payment
             'reservation_fee_amount'  => $reservationFeeAmount,
+            'fast_track_fee_amount'   => $fastTrackFeeAmount,
+            'fast_track_fee_paid'     => isset($paidMap['FAST_TRACK_FEE']),
             'paymentCheckList'        => $paymentCheckList,
             'showPaymentNotification' => $showPaymentNotification
         ];

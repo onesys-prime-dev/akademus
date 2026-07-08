@@ -229,7 +229,19 @@ class EmailService
             <p>We will notify you once it has been reviewed.</p>
         ";
 
-        return self::send($to, 'Admission Fee Payment Submitted - Akademus', $message);   
+        return self::send($to, 'Admission Fee Payment Submitted - Akademus', $message);
+    }
+
+    public static function sendFastTrackFeePendingNotification(string $to, string $referenceNum): bool
+    {
+        $message = "
+            <h2>Fast Track Fee Payment Submitted</h2>
+            <p>Your Fast Track fee payment has been submitted and is awaiting verification by the accounting office.</p>
+            <p>Reference Number: {$referenceNum}</p>
+            <p>We will notify you once it has been reviewed.</p>
+        ";
+
+        return self::send($to, 'Fast Track Fee Payment Submitted - Akademus', $message);
     }
 
     public static function sendReservationFeePendingNotification(string $to, string $referenceNum): bool

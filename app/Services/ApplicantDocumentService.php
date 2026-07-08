@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Libraries\EncryptedFileStorage;
 use App\Models\Requirements\ApplicantDocumentModel;
 
 class ApplicantDocumentService
@@ -48,8 +49,9 @@ class ApplicantDocumentService
 
             $extension = $file->getExtension();
             $fileName = "{$applicant_id}_{$program_requirement_id}.{$extension}";
+            $mimeType = $file->getMimeType();
 
-            $file->move($uploadPath, $fileName, true);
+            EncryptedFileStorage::storeFromPath($file->getTempName(), $uploadPath . $fileName);
 
             db_connect()
                 ->table('applicant_documents')
@@ -57,6 +59,7 @@ class ApplicantDocumentService
                     'applicant_id'            => $applicant_id,
                     'program_requirement_id'  => $program_requirement_id,
                     'document_name'           => $fileName,
+                    'mime_type'               => $mimeType,
                 ]);
 
             // 🔥 get requirement name
@@ -78,7 +81,7 @@ class ApplicantDocumentService
     public function getDocument($applicant_id, $program_requirement_id)
     {
         return $this->applicantDocumentModel
-            ->select('document_name')
+            ->select('document_name, mime_type')
             ->where('applicant_id', $applicant_id)
             ->where('program_requirement_id', $program_requirement_id)
             ->first();
@@ -114,7 +117,7 @@ class ApplicantDocumentService
         return $result;
     }
 
-    public function allRequiredCompleted(int $applicant_id, int $program_id): bool
+    public function allRequiredCompleted(int $applicant_id, int $program_id, bool $isFastTrack = false): bool
     {
         $allReqs = (new RequirementService())->getRequirements($program_id);
 
@@ -124,9 +127,10 @@ class ApplicantDocumentService
 
         $uploadedDocs = $this->getStepDocuments($applicant_id, $allReqs);
 
+        $requiredKey  = $isFastTrack ? 'is_fast_track_required' : 'is_required';
         $requiredReqs = array_filter(
             $allReqs,
-            fn($r) => $r['is_required']
+            fn($r) => $r[$requiredKey]
         );
 
         $totalRequired = count($requiredReqs);
@@ -143,7 +147,7 @@ class ApplicantDocumentService
             && $uploadedRequired >= $totalRequired;
     }
 
-    public function allRequiredVerified(int $applicant_id, int $program_id): bool
+    public function allRequiredVerified(int $applicant_id, int $program_id, bool $isFastTrack = false): bool
     {
         $allReqs = (new RequirementService())->getRequirements($program_id);
 
@@ -153,9 +157,10 @@ class ApplicantDocumentService
 
         $uploadedDocs = $this->getStepDocuments($applicant_id, $allReqs);
 
+        $requiredKey  = $isFastTrack ? 'is_fast_track_required' : 'is_required';
         $requiredReqs = array_filter(
             $allReqs,
-            fn($r) => $r['is_required']
+            fn($r) => $r[$requiredKey]
         );
 
         $totalRequired = count($requiredReqs);

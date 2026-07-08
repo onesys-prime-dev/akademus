@@ -21,6 +21,7 @@ class ApplicationModel extends Model
         'application_status',
         'revision_note',
         'revision_pages',
+        'is_fast_track',
     ];
 
     protected $useTimestamps = true;

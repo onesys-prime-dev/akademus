@@ -39,6 +39,11 @@
     color: #5B00BD;
 }
 
+.status-badge--fast-track {
+    background-color: #BFDBFE;
+    color: #1D4ED8;
+}
+
 
 /* Additional statuses for exam schedule applicants */
 /* Cancelled */

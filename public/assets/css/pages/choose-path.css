@@ -1,0 +1,147 @@
+/* ============================================================
+   CHOOSE YOUR APPLICATION PATH
+   ============================================================ */
+.choose-path-page {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 0 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.choose-path-header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.choose-path-header__eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--primary);
+}
+
+.choose-path-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.choose-path-header p {
+    font-size: 14px;
+    color: var(--text-secondary, #6b7280);
+}
+
+.choose-path-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.choose-path-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 28px 26px;
+    background: #ffffff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 16px;
+    text-align: left;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+
+.choose-path-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+}
+
+.choose-path-card--fast-track {
+    border-color: var(--primary);
+    background: var(--primary-soft, #eef4ff);
+}
+
+.choose-path-card__badge {
+    align-self: flex-start;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--primary);
+    background: #ffffff;
+    border: 1px solid var(--primary);
+    border-radius: 999px;
+    padding: 4px 10px;
+}
+
+.choose-path-card__title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.choose-path-card__desc {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text-secondary, #6b7280);
+}
+
+.choose-path-card__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 4px 0 8px;
+    padding: 0;
+}
+
+.choose-path-card__list li {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    padding-left: 18px;
+    position: relative;
+}
+
+.choose-path-card__list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.choose-path-card__btn {
+    margin-top: auto;
+    padding: 12px 20px;
+    border: 1.5px solid var(--primary);
+    border-radius: 10px;
+    background: #ffffff;
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.choose-path-card__btn:hover {
+    opacity: 0.85;
+}
+
+.choose-path-card__btn--accent {
+    background: var(--primary);
+    color: #ffffff;
+}
+
+/* ============================================================
+   RESPONSIVE — TABLET (≤ 900 px)
+   ============================================================ */
+@media (max-width: 900px) {
+    .choose-path-options {
+        grid-template-columns: 1fr;
+    }
+}

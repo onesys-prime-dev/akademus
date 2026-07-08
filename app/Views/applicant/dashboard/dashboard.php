@@ -63,6 +63,9 @@ $formBar = progressBar($form_progress);
             <div class="quick-actions">
                 <a class="btn-accent" href="<?= base_url('requirements') ?>">Upload Documents</a>
                 <a class="btn-accent" href="<?= base_url('admission-processing-fee') ?>">Pay Admission Fee</a>
+                <?php if (!empty($is_fast_track) && empty($fast_track_fee_paid)): ?>
+                    <a class="btn-accent" href="<?= base_url('fast-track-fee') ?>">Pay Fast Track Fee</a>
+                <?php endif; ?>
                 <?php if ($app_status === 'approved'): ?>
                     <a class="btn-accent btn-reservation" href="<?= base_url('reservation-fee') ?>">
                         Pay Reservation Fee
@@ -158,7 +161,135 @@ $formBar = progressBar($form_progress);
         </div>
     <?php endif; ?>
 
+    <!-- ── Revision Notification (persistent banner) ── -->
+    <?php if ($revision_requested): ?>
+        <div class="revision-notification-container">
+            <div class="revision-notification-text-info">
+                <p>Revision requested on your application.</p>
+                <span>
+                    <?php if (!empty($revision_pages)): ?>
+                        Please update: <strong><?= esc(implode(', ', $revision_pages)) ?></strong>.
+                    <?php endif; ?>
+                    <?= esc($revision_note ?? '') ?>
+                </span>
+            </div>
+            <a href="<?= base_url('applicant-form') ?>" class="revision-now-btn">Review &amp; Fix</a>
+        </div>
+    <?php endif; ?>
+
+    <!-- ── Fast Track Reminder (persistent banner) ── -->
+    <?php if (!empty($is_fast_track) && !empty($pending_fast_track_pages)): ?>
+        <div class="fast-track-notification-container">
+            <div class="fast-track-notification-text-info">
+                <p>Fast Track: complete the rest of your application when you're ready.</p>
+                <span>
+                    Still needed: <strong><?= esc(implode(', ', $pending_fast_track_pages)) ?></strong>.
+                </span>
+            </div>
+            <a href="<?= base_url('applicant-form/step/3') ?>" class="fast-track-now-btn">Complete Now</a>
+        </div>
+    <?php endif; ?>
+
 </div><!-- /.dashboard-container -->
+
+<!-- ── Fast Track Popup Modal (shown once per session) ── -->
+<?php if (!empty($is_fast_track) && !empty($pending_fast_track_pages)): ?>
+<div id="fast-track-modal-backdrop" class="fast-track-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="fast-track-modal-title" hidden>
+    <div class="fast-track-modal">
+        <div class="fast-track-modal__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+            </svg>
+        </div>
+        <h3 id="fast-track-modal-title" class="fast-track-modal__title">You're on Fast Track</h3>
+        <p class="fast-track-modal__body">
+            You submitted your initial application with just the basics.
+            <br><strong>Still needed:</strong> <?= esc(implode(', ', $pending_fast_track_pages)) ?>
+        </p>
+        <div class="fast-track-modal__actions">
+            <button type="button" id="fast-track-modal-dismiss" class="fast-track-modal__btn fast-track-modal__btn--cancel">Remind Me Later</button>
+            <a href="<?= base_url('applicant-form/step/3') ?>" class="fast-track-modal__btn fast-track-modal__btn--confirm">Complete Now</a>
+        </div>
+    </div>
+</div>
+<script>
+(function () {
+    var seenKey = 'akademus_fast_track_modal_seen';
+    if (sessionStorage.getItem(seenKey)) return;
+
+    var backdrop = document.getElementById('fast-track-modal-backdrop');
+    var dismissBtn = document.getElementById('fast-track-modal-dismiss');
+    if (!backdrop) return;
+
+    backdrop.removeAttribute('hidden');
+    sessionStorage.setItem(seenKey, '1');
+
+    function close() { backdrop.setAttribute('hidden', ''); }
+
+    dismissBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', function (e) {
+        if (e.target === backdrop) close();
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !backdrop.hasAttribute('hidden')) close();
+    });
+})();
+</script>
+<?php endif; ?>
+
+<!-- ── Revision Popup Modal (shown once per session) ── -->
+<?php if ($revision_requested): ?>
+<div id="revision-modal-backdrop" class="revision-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="revision-modal-title" hidden>
+    <div class="revision-modal">
+        <div class="revision-modal__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                <path d="M3 3v5h5"/>
+            </svg>
+        </div>
+        <h3 id="revision-modal-title" class="revision-modal__title">Revision Needed</h3>
+        <p class="revision-modal__body">
+            The admissions office has requested changes to your application.
+            <?php if (!empty($revision_pages)): ?>
+                <br><strong>Steps to update:</strong> <?= esc(implode(', ', $revision_pages)) ?>
+            <?php endif; ?>
+        </p>
+        <?php if (!empty($revision_note)): ?>
+            <p class="revision-modal__note"><?= esc($revision_note) ?></p>
+        <?php endif; ?>
+        <div class="revision-modal__actions">
+            <button type="button" id="revision-modal-dismiss" class="revision-modal__btn revision-modal__btn--cancel">Remind Me Later</button>
+            <a href="<?= base_url('applicant-form') ?>" class="revision-modal__btn revision-modal__btn--confirm">Go to Application Form</a>
+        </div>
+    </div>
+</div>
+<script>
+(function () {
+    var seenKey = 'akademus_revision_modal_seen';
+    if (sessionStorage.getItem(seenKey)) return;
+
+    var backdrop = document.getElementById('revision-modal-backdrop');
+    var dismissBtn = document.getElementById('revision-modal-dismiss');
+    if (!backdrop) return;
+
+    backdrop.removeAttribute('hidden');
+    sessionStorage.setItem(seenKey, '1');
+
+    function close() { backdrop.setAttribute('hidden', ''); }
+
+    dismissBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', function (e) {
+        if (e.target === backdrop) close();
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !backdrop.hasAttribute('hidden')) close();
+    });
+})();
+</script>
+<?php endif; ?>
 
 <script>
     const paymentNotificationCard = document.querySelector('.payment-notification-container');

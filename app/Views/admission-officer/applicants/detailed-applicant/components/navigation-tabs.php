@@ -26,6 +26,12 @@ $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') =
         <span class="application-tabs__label">Reservation Fee</span>
     </div>
 
+    <?php if (!empty($profile['is_fast_track'])): ?>
+    <div class="application-tabs__item <?= $activeTab === 'fast_track_fee' ? 'application-tabs__item--active' : '' ?>" data-tab="fast_track_fee">
+        <span class="application-tabs__label">Fast Track Fee</span>
+    </div>
+    <?php endif; ?>
+
     <div class="application-tabs__item <?= $activeTab === 'clearance' ? 'application-tabs__item--active' : '' ?>" data-tab="clearance">
         <span class="application-tabs__label">Clearance</span>
     </div>

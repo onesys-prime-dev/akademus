@@ -59,6 +59,7 @@ class RequirementService
                     'r.requirement_name',
                     'r.description',
                     'pr.is_mandatory',
+                    'pr.is_fast_track_required',
                     'pr.display_order',
                     'pr.is_active',
                 ])
@@ -95,6 +96,9 @@ class RequirementService
 
                     'is_required' =>
                         (int) $row['is_mandatory'],
+
+                    'is_fast_track_required' =>
+                        (int) $row['is_fast_track_required'],
 
                     'requirement_order' =>
                         (int) $row['display_order'],

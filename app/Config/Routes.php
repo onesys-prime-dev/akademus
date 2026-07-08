@@ -48,6 +48,8 @@ $routes->get('dashboard', 'Applicant\DashboardController::index');
 
 // applicant form steps routes
 $routes->get('applicant-form', 'Applicant\ApplicantFormController::index');
+$routes->get('applicant-form/choose-path', 'Applicant\ApplicantFormController::choosePath');
+$routes->post('applicant-form/choose-path', 'Applicant\ApplicantFormController::submitChoosePath');
 $routes->get('applicant-form/step/(:num)', 'Applicant\ApplicantFormController::getStep/$1');
 $routes->post('applicant-form/update/(:num)', 'Applicant\ApplicantFormController::updateForm/$1');
 $routes->post('applicant-form/get-drafts', 'Applicant\ApplicantFormController::getSavedDraft');
@@ -100,6 +102,10 @@ $routes->get('admission-processing-fee/proof/(:num)', 'Payment\AdmissionProcessi
 $routes->get('reservation-fee',         'Payment\ReservationFeeController::index');
 $routes->post('reservation-fee/submit', 'Payment\ReservationFeeController::store');
 $routes->get('reservation-fee/proof/(:num)', 'Payment\ReservationFeeController::proofFile/$1');
+
+$routes->get('fast-track-fee',         'Payment\FastTrackFeeController::index');
+$routes->post('fast-track-fee/submit', 'Payment\FastTrackFeeController::store');
+$routes->get('fast-track-fee/proof/(:num)', 'Payment\FastTrackFeeController::proofFile/$1');
 
 // SMART PAY Webhook
 $routes->post(

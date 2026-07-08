@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Application\FamilyBackgroundModel;
+use App\Models\Application\PersonalInformationModel;
+
 class ApplicantProfileService
 {
     public function getViewMap(): array
@@ -12,6 +15,7 @@ class ApplicantProfileService
             'exam'            => 'admission-officer/applicants/detailed-applicant/components/content/exam',
             'admission_fee'   => 'admission-officer/applicants/detailed-applicant/components/content/admission-fee',
             'reservation_fee' => 'admission-officer/applicants/detailed-applicant/components/content/reservation-fee',
+            'fast_track_fee'  => 'admission-officer/applicants/detailed-applicant/components/content/fast-track-fee',
             'clearance'       => 'admission-officer/applicants/detailed-applicant/components/content/clearance',
         ];
     }
@@ -34,7 +38,8 @@ class ApplicantProfileService
                 p.program_name,
                 ap.application_status as form_status,
                 ap.revision_note,
-                ap.revision_pages
+                ap.revision_pages,
+                ap.is_fast_track
             ')
             ->join('users u', 'u.user_id = a.user_id')
             ->join('programs p', 'p.program_id = a.program_id')
@@ -59,6 +64,7 @@ class ApplicantProfileService
             'exam'            => $this->getExamPayload($applicantId, $filters, $limit, $offset),
             'admission_fee'   => $this->getAdmissionFeePayload($applicantId),
             'reservation_fee' => $this->getReservationFeePayload($applicantId),
+            'fast_track_fee'  => $this->getFastTrackFeePayload($applicantId),
             'clearance'       => $this->getClearancePayload($applicantId, $filters, $limit, $offset),
             default           => '',
         };
@@ -79,17 +85,17 @@ class ApplicantProfileService
 
         $applicationId = $app['application_id'];
 
-        $personal = $db->table('personal_informations')
+        $personal = (new PersonalInformationModel())
             ->where('application_id', $applicationId)
-            ->get()->getRowArray() ?? [];
+            ->first() ?? [];
 
         $educational = $db->table('educational_backgrounds')
             ->where('application_id', $applicationId)
             ->get()->getResultArray();
 
-        $family = $db->table('family_backgrounds')
+        $family = (new FamilyBackgroundModel())
             ->where('application_id', $applicationId)
-            ->get()->getResultArray();
+            ->findAll();
 
         return [
             'personal'    => $personal,
@@ -200,6 +206,11 @@ class ApplicantProfileService
     private function getReservationFeePayload(int $applicantId): array
     {
         return ['payment' => $this->fetchPaymentRecord($applicantId, 'RESERVATION_FEE')];
+    }
+
+    private function getFastTrackFeePayload(int $applicantId): array
+    {
+        return ['payment' => $this->fetchPaymentRecord($applicantId, 'FAST_TRACK_FEE')];
     }
 
     private function fetchPaymentRecord(int $applicantId, string $feeCode): ?array

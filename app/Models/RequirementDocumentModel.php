@@ -10,7 +10,7 @@ class RequirementDocumentModel extends Model
     protected $primaryKey = 'requirement_id';
     protected $returnType = 'array';
     protected $useAutoIncrement = true;
-    protected $allowedFields = ['category_id', 'requirement_name', 'description', 'is_required', 'display_order', 'is_active'];
+    protected $allowedFields = ['category_id', 'requirement_name', 'description', 'is_required', 'is_fast_track_required', 'display_order', 'is_active'];
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';

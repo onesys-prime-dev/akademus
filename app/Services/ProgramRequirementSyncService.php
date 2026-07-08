@@ -14,7 +14,7 @@ class ProgramRequirementSyncService
         |--------------------------------------------------------------------------
         */
         $requirement = $db->table('requirements')
-            ->select('is_required, is_active')
+            ->select('is_required, is_fast_track_required, is_active')
             ->where('requirement_id', $requirementId)
             ->get()
             ->getRowArray();
@@ -23,8 +23,9 @@ class ProgramRequirementSyncService
             return;
         }
 
-        $isMandatory = (int) $requirement['is_required'];
-        $isActive    = (int) $requirement['is_active'];
+        $isMandatory        = (int) $requirement['is_required'];
+        $isFastTrackRequired = (int) $requirement['is_fast_track_required'];
+        $isActive           = (int) $requirement['is_active'];
 
         /*
         |--------------------------------------------------------------------------
@@ -62,9 +63,10 @@ class ProgramRequirementSyncService
                         $existing['program_requirement_id']
                     )
                     ->update([
-                        'is_mandatory' => $isMandatory,
-                        'is_active'    => $isActive,
-                        'updated_at'   => date('Y-m-d H:i:s'),
+                        'is_mandatory'            => $isMandatory,
+                        'is_fast_track_required'  => $isFastTrackRequired,
+                        'is_active'               => $isActive,
+                        'updated_at'              => date('Y-m-d H:i:s'),
                     ]);
 
                 continue;
@@ -92,6 +94,7 @@ class ProgramRequirementSyncService
                 'display_order'                  => $displayOrder,
                 'is_active'                      => $isActive,
                 'is_mandatory'                   => $isMandatory, // ← synced
+                'is_fast_track_required'         => $isFastTrackRequired, // ← synced
             ]);
         }
     }

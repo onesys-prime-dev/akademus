@@ -23,6 +23,7 @@ class PaymentFeeTypeModel extends Model
 
     const CODE_ADMISSION   = 'ADMISSION_FEE';
     const CODE_RESERVATION = 'RESERVATION_FEE';
+    const CODE_FAST_TRACK  = 'FAST_TRACK_FEE';
 
     public function getIdByCode(string $code): int
     {

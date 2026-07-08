@@ -135,6 +135,13 @@ $action    = $action    ?? 'create';
                                            <?= !empty($doc['is_required']) ? 'checked' : '' ?>>
                                     Required
                                 </label>
+                                <label class="doc-required-label">
+                                    <input type="checkbox"
+                                           name="documents[<?= $i ?>][is_fast_track_required]"
+                                           value="1"
+                                           <?= !empty($doc['is_fast_track_required']) ? 'checked' : '' ?>>
+                                    Fast Track Required
+                                </label>
                             </div>
                             <button type="button" class="btn-remove-doc" onclick="removeDoc(this)">✕</button>
                         </div>
@@ -183,6 +190,13 @@ $action    = $action    ?? 'create';
                                    value="1"
                                    ${data.is_required !== false ? 'checked' : ''}>
                             Required
+                        </label>
+                        <label class="doc-required-label">
+                            <input type="checkbox"
+                                   name="documents[${i}][is_fast_track_required]"
+                                   value="1"
+                                   ${data.is_fast_track_required ? 'checked' : ''}>
+                            Fast Track Required
                         </label>
                     </div>
                     <button type="button" class="btn-remove-doc" onclick="removeDoc(this)">✕</button>
