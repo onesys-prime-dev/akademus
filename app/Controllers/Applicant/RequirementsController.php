@@ -53,9 +53,25 @@ class RequirementsController extends BaseController
         $application = $db->table('applications')->where('applicant_id', $applicant_id)->get()->getRowArray();
         $application_status = $application['application_status'] ?? '';
 
+        $isFastTrack = $this->isApplicantFastTrack($applicant_id);
+
         $requiredDocsVerified = $program_id && $applicant_id
-            ? $this->documentService->allRequiredVerified($applicant_id, $program_id, $this->isApplicantFastTrack($applicant_id))
+            ? $this->documentService->allRequiredVerified($applicant_id, $program_id, $isFastTrack)
             : false;
+
+        // Only the documents actually required right now — used by the Fast
+        // Track popup so applicants aren't shown the full (mostly deferred) list.
+        $fastTrackRequiredDocs = [];
+        if ($isFastTrack && $program_id) {
+            $reqs = $this->applyFastTrackRequiredFlag(
+                $this->requirementService->getRequirements($program_id),
+                true
+            );
+            $fastTrackRequiredDocs = array_values(array_map(
+                fn($r) => $r['requirement_name'],
+                array_filter($reqs, fn($r) => $r['is_required'])
+            ));
+        }
 
         return view('applicant/main', [
             'title'              => 'Requirements',
@@ -66,6 +82,8 @@ class RequirementsController extends BaseController
             'theme'              => $theme,
             'application_status' => $application_status,
             'requiredDocsVerified' => $requiredDocsVerified,
+            'is_fast_track'         => $isFastTrack,
+            'fast_track_required_docs' => $fastTrackRequiredDocs,
         ]);
     }
 
@@ -82,7 +100,16 @@ class RequirementsController extends BaseController
             ->get()
             ->getRowArray();
 
-        return !empty($application['is_fast_track']);
+        if ($application) {
+            return !empty($application['is_fast_track']);
+        }
+
+        // No application row yet — they picked a path on the Choose Your Path
+        // screen but haven't saved Step 1 of the Applicant Form yet (that's
+        // when the row, and is_fast_track with it, actually gets created).
+        // Fall back to the session choice so Requirements still reflects it
+        // immediately if they jump here first via the sidebar.
+        return (bool) session()->get('fast_track_choice');
     }
 
     /**

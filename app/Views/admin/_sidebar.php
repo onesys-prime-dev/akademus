@@ -225,6 +225,15 @@ $adminLogoText = strtoupper(substr($theme['logo_text'] ?? $theme['app_name'] ?? 
             System Settings
         </a>
 
+        <a href="<?= base_url('admin/fast-track-requirements') ?>" class="nav-item <?= strpos(current_url(), 'admin/fast-track-requirements') !== false ? 'on' : '' ?>">
+            <!-- Zap: fast track -->
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+            Fast Track Requirements
+        </a>
+
         <a href="<?= base_url('admin/users') ?>" class="nav-item <?= strpos(current_url(), 'admin/users') !== false ? 'on' : '' ?>">
             <!-- Users: two people = manage user accounts -->
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

@@ -168,6 +168,10 @@ $routes->get('admin/requirement-categories/(:num)/edit',            'Admin\Requi
 $routes->post('admin/requirement-categories/(:num)/update',          'Admin\RequirementCategoriesController::update/$1');
 $routes->get('admin/requirement-categories/(:num)/delete',          'Admin\RequirementCategoriesController::delete/$1');
 
+// Admin Fast Track Requirements
+$routes->get('admin/fast-track-requirements',       'Admin\FastTrackRequirementsController::index');
+$routes->post('admin/fast-track-requirements/save', 'Admin\FastTrackRequirementsController::save');
+
 // Admin Program Management (CRUD)
 $routes->get('admin/programs',                  'Admin\CoursesController::index');
 $routes->get('admin/programs/create',           'Admin\CoursesController::create');

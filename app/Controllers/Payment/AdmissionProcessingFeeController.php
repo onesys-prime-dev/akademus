@@ -33,6 +33,10 @@ class AdmissionProcessingFeeController extends BaseController
     {
         helper('theme');
 
+        if (! session()->get('logged_in')) {
+            return redirect()->to('/sign-in');
+        }
+
         $applicantId = (int) session()->get('applicant_id');
 
         // Fee type row (used for its ID on form submit)
@@ -75,6 +79,10 @@ class AdmissionProcessingFeeController extends BaseController
         //   redirected instead of hitting a half-processed action.
         if (! $this->request->isAJAX()) {
             return redirect()->to('/admission-processing-fee');
+        }
+
+        if (! session()->get('logged_in')) {
+            return $this->jsonError('You must be signed in to submit a payment.', 401);
         }
 
         $applicantId = (int) session()->get('applicant_id');

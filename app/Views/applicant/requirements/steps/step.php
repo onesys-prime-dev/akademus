@@ -40,13 +40,15 @@
             $is_required = (bool) ($requirement['is_required'] ?? false);
             ?>
             <div class="form-field">
-                <label for="requirement_<?= $program_requirement_id ?>" class="upload-field">
+                <label for="requirement_<?= $program_requirement_id ?>" class="upload-field <?= $is_required ? '' : 'upload-optional' ?>">
                     <div class="requirement-upload-info">
                         <p class="requirement-title">
                             <?= esc($requirement_name) ?>
 
                             <?php if ($is_required): ?>
                                 <span class="required">REQUIRED</span>
+                            <?php else: ?>
+                                <span class="optional">OPTIONAL FOR NOW</span>
                             <?php endif; ?>
                         </p>
                         <p class="requirement-description"><?= esc($requirement_description) ?></p>

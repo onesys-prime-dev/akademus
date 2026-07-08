@@ -108,6 +108,20 @@
         transition: 0.3s;
     }
 
+    /* Not required right now (e.g. deferred under Fast Track) — muted instead
+       of the urgent warning color, so it doesn't read as something blocking.
+       Same specificity as .upload-field (single class) so once a file IS
+       uploaded, .upload-pending/.upload-approved/.upload-rejected below
+       still win on source order, same as they already do over .upload-field. */
+    .upload-optional {
+        background: color-mix(in srgb, var(--text-secondary, #6b7280) 8%, transparent);
+        border: 1px solid color-mix(in srgb, var(--text-secondary, #6b7280) 25%, transparent);
+    }
+
+    .upload-optional:hover {
+        background: color-mix(in srgb, var(--text-secondary, #6b7280) 14%, transparent);
+    }
+
         .upload-pending {
             background: color-mix(in srgb, var(--primary) 10%, transparent);
             border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
@@ -150,6 +164,13 @@
             font-size: 12px;
             bottom: 2px;
             position: relative;
+        }
+
+        .requirement-title .optional {
+            font-size: 12px;
+            bottom: 2px;
+            position: relative;
+            color: var(--text-secondary, #6b7280);
         }
 
     .requirement-description {

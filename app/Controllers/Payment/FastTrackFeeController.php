@@ -30,6 +30,10 @@ class FastTrackFeeController extends BaseController
     {
         helper('theme');
 
+        if (! session()->get('logged_in')) {
+            return redirect()->to('/sign-in');
+        }
+
         $applicantId = (int) session()->get('applicant_id');
 
         $fee = $this->feeModel
@@ -64,6 +68,10 @@ class FastTrackFeeController extends BaseController
     {
         if (! $this->request->isAJAX()) {
             return redirect()->to('/fast-track-fee');
+        }
+
+        if (! session()->get('logged_in')) {
+            return $this->jsonError('You must be signed in to submit a payment.', 401);
         }
 
         $applicantId = (int) session()->get('applicant_id');

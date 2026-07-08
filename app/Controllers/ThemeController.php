@@ -169,6 +169,10 @@ class ThemeController extends BaseController
 
     public function uploadLogo()
     {
+        if (!session()->get('admin_logged_in')) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
+        }
+
         $file = $this->request->getFile('logo_file');
 
         if (!$file || !$file->isValid()) {
@@ -176,6 +180,16 @@ class ThemeController extends BaseController
                 'status' => 'error',
                 'message' => 'Invalid file'
             ]);
+        }
+
+        $valid = $this->validate([
+            'logo_file' => 'is_image[logo_file]|mime_in[logo_file,image/jpeg,image/png,image/gif,image/webp]|max_size[logo_file,2048]',
+        ]);
+        if (!$valid) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'Logo must be a JPEG, PNG, GIF, or WebP image under 2 MB.',
+            ])->setStatusCode(422);
         }
 
         $newName = $file->getRandomName();

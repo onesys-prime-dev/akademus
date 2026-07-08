@@ -3,8 +3,9 @@ if (! session()->get('admin_logged_in')) {
     header('Location: ' . base_url('admin/login'));
     exit;
 }
-$theme        = $theme        ?? [];
-$exam_enabled = $exam_enabled ?? true;
+$theme              = $theme              ?? [];
+$exam_enabled       = $exam_enabled       ?? true;
+$fast_track_enabled = $fast_track_enabled ?? true;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -120,6 +121,24 @@ $exam_enabled = $exam_enabled ?? true;
                             </div>
                         </div>
 
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <div class="setting-label">Enable Fast Track</div>
+                                <div class="setting-desc">
+                                    When ON, applicants can choose Fast Track at the start of their application —
+                                    submit basics now, finish the rest later, for an additional fee.<br>
+                                    When OFF, new applicants only see the standard Full Application — applicants
+                                    already on Fast Track are unaffected.
+                                </div>
+                            </div>
+                            <div class="toggle-wrap" style="margin-left:24px;display:flex;flex-direction:column;align-items:center;gap:4px;">
+                                <input type="checkbox" name="fast_track_enabled" id="toggle-fast-track"
+                                    <?= $fast_track_enabled ? 'checked' : '' ?>>
+                                <label class="toggle-switch" for="toggle-fast-track"></label>
+                                <span class="toggle-state" id="toggle-fast-track-label"><?= $fast_track_enabled ? 'ON' : 'OFF' ?></span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -135,6 +154,9 @@ $exam_enabled = $exam_enabled ?? true;
 <script>
 document.getElementById('toggle-exam').addEventListener('change', function () {
     document.getElementById('toggle-exam-label').textContent = this.checked ? 'ON' : 'OFF';
+});
+document.getElementById('toggle-fast-track').addEventListener('change', function () {
+    document.getElementById('toggle-fast-track-label').textContent = this.checked ? 'ON' : 'OFF';
 });
 </script>
 </body>

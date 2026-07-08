@@ -102,6 +102,14 @@ class ApplicantFormController extends BaseController
         }
 
         $themeModel = new ThemeModel();
+
+        // Fast Track disabled system-wide — skip the chooser entirely, applicant
+        // never sees the option (not even grayed out), same as exam_enabled gating.
+        if ($themeModel->getSetting('fast_track_enabled', '1') !== '1') {
+            session()->set('fast_track_choice', false);
+            return redirect()->to('applicant-form');
+        }
+
         $theme      = $themeModel->getAllSettings();
         $theme['primary_soft'] = $this->lightenHex($theme['primary_color'] ?? '#0040a6', 0.88);
 
