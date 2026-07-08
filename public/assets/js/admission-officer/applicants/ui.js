@@ -448,7 +448,7 @@ function renderActions(id) {
     `;
 }
 
-function escapeHtml(str) {
+export function escapeHtml(str) {
     if (!str) return '';
 
     return str.replace(/[&<>"']/g, m => ({

@@ -28,7 +28,10 @@ import {
 
     // doc modal
     openDocModal,
-    closeDocModal
+    closeDocModal,
+
+    // shared helpers
+    escapeHtml
 } from './ui.js';
 
 import { handlePaymentAction } from './payments.js';
@@ -363,7 +366,7 @@ function openBulkModal(applicants, status) {
     list.innerHTML = applicants.map((app, i) => `
         <div class="bulk-modal-item">
             <span>${i + 1}.</span>
-            <strong>${app.name}</strong>
+            <strong>${escapeHtml(app.name)}</strong>
         </div>
     `).join('');
 
