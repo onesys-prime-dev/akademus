@@ -40,10 +40,7 @@ class AdmissionProcessingFeeController extends BaseController
         $applicantId = (int) session()->get('applicant_id');
 
         // Fee type row (used for its ID on form submit)
-        $fee = $this->feeModel
-            ->where('code', PaymentFeeTypeModel::CODE_ADMISSION)
-            ->where('is_active', 1)
-            ->first();
+        $fee = $this->feeModel->getByCode(PaymentFeeTypeModel::CODE_ADMISSION);
 
         // $this->paymentModel->insert([
         //     'amount_paid' => $fee['amount'] ?? self::FEE_AMOUNT,
@@ -159,12 +156,14 @@ class AdmissionProcessingFeeController extends BaseController
             ? (int) $rawAccountId
             : null;
 
-        $feeTypeId = $this->feeModel->getIdByCode(PaymentFeeTypeModel::CODE_ADMISSION);
+        $fee = $this->feeModel->getByCode(PaymentFeeTypeModel::CODE_ADMISSION);
+        $feeTypeId = $fee['payment_fee_type_id'] ?? null;
 
-        $fee = $this->feeModel
-            ->where('code', PaymentFeeTypeModel::CODE_ADMISSION)
-            ->where('is_active', 1)
-            ->first();
+        if (! $fee || ! $feeTypeId) {
+            @unlink($uploadDir . $newFileName);
+
+            return $this->jsonError('Admission processing fee is not available at the moment. Please try again later.');
+        }
 
         $inserted = $this->paymentModel->insert([
             'applicant_id'              => $applicantId,

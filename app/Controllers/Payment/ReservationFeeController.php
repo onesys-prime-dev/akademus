@@ -36,10 +36,7 @@ class ReservationFeeController extends BaseController
 
         $applicantId = (int) session()->get('applicant_id');
 
-        $fee = $this->feeModel
-            ->where('code', PaymentFeeTypeModel::CODE_RESERVATION)
-            ->where('is_active', 1)
-            ->first();
+        $fee = $this->feeModel->getByCode(PaymentFeeTypeModel::CODE_RESERVATION);
 
         $rawMethods     = $this->methodModel->getActiveWithAccounts();
         $paymentMethods = $this->buildMethodsMap($rawMethods);
@@ -151,14 +148,8 @@ class ReservationFeeController extends BaseController
             ? (int) $rawAccountId
             : null;
 
-        $feeTypeId = $this->feeModel->getIdByCode(
-            PaymentFeeTypeModel::CODE_RESERVATION
-        );
-
-        $fee = $this->feeModel
-            ->where('code', PaymentFeeTypeModel::CODE_RESERVATION)
-            ->where('is_active', 1)
-            ->first();
+        $fee = $this->feeModel->getByCode(PaymentFeeTypeModel::CODE_RESERVATION);
+        $feeTypeId = $fee['payment_fee_type_id'] ?? null;
 
         if (! $fee || ! $feeTypeId) {
             @unlink($uploadDir . $newFileName);

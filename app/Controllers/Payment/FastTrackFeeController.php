@@ -36,10 +36,7 @@ class FastTrackFeeController extends BaseController
 
         $applicantId = (int) session()->get('applicant_id');
 
-        $fee = $this->feeModel
-            ->where('code', PaymentFeeTypeModel::CODE_FAST_TRACK)
-            ->where('is_active', 1)
-            ->first();
+        $fee = $this->feeModel->getByCode(PaymentFeeTypeModel::CODE_FAST_TRACK);
 
         $rawMethods     = $this->methodModel->getActiveWithAccounts();
         $paymentMethods = $this->buildMethodsMap($rawMethods);
@@ -144,12 +141,14 @@ class FastTrackFeeController extends BaseController
             ? (int) $rawAccountId
             : null;
 
-        $feeTypeId = $this->feeModel->getIdByCode(PaymentFeeTypeModel::CODE_FAST_TRACK);
+        $fee = $this->feeModel->getByCode(PaymentFeeTypeModel::CODE_FAST_TRACK);
+        $feeTypeId = $fee['payment_fee_type_id'] ?? null;
 
-        $fee = $this->feeModel
-            ->where('code', PaymentFeeTypeModel::CODE_FAST_TRACK)
-            ->where('is_active', 1)
-            ->first();
+        if (! $fee || ! $feeTypeId) {
+            @unlink($uploadDir . $newFileName);
+
+            return $this->jsonError('Fast Track fee is not available at the moment. Please try again later.');
+        }
 
         $inserted = $this->paymentModel->insert([
             'applicant_id'              => $applicantId,

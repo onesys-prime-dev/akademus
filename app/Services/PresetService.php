@@ -71,32 +71,37 @@ class PresetService
      */
     public function getFormPagesForApplicant($programId)
     {
-        $preset = $this->getPresetForProgram($programId);
+        // Every applicant on the same program gets the same result, and it
+        // otherwise costs a preset lookup plus one find() per section — cache
+        // it per-program for a short window rather than paying that on every load.
+        return cache_remember("form_pages_for_program_{$programId}", 120, function () use ($programId) {
+            $preset = $this->getPresetForProgram($programId);
 
-        if (!$preset) {
-            // If no preset found, return all active form pages
-            return $this->formPageModel->getActivePages();
-        }
-
-        // Get the form page IDs from the preset
-        $pageIds = array_map(function ($section) {
-            return $section['form_page_id'];
-        }, $preset['sections']);
-
-        if (empty($pageIds)) {
-            return [];
-        }
-
-        // Get the full page details in order
-        $pages = [];
-        foreach ($pageIds as $pageId) {
-            $page = $this->formPageModel->find($pageId);
-            if ($page && $page['is_enabled']) {
-                $pages[] = $page;
+            if (!$preset) {
+                // If no preset found, return all active form pages
+                return $this->formPageModel->getActivePages();
             }
-        }
 
-        return $pages;
+            // Get the form page IDs from the preset
+            $pageIds = array_map(function ($section) {
+                return $section['form_page_id'];
+            }, $preset['sections']);
+
+            if (empty($pageIds)) {
+                return [];
+            }
+
+            // Get the full page details in order
+            $pages = [];
+            foreach ($pageIds as $pageId) {
+                $page = $this->formPageModel->find($pageId);
+                if ($page && $page['is_enabled']) {
+                    $pages[] = $page;
+                }
+            }
+
+            return $pages;
+        });
     }
 
     /**

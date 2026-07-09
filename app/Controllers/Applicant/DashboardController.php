@@ -240,18 +240,10 @@ class DashboardController extends BaseController
         | Payments
         |--------------------------------------------------------------------------
         */
-        $reservationFee = (new PaymentFeeTypeModel())
-            ->where('code', PaymentFeeTypeModel::CODE_RESERVATION)
-            ->where('is_active', 1)
-            ->first();
-
+        $reservationFee = (new PaymentFeeTypeModel())->getByCode(PaymentFeeTypeModel::CODE_RESERVATION);
         $reservationFeeAmount = $reservationFee['amount'] ?? 2000;
 
-        $fastTrackFee = (new PaymentFeeTypeModel())
-            ->where('code', PaymentFeeTypeModel::CODE_FAST_TRACK)
-            ->where('is_active', 1)
-            ->first();
-
+        $fastTrackFee = (new PaymentFeeTypeModel())->getByCode(PaymentFeeTypeModel::CODE_FAST_TRACK);
         $fastTrackFeeAmount = $fastTrackFee['amount'] ?? 1000;
 
         $payments = (new PaymentModel())
