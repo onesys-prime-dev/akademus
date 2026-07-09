@@ -19,14 +19,16 @@ class SettingsController extends BaseController
     {
         if ($r = $this->requireAdmin()) return $r;
 
-        $themeModel       = new ThemeModel();
-        $examEnabled      = $themeModel->getSetting('exam_enabled', '1') === '1';
-        $fastTrackEnabled = $themeModel->getSetting('fast_track_enabled', '1') === '1';
+        $themeModel           = new ThemeModel();
+        $examEnabled          = $themeModel->getSetting('exam_enabled', '1') === '1';
+        $fastTrackEnabled     = $themeModel->getSetting('fast_track_enabled', '1') === '1';
+        $tuitionCalcEnabled   = $themeModel->getSetting('tuition_calculator_enabled', '1') === '1';
 
         return view('admin/settings', [
-            'theme'              => $themeModel->getAllSettings(),
-            'exam_enabled'       => $examEnabled,
-            'fast_track_enabled' => $fastTrackEnabled,
+            'theme'                      => $themeModel->getAllSettings(),
+            'exam_enabled'               => $examEnabled,
+            'fast_track_enabled'         => $fastTrackEnabled,
+            'tuition_calculator_enabled' => $tuitionCalcEnabled,
         ]);
     }
 
@@ -37,9 +39,11 @@ class SettingsController extends BaseController
         $themeModel  = new ThemeModel();
         $examEnabled = $this->request->getPost('exam_enabled') ? '1' : '0';
         $fastTrackEnabled = $this->request->getPost('fast_track_enabled') ? '1' : '0';
+        $tuitionCalcEnabled = $this->request->getPost('tuition_calculator_enabled') ? '1' : '0';
 
         $themeModel->saveSetting('exam_enabled', $examEnabled);
         $themeModel->saveSetting('fast_track_enabled', $fastTrackEnabled);
+        $themeModel->saveSetting('tuition_calculator_enabled', $tuitionCalcEnabled);
 
         return redirect()->to(base_url('admin/settings'))->with('success', 'Settings saved.');
     }

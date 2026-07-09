@@ -16,6 +16,7 @@ $applicant_number = session()->get('applicant_number');
 $app_name    = $theme['app_name']  ?? 'AKADEMUS';
 $logo_url    = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/logo_akademus.png');
 $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') === '1';
+$tuitionCalcEnabled = (new \App\Models\ThemeModel())->getSetting('tuition_calculator_enabled', '1') === '1';
 
 $isApproved = (new \App\Models\Applicant\ApplicantModel())->getAppStatus('application_status', '') === 'approved';
 $examPassed = (new \App\Models\ExamBookingModel())->getResultStatus('result_status', '') === 'PASSED';
@@ -132,10 +133,12 @@ $examPassed = (new \App\Models\ExamBookingModel())->getResultStatus('result_stat
                         <div class="dotted-link"></div>
                         <span>Follow-Up Messages</span>
                     </a>
-                    <a href="<?= base_url('/tuition-fee-calculator') ?>" class="sidebar-nav-link <?= str_contains($uri, 'tuition-fee-calculator') ? 'active' : '' ?>">
-                        <div class="dotted-link"></div>
-                        <span>Tuition Fee Calculator</span>
-                    </a>
+                    <?php if ($tuitionCalcEnabled): ?>
+                        <a href="<?= base_url('/tuition-fee-calculator') ?>" class="sidebar-nav-link <?= str_contains($uri, 'tuition-fee-calculator') ? 'active' : '' ?>">
+                            <div class="dotted-link"></div>
+                            <span>Tuition Fee Calculator</span>
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
