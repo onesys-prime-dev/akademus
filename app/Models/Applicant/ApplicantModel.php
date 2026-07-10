@@ -17,6 +17,7 @@ class ApplicantModel extends Model
         'temp_password',
         'application_status',
         'application_date',
+        'has_seen_tour',
     ];
 
     public function getAppStatus(string $key, string $default = ''): string

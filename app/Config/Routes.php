@@ -45,6 +45,7 @@ $routes->get('success', 'Auth\AuthController::success');
 
 // dashoard pages for student applicants
 $routes->get('dashboard', 'Applicant\DashboardController::index');
+$routes->post('dashboard/tour/dismiss', 'Applicant\DashboardController::dismissTour');
 
 // applicant form steps routes
 $routes->get('applicant-form', 'Applicant\ApplicantFormController::index');

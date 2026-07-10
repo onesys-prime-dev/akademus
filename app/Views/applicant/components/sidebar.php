@@ -45,19 +45,19 @@ $examPassed = (new \App\Models\ExamBookingModel())->getResultStatus('result_stat
 
                 <?php $uri = uri_string(); ?>
                 <div class="grouped-links">
-                    <a href="<?= base_url('/dashboard') ?>" class="sidebar-nav-link <?= $uri === 'dashboard' ? 'active' : '' ?>">
+                    <a href="<?= base_url('/dashboard') ?>" data-tour="sidebar-dashboard" class="sidebar-nav-link <?= $uri === 'dashboard' ? 'active' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Dashboard</span>
                     </a>
-                    <a href="<?= base_url('/applicant-form') ?>" class="sidebar-nav-link <?= str_contains($uri, 'applicant-form') ? 'active' : '' ?>">
+                    <a href="<?= base_url('/applicant-form') ?>" data-tour="sidebar-applicant-form" class="sidebar-nav-link <?= str_contains($uri, 'applicant-form') ? 'active' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Applicant Form</span>
                     </a>
-                    <a href="<?= base_url('/requirements') ?>" class="sidebar-nav-link <?= str_contains($uri, 'requirements') ? 'active' : '' ?>">
+                    <a href="<?= base_url('/requirements') ?>" data-tour="sidebar-requirements" class="sidebar-nav-link <?= str_contains($uri, 'requirements') ? 'active' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Requirements</span>
                     </a>
-                    <a href="<?= base_url('/tracking-progress') ?>" class="sidebar-nav-link <?= str_contains($uri, 'tracking-progress') ? 'active' : '' ?>">
+                    <a href="<?= base_url('/tracking-progress') ?>" data-tour="sidebar-tracking" class="sidebar-nav-link <?= str_contains($uri, 'tracking-progress') ? 'active' : '' ?>">
                         <div class="dotted-link"></div>
                         <span>Tracking Progress</span>
                     </a>
@@ -85,7 +85,7 @@ $examPassed = (new \App\Models\ExamBookingModel())->getResultStatus('result_stat
                 </div>
             </div>
 
-            <div class="group-container">
+            <div class="group-container" data-tour="sidebar-payments">
                 <div class="group-title-row">
                     <p>PAYMENTS</p>
                 </div>
@@ -121,7 +121,7 @@ $examPassed = (new \App\Models\ExamBookingModel())->getResultStatus('result_stat
 
             </div>
 
-            <div class="group-container">
+            <div class="group-container" data-tour="sidebar-support">
                 <p>SUPPORT</p>
 
                 <div class="grouped-links">

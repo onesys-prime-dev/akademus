@@ -334,9 +334,25 @@ class DashboardController extends BaseController
             'fast_track_fee_amount'   => $fastTrackFeeAmount,
             'fast_track_fee_paid'     => isset($paidMap['FAST_TRACK_FEE']),
             'paymentCheckList'        => $paymentCheckList,
-            'showPaymentNotification' => $showPaymentNotification
+            'showPaymentNotification' => $showPaymentNotification,
+
+            'show_tour' => empty($applicant['has_seen_tour']),
         ];
 
         return view('applicant/main', $data);
+    }
+
+    public function dismissTour()
+    {
+        if (!session()->get('logged_in')) {
+            return $this->response->setJSON(['success' => false])->setStatusCode(401);
+        }
+
+        \Config\Database::connect()
+            ->table('applicants')
+            ->where('user_id', session()->get('user_id'))
+            ->update(['has_seen_tour' => 1]);
+
+        return $this->response->setJSON(['success' => true]);
     }
 }

@@ -60,7 +60,7 @@ $formBar = progressBar($form_progress);
                 <p>#<?= esc($applicant_number) ?></p>
             </div>
 
-            <div class="quick-actions">
+            <div class="quick-actions" data-tour="quick-actions">
                 <a class="btn-accent" href="<?= base_url('requirements') ?>">Upload Documents</a>
                 <a class="btn-accent" href="<?= base_url('admission-processing-fee') ?>">Pay Admission Fee</a>
                 <?php if (!empty($is_fast_track) && empty($fast_track_fee_paid)): ?>
@@ -76,7 +76,7 @@ $formBar = progressBar($form_progress);
     </div>
 
     <!-- ── Overall Progress ── -->
-    <div class="application-progress">
+    <div class="application-progress" data-tour="progress-stepper">
         <div class="app-progress-header">
             <h2>Overall Application Progress</h2>
             <span><?= $progress ?>%</span>
@@ -120,7 +120,7 @@ $formBar = progressBar($form_progress);
     </div>
 
     <!-- ── Checklist Cards ── -->
-    <div class="checklist-summary-container">
+    <div class="checklist-summary-container" data-tour="checklist-cards">
 
         <?= view('applicant/dashboard/components/checklist-form', [
             'form_pages'      => $form_pages,
