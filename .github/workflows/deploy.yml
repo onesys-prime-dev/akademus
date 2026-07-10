@@ -23,6 +23,15 @@ jobs:
         with:
           php-version: '8.2'
 
+      - name: ⚙️ Create .env for CI
+        run: |
+          cp env .env
+
+          cat >> .env <<EOF
+          CI_ENVIRONMENT = testing
+          app.baseURL = 'http://localhost/'
+          EOF
+
       - name: 📦 Install dependencies
         run: composer install --no-interaction --prefer-dist
 
