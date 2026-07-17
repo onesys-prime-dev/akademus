@@ -159,7 +159,11 @@ class App extends BaseConfig
      * secure, the user will be redirected to a secure version of the page
      * and the HTTP Strict Transport Security (HSTS) header will be set.
      */
-    public bool $forceGlobalSecureRequests = ENVIRONMENT === 'production';
+    // Opt-in rather than environment-tied: tying this to production forces an
+    // HTTPS redirect + HSTS even when serving over plain HTTP (e.g. local XAMPP
+    // on http://localhost), which breaks the app. Enable it via .env
+    // (app.forceGlobalSecureRequests = true) ONLY where real TLS is terminated.
+    public bool $forceGlobalSecureRequests = false;
 
     /**
      * --------------------------------------------------------------------------
