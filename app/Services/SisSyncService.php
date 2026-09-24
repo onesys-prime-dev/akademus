@@ -100,6 +100,9 @@ class SisSyncService
         try {
             $payload = $this->buildPayload((int) $row['applicant_id']);
             $result  = $this->post($payload);
+        } catch (\RuntimeException $e) {
+            // Bad data on our side (missing applicant/program code): retrying won't fix it.
+            $result = ['ok' => false, 'retry' => false, 'error' => $e->getMessage()];
         } catch (Throwable $e) {
             $result = ['ok' => false, 'retry' => true, 'error' => $e->getMessage()];
         }
@@ -129,7 +132,7 @@ class SisSyncService
     private function buildPayload(int $applicantId): array
     {
         $row = db_connect()->table('applicants a')
-            ->select('a.applicant_id, u.firstname, u.lastname, u.email, u.mobile, p.program_code')
+            ->select('a.applicant_id, u.firstname, u.lastname, u.email, u.mobile, p.program_code, p.program_name')
             ->join('users u', 'u.user_id = a.user_id')
             ->join('programs p', 'p.program_id = a.program_id', 'left')
             ->where('a.applicant_id', $applicantId)
@@ -162,8 +165,19 @@ class SisSyncService
             'email'        => strtolower(trim((string) $row['email'])),
         ];
 
-        if (! empty($row['program_code'])) {
-            $payload['program_code'] = $row['program_code'];
+        // Programs are dynamic in Admissions, so the SIS creates any code it
+        // doesn't know yet — which is why the name travels with the code.
+        // A program with no code can't be represented in the SIS at all.
+        if (empty($row['program_code'])) {
+            throw new \RuntimeException(
+                'The applicant\'s program has no program code in Admissions. Set one, then run: php spark sis:sync --requeue ' . $applicantId
+            );
+        }
+
+        $payload['program_code'] = trim((string) $row['program_code']);
+
+        if (! empty($row['program_name'])) {
+            $payload['program_name'] = trim((string) $row['program_name']);
         }
         if (! empty($row['mobile'])) {
             $payload['contact_number'] = $row['mobile'];
