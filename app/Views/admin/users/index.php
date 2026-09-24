@@ -300,6 +300,8 @@ $users = $users ?? [];
 
 <script>
     const BASE = '<?= base_url() ?>';
+    const CSRF_NAME  = '<?= csrf_token() ?>';
+    const CSRF_HASH  = '<?= csrf_hash() ?>';
 
     let currentUserId  = null;
     let isEditMode     = false;
@@ -374,6 +376,7 @@ $users = $users ?? [];
         errEl.textContent = '';
 
         const body = new FormData();
+        body.append(CSRF_NAME, CSRF_HASH);
         body.append('firstname', document.getElementById('f-firstname').value.trim());
         body.append('lastname',  document.getElementById('f-lastname').value.trim());
         body.append('email',     document.getElementById('f-email').value.trim());
@@ -427,6 +430,7 @@ $users = $users ?? [];
         if (pw !== conf)   { errEl.textContent = 'Passwords do not match.'; return; }
 
         const body = new FormData();
+        body.append(CSRF_NAME, CSRF_HASH);
         body.append('password', pw);
 
         btn.disabled    = true;
@@ -459,8 +463,11 @@ $users = $users ?? [];
         btn.disabled    = true;
         btn.textContent = 'Deleting…';
 
+        const delBody = new FormData();
+        delBody.append(CSRF_NAME, CSRF_HASH);
+
         fetch(BASE + 'admin/users/' + currentUserId + '/delete', {
-            method:'POST', headers:{'X-Requested-With':'XMLHttpRequest'}
+            method:'POST', body: delBody, headers:{'X-Requested-With':'XMLHttpRequest'}
         })
         .then(r => r.json())
         .then(data => {
