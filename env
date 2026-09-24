@@ -67,3 +67,8 @@
 #--------------------------------------------------------------------
 
 # logger.threshold = 4
+#--------------------------------------------------------------------
+# SIS HANDOFF (Reservation Fee paid -> create student in the SIS)
+#--------------------------------------------------------------------
+# SIS_API_URL = http://localhost/akademus-sis/public
+# SIS_API_KEY = same value as API_KEY in the SIS .env

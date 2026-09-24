@@ -2,7 +2,10 @@
 
 namespace App\Models\Payment;
 
+use App\Services\SisSyncService;
+use CodeIgniter\Events\Events;
 use CodeIgniter\Model;
+use Throwable;
 
 class PaymentModel extends Model
 {
@@ -30,10 +33,48 @@ class PaymentModel extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
-    const STATUS_PENDING    = 'PENDING';
+    // Every path that marks a payment PAID (officer approval, SmartPay webhook)
+    // goes through Model::update(), so one hook covers them all.
+    protected $afterUpdate = ['queueSisHandoff'];
+
+    const STATUS_PENDING   = 'PENDING';
     const STATUS_PROCESSING = 'PROCESSING';
     const STATUS_PAID       = 'PAID';
     const STATUS_REJECTED   = 'REJECTED';
+
+    /**
+     * When a Reservation Fee turns PAID, queue the applicant for handoff to the
+     * SIS. Only inserts a sis_sync row (safe inside the payment transaction);
+     * the HTTP call runs after the response is sent, and `php spark sis:sync`
+     * retries anything that fails. Must never break the payment itself.
+     */
+    protected function queueSisHandoff(array $eventData): array
+    {
+        if (($eventData['data']['payment_status'] ?? null) !== self::STATUS_PAID) {
+            return $eventData;
+        }
+
+        foreach ((array) ($eventData['id'] ?? []) as $paymentId) {
+            try {
+                $service = new SisSyncService();
+                $syncId  = $service->queueForPayment((int) $paymentId);
+
+                if ($syncId !== null) {
+                    Events::on('post_system', static function () use ($service, $syncId): void {
+                        try {
+                            $service->attempt($syncId);
+                        } catch (Throwable $e) {
+                            log_message('error', '[SIS sync] post-response attempt failed: ' . $e->getMessage());
+                        }
+                    });
+                }
+            } catch (Throwable $e) {
+                log_message('error', '[SIS sync] could not queue handoff: ' . $e->getMessage());
+            }
+        }
+
+        return $eventData;
+    }
 
     // check if applicant already paid or not
     public function hasActivePayment(int $applicantId, string $feeTypeCode): bool
