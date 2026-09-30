@@ -133,6 +133,20 @@ class SisSyncService
             ->get()
             ->getRowArray();
 
+        // The term the applicant actually picked at application time —
+        // school_year/semester live only on `applications`, not
+        // `applicants`, so this is a separate lookup. No unique constraint
+        // on applications.applicant_id, so take the latest by
+        // application_date, same disambiguation ApplicantsController::
+        // requestRevision() already uses for this table.
+        $application = db_connect()->table('applications')
+            ->select('school_year, semester')
+            ->where('applicant_id', $applicantId)
+            ->orderBy('application_date', 'DESC')
+            ->limit(1)
+            ->get()
+            ->getRowArray();
+
         $paidAt = null;
         if (! empty($payment['payment_id'])) {
             $paidAt = db_connect()->table('payment')
@@ -168,6 +182,12 @@ class SisSyncService
         }
         if (! empty($paidAt)) {
             $payload['admission_date'] = $paidAt;
+        }
+        if (! empty($application['school_year'])) {
+            $payload['school_year'] = trim((string) $application['school_year']);
+        }
+        if (! empty($application['semester'])) {
+            $payload['semester'] = trim((string) $application['semester']);
         }
 
         return $payload;
