@@ -15,7 +15,7 @@ use CodeIgniter\CLI\CLI;
  *   php spark sis:sync --requeue all      reset every failed handoff
  *
  * Schedule the plain form every minute (Windows Task Scheduler / cron) so a
- * SIS outage self-heals; the normal path already syncs right after payment.
+ * SIS outage self-heals; the normal path already syncs right after approval.
  */
 class SisSync extends BaseCommand
 {

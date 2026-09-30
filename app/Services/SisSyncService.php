@@ -2,18 +2,16 @@
 
 namespace App\Services;
 
-use App\Models\Payment\PaymentFeeTypeModel;
-use App\Models\Payment\PaymentModel;
 use Throwable;
 
 /**
  * Hands an approved applicant over to the SIS (POST /api/students/promote)
- * once their Reservation Fee is PAID.
+ * the moment an Admission Officer approves their application.
  *
  * Flow:
- *   1. PaymentModel's afterUpdate hook calls queueForPayment() — this only
- *      inserts a sis_sync row, so it is safe inside the payment transaction
- *      and can never fail a payment.
+ *   1. ApplicantsController::decide()/bulkUpdate() calls queueForApplicant()
+ *      right after setting application_status = 'approved' — this only
+ *      inserts a sis_sync row, so it can never fail the approval itself.
  *   2. attempt() does the HTTP call (run after the response is sent, and again
  *      by `php spark sis:sync` for anything that failed or was missed).
  *   3. On success the SIS student number is stored and the applicant becomes
@@ -29,31 +27,17 @@ class SisSyncService
     private const BACKOFF_MINUTES = [1, 5, 15, 60, 240, 720];
 
     /**
-     * Queue a handoff if this payment is a PAID reservation fee.
-     * Returns the sync_id when a row was created, null otherwise.
+     * Queue a handoff for an applicant an Admission Officer just approved —
+     * the trigger point, in place of the old Reservation-Fee-PAID one.
+     * Returns the sync_id when a row was created, null when one already
+     * exists for this applicant (unique key on applicant_id backs this up).
      */
-    public function queueForPayment(int $paymentId): ?int
+    public function queueForApplicant(int $applicantId): ?int
     {
         $db = db_connect();
 
-        $payment = $db->table('payment p')
-            ->select('p.payment_id, p.applicant_id, p.payment_status, pft.code AS fee_code')
-            ->join('payment_fee_type pft', 'pft.payment_fee_type_id = p.payment_fee_type_id')
-            ->where('p.payment_id', $paymentId)
-            ->get()
-            ->getRowArray();
-
-        if (
-            ! $payment
-            || $payment['payment_status'] !== PaymentModel::STATUS_PAID
-            || $payment['fee_code'] !== PaymentFeeTypeModel::CODE_RESERVATION
-        ) {
-            return null;
-        }
-
-        // Unique applicant_id: a second PAID event for the same applicant is a no-op.
         $exists = $db->table('sis_sync')
-            ->where('applicant_id', $payment['applicant_id'])
+            ->where('applicant_id', $applicantId)
             ->countAllResults() > 0;
 
         if ($exists) {
@@ -63,8 +47,8 @@ class SisSyncService
         $now = date('Y-m-d H:i:s');
 
         $db->table('sis_sync')->insert([
-            'applicant_id'    => $payment['applicant_id'],
-            'payment_id'      => $payment['payment_id'],
+            'applicant_id'    => $applicantId,
+            'payment_id'      => null,
             'status'          => 'pending',
             'attempts'        => 0,
             'next_attempt_at' => $now,

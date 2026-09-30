@@ -167,6 +167,9 @@ class SendEmails extends BaseCommand
                         'attempts' => $email['attempts'] + ($success ? 0 : 1),
                         'last_attempt_at' => date('Y-m-d H:i:s')
                     ]);
+
+                // ⏱ throttle: Gmail SMTP flags rapid back-to-back connections as abuse
+                usleep(500000);
             }
 
             echo "Processed " . count($emails) . " emails\n";

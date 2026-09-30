@@ -9,6 +9,9 @@ use App\Models\ProgramModel;
 use App\Services\ApplicantService;
 use App\Services\ApplicantProfileService;
 use App\Services\NotificationService;
+use App\Services\SisSyncService;
+use CodeIgniter\Events\Events;
+use Throwable;
 
 class ApplicantsController extends BaseController
 {
@@ -141,6 +144,7 @@ class ApplicantsController extends BaseController
         // ✅ SAFE TO TRIGGER NOW
         if ($status === 'approved') {
             $this->notificationService->trigger('applicant.approved', $applicantId);
+            $this->queueSisHandoff($applicantId);
         }
 
         if ($status === 'rejected') {
@@ -152,6 +156,33 @@ class ApplicantsController extends BaseController
             'status'  => $status,
             'message' => 'Decision saved successfully.',
         ]);
+    }
+
+    /**
+     * Queues the just-approved applicant for handoff to the SIS. Only
+     * inserts a sis_sync row (safe alongside the decision write above); the
+     * actual HTTP call runs after the response is sent, and
+     * `php spark sis:sync` retries anything that fails. Must never break
+     * the approval decision itself.
+     */
+    private function queueSisHandoff(int $applicantId): void
+    {
+        try {
+            $service = new SisSyncService();
+            $syncId  = $service->queueForApplicant($applicantId);
+
+            if ($syncId !== null) {
+                Events::on('post_system', static function () use ($service, $syncId): void {
+                    try {
+                        $service->attempt($syncId);
+                    } catch (Throwable $e) {
+                        log_message('error', '[SIS sync] post-response attempt failed: ' . $e->getMessage());
+                    }
+                });
+            }
+        } catch (Throwable $e) {
+            log_message('error', '[SIS sync] could not queue handoff: ' . $e->getMessage());
+        }
     }
 
     public function requestRevision(int $applicantId)
@@ -292,6 +323,7 @@ class ApplicantsController extends BaseController
             // 🔥 Trigger ONLY for relevant statuses
             if ($status === 'approved') {
                 $this->notificationService->trigger('applicant.approved', $applicantId);
+                $this->queueSisHandoff($applicantId);
             }
 
             if ($status === 'rejected') {
