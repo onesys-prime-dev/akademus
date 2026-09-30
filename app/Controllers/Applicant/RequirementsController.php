@@ -223,18 +223,7 @@ class RequirementsController extends BaseController
 
         $uploaded = $this->documentService->insertDocuments($applicant_id, $files);
 
-        // 🔥 trigger per document
-        foreach ($uploaded as $doc) {
-            $this->notificationService->trigger(
-                'requirements.uploaded',
-                $applicant_id,
-                [
-                    'requirement_name' => $doc['requirement_name']
-                ]
-            );
-        }
-
-        // 🔥 NEW: check completion
+        // check completion
         $program_id = session()->get('selected_program_id') ?? session()->get('program_id');
 
         if ($this->documentService->allRequiredCompleted($applicant_id, $program_id, $this->isApplicantFastTrack($applicant_id))) {

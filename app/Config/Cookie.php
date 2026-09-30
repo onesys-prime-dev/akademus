@@ -53,8 +53,14 @@ class Cookie extends BaseConfig
      * --------------------------------------------------------------------------
      *
      * Cookie will only be set if a secure HTTPS connection exists.
+     *
+     * Set dynamically in the constructor below based on the ACTUAL request
+     * scheme rather than the environment name. Tying it to ENVIRONMENT breaks
+     * cookies (session + CSRF) when running production mode over plain HTTP,
+     * e.g. http://localhost — the browser drops Secure cookies on HTTP, so the
+     * session never persists and every authenticated POST returns "Unauthorized".
      */
-    public bool $secure = ENVIRONMENT === 'production';
+    public bool $secure = false;
 
     /**
      * --------------------------------------------------------------------------
@@ -104,4 +110,18 @@ class Cookie extends BaseConfig
      * @see https://tools.ietf.org/html/rfc2616#section-2.2
      */
     public bool $raw = false;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Only flag cookies as Secure when the request is genuinely over HTTPS.
+        // Covers direct TLS as well as proxies/tunnels (e.g. ngrok) that
+        // terminate TLS and forward the original scheme via X-Forwarded-Proto.
+        $isHttps = (! empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off')
+            || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')
+            || ((int) ($_SERVER['SERVER_PORT'] ?? 0) === 443);
+
+        $this->secure = $isHttps;
+    }
 }

@@ -221,6 +221,18 @@ class DashboardController extends BaseController
         */
         if ($appStatus === 'enrolled') {
             $bannerMessage = 'You are now officially enrolled. Welcome to the family!';
+
+            // Student number issued by the SIS at handoff (see SisSyncService).
+            $sisRecord = db_connect()->table('sis_sync')
+                ->select('student_number')
+                ->where('applicant_id', $applicant['applicant_id'])
+                ->where('status', 'synced')
+                ->get()
+                ->getRowArray();
+
+            if (! empty($sisRecord['student_number'])) {
+                $bannerMessage .= ' Your student number is ' . $sisRecord['student_number'] . '.';
+            }
         } elseif ($appStatus === 'approved') {
             $bannerMessage = 'Congratulations! Your application has been approved. Please settle your reservation fee.';
         } elseif ($docProgress === 100) {

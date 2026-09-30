@@ -49,7 +49,7 @@ class GroqProxyController extends Controller
                 'Authorization: Bearer ' . $groqKey,
             ],
             CURLOPT_POSTFIELDS => json_encode([
-                'model'       => 'llama-3.1-8b-instant',
+                'model'       => env('api.groqModel') ?? 'openai/gpt-oss-20b',
                 'messages'    => $messages,
                 'temperature' => $temperature,
                 'max_tokens'  => $maxTokens,

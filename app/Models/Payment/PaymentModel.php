@@ -30,7 +30,7 @@ class PaymentModel extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
-    const STATUS_PENDING    = 'PENDING';
+    const STATUS_PENDING   = 'PENDING';
     const STATUS_PROCESSING = 'PROCESSING';
     const STATUS_PAID       = 'PAID';
     const STATUS_REJECTED   = 'REJECTED';

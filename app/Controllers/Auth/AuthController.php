@@ -283,7 +283,7 @@ class AuthController extends BaseController
                 time() + (30 * 24 * 60 * 60),
                 '/',
                 '',
-                ENVIRONMENT === 'production',
+                $this->request->isSecure(), // Secure flag only over real HTTPS
                 true
             );
         }

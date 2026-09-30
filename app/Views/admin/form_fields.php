@@ -12,6 +12,7 @@ $grouped = $grouped ?? [];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<?= csrf_hash() ?>">
     <title>Akademus | Form Field Manager</title>
     <?= theme_favicon_tags() ?>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -439,6 +440,7 @@ $grouped = $grouped ?? [];
 let ffChanges = 0;
 let editRowEl = null;
 let currentPageId = <?= (int)(($pages[0]['id'] ?? 1)) ?>;
+const ffCsrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
 // ── PAGE SELECTION ───────────────────────────────────────────
 function ffSelectPage(pageId, el) {
@@ -462,7 +464,7 @@ function ffSelectPage(pageId, el) {
 function ffTogglePage(id, btn) {
     fetch('<?= base_url('admin/form-fields/pages') ?>/' + id + '/toggle', {
         method: 'POST',
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': ffCsrf }
     })
     .then(r => r.json())
     .then(data => {
@@ -494,7 +496,7 @@ function ffDeletePage(id) {
     if (!confirm('Delete this page and all its custom fields? System fields will be unaffected.')) return;
     fetch('<?= base_url('admin/form-fields/pages') ?>/' + id + '/delete', {
         method: 'POST',
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': ffCsrf }
     })
     .then(r => r.json())
     .then(data => {
@@ -544,7 +546,7 @@ function ffSubmitPageModal() {
 
     fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': ffCsrf },
         body: JSON.stringify({ title, description: desc })
     })
     .then(r => r.json())
@@ -666,7 +668,7 @@ document.getElementById('page-modal').addEventListener('click', function(e) { if
 
         fetch('<?= base_url('admin/form-fields/pages/reorder') ?>', {
             method:  'POST',
-            headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+            headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': ffCsrf },
             body:    JSON.stringify({ order })
         })
         .then(r => r.json())
@@ -818,7 +820,7 @@ function ffDiscardChanges() {
 
 function ffResetAll() {
     if (!confirm('Reset ALL fields to defaults and remove custom fields?')) return;
-    fetch('<?= base_url('admin/form-fields/reset') ?>', { method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+    fetch('<?= base_url('admin/form-fields/reset') ?>', { method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': ffCsrf } })
     .then(r => r.json())
     .then(data => { if (data.status === 'success') { ffToast('Reset to defaults.', 'success'); setTimeout(() => location.reload(), 1000); } });
 }

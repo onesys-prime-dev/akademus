@@ -14,7 +14,7 @@ class Groq extends ResourceController
 
         $groqKey     = env('api.groqKey');
         $groqURL     = env('api.groqURL');
-        $groqModel       = env('api.groqModel', 'llama-3.1-8b-instant');
+        $groqModel       = env('api.groqModel', 'openai/gpt-oss-20b');
         $groqDefaultTemp = (float) env('api.groqTemperature', 0.5);
         $groqDefaultMax  = (int) env('api.groqMaxTokens', 512);
 
