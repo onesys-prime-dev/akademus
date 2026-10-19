@@ -7,6 +7,10 @@ $formSubmitted  = $form_submitted   ?? false;
 $docsComplete   = $docs_complete    ?? false;
 $decisionRemarks = $decision_remarks ?? null;
 
+$revisionRequested = $revision_requested ?? false;
+$revisionNote      = $revision_note      ?? null;
+$revisionPages     = $revision_pages     ?? [];
+
 $isApproved = in_array($appStatus, ['approved', 'enrolled']);
 $isRejected = $appStatus === 'rejected';
 $isEnrolled = $appStatus === 'enrolled';
@@ -56,6 +60,11 @@ function tp_step_icon(string $status): string {
             $statusDesc  = 'Congratulations! Your application has been approved. Please proceed with the next steps.';
             $statusMod   = 'tp-status-card--success';
 
+        elseif ($revisionRequested):
+            $statusTitle = 'Revision Needed';
+            $statusDesc  = 'The admissions office has requested changes to your application. Please review the details below and resubmit.';
+            $statusMod   = 'tp-status-card--revision';
+
         elseif ($formComplete && $docsComplete):
             // Case 3: waiting for verification
             $statusTitle = 'Application Under Review';
@@ -102,6 +111,30 @@ function tp_step_icon(string $status): string {
             <?php endif; ?>
         </div>
         <p class="tp-remarks-body"><?= esc($decisionRemarks) ?></p>
+    </div>
+    <?php endif; ?>
+
+    <!-- Revision-requested card -->
+    <?php if ($revisionRequested): ?>
+    <div class="tp-remarks-card tp-remarks-card--revision">
+        <div class="tp-remarks-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            <span>Revision Requested</span>
+        </div>
+
+        <?php if (!empty($revisionPages)): ?>
+        <p class="tp-remarks-body" style="margin-bottom:8px;">
+            <strong>Steps to update:</strong> <?= esc(implode(', ', $revisionPages)) ?>
+        </p>
+        <?php endif; ?>
+
+        <p class="tp-remarks-body"><?= esc($revisionNote) ?></p>
+
+        <div style="margin-top:14px; display:flex; gap:10px;">
+            <a href="<?= base_url('applicant-form') ?>" class="tp-remarks-cta-link">Go to Application Form</a>
+            <button type="button" id="tp-resubmit-btn" class="tp-remarks-cta-btn">Resubmit Application</button>
+        </div>
+        <p id="tp-resubmit-error" style="color:#dc2626; font-size:12px; margin-top:6px;"></p>
     </div>
     <?php endif; ?>
 
@@ -165,3 +198,32 @@ function tp_step_icon(string $status): string {
         </div>
     </div>
 </div>
+
+<?php if ($revisionRequested): ?>
+<script>
+document.getElementById('tp-resubmit-btn')?.addEventListener('click', async function () {
+    const btn = this;
+    const err = document.getElementById('tp-resubmit-error');
+    btn.disabled = true;
+    btn.textContent = 'Resubmitting…';
+    try {
+        const res  = await fetch('<?= base_url('applicant-form/resubmit') ?>', {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+            location.reload();
+        } else {
+            err.textContent = data.message || 'Something went wrong.';
+            btn.disabled = false;
+            btn.textContent = 'Resubmit Application';
+        }
+    } catch (e) {
+        err.textContent = 'Network error. Please try again.';
+        btn.disabled = false;
+        btn.textContent = 'Resubmit Application';
+    }
+});
+</script>
+<?php endif; ?>

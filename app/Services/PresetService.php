@@ -6,6 +6,7 @@ use App\Models\PresetModel;
 use App\Models\PresetSectionModel;
 use App\Models\ProgramModel;
 use App\Models\FormPageModel;
+use App\Services\ProgramRequirementProjectionService;
 
 class PresetService
 {
@@ -70,32 +71,37 @@ class PresetService
      */
     public function getFormPagesForApplicant($programId)
     {
-        $preset = $this->getPresetForProgram($programId);
+        // Every applicant on the same program gets the same result, and it
+        // otherwise costs a preset lookup plus one find() per section — cache
+        // it per-program for a short window rather than paying that on every load.
+        return cache_remember("form_pages_for_program_{$programId}", 120, function () use ($programId) {
+            $preset = $this->getPresetForProgram($programId);
 
-        if (!$preset) {
-            // If no preset found, return all active form pages
-            return $this->formPageModel->getActivePages();
-        }
-
-        // Get the form page IDs from the preset
-        $pageIds = array_map(function ($section) {
-            return $section['form_page_id'];
-        }, $preset['sections']);
-
-        if (empty($pageIds)) {
-            return [];
-        }
-
-        // Get the full page details in order
-        $pages = [];
-        foreach ($pageIds as $pageId) {
-            $page = $this->formPageModel->find($pageId);
-            if ($page && $page['is_enabled']) {
-                $pages[] = $page;
+            if (!$preset) {
+                // If no preset found, return all active form pages
+                return $this->formPageModel->getActivePages();
             }
-        }
 
-        return $pages;
+            // Get the form page IDs from the preset
+            $pageIds = array_map(function ($section) {
+                return $section['form_page_id'];
+            }, $preset['sections']);
+
+            if (empty($pageIds)) {
+                return [];
+            }
+
+            // Get the full page details in order
+            $pages = [];
+            foreach ($pageIds as $pageId) {
+                $page = $this->formPageModel->find($pageId);
+                if ($page && $page['is_enabled']) {
+                    $pages[] = $page;
+                }
+            }
+
+            return $pages;
+        });
     }
 
     /**
@@ -110,7 +116,17 @@ class PresetService
             'is_active'   => 1,
         ];
 
-        return $this->presetModel->createPresetWithSections($presetData, $formPageIds, $categoryIds);
+        $presetId = $this->presetModel->createPresetWithSections(
+            $presetData,
+            $formPageIds,
+            $categoryIds
+        );
+
+        // rebuild projection for programs already using this preset
+        (new ProgramRequirementProjectionService())
+            ->rebuildForPreset((int) $presetId);
+
+        return $presetId;
     }
 
     /**
@@ -124,7 +140,19 @@ class PresetService
             'is_global'   => $isGlobal ? 1 : 0,
         ];
 
-        return $this->presetModel->updatePresetWithSections($presetId, $presetData, $formPageIds, $categoryIds);
+        $ok = $this->presetModel->updatePresetWithSections(
+            $presetId,
+            $presetData,
+            $formPageIds,
+            $categoryIds
+        );
+
+        if ($ok) {
+            (new ProgramRequirementProjectionService())
+                ->rebuildForPreset((int) $presetId);
+        }
+
+        return $ok;
     }
 
     /**
@@ -145,10 +173,17 @@ class PresetService
      */
     public function assignPresetToProgram($programId, $presetId)
     {
-        return \Config\Database::connect()
+        $ok = \Config\Database::connect()
             ->table('programs')
             ->where('program_id', (int)$programId)
             ->update(['preset_id' => (int)$presetId]);
+
+        if ($ok) {
+            (new ProgramRequirementProjectionService())
+                ->rebuildForProgram((int)$programId);
+        }
+
+        return $ok;
     }
 
     /**

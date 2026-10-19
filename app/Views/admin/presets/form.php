@@ -14,6 +14,7 @@ $action   = $action   ?? 'create';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akademus | Applicant Form</title>
+    <?= theme_favicon_tags() ?>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -178,7 +179,7 @@ $action   = $action   ?? 'create';
                     <label class="form-label">Requirement Categories *</label>
                     <p class="form-help" style="margin-bottom:12px;">
                         Select which document categories apply to this preset. Each selected category becomes a step in the applicant's requirements checklist.
-                        <a href="<?= base_url('admin/requirement-categories') ?>" target="_blank" style="color:var(--primary);">Manage categories →</a>
+                        <a href="<?= base_url('admin/requirement-categories') ?>" target="_blank" rel="noopener noreferrer" style="color:var(--primary);">Manage categories →</a>
                     </p>
                     <div class="section-list">
                         <?php if (!empty($requirementCategories)): ?>

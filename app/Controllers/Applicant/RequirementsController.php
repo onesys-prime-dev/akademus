@@ -5,8 +5,10 @@ namespace App\Controllers\Applicant;
 
 use App\Controllers\BaseController;
 
+use App\Libraries\EncryptedFileStorage;
 use App\Services\RequirementService;
 use App\Services\ApplicantDocumentService;
+use App\Services\NotificationService;
 
 use App\Models\ThemeModel;
 
@@ -14,11 +16,12 @@ class RequirementsController extends BaseController
 {
     protected $requirementService;
     protected $documentService;
-
+    protected $notificationService;
 
     public function __construct() {
         $this->requirementService = new RequirementService();
         $this->documentService = new ApplicantDocumentService();
+        $this->notificationService = new NotificationService();
     }
 
     public function index() {
@@ -50,6 +53,26 @@ class RequirementsController extends BaseController
         $application = $db->table('applications')->where('applicant_id', $applicant_id)->get()->getRowArray();
         $application_status = $application['application_status'] ?? '';
 
+        $isFastTrack = $this->isApplicantFastTrack($applicant_id);
+
+        $requiredDocsVerified = $program_id && $applicant_id
+            ? $this->documentService->allRequiredVerified($applicant_id, $program_id, $isFastTrack)
+            : false;
+
+        // Only the documents actually required right now — used by the Fast
+        // Track popup so applicants aren't shown the full (mostly deferred) list.
+        $fastTrackRequiredDocs = [];
+        if ($isFastTrack && $program_id) {
+            $reqs = $this->applyFastTrackRequiredFlag(
+                $this->requirementService->getRequirements($program_id),
+                true
+            );
+            $fastTrackRequiredDocs = array_values(array_map(
+                fn($r) => $r['requirement_name'],
+                array_filter($reqs, fn($r) => $r['is_required'])
+            ));
+        }
+
         return view('applicant/main', [
             'title'              => 'Requirements',
             'page_content'       => 'applicant/requirements/requirements',
@@ -58,7 +81,51 @@ class RequirementsController extends BaseController
             'categories'         => $categories,
             'theme'              => $theme,
             'application_status' => $application_status,
+            'requiredDocsVerified' => $requiredDocsVerified,
+            'is_fast_track'         => $isFastTrack,
+            'fast_track_required_docs' => $fastTrackRequiredDocs,
         ]);
+    }
+
+    private function isApplicantFastTrack($applicant_id): bool
+    {
+        if (!$applicant_id) {
+            return false;
+        }
+
+        $application = \Config\Database::connect()
+            ->table('applications')
+            ->select('is_fast_track')
+            ->where('applicant_id', $applicant_id)
+            ->get()
+            ->getRowArray();
+
+        if ($application) {
+            return !empty($application['is_fast_track']);
+        }
+
+        // No application row yet — they picked a path on the Choose Your Path
+        // screen but haven't saved Step 1 of the Applicant Form yet (that's
+        // when the row, and is_fast_track with it, actually gets created).
+        // Fall back to the session choice so Requirements still reflects it
+        // immediately if they jump here first via the sidebar.
+        return (bool) session()->get('fast_track_choice');
+    }
+
+    /**
+     * For a Fast Track applicant, only documents flagged is_fast_track_required
+     * count as "required" for now — the rest are deferred, not mandatory.
+     */
+    private function applyFastTrackRequiredFlag(array $requirements, bool $isFastTrack): array
+    {
+        if (!$isFastTrack) {
+            return $requirements;
+        }
+
+        return array_map(function ($r) {
+            $r['is_required'] = $r['is_fast_track_required'] ?? false;
+            return $r;
+        }, $requirements);
     }
 
     private function lightenHex(string $hex, float $amount = 0.88): string
@@ -102,10 +169,13 @@ class RequirementsController extends BaseController
             $requirements = $this->requirementService->getStepRequirements($program_id, $step);
 
             $category_name = $category['category_name'];
-            $category_description = $category['category_description'];
+            $category_description = $category['description'];
         }
 
         $applicant_id = session()->get('applicant_id');
+        $isFastTrack  = $this->isApplicantFastTrack($applicant_id);
+
+        $requirements = $this->applyFastTrackRequiredFlag($requirements, $isFastTrack);
 
         $formData = $this->documentService->getStepDocuments($applicant_id, $requirements);
 
@@ -115,7 +185,7 @@ class RequirementsController extends BaseController
         $totalUploaded   = count($formData);
 
         // Check ALL requirements across every step (not just the current one)
-        $allReqs          = $this->requirementService->getRequirements($program_id);
+        $allReqs          = $this->applyFastTrackRequiredFlag($this->requirementService->getRequirements($program_id), $isFastTrack);
         $allUploaded      = $this->documentService->getStepDocuments($applicant_id, $allReqs);
         $allTotalRequired = count(array_filter($allReqs, fn($r) => $r['is_required']));
         $allUploadedReq   = count(array_filter($allReqs, fn($r) => $r['is_required'] && isset($allUploaded[$r['program_requirement_id']])));
@@ -151,7 +221,25 @@ class RequirementsController extends BaseController
 
         $files = $this->request->getFiles();
 
-        $this->documentService->insertDocuments($applicant_id, $files);
+        $uploaded = $this->documentService->insertDocuments($applicant_id, $files);
+
+        // check completion
+        $program_id = session()->get('selected_program_id') ?? session()->get('program_id');
+
+        if ($this->documentService->allRequiredCompleted($applicant_id, $program_id, $this->isApplicantFastTrack($applicant_id))) {
+
+            $key = "requirements_completed_{$applicant_id}";
+
+            if (! $this->alreadyQueued($key)) {
+
+                $this->notificationService->trigger(
+                    'requirements.completed',
+                    $applicant_id,
+                    [],
+                    $key
+                );
+            }
+        }
 
         return $this->response->setJSON([
             'status' => 'success'
@@ -177,12 +265,12 @@ class RequirementsController extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        $mime = mime_content_type($filePath);
+        $mime = $doc['mime_type'] ?? 'application/octet-stream';
 
         return $this->response
             ->setHeader('Content-Type', $mime)
             ->setHeader('Content-Disposition', 'inline; filename="' . $doc['document_name'] . '"')
-            ->setBody(file_get_contents($filePath));
+            ->setBody(EncryptedFileStorage::read($filePath));
     }
 
     public function submitApplication()
@@ -199,5 +287,13 @@ class RequirementsController extends BaseController
             ->update(['application_status' => 'pending']);
 
         return $this->response->setJSON(['status' => 'success']);
+    }
+
+    private function alreadyQueued($key)
+    {
+        return db_connect()->table('email_queue')
+            ->where('notification_key', $key)
+            ->get()
+            ->getRowArray() !== null;
     }
 }

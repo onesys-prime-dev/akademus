@@ -12,7 +12,8 @@ class ApplicantDocumentModel extends Model
     protected $allowedFields = [
         'applicant_id',
         'program_requirement_id',
-        'document_name'
+        'document_name',
+        'mime_type'
     ];
 
     protected $createdField  = 'uploaded_at';

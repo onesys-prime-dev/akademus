@@ -24,7 +24,9 @@
 
 /* Info grid */
 .pr-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;}
-.pr-info-item{}
+.pr-info-item{
+    /* reserved for future styles */
+}
 .pr-info-item--full{grid-column:1/-1;}
 .pr-info-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;margin-bottom:3px;}
 .pr-info-value{font-size:13px;font-weight:600;color:#1e293b;}
@@ -33,7 +35,9 @@
 .pr-info-sub{font-size:11px;color:#94a3b8;margin-top:1px;}
 
 /* Proof of payment */
-.pr-proof-col{}
+.pr-proof-col{
+    /* reserved for future styles */
+}
 .pr-proof-thumb{position:relative;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0;cursor:pointer;background:#f8fafc;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;}
 .pr-proof-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .2s;}
 .pr-proof-thumb:hover img{transform:scale(1.03);}
@@ -48,7 +52,9 @@
 /* Action area */
 .pr-action-area{margin-top:20px;border-top:1px solid #e2e8f0;padding-top:20px;}
 .pr-action-header{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:#475569;margin-bottom:14px;}
-.pr-action-body{}
+.pr-action-body{
+    /* reserved for future styles */
+}
 .pr-remarks-label{font-size:11px;font-weight:700;color:#64748b;margin-bottom:6px;}
 .pr-remarks-label span{font-weight:400;color:#94a3b8;}
 .pr-remarks-input{width:100%;border:1px solid #cbd5e0;border-radius:7px;padding:9px 12px;font-size:13px;color:#1e293b;resize:vertical;font-family:inherit;line-height:1.5;transition:border-color .15s,box-shadow .15s;}

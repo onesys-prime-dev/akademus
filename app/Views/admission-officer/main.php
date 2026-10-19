@@ -6,10 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akademus | <?= $title ?></title>
-    <?php $favicon = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/favicons/favicon-32x32.png'); ?>
-    <link rel="icon" type="image/png" sizes="32x32" href="<?= $favicon ?>">
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/favicons/favicon-16x16.png') ?>">
-    <link rel="apple-touch-icon" sizes="180x180" href="<?= !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/favicons/favicon-180x180.png') ?>">
+    <?= theme_favicon_tags() ?>
 
     <?= theme_css_vars() ?>
 
@@ -48,6 +45,10 @@
     <link rel="stylesheet" href="<?= base_url("assets/css/pages/admission-officer/{$pageName}.css?v=" . time()) ?>">
     <?php endif; ?>
 
+<meta name="csrf-token" content="<?= csrf_hash() ?>">
+<script>
+(function(){var _f=window.fetch;window.fetch=function(u,o){o=o||{};if(o.method&&o.method.toUpperCase()!=='GET'){var t=document.querySelector('meta[name="csrf-token"]');if(t){o.headers=o.headers||{};if(o.headers instanceof Headers){o.headers.set('X-CSRF-TOKEN',t.content);}else{o.headers['X-CSRF-TOKEN']=t.content;}}}return _f.call(this,u,o);};})();
+</script>
 </head>
 
 <body>

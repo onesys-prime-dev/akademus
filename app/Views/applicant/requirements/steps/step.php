@@ -15,8 +15,11 @@
             <div class="requirements-section__header-top">
                 <h3><?= esc($category_name) ?></h3>
                 <?php if (($total_required ?? 0) > 0): ?>
-                    <span class="upload-counter <?= ($uploaded_required ?? 0) >= ($total_required ?? 0) ? 'upload-counter--done' : '' ?>">
-                        <?= (int)($uploaded_required ?? 0) ?>/<?= (int)($total_required ?? 0) ?> required uploaded
+                    <span
+                        class="upload-counter <?= ($total_uploaded ?? 0) >= ($total_required ?? 0) ? 'upload-counter--done' : '' ?>"
+                        data-total-required="<?= (int) $total_required ?>"
+                    >
+                        <?= (int)($total_uploaded ?? 0) ?>/<?= (int)($total_required ?? 0) ?> required uploaded
                     </span>
                 <?php endif; ?>
             </div>
@@ -37,13 +40,15 @@
             $is_required = (bool) ($requirement['is_required'] ?? false);
             ?>
             <div class="form-field">
-                <label for="requirement_<?= $program_requirement_id ?>" class="upload-field">
+                <label for="requirement_<?= $program_requirement_id ?>" class="upload-field <?= $is_required ? '' : 'upload-optional' ?>">
                     <div class="requirement-upload-info">
                         <p class="requirement-title">
                             <?= esc($requirement_name) ?>
 
                             <?php if ($is_required): ?>
                                 <span class="required">REQUIRED</span>
+                            <?php else: ?>
+                                <span class="optional">OPTIONAL FOR NOW</span>
                             <?php endif; ?>
                         </p>
                         <p class="requirement-description"><?= esc($requirement_description) ?></p>

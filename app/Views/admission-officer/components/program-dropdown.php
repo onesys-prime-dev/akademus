@@ -9,9 +9,7 @@
     <?php foreach ($programs as $program): ?>
 
         <?php
-            if (preg_match('/Bachelor of Science in/', $program['program_name'])) {
-                $programName = preg_replace('/Bachelor of Science in/', 'BS', $program['program_name']);
-            }
+            $programName = preg_replace('/Bachelor of Science in/', 'BS', $program['program_name']);
         ?>
 
         <option 

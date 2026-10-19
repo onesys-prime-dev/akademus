@@ -12,6 +12,7 @@ $payments = $payments ?? [];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akademus | Payment Review</title>
+    <?= theme_favicon_tags() ?>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -127,7 +128,7 @@ $payments = $payments ?? [];
                                     <td>₱<?= number_format($p['amount_paid'], 2) ?></td>
                                     <td>
                                         <?php if (! empty($p['proof_of_payment'])): ?>
-                                            <a href="<?= base_url($p['proof_of_payment']) ?>" target="_blank" class="btn" style="background:#e8f0ff;color:var(--primary);">View</a>
+                                            <a href="<?= base_url($p['proof_of_payment']) ?>" target="_blank" rel="noopener noreferrer" class="btn" style="background:#e8f0ff;color:var(--primary);">View</a>
                                         <?php else: ?>
                                             —
                                         <?php endif; ?>
@@ -184,7 +185,7 @@ $payments = $payments ?? [];
                                     <td>₱<?= number_format($p['amount_paid'], 2) ?></td>
                                     <td>
                                         <?php if (! empty($p['proof_of_payment'])): ?>
-                                            <a href="<?= base_url($p['proof_of_payment']) ?>" target="_blank" class="btn" style="background:#e8f0ff;color:var(--primary);">View</a>
+                                            <a href="<?= base_url($p['proof_of_payment']) ?>" target="_blank" rel="noopener noreferrer" class="btn" style="background:#e8f0ff;color:var(--primary);">View</a>
                                         <?php else: ?>
                                             —
                                         <?php endif; ?>

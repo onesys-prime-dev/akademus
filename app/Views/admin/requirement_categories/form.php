@@ -14,6 +14,7 @@ $action    = $action    ?? 'create';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akademus | <?= ($action === 'edit') ? 'Edit Category' : 'Create Category' ?></title>
+    <?= theme_favicon_tags() ?>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -114,6 +115,9 @@ $action    = $action    ?? 'create';
                         <?php foreach ($documents as $i => $doc): ?>
                         <div class="doc-row" data-index="<?= $i ?>">
                             <div class="doc-row-fields">
+                                <input type="hidden"
+                                       name="documents[<?= $i ?>][requirement_id]"
+                                       value="<?= esc($doc['requirement_id']) ?>">
                                 <input type="text"
                                        name="documents[<?= $i ?>][requirement_name]"
                                        class="form-input doc-full"
@@ -131,6 +135,13 @@ $action    = $action    ?? 'create';
                                            value="1"
                                            <?= !empty($doc['is_required']) ? 'checked' : '' ?>>
                                     Required
+                                </label>
+                                <label class="doc-required-label">
+                                    <input type="checkbox"
+                                           name="documents[<?= $i ?>][is_fast_track_required]"
+                                           value="1"
+                                           <?= !empty($doc['is_fast_track_required']) ? 'checked' : '' ?>>
+                                    Fast Track Required
                                 </label>
                             </div>
                             <button type="button" class="btn-remove-doc" onclick="removeDoc(this)">✕</button>
@@ -160,6 +171,9 @@ $action    = $action    ?? 'create';
                 div.dataset.index = i;
                 div.innerHTML = `
                     <div class="doc-row-fields">
+                        <input type="hidden"
+                               name="documents[${i}][requirement_id]"
+                               value="${data.requirement_id || ''}">
                         <input type="text"
                                name="documents[${i}][requirement_name]"
                                class="form-input doc-full"
@@ -177,6 +191,13 @@ $action    = $action    ?? 'create';
                                    value="1"
                                    ${data.is_required !== false ? 'checked' : ''}>
                             Required
+                        </label>
+                        <label class="doc-required-label">
+                            <input type="checkbox"
+                                   name="documents[${i}][is_fast_track_required]"
+                                   value="1"
+                                   ${data.is_fast_track_required ? 'checked' : ''}>
+                            Fast Track Required
                         </label>
                     </div>
                     <button type="button" class="btn-remove-doc" onclick="removeDoc(this)">✕</button>

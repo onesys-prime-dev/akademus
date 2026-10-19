@@ -1,6 +1,7 @@
 <?php
 helper('form_field');
 $fields = get_field_configs(4);
+$currentYear = (int) date('Y');
 ?>
 
 <form 
@@ -89,7 +90,7 @@ $fields = get_field_configs(4);
                         <?php if (field_visible($fields, 'school_year_start') || field_visible($fields, 'school_year_end')): ?>
                         <div class="application-form-input-field medium-field">
                             <label class="category-text-color">
-                                SCHOOL YEAR
+                                School Year
                                 <?php if (field_required($fields, 'school_year_start')): ?><span class="required-field">*</span><?php endif; ?>
                             </label>
                             <div style="display:flex; gap:6px; align-items:center;">
@@ -97,7 +98,7 @@ $fields = get_field_configs(4);
                                 <input type="number" name="school_year_start"
                                        placeholder="<?= esc(field_placeholder($fields, 'school_year_start', 'e.g. 2024')) ?>"
                                        value="<?= esc($data['school_year_start'] ?? '') ?>"
-                                       min="2000" max="2099" style="width:90px;"
+                                       min="2000" max="<?= $currentYear ?>"
                                        <?= field_required($fields, 'school_year_start') ? 'required' : '' ?>>
                                 <?php endif; ?>
                                 <?php if (field_visible($fields, 'school_year_start') && field_visible($fields, 'school_year_end')): ?>
@@ -107,7 +108,7 @@ $fields = get_field_configs(4);
                                 <input type="number" name="school_year_end"
                                        placeholder="<?= esc(field_placeholder($fields, 'school_year_end', 'e.g. 2025')) ?>"
                                        value="<?= esc($data['school_year_end'] ?? '') ?>"
-                                       min="2000" max="2099" style="width:90px;"
+                                       min="2000" max="<?= $currentYear ?>"
                                        <?= field_required($fields, 'school_year_end') ? 'required' : '' ?>>
                                 <?php endif; ?>
                             </div>
@@ -127,7 +128,7 @@ $fields = get_field_configs(4);
                                 <?= esc(field_label($fields, 'gwa', 'GENERAL AVERAGE (GWA)')) ?>
                                 <?php if (field_required($fields, 'gwa')): ?><span class="required-field">*</span><?php endif; ?>
                             </label>
-                            <input type="text" name="gwa"
+                            <input type="number" name="gwa" step="0.01" min="60" max="100"
                                    placeholder="<?= esc(field_placeholder($fields, 'gwa', 'e.g., 92.3')) ?>"
                                    value="<?= esc($data['gwa'] ?? '') ?>"
                                    <?= field_required($fields, 'gwa') ? 'required' : '' ?>>

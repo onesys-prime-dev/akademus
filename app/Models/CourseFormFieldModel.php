@@ -37,9 +37,9 @@ class CourseFormFieldModel extends Model
 
     public function getOverriddenFields($courseId)
     {
-        return $this->where('course_id', $courseId)
+        $rows = $this->where('course_id', $courseId)
             ->where('override_global', true)
-            ->pluck('field_name')
-            ->getResultArray();
+            ->findAll();
+        return array_column($rows, 'field_name');
     }
 }

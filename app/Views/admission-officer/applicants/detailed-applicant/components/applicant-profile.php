@@ -9,6 +9,12 @@
             </div>
         </div>
 
+        <?php if (!empty($profile['is_fast_track'])): ?>
+        <div class="applicant-profile__status status-badge status-badge--fast-track">
+            Fast Track
+        </div>
+        <?php endif; ?>
+
         <div class="applicant-profile__status status-badge status-badge--<?= esc($profile['status'] ?? 'pending') ?>">
             <?= esc(ucwords(str_replace('_', ' ', $profile['application_status'] ?? 'Pending'))) ?>
         </div>

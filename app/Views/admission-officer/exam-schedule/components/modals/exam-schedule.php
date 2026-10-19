@@ -8,6 +8,7 @@
 
         <div class="modal__body">
             <form class="form--fields" id="exam-schedule-form">
+                <?= csrf_field() ?>
                 <input type="hidden" name="mode" value="create">
                 <input type="hidden" name="exam_schedule_id">
 

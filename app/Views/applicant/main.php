@@ -1,4 +1,5 @@
 <!-- dashboard/main.php -->
+<?php $show_tour = $show_tour ?? false; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,10 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akademus | <?= $title ?></title>
-    <?php $favicon = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/favicons/favicon-32x32.png'); ?>
-    <link rel="icon" type="image/png" sizes="32x32" href="<?= $favicon ?>">
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/favicons/favicon-16x16.png') ?>">
-    <link rel="apple-touch-icon" sizes="180x180" href="<?= !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('assets/images/favicons/favicon-180x180.png') ?>">
+    <?= theme_favicon_tags() ?>
 
     <?= theme_css_vars() ?>
 
@@ -46,6 +44,10 @@
     <link rel="stylesheet" href="<?= base_url("assets/css/pages/{$pageName}.css?v=" . time()) ?>">
     <?php endif; ?>
 
+<meta name="csrf-token" content="<?= csrf_hash() ?>">
+<script>
+(function(){var _f=window.fetch;window.fetch=function(u,o){o=o||{};if(o.method&&o.method.toUpperCase()!=='GET'){var t=document.querySelector('meta[name="csrf-token"]');if(t){o.headers=o.headers||{};if(o.headers instanceof Headers){o.headers.set('X-CSRF-TOKEN',t.content);}else{o.headers['X-CSRF-TOKEN']=t.content;}}}return _f.call(this,u,o);};})();
+</script>
 </head>
 
 <body>
@@ -77,7 +79,7 @@
                 </button>
                 <h1><?= $title ?></h1>
                 <!-- Notification Bell -->
-                <div style="position:relative;" id="notifWrap">
+                <div style="position:relative;" id="notifWrap" data-tour="notif-bell">
                     <button id="notifBell" onclick="toggleNotifDropdown()" style="
                         position:relative;background:none;border:none;
                         cursor:pointer;display:flex;align-items:center;padding:4px;
@@ -250,7 +252,7 @@
             const data = await res.json();
 
             if (data.success) {
-                document.getElementById('changePwModal').remove();
+                window.location.reload();
             } else {
                 errBox.textContent   = data.message;
                 errBox.style.display = 'block';
@@ -393,5 +395,196 @@
             });
         })();
     </script>
+
+    <?php if ($show_tour && !session()->get('temp_password')): ?>
+    <!-- First-login onboarding tour -->
+    <style>
+        #tourHighlight {
+            position: fixed; z-index: 100000; border-radius: 10px;
+            box-shadow: 0 0 0 9999px rgba(13, 30, 56, 0.65);
+            transition: top .25s ease, left .25s ease, width .25s ease, height .25s ease;
+            pointer-events: none;
+        }
+        #tourTooltip {
+            position: fixed; z-index: 100001; width: 300px; max-width: calc(100vw - 32px);
+            background: #fff; border-radius: 12px; padding: 18px 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            font-family: inherit; transition: top .25s ease, left .25s ease;
+        }
+        #tourTooltip h4 { margin: 0 0 6px; font-size: 15px; font-weight: 700; color: #0d1e38; }
+        #tourTooltip p { margin: 0 0 14px; font-size: 13px; line-height: 1.5; color: #4a5568; }
+        .tour-actions { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+        .tour-step-count { font-size: 11px; color: #a0aec0; font-weight: 600; }
+        .tour-btns { display: flex; gap: 8px; }
+        .tour-btn {
+            border: none; border-radius: 7px; font-size: 12.5px; font-weight: 700;
+            padding: 7px 14px; cursor: pointer; font-family: inherit;
+        }
+        .tour-btn--skip { background: transparent; color: #7a8aaa; padding-left: 0; }
+        .tour-btn--next { background: var(--primary); color: #fff; }
+    </style>
+
+    <div id="tourHighlight" hidden></div>
+    <div id="tourTooltip" hidden role="dialog" aria-modal="true" aria-labelledby="tourTooltipTitle">
+        <h4 id="tourTooltipTitle"></h4>
+        <p id="tourTooltipBody"></p>
+        <div class="tour-actions">
+            <button type="button" class="tour-btn tour-btn--skip" id="tourSkipBtn">Skip tour</button>
+            <span class="tour-step-count" id="tourStepCount"></span>
+            <div class="tour-btns">
+                <button type="button" class="tour-btn" id="tourBackBtn" style="background:#eef2f7;color:#4a5568;">Back</button>
+                <button type="button" class="tour-btn tour-btn--next" id="tourNextBtn">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function () {
+        var DISMISS_URL = '<?= base_url('dashboard/tour/dismiss') ?>';
+
+        var allSteps = [
+            { selector: null, title: 'Welcome to Akademus!', body: "Let's take a quick tour of your applicant dashboard so you know where everything is." },
+            { selector: '[data-tour="quick-actions"]', title: 'Quick Actions', body: 'Jump straight to uploading documents or paying fees from these buttons.' },
+            { selector: '[data-tour="progress-stepper"]', title: 'Application Progress', body: 'Track your overall progress here, from account creation to enrollment.' },
+            { selector: '[data-tour="checklist-cards"]', title: 'Checklists', body: "See at a glance what's left in your form, document, and payment checklists." },
+            { selector: '[data-tour="sidebar-applicant-form"]', title: 'Applicant Form', body: 'Fill out and update your application details here.' },
+            { selector: '[data-tour="sidebar-requirements"]', title: 'Requirements', body: 'Upload the documents needed for your application here.' },
+            { selector: '[data-tour="sidebar-tracking"]', title: 'Tracking Progress', body: 'Check detailed, step-by-step status updates on your application.' },
+            { selector: '[data-tour="sidebar-payments"]', title: 'Payments', body: "Pay your admission, reservation, and other fees from this section once they're due." },
+            { selector: '[data-tour="notif-bell"]', title: 'Notifications', body: 'Click the bell any time to see replies from Admission Officers.' },
+            { selector: '[data-tour="sidebar-support"]', title: 'Need Help?', body: 'Visit FAQ & Chat Support anytime you have questions.' }
+        ];
+
+        var steps = allSteps.filter(function (s) {
+            return !s.selector || document.querySelector(s.selector);
+        });
+
+        if (!steps.length) return;
+
+        var current = 0;
+        var highlight = document.getElementById('tourHighlight');
+        var tooltip = document.getElementById('tourTooltip');
+        var titleEl = document.getElementById('tourTooltipTitle');
+        var bodyEl = document.getElementById('tourTooltipBody');
+        var countEl = document.getElementById('tourStepCount');
+        var backBtn = document.getElementById('tourBackBtn');
+        var nextBtn = document.getElementById('tourNextBtn');
+        var skipBtn = document.getElementById('tourSkipBtn');
+
+        function isInSidebar(el) {
+            return !!el.closest('.sidebar-container');
+        }
+
+        function setSidebarOpen(open) {
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.getElementById('sidebar-overlay');
+            if (!sidebar || !overlay || window.innerWidth > 768) return;
+            sidebar.classList.toggle('sidebar-open', open);
+            overlay.classList.toggle('sidebar-open', open);
+        }
+
+        function render() {
+            var step = steps[current];
+            var target = step.selector ? document.querySelector(step.selector) : null;
+
+            titleEl.textContent = step.title;
+            bodyEl.textContent = step.body;
+            countEl.textContent = (current + 1) + ' of ' + steps.length;
+            backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
+            nextBtn.textContent = current === steps.length - 1 ? 'Finish' : 'Next';
+
+            highlight.hidden = false;
+            tooltip.hidden = false;
+
+            if (target) {
+                setSidebarOpen(isInSidebar(target));
+                target.scrollIntoView({ block: 'center', behavior: 'auto' });
+                positionOn(target);
+            } else {
+                setSidebarOpen(false);
+                positionCentered();
+            }
+        }
+
+        function positionOn(target) {
+            var rect = target.getBoundingClientRect();
+            var pad = 8;
+
+            highlight.style.top = Math.max(rect.top - pad, 0) + 'px';
+            highlight.style.left = Math.max(rect.left - pad, 0) + 'px';
+            highlight.style.width = (rect.width + pad * 2) + 'px';
+            highlight.style.height = (rect.height + pad * 2) + 'px';
+
+            var tW = tooltip.offsetWidth || 300;
+            var tH = tooltip.offsetHeight || 140;
+            var margin = 14;
+
+            var top = rect.bottom + margin;
+            if (top + tH > window.innerHeight) {
+                top = rect.top - tH - margin;
+            }
+            if (top < 8) top = 8;
+
+            var left = rect.left;
+            if (left + tW > window.innerWidth - 8) {
+                left = window.innerWidth - tW - 8;
+            }
+            if (left < 8) left = 8;
+
+            tooltip.style.top = top + 'px';
+            tooltip.style.left = left + 'px';
+        }
+
+        function positionCentered() {
+            highlight.style.top = '-9999px';
+            highlight.style.left = '-9999px';
+            highlight.style.width = '0px';
+            highlight.style.height = '0px';
+
+            var tW = tooltip.offsetWidth || 300;
+            var tH = tooltip.offsetHeight || 140;
+
+            tooltip.style.top = ((window.innerHeight - tH) / 2) + 'px';
+            tooltip.style.left = ((window.innerWidth - tW) / 2) + 'px';
+        }
+
+        function finish() {
+            highlight.hidden = true;
+            tooltip.hidden = true;
+            setSidebarOpen(false);
+
+            fetch(DISMISS_URL, { method: 'POST' }).catch(function () {});
+        }
+
+        nextBtn.addEventListener('click', function () {
+            if (current === steps.length - 1) {
+                finish();
+                return;
+            }
+            current++;
+            render();
+        });
+
+        backBtn.addEventListener('click', function () {
+            if (current === 0) return;
+            current--;
+            render();
+        });
+
+        skipBtn.addEventListener('click', finish);
+
+        window.addEventListener('resize', function () {
+            if (tooltip.hidden) return;
+            render();
+        });
+
+        render();
+    })();
+    </script>
+    <?php endif; ?>
+
+    <?php if (!empty($isPreview)): ?>
+        <?= view('admin/_preview_runtime') ?>
+    <?php endif; ?>
 </body>
 </html>

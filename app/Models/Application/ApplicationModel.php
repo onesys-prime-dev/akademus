@@ -18,7 +18,10 @@ class ApplicationModel extends Model
         'program_id',
         'school_year',
         'semester',
-        'application_status'
+        'application_status',
+        'revision_note',
+        'revision_pages',
+        'is_fast_track',
     ];
 
     protected $useTimestamps = true;

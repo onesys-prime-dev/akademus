@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Application\FamilyBackgroundModel;
+use App\Models\Application\PersonalInformationModel;
+
 class ApplicantProfileService
 {
     public function getViewMap(): array
@@ -12,6 +15,7 @@ class ApplicantProfileService
             'exam'            => 'admission-officer/applicants/detailed-applicant/components/content/exam',
             'admission_fee'   => 'admission-officer/applicants/detailed-applicant/components/content/admission-fee',
             'reservation_fee' => 'admission-officer/applicants/detailed-applicant/components/content/reservation-fee',
+            'fast_track_fee'  => 'admission-officer/applicants/detailed-applicant/components/content/fast-track-fee',
             'clearance'       => 'admission-officer/applicants/detailed-applicant/components/content/clearance',
         ];
     }
@@ -31,7 +35,11 @@ class ApplicantProfileService
                 CONCAT(u.lastname, ", ", u.firstname) as applicant_name,
                 u.user_id,
                 u.email,
-                p.program_name
+                p.program_name,
+                ap.application_status as form_status,
+                ap.revision_note,
+                ap.revision_pages,
+                ap.is_fast_track
             ')
             ->join('users u', 'u.user_id = a.user_id')
             ->join('programs p', 'p.program_id = a.program_id')
@@ -48,20 +56,21 @@ class ApplicantProfileService
         return $row;
     }
 
-    public function getTabPayload(int $applicantId, string $tab, array $filters = [], int $limit = 10, int $offset = 0): array
+    public function getTabPayload(int $applicantId, string $tab, array $filters = [], int $limit = null, int $offset = 0): array
     {
         return match ($tab) {
-            'applicant_form'  => $this->getApplicantFormPayload($applicantId),
+            'applicant_form'  => $this->getApplicantFormPayload($applicantId, $filters, $limit, $offset),
             'requirements'    => $this->getRequirementsPayload($applicantId, $filters, $limit, $offset),
             'exam'            => $this->getExamPayload($applicantId, $filters, $limit, $offset),
             'admission_fee'   => $this->getAdmissionFeePayload($applicantId),
             'reservation_fee' => $this->getReservationFeePayload($applicantId),
+            'fast_track_fee'  => $this->getFastTrackFeePayload($applicantId),
             'clearance'       => $this->getClearancePayload($applicantId, $filters, $limit, $offset),
-            default           => $this->getRequirementsPayload($applicantId, $filters, $limit, $offset),
+            default           => '',
         };
     }
 
-    private function getApplicantFormPayload(int $applicantId): array
+    private function getApplicantFormPayload(int $applicantId, array $filters, int $limit, int $offset): array
     {
         $db = \Config\Database::connect();
 
@@ -76,17 +85,17 @@ class ApplicantProfileService
 
         $applicationId = $app['application_id'];
 
-        $personal = $db->table('personal_informations')
+        $personal = (new PersonalInformationModel())
             ->where('application_id', $applicationId)
-            ->get()->getRowArray() ?? [];
+            ->first() ?? [];
 
         $educational = $db->table('educational_backgrounds')
             ->where('application_id', $applicationId)
-            ->get()->getResultArray() ?? [];
+            ->get()->getResultArray();
 
-        $family = $db->table('family_backgrounds')
+        $family = (new FamilyBackgroundModel())
             ->where('application_id', $applicationId)
-            ->get()->getResultArray() ?? [];
+            ->findAll();
 
         return [
             'personal'    => $personal,
@@ -101,6 +110,7 @@ class ApplicantProfileService
 
         $builder = $db->table('program_requirements pr')
             ->select('
+                ad.document_id,
                 pr.program_requirement_id,
                 r.requirement_name as document_name,
                 rc.category_name as category,
@@ -172,6 +182,11 @@ class ApplicantProfileService
                 'es.max_slots',
                 'es.booked_slots',
                 'es.status       AS schedule_status',
+                'eb.result_status',
+                'eb.score',
+                'eb.result_remarks',
+                'eb.result_recorded_at',
+                'eb.result_recorded_by',
             ])
             ->join('exam_schedules es', 'es.exam_schedule_id = eb.exam_schedule_id')
             ->where('eb.applicant_id', $applicantId)
@@ -193,6 +208,11 @@ class ApplicantProfileService
         return ['payment' => $this->fetchPaymentRecord($applicantId, 'RESERVATION_FEE')];
     }
 
+    private function getFastTrackFeePayload(int $applicantId): array
+    {
+        return ['payment' => $this->fetchPaymentRecord($applicantId, 'FAST_TRACK_FEE')];
+    }
+
     private function fetchPaymentRecord(int $applicantId, string $feeCode): ?array
     {
         $db = \Config\Database::connect();
@@ -200,7 +220,9 @@ class ApplicantProfileService
         return $db->table('payment p')
             ->select([
                 'p.payment_id',
+                'p.payment_source',
                 'p.reference_num',
+                'p.external_reference',
                 'p.amount_paid',
                 'p.payment_status',
                 'p.payment_date',
@@ -209,17 +231,28 @@ class ApplicantProfileService
                 'p.reviewed_by',
                 'p.reviewed_at',
                 'p.created_at',
+
                 'pm.name  AS method_name',
                 'pft.name AS fee_type_name',
                 'pma.account_number',
                 'pma.account_name',
+
+                'pgt.gateway_name',
+                'pgt.gateway_reference',
+                'pgt.gateway_status',
+                'pgt.settlement_status',
+                'pgt.checkout_url',
+                'pgt.paid_at',
+                'pgt.webhook_received_at',
+
                 'u.firstname AS reviewer_firstname',
                 'u.lastname  AS reviewer_lastname',
             ])
-            ->join('payment_method pm',         'pm.payment_method_id = p.payment_method_id',                   'left')
-            ->join('payment_fee_type pft',       'pft.payment_fee_type_id = p.payment_fee_type_id',             'left')
+            ->join('payment_method pm', 'pm.payment_method_id = p.payment_method_id', 'left')
+            ->join('payment_fee_type pft', 'pft.payment_fee_type_id = p.payment_fee_type_id', 'left')
             ->join('payment_method_account pma', 'pma.payment_method_account_id = p.payment_method_account_id', 'left')
-            ->join('users u',                    'u.user_id = p.reviewed_by',                                   'left')
+            ->join('payment_gateway_transactions pgt', 'pgt.payment_id = p.payment_id', 'left')
+            ->join('users u', 'u.user_id = p.reviewed_by', 'left')
             ->where('p.applicant_id', $applicantId)
             ->where('pft.code', $feeCode)
             ->orderBy('p.created_at', 'DESC')
@@ -271,42 +304,6 @@ class ApplicantProfileService
             ->getResultArray();
 
         return $this->normalizeCounts($results);
-    }
-
-    private function getExamStatusCounts(int $applicantId, array $filters = []): array
-    {
-        return [];
-    }
-
-    private function getReservationFeeStatusCounts(int $applicantId, array $filters = []): array
-    {
-        return [];
-    }
-
-    private function getClearanceStatusCounts(int $applicantId, array $filters = []): array
-    {
-        return [];
-        /*
-        $db = \Config\Database::connect();
-
-        $builder = $db->table('clearances c')
-            ->select('c.status, COUNT(*) as total')
-            ->where('c.applicant_id', $applicantId);
-
-        if (!empty($filters['search'])) {
-            $builder->groupStart()
-                ->like('c.clearance_name', $filters['search'])
-                ->orLike('c.status', $filters['search'])
-                ->groupEnd();
-        }
-
-        $results = $builder
-            ->groupBy('c.status')
-            ->get()
-            ->getResultArray();
-
-        return $this->normalizeCounts($results);
-        */
     }
 
     private function normalizeCounts(array $results): array

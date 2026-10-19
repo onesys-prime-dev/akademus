@@ -12,19 +12,25 @@ $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') =
         <span class="application-tabs__label">Requirements</span>
     </div>
 
+    <div class="application-tabs__item <?= $activeTab === 'admission_fee' ? 'application-tabs__item--active' : '' ?>" data-tab="admission_fee">
+        <span class="application-tabs__label">Admission Processing Fee</span>
+    </div>
+
     <?php if ($examEnabled): ?>
     <div class="application-tabs__item <?= $activeTab === 'exam' ? 'application-tabs__item--active' : '' ?>" data-tab="exam">
         <span class="application-tabs__label">Exam</span>
     </div>
     <?php endif; ?>
 
-    <div class="application-tabs__item <?= $activeTab === 'admission_fee' ? 'application-tabs__item--active' : '' ?>" data-tab="admission_fee">
-        <span class="application-tabs__label">Admission Processing Fee</span>
-    </div>
-
     <div class="application-tabs__item <?= $activeTab === 'reservation_fee' ? 'application-tabs__item--active' : '' ?>" data-tab="reservation_fee">
         <span class="application-tabs__label">Reservation Fee</span>
     </div>
+
+    <?php if (!empty($profile['is_fast_track'])): ?>
+    <div class="application-tabs__item <?= $activeTab === 'fast_track_fee' ? 'application-tabs__item--active' : '' ?>" data-tab="fast_track_fee">
+        <span class="application-tabs__label">Fast Track Fee</span>
+    </div>
+    <?php endif; ?>
 
     <div class="application-tabs__item <?= $activeTab === 'clearance' ? 'application-tabs__item--active' : '' ?>" data-tab="clearance">
         <span class="application-tabs__label">Clearance</span>

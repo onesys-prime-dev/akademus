@@ -22,10 +22,16 @@ class FormPageModel extends Model
 
     /**
      * Only enabled pages — what the applicant form renders.
+     *
+     * Hit on nearly every applicant-portal page load and identical for
+     * every applicant, so it's cached for a short window rather than
+     * re-queried from scratch every time.
      */
     public function getEnabledOrdered(): array
     {
-        return $this->where('is_enabled', 1)->orderBy('sort_order', 'ASC')->findAll();
+        return cache_remember('form_pages_enabled_ordered', 120, function () {
+            return $this->where('is_enabled', 1)->orderBy('sort_order', 'ASC')->findAll();
+        });
     }
 
     /**

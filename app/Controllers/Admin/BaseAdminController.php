@@ -12,10 +12,10 @@ class BaseAdminController extends Controller
 
     public function __construct()
     {
-        // Check admin authentication here
-        // if (!auth()->loggedIn() || !auth()->user()->is_admin) {
-        //     return redirect()->to('/auth/login');
-        // }
+        if (!session()->get('admin_logged_in')) {
+            redirect()->to('admin/login')->send();
+            exit;
+        }
     }
 
     /**

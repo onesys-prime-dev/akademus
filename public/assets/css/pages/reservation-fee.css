@@ -129,36 +129,222 @@
     margin-bottom: 28px;
 }
 
+/* ─── Banner section tabs ─── */
+
+.apf-banner__tabs {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    width: fit-content;
+
+    padding: 6px;
+
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.apf-banner__tab {
+    appearance: none;
+
+    padding: 10px 18px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: transparent;
+
+    color: rgba(255, 255, 255, 0.75);
+
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* Inactive Hover */
+
+.apf-banner__tab:not(.apf-banner__tab--active):hover {
+    background: rgba(255, 255, 255, 0.12);
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+/* Active */
+
+.apf-banner__tab--active {
+    background: #ffffff;
+
+    color: var(--primary);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.apf-banner__tab--active:hover {
+    color: var(--primary-dark);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 1),
+        0 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+.apf-banner__tabs--locked .apf-banner__tab:not(.apf-banner__tab--active) {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.apf-banner__tab:disabled {
+    pointer-events: none;
+}
+
+
+/* Only tab-controlled sections are hidden */
+.apf-section[data-apf-section] {
+    display: none;
+}
+
+.apf-section[data-apf-section].apf-section--active {
+    display: flex;
+}
+
+
+
 /* ─── Payment method tabs ─── */
 .apf-methods {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     gap: 10px;
 }
 
 .apf-method-btn {
-    padding: 10px 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+
+    padding: 12px 16px;
+
     border-radius: 10px;
-    border: 1.5px solid rgba(255,255,255,0.3);
-    background: rgba(255,255,255,0.08);
-    color: rgba(255,255,255,0.75);
+    border: 1px solid #e5e7eb;
+
+    background: #ffffff;
+
+    color: #111827;
+
     font-size: 14px;
     font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
     font-family: inherit;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+
+    position: relative;
 }
 
 .apf-method-btn:hover {
-    background: rgba(255,255,255,0.15);
-    border-color: rgba(255,255,255,0.5);
-    color: #fff;
+    background: #f8fafc;
+
+    border-color: #cbd5e1;
+
+    color: #111827;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
+.apf-method-btn:active {
+    transform: scale(0.98);
+}
+
+.apf-method-btn__icon {
+    width: 28px;
+    height: 28px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
+}
+
+.apf-method-btn input[type="radio"] {
+    display: none;
+}
+
+.apf-method-btn::after {
+    content: '';
+
+    margin-left: auto;
+
+    width: 18px;
+    height: 18px;
+
+    border: 2px solid #cbd5e1;
+    border-radius: 50%;
+
+    flex-shrink: 0;
+
+    transition: all 0.2s ease;
+}
+
+/* Active */
+
 .apf-method-btn--active {
-    background: rgba(255,255,255,0.18);
-    border-color: #fff;
-    color: #fff;
+    background: #f8fafc;
+
+    border-color: #2563eb;
+
+    color: #111827;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.apf-method-btn--active::after {
+    border-color: #2563eb;
+
+    background: #2563eb;
+
+    box-shadow: inset 0 0 0 4px #ffffff;
+}
+
+/* Disabled */
+
+.apf-method-btn:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+.apf-method-btn:disabled:hover {
+    background: #ffffff;
+
+    border-color: #e5e7eb;
+
+    color: #111827;
+
+    box-shadow: none;
 }
 
 /* ─── Section card ─── */
@@ -213,6 +399,105 @@
     flex-direction: column;
 }
 
+.apf-info-grid {
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.apf-proof-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 14px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #eef4ff;
+    color: var(--primary);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.apf-proof-btn:hover {
+    background: #dfeaff;
+}
+
+.apf-proof-modal {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+
+    z-index: 9999;
+}
+
+.apf-proof-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.apf-proof-modal__backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(0,0,0,.75);
+}
+
+.apf-proof-modal__content {
+    position: relative;
+
+    width: min(1000px, 95vw);
+    height: min(90vh, 900px);
+
+    background: #fff;
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    z-index: 2;
+}
+
+.apf-proof-modal__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(0,0,0,.08);
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+    z-index: 5;
+}
+
+.apf-proof-modal__image {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+.apf-proof-modal__pdf {
+    width: 100%;
+    height: 100%;
+
+    border: none;
+}
+
 .apf-info-row {
     display: flex;
     align-items: center;
@@ -259,6 +544,99 @@
     flex-shrink: 0;
     margin-top: 1px;
     color: #d97706;
+}
+
+/* ─── Counter payment steps ─── */
+
+.apf-counter-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    padding: 16px;
+
+    margin-bottom: 20px;
+
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-md);
+
+    background: linear-gradient(
+        180deg,
+        #ffffff 0%,
+        var(--bg-muted) 100%
+    );
+}
+
+.apf-counter-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+
+    position: relative;
+
+    padding: 14px 16px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.apf-counter-step:hover {
+    border-color: rgba(0, 64, 166, 0.25);
+
+    box-shadow: 0 8px 20px rgba(0, 64, 166, 0.08);
+
+    transform: translateY(-1px);
+}
+
+.apf-counter-step__number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+
+    background: rgba(0, 64, 166, 0.08);
+
+    color: var(--primary);
+
+    font-size: 13px;
+    font-weight: 800;
+
+    flex-shrink: 0;
+}
+
+.apf-counter-step__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.apf-counter-step__title {
+    margin: 0;
+
+    color: var(--text-primary);
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.apf-counter-step__text {
+    margin: 0;
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+    line-height: 1.5;
 }
 
 /* ─── File Upload Zone ─── */
@@ -366,6 +744,190 @@
     background: #fee2e2;
     border-color: #fca5a5;
     color: var(--color-danger);
+}
+
+/* ─────────────────────────────────────────
+   PAY NOW BUTTON
+───────────────────────────────────────── */
+
+.apf-paynow-row{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:10px;
+}
+
+.apf-paynow-btn{
+    width:fit-content;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:14px 24px;
+
+    border:none;
+    border-radius:12px;
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--primary-dark)
+    );
+
+    color:#fff;
+    font-size:15px;
+    font-weight:700;
+    font-family:inherit;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+.apf-paynow-btn:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 10px 24px rgba(0,64,166,.25);
+}
+
+.apf-paynow-note{
+    font-size:12px;
+    color:var(--text-muted);
+}
+
+/* ─────────────────────────────────────────
+   SMARTPAY CHECKOUT MODAL
+───────────────────────────────────────── */
+
+.smartpay-modal{
+    position:fixed;
+    inset:0;
+
+    display:none;
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    background:rgba(0,0,0,.55);
+
+    z-index:9999;
+}
+
+.smartpay-modal.active{
+    display:flex;
+}
+
+.smartpay-modal-content{
+    width:100%;
+    max-width:420px;
+
+    background:#fff;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    animation:smartpayPop .2s ease;
+}
+
+@keyframes smartpayPop{
+
+    from{
+        opacity:0;
+        transform:scale(.95);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+.smartpay-header{
+    padding:18px 22px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    border-bottom:1px solid #eee;
+}
+
+.smartpay-header h3{
+    font-size:18px;
+    font-weight:700;
+}
+
+.smartpay-close{
+    border:none;
+    background:none;
+
+    font-size:28px;
+
+    cursor:pointer;
+}
+
+.smartpay-body{
+    padding:28px 24px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    gap:18px;
+}
+
+.smartpay-amount{
+    font-size:38px;
+    font-weight:800;
+
+    color:var(--primary);
+}
+
+.smartpay-subtitle{
+    font-size:13px;
+    color:#666;
+}
+
+.smartpay-method-preview{
+    width:100%;
+
+    padding:14px 16px;
+
+    border-radius:12px;
+
+    background:#f5f7fb;
+
+    text-align:center;
+
+    font-weight:600;
+}
+
+.smartpay-proceed-btn{
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+    border-radius:12px;
+
+    background:var(--primary);
+
+    color:#fff;
+
+    font-size:15px;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+.smartpay-proceed-btn:hover{
+    opacity:.92;
 }
 
 /* ─── Submit row ─── */

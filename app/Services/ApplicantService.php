@@ -69,7 +69,8 @@ class ApplicantService
                 CONCAT(UPPER(LEFT(ass.applicant_type, 1)), LOWER(SUBSTRING(ass.applicant_type, 2))) as applicant_type,
                 p.program_code as program,
                 a.application_status as status,
-                a.created_at as date_added
+                a.created_at as date_added,
+                ass.is_fast_track
             ")
             ->orderBy('a.created_at', 'DESC')
             ->limit($limit, $offset)
@@ -134,6 +135,9 @@ class ApplicantService
     public function dashboardSearchApplicants($query, $limit = 10) {
         $builder = $this->baseQuery(['search' => $query]);
 
+        $db = \Config\Database::connect();
+        $escapedQuery = $db->escapeLikeString($query);
+
         return $builder
             ->select("
                 a.applicant_id,
@@ -146,9 +150,9 @@ class ApplicantService
                 a.created_at as date_added
             ")
             ->orderBy("
-                CASE 
-                    WHEN u.firstname LIKE '{$query}%' THEN 1
-                    WHEN u.lastname LIKE '{$query}%' THEN 2
+                CASE
+                    WHEN u.firstname LIKE '{$escapedQuery}%' THEN 1
+                    WHEN u.lastname LIKE '{$escapedQuery}%' THEN 2
                     ELSE 3
                 END
             ", '', false)

@@ -4,6 +4,17 @@
     gap: 20px;
 }
 
+/* ---------------------
+   APPLE-STYLE CARD PASS (scoped to this page only)
+   Trades the shared .card component's hard 1px border for a softer,
+   more diffused shadow and a slightly larger radius.
+--------------------- */
+.dashboard .card {
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+}
+
 .dashboard__section--middle {
     display: flex;
     gap: 20px;
@@ -23,6 +34,7 @@
 
 .stats-overview__row {
     display: flex;
+    align-items: flex-start;
     gap: 20px;
     flex: 1;
 }
@@ -99,7 +111,7 @@
 }
 
 .metric__icon--application {
-    background-color: rgba(112, 127, 221, 0.15);
+    background-color: color-mix(in srgb, var(--primary) 15%, transparent);
 }
 
 .metric__icon--approved {
@@ -197,6 +209,7 @@
 .passing-rate__legend--box {
     width: 10px;
     height: 10px;
+    border-radius: 50%;
 }
 
 .passing-rate__legend--title {
@@ -346,7 +359,7 @@
 .applicants-per-status__legend--box {
     width: 10px;
     height: 10px;
-    border-radius: 2px;
+    border-radius: 50%;
 }
 
 .applicants-per-status__legend--box-submitted { background: #3b82f6; }
@@ -474,7 +487,7 @@
     width: var(--progress);
     border-radius: 999px;
 
-    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
 
     transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -610,18 +623,19 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    background: #ffffff;
+    /* Frosted-glass: translucent over the solid blue calendar-overview panel
+       behind it, so the panel's color reads softly through the card. */
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-radius: 16px;
     padding: 16px;
     cursor: pointer;
 
-    border: 1px solid rgba(0, 0, 0, 0.04);
-
     /* smoother animation curve */
-    transition: 
+    transition:
         transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
         box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-        border-color 0.2s ease,
         background 0.2s ease;
 
     /* subtle base shadow */
@@ -638,8 +652,6 @@
     box-shadow:
         0 10px 25px rgba(0, 0, 0, 0.08),
         0 4px 10px rgba(0, 0, 0, 0.04);
-
-    border-color: rgba(0, 0, 0, 0.08);
 }
 
 .exam-schedule__card--row {

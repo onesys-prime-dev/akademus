@@ -14,7 +14,7 @@ $isSubmittedPHP = !empty($is_submitted);
             </svg>
         </div>
         <h3 id="af-modal-title" class="af-modal__title">Submit Application?</h3>
-        <p class="af-modal__body">
+        <p id="af-modal-body" class="af-modal__body">
             Please make sure all your details are correct before submitting.
             <strong>Once submitted, you will no longer be able to edit your application.</strong>
         </p>
@@ -70,6 +70,8 @@ $isSubmittedPHP = !empty($is_submitted);
                 <button type="button" id="save-and-continue-btn" class="btn-primary hidden">Save &amp; Continue</button>
                 <button type="button" id="submit-form"           class="btn-primary hidden">Submit Form</button>
                 <button type="button" id="next-btn"              class="btn-primary hidden">Next</button>
+                <!-- Shown only while editing a step reopened for revision (submitted app, this step unlocked) -->
+                <button type="button" id="revision-submit-btn"   class="btn-primary hidden">Submit</button>
             </div>
         </div>
     </div>
@@ -79,6 +81,9 @@ $isSubmittedPHP = !empty($is_submitted);
     // ── State ────────────────────────────────────────────────────────────────
     // Start from server-rendered value; may be updated after each AJAX step load.
     let formIsSubmitted = <?= $isSubmittedPHP ? 'true' : 'false' ?>;
+    // Whether the applicant checked "Apply via Fast Track" on step 1 — updated from
+    // every loadForm() response since it's read off the `applications` row, not the step.
+    let isFastTrack = false;
 
     const formProgressH4Text   = document.getElementById('form-progress-h4-text');
     const backBtn              = document.getElementById('back-btn');
@@ -88,6 +93,7 @@ $isSubmittedPHP = !empty($is_submitted);
     const formFillupContainer  = document.getElementById('form-fillup-container');
     const formReadonlyLabel    = document.getElementById('form-readonly-label');
     const saveChangesTextUI    = document.getElementById('save-changes-text-ui');
+    const revisionSubmitBtn    = document.getElementById('revision-submit-btn');
     const formSubmittedBanner  = document.getElementById('form-submitted-banner');
 
     // Modal elements
@@ -117,22 +123,39 @@ $isSubmittedPHP = !empty($is_submitted);
 
             const data = await response.json();
 
-            // ── Trust the server's submitted flag on every load ───────────────
+            // ── Trust the server's per-step submitted flag on every load ──────
             // This fixes the stale-cache problem: if someone navigates back via
             // browser history the server response will tell us the real state.
-            if (data.is_submitted && !formIsSubmitted) {
+            // Note: `stepIsSubmitted` (this step only) drives the lock decision and
+            // the "View Only" label below, since a revision request unlocks individual
+            // steps while others stay locked. `formIsSubmitted` is a separate one-way
+            // latch used only for Back/Next-only navigation chrome (updateButtons()) —
+            // once the applicant has submitted at all, we don't want the Save & Continue/
+            // Submit Form wizard buttons to reappear just because one step is editable.
+            const stepIsSubmitted = !!data.is_submitted;
+            isFastTrack = !!data.is_fast_track;
+
+            if (stepIsSubmitted && !formIsSubmitted) {
                 formIsSubmitted = true;
-                // Show the submitted banner if it wasn't already visible
                 if (formSubmittedBanner) formSubmittedBanner.removeAttribute('hidden');
-                if (formReadonlyLabel)   formReadonlyLabel.removeAttribute('hidden');
-                if (saveChangesTextUI)   saveChangesTextUI.setAttribute('hidden', '');
             }
+
+            // The readonly label/autosave text reflects THIS step, not the sticky latch —
+            // otherwise a step unlocked for revision would incorrectly still say "View Only".
+            if (formReadonlyLabel) formReadonlyLabel.toggleAttribute('hidden', !stepIsSubmitted);
+            if (saveChangesTextUI) saveChangesTextUI.toggleAttribute('hidden', stepIsSubmitted);
+
+            // Editing a step reopened for revision on an already-submitted application —
+            // show a direct Submit button right here instead of only pointing elsewhere.
+            // Note: this button group hides items via the "hidden" CSS class (see
+            // updateButtons()), not the HTML hidden attribute, so match that convention.
+            if (revisionSubmitBtn) revisionSubmitBtn.classList.toggle('hidden', !(formIsSubmitted && !stepIsSubmitted));
 
             document.title = "Akademus | " + data.title;
             formProgressH4Text.textContent = `Form Progress — Step ${step} of ${maxSteps}`;
             formFillupContainer.innerHTML  = data.form;
 
-            updateProgress(step);
+            updateProgress(step, stepIsSubmitted);
 
             if (document.getElementById('program')) {
                 await loadPrograms();
@@ -140,9 +163,10 @@ $isSubmittedPHP = !empty($is_submitted);
 
             populateForm(`applicant-form-${step}`, data.formData);
 
-            if (formIsSubmitted) {
+            if (stepIsSubmitted) {
                 lockFormFields();
             } else {
+                unlockFormFields();
                 setupAutoSave(step);
             }
 
@@ -160,6 +184,19 @@ $isSubmittedPHP = !empty($is_submitted);
             el.disabled = true;
         });
         formFillupContainer.classList.add('form-locked');
+    }
+
+    // Companion to lockFormFields() — needed because a revision request only
+    // unlocks specific steps, so a step visited earlier in the same session
+    // may have left the container's lock class behind (classList.add() alone
+    // never gets undone otherwise, and .form-locked sets pointer-events:none
+    // on the whole container regardless of each field's own disabled state).
+    function unlockFormFields() {
+        if (!formFillupContainer) return;
+        formFillupContainer.querySelectorAll('input, select, textarea, button[type="submit"]').forEach(el => {
+            el.disabled = false;
+        });
+        formFillupContainer.classList.remove('form-locked');
     }
 
     function populateForm(formId, data) {
@@ -291,12 +328,15 @@ $isSubmittedPHP = !empty($is_submitted);
         return isValid;
     }
 
-    function updateProgress(step) {
+    function updateProgress(step, stepIsSubmitted) {
         document.querySelectorAll('.progress-circle').forEach(circle => {
-            const num  = +circle.dataset.step;
-            const done = formIsSubmitted || num < step;
+            const num = +circle.dataset.step;
+            // The step currently being viewed uses its OWN lock state (so a step
+            // unlocked for revision shows "active", not just a plain done checkmark),
+            // while every other step still reflects the overall submitted state.
+            const done = num === step ? stepIsSubmitted : (formIsSubmitted || num < step);
             circle.classList.toggle('progress-circle-done',   done);
-            circle.classList.toggle('progress-circle-active', !formIsSubmitted && num === step);
+            circle.classList.toggle('progress-circle-active', !done && num === step);
             circle.textContent = done ? '✓' : String(num);
         });
         document.querySelectorAll('.progress-line').forEach(line => {
@@ -313,15 +353,32 @@ $isSubmittedPHP = !empty($is_submitted);
             if (saveAndContinueBtn) { saveAndContinueBtn.classList.add('hidden'); }
             if (submitFormBtn)      { submitFormBtn.classList.add('hidden'); }
         } else {
+            // A Fast Track applicant can finalize right after step 2 (Personal
+            // Information) instead of waiting for the last step.
+            const isFastTrackFinalizeStep = isFastTrack && currentStep === 2;
+
             if (backBtn)            { backBtn.classList.toggle('hidden', currentStep === 1); }
             if (nextBtn)            { nextBtn.classList.add('hidden'); }
             if (saveAndContinueBtn) { saveAndContinueBtn.classList.toggle('hidden', currentStep === maxSteps); }
-            if (submitFormBtn)      { submitFormBtn.classList.toggle('hidden', currentStep !== maxSteps); }
+            if (submitFormBtn)      { submitFormBtn.classList.toggle('hidden', !(currentStep === maxSteps || isFastTrackFinalizeStep)); }
         }
     }
 
     // ── Modal helpers ────────────────────────────────────────────────────────
-    function openModal() {
+    function openModal(isFastTrackPartial = false) {
+        const titleEl = document.getElementById('af-modal-title');
+        const bodyEl  = document.getElementById('af-modal-body');
+
+        if (isFastTrackPartial) {
+            titleEl.textContent = 'Submit Initial Application?';
+            bodyEl.innerHTML = 'This submits your Application Type and Personal Information only. ' +
+                '<strong>Family Background and Educational Background can still be completed later</strong> from your Dashboard.';
+        } else {
+            titleEl.textContent = 'Submit Application?';
+            bodyEl.innerHTML = 'Please make sure all your details are correct before submitting. ' +
+                '<strong>Once submitted, you will no longer be able to edit your application.</strong>';
+        }
+
         submitModal.removeAttribute('hidden');
         document.body.style.overflow = 'hidden';
         modalConfirmBtn.focus();
@@ -392,7 +449,54 @@ $isSubmittedPHP = !empty($is_submitted);
     if (submitFormBtn) {
         submitFormBtn.addEventListener('click', () => {
             if (!checkAllFields(currentStep)) return;
-            openModal();
+            openModal(isFastTrack && currentStep === 2);
+        });
+    }
+
+    // ── Revision resubmit button ────────────────────────────────────────────
+    // Saves this step non-silently (so a still-invalid value pops up the exact
+    // validation error, reusing the same validateSchoolYears()/validateGwa()
+    // checks the autosave path already enforces), then finalizes the resubmit.
+    if (revisionSubmitBtn) {
+        revisionSubmitBtn.addEventListener('click', async () => {
+            if (!checkAllFields(currentStep)) return;
+
+            revisionSubmitBtn.disabled = true;
+            revisionSubmitBtn.textContent = 'Submitting…';
+
+            const saved = await processForm(currentStep, 'draft', false);
+
+            if (!saved) {
+                revisionSubmitBtn.disabled = false;
+                revisionSubmitBtn.textContent = 'Submit';
+                return;
+            }
+
+            try {
+                // Scope this resubmit to the step actually being viewed — resolving
+                // this one page must not clear a revision still flagged on another step.
+                const pageId = enabledPages[currentStep - 1]?.id;
+                const body = new URLSearchParams();
+                if (pageId !== undefined) body.set('page_id', pageId);
+
+                const res  = await fetch('<?= base_url('applicant-form/resubmit') ?>', {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body,
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    window.location.href = '<?= base_url('tracking-progress') ?>';
+                } else {
+                    alert(data.message || 'Something went wrong.');
+                    revisionSubmitBtn.disabled = false;
+                    revisionSubmitBtn.textContent = 'Submit';
+                }
+            } catch (e) {
+                alert('Network error. Please try again.');
+                revisionSubmitBtn.disabled = false;
+                revisionSubmitBtn.textContent = 'Submit';
+            }
         });
     }
 

@@ -8,6 +8,12 @@
     gap: 16px;
 }
 
+.calc-header {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 24px;
+}
+
 .calc-header.card h2 {
     font-size: 18px;
     font-weight: 700;
@@ -23,9 +29,15 @@
 
 .calc-body {
     display: grid;
-    grid-template-columns: 1fr 380px;
+    grid-template-columns: 1fr 400px;
     gap: 16px;
-    align-items: start;
+    align-items: stretch;
+}
+
+.calc-left-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 24px;
 }
 
 /* SUBJECT LIST */
@@ -154,13 +166,22 @@
 }
 
 /* SUMMARY PANEL */
+.calc-right {
+    display: flex;
+    flex-direction: column;
+}
+
 .calc-summary {
     background: var(--primary);
     border-radius: var(--radius);
-    padding: 22px 20px;
+    padding: 28px 24px;
     color: white;
     position: sticky;
     top: 70px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 360px;
 }
 
 .cs-eyebrow {
@@ -253,31 +274,34 @@
 }
 
 .cs-note {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.3);
+    font-size: 10.5px;
+    color: rgba(255, 255, 255, 0.35);
     margin-top: 14px;
     line-height: 1.6;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     padding-top: 12px;
+    flex: 1;
 }
 
 .cs-reset-btn {
     width: 100%;
-    margin-top: 14px;
-    padding: 9px;
+    margin-top: 20px;
+    padding: 11px;
     background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--radius);
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.18s ease;
+    letter-spacing: 0.3px;
 }
 
 .cs-reset-btn:hover {
-    background: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.16);
     color: white;
+    border-color: rgba(255, 255, 255, 0.35);
 }
 
 /* RESPONSIVE */
@@ -288,5 +312,6 @@
 
     .calc-summary {
         position: static;
+        min-height: unset;
     }
 }

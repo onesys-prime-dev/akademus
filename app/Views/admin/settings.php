@@ -3,8 +3,10 @@ if (! session()->get('admin_logged_in')) {
     header('Location: ' . base_url('admin/login'));
     exit;
 }
-$theme        = $theme        ?? [];
-$exam_enabled = $exam_enabled ?? true;
+$theme              = $theme              ?? [];
+$exam_enabled       = $exam_enabled       ?? true;
+$fast_track_enabled = $fast_track_enabled ?? true;
+$tuition_calculator_enabled = $tuition_calculator_enabled ?? true;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,6 +14,7 @@ $exam_enabled = $exam_enabled ?? true;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akademus | System Settings</title>
+    <?= theme_favicon_tags() ?>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -120,6 +123,40 @@ $exam_enabled = $exam_enabled ?? true;
                             </div>
                         </div>
 
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <div class="setting-label">Enable Fast Track</div>
+                                <div class="setting-desc">
+                                    When ON, applicants can choose Fast Track at the start of their application —
+                                    submit basics now, finish the rest later, for an additional fee.<br>
+                                    When OFF, new applicants only see the standard Full Application — applicants
+                                    already on Fast Track are unaffected.
+                                </div>
+                            </div>
+                            <div class="toggle-wrap" style="margin-left:24px;display:flex;flex-direction:column;align-items:center;gap:4px;">
+                                <input type="checkbox" name="fast_track_enabled" id="toggle-fast-track"
+                                    <?= $fast_track_enabled ? 'checked' : '' ?>>
+                                <label class="toggle-switch" for="toggle-fast-track"></label>
+                                <span class="toggle-state" id="toggle-fast-track-label"><?= $fast_track_enabled ? 'ON' : 'OFF' ?></span>
+                            </div>
+                        </div>
+
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <div class="setting-label">Enable Tuition Fee Calculator</div>
+                                <div class="setting-desc">
+                                    When ON, applicants can access the Tuition Fee Calculator from their portal.<br>
+                                    When OFF, the calculator link is hidden and the page is inaccessible.
+                                </div>
+                            </div>
+                            <div class="toggle-wrap" style="margin-left:24px;display:flex;flex-direction:column;align-items:center;gap:4px;">
+                                <input type="checkbox" name="tuition_calculator_enabled" id="toggle-tuition-calc"
+                                    <?= $tuition_calculator_enabled ? 'checked' : '' ?>>
+                                <label class="toggle-switch" for="toggle-tuition-calc"></label>
+                                <span class="toggle-state" id="toggle-tuition-calc-label"><?= $tuition_calculator_enabled ? 'ON' : 'OFF' ?></span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -135,6 +172,12 @@ $exam_enabled = $exam_enabled ?? true;
 <script>
 document.getElementById('toggle-exam').addEventListener('change', function () {
     document.getElementById('toggle-exam-label').textContent = this.checked ? 'ON' : 'OFF';
+});
+document.getElementById('toggle-fast-track').addEventListener('change', function () {
+    document.getElementById('toggle-fast-track-label').textContent = this.checked ? 'ON' : 'OFF';
+});
+document.getElementById('toggle-tuition-calc').addEventListener('change', function () {
+    document.getElementById('toggle-tuition-calc-label').textContent = this.checked ? 'ON' : 'OFF';
 });
 </script>
 </body>

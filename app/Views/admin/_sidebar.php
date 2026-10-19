@@ -103,18 +103,34 @@
 .nav-admin-role { font-size: 10px; color: rgba(255,255,255,0.3); }
 </style>
 
+<?php
+$adminLogoPath = $theme['logo_url'] ?? '';
+
+$adminLogoSrc = '';
+
+if (!empty($adminLogoPath)) {
+    $adminLogoSrc = str_starts_with($adminLogoPath, 'http') || str_starts_with($adminLogoPath, 'data:image')
+        ? $adminLogoPath
+        : base_url($adminLogoPath);
+}
+
+$adminLogoText = strtoupper(substr($theme['logo_text'] ?? $theme['app_name'] ?? 'AK', 0, 2));
+?>
+
 <nav class="admin-nav">
 
     <!-- Brand -->
     <a href="<?= base_url('admin/theme') ?>" class="nav-brand">
         <div class="nav-brand-logo">
-            <?php if (!empty($theme['logo_url'])): ?>
-                <img src="<?= base_url(esc($theme['logo_url'])) ?>"
-                     alt="<?= esc($theme['app_name'] ?? 'Logo') ?>"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
-                <span style="display:none"><?= strtoupper(substr($theme['logo_text'] ?? $theme['app_name'] ?? 'AK', 0, 2)) ?></span>
+            <?php if (!empty($adminLogoSrc)): ?>
+                <img
+                    src="<?= esc($adminLogoSrc, 'attr') ?>"
+                    alt="<?= esc($theme['app_name'] ?? 'Logo', 'attr') ?>"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"
+                >
+                <span style="display:none"><?= esc($adminLogoText) ?></span>
             <?php else: ?>
-                <?= strtoupper(substr($theme['logo_text'] ?? $theme['app_name'] ?? 'AK', 0, 2)) ?>
+                <?= esc($adminLogoText) ?>
             <?php endif; ?>
         </div>
         <div class="nav-brand-text">
@@ -170,6 +186,15 @@
             Requirement Docs
         </a>
 
+        <a href="<?= base_url('admin/programs') ?>" class="nav-item <?= (strpos(current_url(), 'admin/programs') !== false && strpos(current_url(), 'admin/programs/presets') === false) ? 'on' : '' ?>">
+            <!-- GraduationCap: manage academic programs -->
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+            Manage Programs
+        </a>
+
         <a href="<?= base_url('admin/programs/presets') ?>" class="nav-item <?= strpos(current_url(), 'admin/programs/presets') !== false ? 'on' : '' ?>">
             <!-- Layers: stacking programs to presets -->
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -198,6 +223,15 @@
                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
             </svg>
             System Settings
+        </a>
+
+        <a href="<?= base_url('admin/fast-track-requirements') ?>" class="nav-item <?= strpos(current_url(), 'admin/fast-track-requirements') !== false ? 'on' : '' ?>">
+            <!-- Zap: fast track -->
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+            Fast Track Requirements
         </a>
 
         <a href="<?= base_url('admin/users') ?>" class="nav-item <?= strpos(current_url(), 'admin/users') !== false ? 'on' : '' ?>">

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($theme['app_name'] ?? 'Akademus') ?> Admin</title>
+    <?= theme_favicon_tags() ?>
     <link href="https://fonts.googleapis.com/css2?family=<?= urlencode($theme['font_family'] ?? 'Sora') ?>:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -164,6 +165,30 @@
             background: rgba(255,255,255,0.85);
         }
 
+        .password-field { position: relative; }
+        .password-field input { padding-right: 42px; }
+        .password-toggle {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #5a5a5a;
+            padding: 0;
+        }
+        .password-toggle:hover { color: #0d1e38; }
+        .password-toggle svg { width: 18px; height: 18px; }
+        .password-toggle .icon-hide { display: none; }
+        .password-toggle.showing .icon-eye  { display: none; }
+        .password-toggle.showing .icon-hide { display: block; }
+
         .submit-btn {
             width: 100%;
             height: 46px;
@@ -270,6 +295,10 @@
             .features { display: none; }
         }
     </style>
+<meta name="csrf-token" content="<?= csrf_hash() ?>">
+<script>
+(function(){var _f=window.fetch;window.fetch=function(u,o){o=o||{};if(o.method&&o.method.toUpperCase()!=='GET'){var t=document.querySelector('meta[name="csrf-token"]');if(t){o.headers=o.headers||{};if(o.headers instanceof Headers){o.headers.set('X-CSRF-TOKEN',t.content);}else{o.headers['X-CSRF-TOKEN']=t.content;}}}return _f.call(this,u,o);};})();
+</script>
 </head>
 <body>
 
@@ -345,7 +374,13 @@
                     </div>
                     <div class="field">
                         <label>Password</label>
-                        <input type="password" name="password" placeholder="••••••••" required>
+                        <div class="password-field">
+                            <input type="password" name="password" id="admin-password" placeholder="••••••••" required>
+                            <button type="button" class="password-toggle" id="password-toggle" aria-label="Show password">
+                                <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                <svg class="icon-hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 11 8 11 8a17.62 17.62 0 0 1-2.5 3.51M6.5 6.5A17.9 17.9 0 0 0 1 12s4 8 11 8a9.74 9.74 0 0 0 5.5-1.5M1 1l22 22"/></svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <button type="submit" class="submit-btn" id="login-btn">Sign In to Admin</button>
@@ -397,6 +432,15 @@
 
     document.getElementById('error-close').addEventListener('click', () => modal.classList.remove('open'));
     modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+
+    const pwInput  = document.getElementById('admin-password');
+    const pwToggle = document.getElementById('password-toggle');
+    pwToggle.addEventListener('click', () => {
+        const showing = pwInput.type === 'text';
+        pwInput.type = showing ? 'password' : 'text';
+        pwToggle.classList.toggle('showing', !showing);
+        pwToggle.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+    });
 </script>
 </body>
 </html>

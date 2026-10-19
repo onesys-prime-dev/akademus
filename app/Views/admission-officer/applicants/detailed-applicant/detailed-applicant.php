@@ -4,6 +4,9 @@ $decisionMade   = in_array($appStatus, ['approved', 'rejected', 'enrolled']);
 $isApproved     = in_array($appStatus, ['approved', 'enrolled']);
 $isRejected     = $appStatus === 'rejected';
 $decisionRemarks = $profile['decision_remarks'] ?? null;
+
+$formStatus      = $profile['form_status'] ?? null;
+$revisionPending = $formStatus === 'needs_revision';
 ?>
 
 <div class="applicants card">
@@ -23,6 +26,17 @@ $decisionRemarks = $profile['decision_remarks'] ?? null;
             </button>
 
             <?php if (!$decisionMade): ?>
+                <?php if ($revisionPending): ?>
+                    <div class="decision-badge decision-badge--revision">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                        Revision Requested
+                    </div>
+                <?php else: ?>
+                    <button class="decision-btn decision-btn--revision" id="btn-revision">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                        Request Revision
+                    </button>
+                <?php endif; ?>
                 <!-- Decision buttons — only before a decision -->
                 <button class="decision-btn decision-btn--decline" id="btn-decline">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -60,6 +74,19 @@ $decisionRemarks = $profile['decision_remarks'] ?? null;
         <div class="decision-remarks-banner__content">
             <span class="decision-remarks-banner__label"><?= $isApproved ? 'Admission Remarks' : 'Reason for Decline' ?></span>
             <span class="decision-remarks-banner__text"><?= esc($decisionRemarks) ?></span>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <?php if ($revisionPending): ?>
+    <!-- Revision-pending banner — shown while awaiting the applicant's fix -->
+    <div class="decision-remarks-banner decision-remarks-banner--revision">
+        <div class="decision-remarks-banner__icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        </div>
+        <div class="decision-remarks-banner__content">
+            <span class="decision-remarks-banner__label">Revision Requested — Awaiting Applicant</span>
+            <span class="decision-remarks-banner__text"><?= esc($profile['revision_note'] ?? '') ?></span>
         </div>
     </div>
     <?php endif; ?>
@@ -156,6 +183,50 @@ $decisionRemarks = $profile['decision_remarks'] ?? null;
     </div>
 </div>
 
+<!-- ── Request Revision Modal ── -->
+<div class="decision-modal-overlay" id="revision-modal-overlay">
+    <div class="decision-modal">
+
+        <!-- Header -->
+        <div class="decision-modal__header decision-modal__header--revision">
+            <div class="decision-modal__header-icon" style="background:#ffedd5;color:#c2410c;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            </div>
+            <div>
+                <h3 class="decision-modal__title">Request Revision</h3>
+                <p class="decision-modal__subtitle"><?= esc($profile['applicant_name'] ?? '') ?> · #<?= esc($profile['applicant_number'] ?? '') ?></p>
+            </div>
+            <button class="decision-modal__close" id="revision-modal-close">&times;</button>
+        </div>
+
+        <!-- Body -->
+        <div class="decision-modal__body">
+            <div class="decision-modal__section-label">Which step(s) need revision? <span>(required)</span></div>
+            <div class="revision-step-checklist" id="revision-step-checklist">
+                <?php foreach (($formPages ?? []) as $page): ?>
+                    <label class="revision-step-item">
+                        <input type="checkbox" name="page_ids[]" value="<?= (int) $page['id'] ?>">
+                        <span><?= esc($page['title']) ?></span>
+                    </label>
+                <?php endforeach; ?>
+            </div>
+
+            <div class="decision-modal__section-label" style="margin-top:16px;">
+                Note to applicant <span>(required)</span>
+            </div>
+            <textarea class="decision-modal__textarea" id="revision-note" rows="4" placeholder="Explain exactly what needs to be corrected…"></textarea>
+            <p class="decision-modal__error" id="revision-error"></p>
+        </div>
+
+        <!-- Footer -->
+        <div class="decision-modal__footer">
+            <button class="decision-modal__cancel" id="revision-modal-cancel">Cancel</button>
+            <button class="decision-modal__submit decision-modal__submit--revision" id="revision-modal-submit">Send Revision Request</button>
+        </div>
+
+    </div>
+</div>
+
 <script>
 window.applicantsConfig = <?= json_encode([
     'baseUrl'     => base_url(),
@@ -164,9 +235,10 @@ window.applicantsConfig = <?= json_encode([
 ]) ?>;
 
 (function () {
-    const DECIDE_URL  = '<?= base_url('admission-officer/applicants/' . $applicantId . '/decide') ?>';
-    const MESSAGE_URL = '<?= base_url('admission-officer/follow-up/send') ?>';
-    const CONV_URL    = '<?= base_url('admission-officer/follow-up/' . $applicantId) ?>';
+    const DECIDE_URL   = '<?= base_url('admission-officer/applicants/' . $applicantId . '/decide') ?>';
+    const MESSAGE_URL  = '<?= base_url('admission-officer/follow-up/send') ?>';
+    const CONV_URL     = '<?= base_url('admission-officer/follow-up/' . $applicantId) ?>';
+    const REVISION_URL = '<?= base_url('admission-officer/applicants/' . $applicantId . '/request-revision') ?>';
 
     const TEMPLATES = {
         approved: [
@@ -341,9 +413,65 @@ window.applicantsConfig = <?= json_encode([
     msgSubmitBtn.addEventListener('click', sendMessage);
     msgOverlay.addEventListener('click', e => { if (e.target === msgOverlay) closeMessageModal(); });
 
+    // ── Revision modal ──────────────────────────────────────────────
+    const revOverlay = document.getElementById('revision-modal-overlay');
+    const revNote    = document.getElementById('revision-note');
+    const revErrorEl = document.getElementById('revision-error');
+    const revSubmit  = document.getElementById('revision-modal-submit');
+
+    function openRevisionModal() {
+        revNote.value = '';
+        revErrorEl.textContent = '';
+        document.querySelectorAll('#revision-step-checklist input').forEach(cb => cb.checked = false);
+        revOverlay.classList.add('active');
+    }
+
+    function closeRevisionModal() {
+        revOverlay.classList.remove('active');
+    }
+
+    async function submitRevision() {
+        const checked = [...document.querySelectorAll('#revision-step-checklist input:checked')].map(cb => cb.value);
+        const note = revNote.value.trim();
+
+        if (!checked.length) { revErrorEl.textContent = 'Select at least one step.'; return; }
+        if (!note) { revErrorEl.textContent = 'Please add a note explaining the issue.'; revNote.focus(); return; }
+
+        revSubmit.disabled = true;
+        revSubmit.textContent = 'Sending…';
+
+        const form = new FormData();
+        checked.forEach(id => form.append('page_ids[]', id));
+        form.append('note', note);
+
+        try {
+            const res  = await fetch(REVISION_URL, { method: 'POST', body: form });
+            const data = await res.json();
+
+            if (data.success) {
+                closeRevisionModal();
+                location.reload();
+            } else {
+                revErrorEl.textContent = data.message || 'Something went wrong. Please try again.';
+            }
+        } catch (e) {
+            revErrorEl.textContent = 'Network error. Please try again.';
+        } finally {
+            revSubmit.disabled = false;
+            revSubmit.textContent = 'Send Revision Request';
+        }
+    }
+
+    const btnRevision = document.getElementById('btn-revision');
+    if (btnRevision) btnRevision.addEventListener('click', openRevisionModal);
+    document.getElementById('revision-modal-close').addEventListener('click', closeRevisionModal);
+    document.getElementById('revision-modal-cancel').addEventListener('click', closeRevisionModal);
+    revSubmit.addEventListener('click', submitRevision);
+    revOverlay.addEventListener('click', e => { if (e.target === revOverlay) closeRevisionModal(); });
+
     // Global ESC closes whichever modal is open
     document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') { closeDecisionModal(); closeMessageModal(); }
+        if (e.key === 'Escape') { closeDecisionModal(); closeMessageModal(); closeRevisionModal(); }
     });
 
     // ── Toast ──────────────────────────────────────────────────────
@@ -360,6 +488,54 @@ window.applicantsConfig = <?= json_encode([
         setTimeout(() => { t.style.opacity = '0'; }, 2500);
     }
 })();
+</script>
+
+<script>
+function openExamResultModal() {
+    document.getElementById('examResultModal').classList.add('active');
+}
+
+function closeExamResultModal() {
+    document.getElementById('examResultModal').classList.remove('active');
+}
+
+async function submitExamResult() {
+    const bookingId = document.getElementById('examBookingId').value;
+    const status = document.getElementById('resultStatus').value;
+    const score = document.getElementById('resultScore').value;
+    const remarks = document.getElementById('resultRemarks').value;
+    const error = document.getElementById('examResultError');
+
+    error.textContent = '';
+
+    if (!status) {
+        error.textContent = 'Result status is required.';
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('result_status', status);
+    formData.append('score', score);
+    formData.append('result_remarks', remarks);
+
+    const response = await fetch(`<?= base_url('admission-officer/exam-bookings') ?>/${bookingId}/result`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+        error.textContent = data.message || 'Failed to save result.';
+        return;
+    }
+
+    closeExamResultModal();
+    location.reload();
+}
 </script>
 
 <script type="module" src="<?= base_url('assets/js/admission-officer/applicants/main.js') ?>?v=<?= time() ?>"></script>

@@ -136,7 +136,7 @@
 </div>
 
 <!-- Passed / Approved Modal -->
-<div id="req-passed-modal" class="req-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="req-passed-title" hidden>
+<div id="req-passed-modal" class="req-modal-backdrop <?= $requiredDocsVerified ? '' : 'hidden' ?>" role="dialog" aria-modal="true" aria-labelledby="req-passed-title" <?= $requiredDocsVerified ? '' : 'hidden' ?>>
     <div class="req-modal">
         <div class="req-modal__icon req-modal__icon--success">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
@@ -162,6 +162,85 @@
     color: #16a34a;
 }
 </style>
+
+<!-- Fast Track: only-what's-needed-now Modal (shown once per session) -->
+<?php if (!empty($is_fast_track) && !empty($fast_track_required_docs)): ?>
+<div id="fast-track-req-modal" class="req-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="fast-track-req-title" hidden>
+    <div class="req-modal">
+        <div class="req-modal__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+            </svg>
+        </div>
+        <h3 id="fast-track-req-title" class="req-modal__title">You're on Fast Track</h3>
+        <p class="req-modal__body">
+            Since you chose Fast Track, you only need to upload these
+            <?= count($fast_track_required_docs) ?> document<?= count($fast_track_required_docs) === 1 ? '' : 's' ?> for now —
+            everything else can wait.
+        </p>
+        <ul class="fast-track-req-modal__list">
+            <?php foreach ($fast_track_required_docs as $docName): ?>
+                <li><?= esc($docName) ?></li>
+            <?php endforeach; ?>
+        </ul>
+        <div class="req-modal__actions">
+            <button type="button" id="fast-track-req-dismiss" class="req-modal__btn req-modal__btn--confirm">Got it</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.fast-track-req-modal__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 24px;
+    padding: 0;
+    text-align: left;
+}
+.fast-track-req-modal__list li {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1a202c;
+    padding-left: 22px;
+    position: relative;
+}
+.fast-track-req-modal__list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-weight: 700;
+}
+</style>
+
+<script>
+(function () {
+    var seenKey = 'akademus_fast_track_req_modal_seen';
+    if (sessionStorage.getItem(seenKey)) return;
+
+    var backdrop = document.getElementById('fast-track-req-modal');
+    var dismissBtn = document.getElementById('fast-track-req-dismiss');
+    if (!backdrop) return;
+
+    backdrop.removeAttribute('hidden');
+    sessionStorage.setItem(seenKey, '1');
+
+    function close() { backdrop.setAttribute('hidden', ''); }
+
+    dismissBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', function (e) {
+        if (e.target === backdrop) close();
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !backdrop.hasAttribute('hidden')) close();
+    });
+})();
+</script>
+<?php endif; ?>
 
 <script>
 window.requirementsConfig = <?= json_encode([
