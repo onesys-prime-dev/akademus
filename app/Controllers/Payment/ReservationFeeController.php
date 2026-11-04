@@ -34,6 +34,11 @@ class ReservationFeeController extends BaseController
             return redirect()->to('/sign-in');
         }
 
+        $examPassed = (new \App\Models\ExamBookingModel())->getResultStatus('result_status', '') === 'PASSED';
+        if (! $examPassed) {
+            return redirect()->to('/dashboard');
+        }
+
         $applicantId = (int) session()->get('applicant_id');
 
         $fee = $this->feeModel->getByCode(PaymentFeeTypeModel::CODE_RESERVATION);

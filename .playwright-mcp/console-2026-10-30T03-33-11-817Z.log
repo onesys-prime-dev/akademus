@@ -1,0 +1,13 @@
+[     231ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost/Akademus/akademus/public/assets/images/logos/1788335034_b3125ff455dec4259bb1.png:0
+[     379ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost/Akademus/akademus/public/assets/images/logos/1788335034_b3125ff455dec4259bb1.png:0
+[     528ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost/akademus/public/sign-in:0
+[     535ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost/Akademus/akademus/public/assets/images/logos/1788335034_b3125ff455dec4259bb1.png:0
+[     805ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost/akademus/public/sign-in:0
+[   51847ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost/akademus/public/change-password:0
+[   51948ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost/akademus/public/reset-password:0
+[   52044ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost/akademus/public/forgot-password:0
+[   52164ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost/akademus/public/forgot-password:0
+[   52263ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost/akademus/public/dashboard/tour/dismiss:0
+[   52357ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost/akademus/public/applicant-form/update/1:0
+[   52453ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost/akademus/public/requirements/update/1:0
+[   52549ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost/akademus/public/exam-schedule/book:0

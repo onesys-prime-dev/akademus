@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\ThemeModel;
 use App\Models\Applicant\ApplicantModel;
 use App\Services\ExamScheduleService;
+use App\Services\ApplicantDocumentService;
 
 class ExamScheduleController extends BaseController
 {
@@ -14,6 +15,7 @@ class ExamScheduleController extends BaseController
     public function __construct()
     {
         $this->service = new ExamScheduleService();
+        $this->documentService = new ApplicantDocumentService();
     }
 
     private function requireApplicant(): ?array
@@ -40,6 +42,11 @@ class ExamScheduleController extends BaseController
 
         if (! $examEnabled) {
             return redirect()->to('/dashboard');
+        }
+
+        if (! $this->documentService->allRequiredCompleted((int) session()->get('applicant_id'), (int) session()->get('program_id'))) {
+            // If the applicant has not completed all required documents, redirect to dashboard (It should not be open to applicant in sidebar anyway)     
+        return redirect()->to('/dashboard');
         }
 
         $applicant = $this->requireApplicant();

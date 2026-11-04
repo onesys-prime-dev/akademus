@@ -19,6 +19,8 @@ $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') =
 $tuitionCalcEnabled = (new \App\Models\ThemeModel())->getSetting('tuition_calculator_enabled', '1') === '1';
 
 $isApproved = (new \App\Models\Applicant\ApplicantModel())->getAppStatus('application_status', '') === 'approved';
+//$examEligible = (new \App\Models\ExamBookingModel())->getResultStatus('result_status', '') === 'PASSED'; //$this->documentService = new ApplicantDocumentService();  allRequiredCompleted(int $applicant_id, int $program_id, bool $isFastTrack = false)
+
 $examPassed = (new \App\Models\ExamBookingModel())->getResultStatus('result_status', '') === 'PASSED';
 ?>
 

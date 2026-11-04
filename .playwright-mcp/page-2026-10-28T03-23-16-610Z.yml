@@ -1,0 +1,77 @@
+- generic [active] [ref=f3e1]:
+  - generic [ref=f3e2]:
+    - link "Akademus Portal" [ref=f3e3] [cursor=pointer]:
+      - /url: http://localhost/akademus/public/
+    - generic [ref=f3e6]:
+      - link [ref=f3e7] [cursor=pointer]:
+        - /url: http://localhost/akademus/public/about.php
+        - paragraph [ref=f3e8]: About Us
+      - link [ref=f3e9] [cursor=pointer]:
+        - /url: http://localhost/akademus/public/features
+        - paragraph [ref=f3e10]: Features
+      - paragraph [ref=f3e12] [cursor=pointer]: Services ▾
+      - link [ref=f3e13] [cursor=pointer]:
+        - /url: http://localhost/akademus/public/contact
+        - paragraph [ref=f3e14]: Contact
+  - generic [ref=f3e15]:
+    - link "About Us" [ref=f3e16] [cursor=pointer]:
+      - /url: http://localhost/akademus/public/about-us
+    - link "Features" [ref=f3e17] [cursor=pointer]:
+      - /url: http://localhost/akademus/public/features
+    - generic [ref=f3e18]: Services ▾
+    - link "Contact" [ref=f3e20] [cursor=pointer]:
+      - /url: http://localhost/akademus/public/contact
+    - link "Get Started" [ref=f3e21] [cursor=pointer]:
+      - /url: http://localhost/akademus/public/sign-in
+  - generic [ref=f3e23]:
+    - generic [ref=f3e25]:
+      - link "Akademus Portal Admission System" [ref=f3e26] [cursor=pointer]:
+        - /url: http://localhost/akademus/public/
+        - generic [ref=f3e28]:
+          - paragraph [ref=f3e29]: Akademus Portal
+          - generic [ref=f3e30]: Admission System
+      - generic [ref=f3e31]:
+        - generic [ref=f3e32]:
+          - paragraph [ref=f3e33]: Your Future
+          - paragraph [ref=f3e34]: Starts Here
+        - generic [ref=f3e35]: Complete your admission entirely online — from document submission to enrollment.
+        - generic [ref=f3e36]:
+          - generic [ref=f3e37]:
+            - generic [ref=f3e38]: "1"
+            - generic [ref=f3e39]: Create your applicant account
+          - generic [ref=f3e40]:
+            - generic [ref=f3e41]: "2"
+            - generic [ref=f3e42]: Submit required documents
+          - generic [ref=f3e43]:
+            - generic [ref=f3e44]: "3"
+            - generic [ref=f3e45]: Track your application status
+    - generic [ref=f3e46]:
+      - generic [ref=f3e47]:
+        - heading "Welcome Back!" [level=2] [ref=f3e81]
+        - generic [ref=f3e49]: Sign in to continue your application.
+      - generic [ref=f3e50]:
+        - generic [ref=f3e51] [cursor=pointer]: Sign In
+        - generic [ref=f3e52]: Sign Up
+      - generic [ref=f3e83]:
+        - generic [ref=f3e84]:
+          - generic [ref=f3e85]:
+            - generic [ref=f3e86]: EMAIL ADDRESS
+            - textbox "yourname@email.com" [ref=f3e87]
+          - generic [ref=f3e88]:
+            - generic [ref=f3e89]: PASSWORD
+            - generic [ref=f3e90]:
+              - textbox "PASSWORD" [ref=f3e91]:
+                - /placeholder: "********"
+              - button [ref=f3e92] [cursor=pointer]
+        - generic [ref=f3e96]:
+          - generic [ref=f3e97] [cursor=pointer]:
+            - checkbox "Remember Me" [ref=f3e98]
+            - generic [ref=f3e99]: Remember Me
+          - link "Forgot Password?" [ref=f3e100] [cursor=pointer]:
+            - /url: "#"
+        - button "Sign In" [ref=f3e101]
+        - generic [ref=f3e103]:
+          - text: Don't have an account?
+          - link "Click here" [ref=f3e104] [cursor=pointer]:
+            - /url: http://localhost/akademus/public/sign-up
+  - generic [ref=f3e105] [cursor=pointer]
