@@ -18,9 +18,7 @@ $logo_url    = !empty($theme['logo_url']) ? esc($theme['logo_url']) : base_url('
 $examEnabled = (new \App\Models\ThemeModel())->getSetting('exam_enabled', '1') === '1';
 $tuitionCalcEnabled = (new \App\Models\ThemeModel())->getSetting('tuition_calculator_enabled', '1') === '1';
 
-$isApproved = (new \App\Models\Applicant\ApplicantModel())->getAppStatus('application_status', '') === 'approved';
-//$examEligible = (new \App\Models\ExamBookingModel())->getResultStatus('result_status', '') === 'PASSED'; //$this->documentService = new ApplicantDocumentService();  allRequiredCompleted(int $applicant_id, int $program_id, bool $isFastTrack = false)
-
+$docsVerified = (new \App\Services\ApplicantDocumentService())->allRequiredCompleted((int) session()->get('applicant_id'), (int) session()->get('program_id'));
 $examPassed = (new \App\Models\ExamBookingModel())->getResultStatus('result_status', '') === 'PASSED';
 ?>
 
@@ -65,12 +63,12 @@ $examPassed = (new \App\Models\ExamBookingModel())->getResultStatus('result_stat
                     </a>
                     <?php if ($examEnabled): ?>
                         <a
-                            href="<?= $isApproved ? base_url('/exam-schedule') : 'javascript:void(0)' ?>"
-                            class="sidebar-nav-link <?= str_contains($uri, 'exam-schedule') ? 'active' : '' ?> <?= !$isApproved ? 'disabled-link' : '' ?>">
+                            href="<?= $docsVerified ? base_url('/exam-schedule') : 'javascript:void(0)' ?>"
+                            class="sidebar-nav-link <?= str_contains($uri, 'exam-schedule') ? 'active' : '' ?> <?= !$docsVerified ? 'disabled-link' : '' ?>">
                             <div class="dotted-link"></div>
                             <span>Exam Schedule</span>
 
-                            <?php if (!$isApproved): ?>
+                            <?php if (!$docsVerified): ?>
                                 <div class="lock-help-wrap" onclick="this.classList.toggle('show-tip')">
                                     <svg class="lock-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                                         <rect x="3" y="11" width="18" height="10" rx="2"></rect>

@@ -5,14 +5,17 @@ namespace App\Controllers\AdmissionOfficer;
 use App\Controllers\BaseController;
 use App\Models\ThemeModel;
 use App\Services\ExamScheduleService;
+use App\Services\NotificationService;
 
 class ExamScheduleController extends BaseController
 {
     private ExamScheduleService $service;
+    protected NotificationService $notificationService;
 
     public function __construct()
     {
         $this->service = new ExamScheduleService();
+        $this->notificationService = new NotificationService();
     }
 
     private function resolveState(): array
@@ -129,7 +132,25 @@ class ExamScheduleController extends BaseController
 
     public function delete($id)
     {
+        $id = (int) $id;
+
+        // Read these before deleting: the schedule row and the 'booked' status are gone afterwards.
+        $schedule     = $this->service->getScheduleById($id);
+        $applicantIds = $schedule ? $this->service->getBookedApplicantIds($id) : [];
+
         $ok = $this->service->deleteSchedule($id);
+
+        if ($ok && $schedule) {
+            foreach ($applicantIds as $applicantId) {
+                $this->notificationService->trigger('exam.schedule_cancelled', $applicantId, [
+                    'exam_date'  => $schedule['raw_date'],
+                    'start_time' => $schedule['start_time'],
+                    'end_time'   => $schedule['end_time'],
+                    'location'   => $schedule['location'],
+                ]);
+            }
+        }
+
         return $this->response->setJSON(['success' => $ok]);
     }
 

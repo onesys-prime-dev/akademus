@@ -278,6 +278,27 @@ class EmailService
         return self::send($to, "{$feeTypeName} Payment Rejected - Akademus", $message);
     }
 
+    public static function sendExamScheduleCancelledNotification(string $to, string $examDate, string $startTime, string $endTime, string $location): bool
+    {
+        $date  = $examDate ? date('l, F j, Y', strtotime($examDate)) : '';
+        $time  = $startTime ? date('g:i A', strtotime($startTime)) . ($endTime ? ' - ' . date('g:i A', strtotime($endTime)) : '') : '';
+        $venue = esc($location);
+
+        $message = "
+            <h2>Exam Schedule Cancelled</h2>
+            <p>The entrance exam schedule you booked has been cancelled by the admissions office:</p>
+            <ul>
+                <li><strong>Date:</strong> {$date}</li>
+                <li><strong>Time:</strong> {$time}</li>
+                <li><strong>Venue:</strong> {$venue}</li>
+            </ul>
+            <p>Your booking has been released. Please log in to your portal and choose a new exam slot.</p>
+            <p><a href='" . base_url('exam-schedule') . "'>Choose a New Exam Slot</a></p>
+        ";
+
+        return self::send($to, 'Exam Schedule Cancelled - Akademus', $message);
+    }
+
     public static function sendApplicationSubmittedNotification(string $to): bool
     {
         $message = "

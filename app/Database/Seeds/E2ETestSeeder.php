@@ -72,6 +72,24 @@ class E2ETestSeeder extends Seeder
             $this->seedExamSlotWithBooking($payerApplicantId, $now);
         }
 
+        // Docs-verified applicants: every required document of the program is uploaded and approved, so the
+        // applicant exam-schedule page is unlocked. They hold no booking: the exam specs have them book
+        // a schedule they create themselves, and clean up afterwards, so no re-seed is needed between runs.
+        //   e2e.docs      book / cancel an exam slot (applicant side)
+        //   e2e.attendee  checked in by the officer
+        //   e2e.dropout   booking cancelled by the officer
+        if ($pw !== null) {
+            foreach (['Docs', 'Attendee', 'Dropout'] as $last) {
+                $id = $this->seedApplicant(null, null, 'Qa', $last, $programs['BSCS'], [
+                    'email' => 'e2e.' . strtolower($last) . '@example.com', 'password' => $pw, 'draft' => true, 'tour' => 1,
+                ]);
+                if ($id) {
+                    $this->seedApprovedDocuments($id, $programs['BSCS']);
+                    $this->resetExamBookings($id);
+                }
+            }
+        }
+
         echo "E2ETestSeeder finished on '{$name}'.\n";
     }
 
@@ -227,6 +245,38 @@ class E2ETestSeeder extends Seeder
         }
 
         return $applicantId;
+    }
+
+    /** Uploads + approves a document for every active, mandatory requirement of the program. */
+    private function seedApprovedDocuments(int $applicantId, int $programId): void
+    {
+        $reqs = $this->db->table('program_requirements pr')
+            ->select('pr.program_requirement_id')
+            ->join('requirements r', 'r.requirement_id = pr.requirement_id')
+            ->join('program_requirement_categories prc', 'prc.program_requirement_category_id = pr.program_requirement_category_id')
+            ->where('prc.program_id', $programId)->where('prc.is_active', 1)
+            ->where('pr.is_active', 1)->where('r.is_active', 1)->where('pr.is_mandatory', 1)
+            ->get()->getResultArray();
+        foreach ($reqs as $req) {
+            $where = ['applicant_id' => $applicantId, 'program_requirement_id' => $req['program_requirement_id']];
+            $data = ['document_name' => 'e2e-seed.pdf', 'mime_type' => 'application/pdf', 'status' => 'approved'];
+            if ($this->db->table('applicant_documents')->where($where)->countAllResults()) {
+                $this->db->table('applicant_documents')->where($where)->update($data);
+            } else {
+                $this->db->table('applicant_documents')->insert($where + $data);
+            }
+        }
+    }
+
+    /** Removes the applicant's exam bookings and recounts the slots they held, so a booking spec starts clean. */
+    private function resetExamBookings(int $applicantId): void
+    {
+        $slotIds = array_column($this->db->table('exam_bookings')->select('exam_schedule_id')->where('applicant_id', $applicantId)->get()->getResultArray(), 'exam_schedule_id');
+        $this->db->table('exam_bookings')->where('applicant_id', $applicantId)->delete();
+        foreach (array_unique($slotIds) as $slotId) {
+            $booked = $this->db->table('exam_bookings')->where(['exam_schedule_id' => $slotId, 'status !=' => 'cancelled'])->countAllResults();
+            $this->db->table('exam_schedules')->where('exam_schedule_id', $slotId)->update(['booked_slots' => $booked]);
+        }
     }
 
     /** A pending COUNTER admission-fee payment an officer can approve / reject. */

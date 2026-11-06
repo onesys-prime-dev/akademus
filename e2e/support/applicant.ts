@@ -2,6 +2,11 @@ import { Page, expect } from '@playwright/test';
 import { gotoAuthPage } from './auth-page';
 import { BASE, SIGN_IN } from './base';
 
+// Applicant seeded by E2ETestSeeder with every required document approved (exam schedule unlocked); signs in with E2E_PASSWORD.
+export const DOCS_APPLICANT_EMAIL = 'e2e.docs@example.com';
+export const ATTENDEE_APPLICANT_EMAIL = 'e2e.attendee@example.com'; // checked in by the officer in the exam specs
+export const DROPOUT_APPLICANT_EMAIL = 'e2e.dropout@example.com'; // booking cancelled by the officer in the exam specs
+
 export function hasApplicantCreds() {
   return !!process.env.E2E_EMAIL && !!process.env.E2E_PASSWORD;
 }
@@ -10,10 +15,10 @@ export const NO_CREDS_REASON = 'E2E_EMAIL / E2E_PASSWORD not set (.env.e2e)';
 
 // Signs in as the pre-provisioned E2E applicant (credentials come from .env.e2e via playwright.config.js).
 // By default also skips the first-login onboarding tour, whose modal would otherwise cover the dashboard.
-export async function loginAsApplicant(page: Page, opts: { dismissTour?: boolean } = {}) {
-  const { dismissTour = true } = opts;
+export async function loginAsApplicant(page: Page, opts: { dismissTour?: boolean; email?: string } = {}) {
+  const { dismissTour = true, email = process.env.E2E_EMAIL! } = opts;
   await gotoAuthPage(page, SIGN_IN);
-  await page.locator('input[name=email]').fill(process.env.E2E_EMAIL!);
+  await page.locator('input[name=email]').fill(email);
   await page.locator('#password').fill(process.env.E2E_PASSWORD!);
   await page.locator('#sign-in-button').click();
   await expect(page).toHaveURL(/\/(dashboard|applicant-form)/, { timeout: 15_000 });

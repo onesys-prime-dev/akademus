@@ -57,9 +57,17 @@ async function setExamEnabled(browser: Browser, enabled: boolean): Promise<boole
 }
 
 // Runs fn with exam scheduling enabled, then puts the flag back exactly as it was.
-// Without admin credentials fn simply runs against the current state (callers must cope with 'disabled').
+// Without admin credentials the flag is left alone (callers must cope with 'disabled'), but fn still runs
+// under the lock so parallel browser projects never use the same seeded applicants at the same time.
 export async function withExamEnabled<T>(browser: Browser, fn: () => Promise<T>): Promise<T> {
-  if (!hasAdminCreds()) return fn();
+  if (!hasAdminCreds()) {
+    await acquireLock();
+    try {
+      return await fn();
+    } finally {
+      releaseLock();
+    }
+  }
 
   await acquireLock();
   let previous: boolean | null = null;

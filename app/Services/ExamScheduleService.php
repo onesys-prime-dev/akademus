@@ -250,11 +250,37 @@ class ExamScheduleService
             ]);
     }
 
+    /** Applicants who currently hold a 'booked' (not yet attended or cancelled) seat on a schedule. */
+    public function getBookedApplicantIds(int $scheduleId): array
+    {
+        return array_map('intval', array_column(
+            $this->db->table('exam_bookings')
+                ->select('applicant_id')
+                ->where('exam_schedule_id', $scheduleId)
+                ->where('status', 'booked')
+                ->get()->getResultArray(),
+            'applicant_id'
+        ));
+    }
+
     public function deleteSchedule(int $id): bool
     {
-        return $this->db->table('exam_schedules')
+        $this->db->transStart();
+
+        // Cancel the schedule's bookings first so applicants are not left holding a booking
+        // for a schedule that no longer exists.
+        $this->db->table('exam_bookings')
+            ->where('exam_schedule_id', $id)
+            ->where('status !=', 'cancelled')
+            ->update(['status' => 'cancelled']);
+
+        $this->db->table('exam_schedules')
             ->where('exam_schedule_id', $id)
             ->delete();
+
+        $this->db->transComplete();
+
+        return $this->db->transStatus();
     }
 
     public function checkInBooking(int $bookingId): bool

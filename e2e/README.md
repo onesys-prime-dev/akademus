@@ -142,12 +142,12 @@ Legend: ✅ covered · 🟡 partly covered · ⏳ written but `test.fixme` (bloc
 | M3-03 | Unread counter | 🟡 | Officer badge vs endpoint ✅; applicant badge reset not tested. |
 | M3-04 | Conversation list | ✅ | |
 | M4-01 | Create exam schedule | ✅ | |
-| M4-02 | Edit/delete schedule | 🟡 | Delete with bookings ⏳. |
-| M4-03 | Applicant books slot | ⏳ | Sheet marks it *Not Working as Expected* (page gated on approval). Only an invalid-slot POST is checked. |
-| M4-04 | Booking when full | ⏳ | Same as above. |
-| M4-05 | Cancel booking | ⏳ | Same as above. |
+| M4-02 | Edit/delete schedule | ✅ | Delete with bookings: bookings are cancelled with the schedule. |
+| M4-03 | Applicant books slot | ✅ | Seeded `e2e.docs` applicant books a schedule the test creates, then cancels. |
+| M4-04 | Booking when full | ⏳ | Only a non-existent slot is checked. |
+| M4-05 | Cancel booking | ✅ | Covered by the M4-03 test. |
 | M4-06 | Scheduling disabled | 🟡 | Redirect and officer disabled page ✅. |
-| M4-07 | Check-in / cancel | ⏳ | Seeded fixture exists, test not written. |
+| M4-07 | Check-in / cancel | ✅ | Seeded `e2e.attendee` / `e2e.dropout`; exam result recording is covered too. |
 | M5-01 | Applicants list | ✅ | |
 | M5-02 | Search/filter/paginate | ✅ | The app has no sort control. |
 | M5-03 | Applicant profile | ✅ | All tabs. |
