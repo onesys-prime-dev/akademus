@@ -103,7 +103,7 @@ function populateForm(formId, data) {
         // Remove required so validation passes on review step
         field.removeAttribute('required');
 
-        const label = form.querySelector(`label[for="requirement_${requirementId}"]`);
+        const label = form.querySelector(`.upload-field[data-req-id="${requirementId}"]`);
         if (!label) return;
 
         // add different classes for each status
@@ -136,6 +136,13 @@ function populateForm(formId, data) {
                 btn.textContent = "Rejected";
                 btn.classList.add('upload-btn-rejected', 'uploaded-btn');
             }
+        }
+
+        // Already-uploaded documents can be replaced via the Re-upload button
+        // (approved documents are locked).
+        const reuploadBtn = label.querySelector('.requirement-reupload-action');
+        if (reuploadBtn && data[requirementId]?.status !== 'approved') {
+            reuploadBtn.classList.remove('hidden');
         }
 
         // Show the View button with the correct URL and file name
@@ -199,6 +206,15 @@ function updateUploadCounter(formId, formData) {
         totalUploaded >= totalRequired
     );
 }
+
+// Upload / Re-upload buttons open the hidden file input (delegated, since the
+// form markup is re-rendered on every loadForm call).
+formFillupContainer.addEventListener('click', e => {
+    const btn = e.target.closest('.requirement-upload-action, .requirement-reupload-action');
+    if (!btn || btn.classList.contains('uploaded-btn')) return;
+
+    document.getElementById(btn.dataset.inputId)?.click();
+});
 
 function setupAutoSave(step) {
     const form = document.getElementById(`requirements-${step}`);

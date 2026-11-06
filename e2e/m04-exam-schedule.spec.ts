@@ -282,7 +282,7 @@ test.describe('Officer exam schedule', () => {
     // CONFIRMED APP BUG: ExamScheduleController::create() always answers {success:true}; the service inserts
     // whatever it is given (past dates, end before start, capacity 0 or negative). Remove this test.fail
     // once server side validation exists.
-    test.fail(true, 'App bug: POST exam-schedule/create has no server-side validation (past date, end before start, capacity <= 0 are all accepted)');
+    // test.fail(true, 'App bug: POST exam-schedule/create has no server-side validation (past date, end before start, capacity <= 0 are all accepted)');
 
     const stamp = Date.now();
     const payloads = [

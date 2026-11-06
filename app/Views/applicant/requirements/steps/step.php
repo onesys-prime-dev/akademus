@@ -40,7 +40,7 @@
             $is_required = (bool) ($requirement['is_required'] ?? false);
             ?>
             <div class="form-field">
-                <label for="requirement_<?= $program_requirement_id ?>" class="upload-field <?= $is_required ? '' : 'upload-optional' ?>">
+                <div data-req-id="<?= $program_requirement_id ?>" class="upload-field <?= $is_required ? '' : 'upload-optional' ?>">
                     <div class="requirement-upload-info">
                         <p class="requirement-title">
                             <?= esc($requirement_name) ?>
@@ -60,9 +60,14 @@
                            data-req-id="<?= $program_requirement_id ?>"
                            data-doc-name=""
                            onclick="event.preventDefault(); event.stopPropagation(); openDocumentModal(this.dataset.reqId, this.dataset.docName)">View</a>
-                        <div class="requirement-upload-action btn-primary">Upload</div>
+                        <button type="button"
+                                class="requirement-reupload-action hidden"
+                                data-input-id="requirement_<?= $program_requirement_id ?>">Re-upload</button>
+                        <button type="button"
+                                class="requirement-upload-action btn-primary"
+                                data-input-id="requirement_<?= $program_requirement_id ?>">Upload</button>
                     </div>
-                </label>
+                </div>
 
                 <input
                     type="file"

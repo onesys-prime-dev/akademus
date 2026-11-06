@@ -98,7 +98,7 @@
         justify-content: space-between;
         padding: 20px 20px;
         background: color-mix(in srgb, var(--color-warning) 20%, transparent);
-        cursor: pointer;
+        cursor: default;
         border: 1px solid color-mix(in srgb, var(--color-warning) 60%, transparent);
         border-radius: var(--radius-md);
     }
@@ -230,6 +230,28 @@
 
     .requirement-view-action:hover {
         background: color-mix(in srgb, var(--primary) 16%, transparent);
+    }
+
+    .requirement-reupload-action {
+        font-size: 13px;
+        font-weight: 600;
+        font-family: inherit;
+        color: var(--text-primary);
+        padding: 8px 14px;
+        border-radius: var(--radius-md);
+        border: 1px solid color-mix(in srgb, var(--text-secondary, #6b7280) 50%, transparent);
+        background: transparent;
+        cursor: pointer;
+        transition: background 0.2s;
+        white-space: nowrap;
+    }
+
+    .requirement-reupload-action:hover {
+        background: color-mix(in srgb, var(--text-secondary, #6b7280) 15%, transparent);
+    }
+
+    .requirement-reupload-action.hidden {
+        display: none;
     }
 
 /* ════════════════════════════════════════════════
