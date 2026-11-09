@@ -56,6 +56,86 @@ class ApplicantProfileService
         return $row;
     }
 
+    /**
+     * Pre-decision steps the applicant has not completed yet, as human-readable
+     * labels. Used to warn the officer before approving an under-qualified
+     * applicant. Post-approval steps (reservation fee, clearance) are not
+     * prerequisites and are intentionally excluded.
+     *
+     * @return string[]
+     */
+    public function getIncompleteSteps(int $applicantId): array
+    {
+        $db = \Config\Database::connect();
+
+        $applicant = $db->table('applicants')
+            ->where('applicant_id', $applicantId)
+            ->get()->getRowArray();
+
+        if (!$applicant) {
+            return [];
+        }
+
+        $application = $db->table('applications')
+            ->where('applicant_id', $applicantId)
+            ->orderBy('application_date', 'DESC')
+            ->get()->getRowArray();
+
+        $progress = (new ApplicationProgressService())->build($applicant, $application ?: null);
+
+        $missing = [];
+
+        if (!$progress['form_submitted'] || !$progress['form_complete']) {
+            if ($progress['form_submitted'] && !empty($progress['pending_fast_track_pages'])) {
+                $missing[] = 'Application Form (incomplete: ' . implode(', ', $progress['pending_fast_track_pages']) . ')';
+            } else {
+                $missing[] = 'Application Form';
+            }
+        }
+
+        if (!$progress['docs_complete']) {
+            $missing[] = 'Required Documents Submitted';
+        }
+
+        if (!$progress['docs_verified']) {
+            $missing[] = 'Documents Verified';
+        }
+
+        if ($progress['exam_enabled']) {
+            $result = strtoupper($progress['exam_booking']['result_status'] ?? '');
+            if ($result !== 'PASSED') {
+                $missing[] = 'Entrance Examination Passed';
+            }
+        }
+
+        $feeTypes = [
+            'Admission Processing Fee' => \App\Models\Payment\PaymentFeeTypeModel::CODE_ADMISSION,
+        ];
+        if (!empty($application['is_fast_track'])) {
+            $feeTypes['Fast Track Fee'] = \App\Models\Payment\PaymentFeeTypeModel::CODE_FAST_TRACK;
+        }
+
+        $feeModel = new \App\Models\Payment\PaymentFeeTypeModel();
+        foreach ($feeTypes as $label => $code) {
+            if (!$feeModel->getByCode($code)) {
+                continue; // fee not active, nothing to pay
+            }
+
+            $paid = $db->table('payment p')
+                ->join('payment_fee_type pft', 'pft.payment_fee_type_id = p.payment_fee_type_id')
+                ->where('p.applicant_id', $applicantId)
+                ->where('pft.code', $code)
+                ->where('p.payment_status', 'PAID')
+                ->countAllResults() > 0;
+
+            if (!$paid) {
+                $missing[] = $label . ' Paid';
+            }
+        }
+
+        return $missing;
+    }
+
     public function getTabPayload(int $applicantId, string $tab, array $filters = [], int $limit = null, int $offset = 0): array
     {
         return match ($tab) {
