@@ -226,17 +226,44 @@ function setupAutoSave(step) {
     });
 }
 
-async function autoSaveHandler() {
+// Per-card "Saving..." indicator: grays out the card and shows a small label
+// while its file is being uploaded. loadForm() re-renders the cards after a
+// save, which clears the state naturally; clearCardSaving() covers failures.
+const savingCards = new Set();
+
+function setCardSaving(card) {
+    if (!card) return;
+    card.classList.add('upload-saving');
+    if (!card.querySelector('.requirement-saving-text')) {
+        const label = document.createElement('p');
+        label.className = 'requirement-saving-text';
+        label.textContent = 'Saving...';
+        card.querySelector('.requirement-upload-info')?.appendChild(label);
+    }
+    savingCards.add(card);
+}
+
+function clearCardSaving() {
+    savingCards.forEach(card => {
+        card.classList.remove('upload-saving');
+        card.querySelector('.requirement-saving-text')?.remove();
+    });
+    savingCards.clear();
+}
+
+async function autoSaveHandler(e) {
     if (!autosaveText) return;
 
     if (autoSaveTimeout) clearTimeout(autoSaveTimeout);
 
     // Show "Saving..." while waiting for debounce
     autosaveText.textContent = 'Saving...';
+    setCardSaving(e?.target?.closest('.form-field')?.querySelector('.upload-field'));
 
     // Wait 1 second after last change before saving
     autoSaveTimeout = setTimeout(async () => {
         const success = await processForm(currentStep);
+        clearCardSaving();
 
         if (success) {
             autosaveText.textContent = 'Auto-saved changes';

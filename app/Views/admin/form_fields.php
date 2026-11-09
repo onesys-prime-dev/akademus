@@ -15,7 +15,7 @@ $grouped = $grouped ?? [];
     <meta name="csrf-token" content="<?= csrf_hash() ?>">
     <title>Akademus | Form Field Manager</title>
     <?= theme_favicon_tags() ?>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <?= theme_font_link() ?>
     <style>
         :root {
             --primary:       <?= esc($theme['primary_color']  ?? '#0040a6') ?>;

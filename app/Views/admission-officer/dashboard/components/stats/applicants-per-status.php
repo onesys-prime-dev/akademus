@@ -40,55 +40,66 @@ for ($g = 0; $g <= $gridSteps; $g++) {
     <span class="applicants-per-status__header">Applicants Per Status</span>
 
     <div class="applicants-per-status__body">
-        <svg
-            class="applicants-per-status__svg"
-            viewBox="0 0 1000 280"
-            preserveAspectRatio="none"
-            role="img"
-            aria-label="Applicants per status bar chart"
-        >
-            <!-- grid lines -->
-            <g class="applicants-per-status__grid">
-                <?php foreach ($gridYs as $gy): ?>
-                <line x1="90" y1="<?= $gy ?>" x2="980" y2="<?= $gy ?>" />
-                <?php endforeach; ?>
-            </g>
+        <!-- Only the SVG (grid + bars) stretches with the container; all text is
+             HTML positioned over it so it never gets squished/stretched. Chart
+             height is fixed at 280px = viewBox height, so top px = viewBox y. -->
+        <div class="applicants-per-status__chart">
+            <svg
+                class="applicants-per-status__svg"
+                viewBox="0 0 1000 280"
+                preserveAspectRatio="none"
+                role="img"
+                aria-label="Applicants per status bar chart"
+            >
+                <!-- grid lines -->
+                <g class="applicants-per-status__grid">
+                    <?php foreach ($gridYs as $gy): ?>
+                    <line x1="90" y1="<?= $gy ?>" x2="980" y2="<?= $gy ?>" />
+                    <?php endforeach; ?>
+                </g>
+
+                <!-- bars -->
+                <g class="applicants-per-status__bars">
+                    <?php foreach ($statusBars as $i => $bar): ?>
+                    <?php
+                        $barH = $bar['count'] > 0
+                            ? round(($bar['count'] / $axisMax) * $chartH)
+                            : 0;
+                        $barY = $chartBottom - $barH;
+                        $bx   = $barXPositions[$i];
+                    ?>
+                    <rect x="<?= $bx ?>" y="<?= $barY ?>" width="<?= $barWidth ?>" height="<?= max(0, $barH) ?>" rx="8" />
+                    <?php endforeach; ?>
+                </g>
+            </svg>
 
             <!-- y-axis labels -->
-            <g class="applicants-per-status__y-axis">
+            <div class="applicants-per-status__y-axis">
                 <?php foreach ($gridYs as $gi => $gy): ?>
-                <text x="80" y="<?= $gy + 4 ?>"><?= number_format($axisMax - $gi * $gridStep) ?></text>
+                <span style="top: <?= $gy ?>px"><?= number_format($axisMax - $gi * $gridStep) ?></span>
                 <?php endforeach; ?>
-            </g>
+            </div>
 
-            <!-- bars -->
-            <g class="applicants-per-status__bars">
+            <!-- bar value labels -->
+            <div class="applicants-per-status__values">
                 <?php foreach ($statusBars as $i => $bar): ?>
-                <?php
-                    $barH = $bar['count'] > 0
-                        ? round(($bar['count'] / $axisMax) * $chartH)
-                        : 0;
-                    $barY = $chartBottom - $barH;
-                    $bx   = $barXPositions[$i];
-                ?>
-                <rect x="<?= $bx ?>" y="<?= $barY ?>" width="<?= $barWidth ?>" height="<?= max(0, $barH) ?>" rx="8" />
                 <?php if ($bar['count'] > 0): ?>
-                <text x="<?= $bx + $barWidth / 2 ?>" y="<?= $barY - 6 ?>"
-                      text-anchor="middle" fill="#555" font-size="13">
-                    <?= number_format($bar['count']) ?>
-                </text>
+                <?php
+                    $barH = round(($bar['count'] / $axisMax) * $chartH);
+                    $barY = $chartBottom - $barH;
+                ?>
+                <span style="left: <?= ($barXPositions[$i] + $barWidth / 2) / 10 ?>%; top: <?= $barY - 6 ?>px"><?= number_format($bar['count']) ?></span>
                 <?php endif; ?>
                 <?php endforeach; ?>
-            </g>
+            </div>
 
             <!-- x-axis labels -->
-            <g fill="#555" font-size="13">
+            <div class="applicants-per-status__x-axis">
                 <?php foreach ($statusBars as $i => $bar): ?>
-                <text x="<?= $barXPositions[$i] + $barWidth / 2 ?>" y="278"
-                      text-anchor="middle"><?= esc($bar['label']) ?></text>
+                <span style="left: <?= ($barXPositions[$i] + $barWidth / 2) / 10 ?>%"><?= esc($bar['label']) ?></span>
                 <?php endforeach; ?>
-            </g>
-        </svg>
+            </div>
+        </div>
     </div>
 
     <div class="applicants-per-status__legends">

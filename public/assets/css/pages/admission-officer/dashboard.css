@@ -314,7 +314,13 @@
     width: 100%;
 }
 
-/* SVG chart */
+/* Chart wrapper: SVG (grid + bars) stretches, text overlays do not */
+.applicants-per-status__chart {
+    position: relative;
+    width: 100%;
+    height: 280px;
+}
+
 .applicants-per-status__svg {
     display: block;
     width: 100%;
@@ -327,14 +333,32 @@
     stroke-width: 1;
 }
 
-.applicants-per-status__y-axis text,
-.applicants-per-status__x-axis text {
-    fill: #333;
-    font-size: 12px;
+.applicants-per-status__y-axis span,
+.applicants-per-status__values span,
+.applicants-per-status__x-axis span {
+    position: absolute;
+    white-space: nowrap;
+    pointer-events: none;
 }
 
-.applicants-per-status__y-axis text {
-    text-anchor: end;
+.applicants-per-status__y-axis span {
+    left: 8%;
+    transform: translate(-100%, -50%);
+    font-size: 12px;
+    color: #333;
+}
+
+.applicants-per-status__values span {
+    transform: translate(-50%, -100%);
+    font-size: 13px;
+    color: #555;
+}
+
+.applicants-per-status__x-axis span {
+    top: 278px;
+    transform: translate(-50%, -100%);
+    font-size: 13px;
+    color: #555;
 }
 
 .applicants-per-status__bars rect:nth-of-type(1) { fill: #3b82f6; }

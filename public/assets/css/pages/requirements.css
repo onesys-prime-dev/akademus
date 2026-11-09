@@ -149,6 +149,21 @@
             background: color-mix(in srgb, var(--color-danger) 30%, transparent);
         }
 
+    /* Card whose file is currently being uploaded */
+    .upload-saving {
+        opacity: 0.55;
+        filter: grayscale(1);
+        pointer-events: none;
+        transition: opacity 0.2s;
+    }
+
+    .requirement-saving-text {
+        margin: 4px 0 0;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-secondary, #6b7280);
+    }
+
     .requirement-upload-info {
         display: flex;
         flex-direction: column;
