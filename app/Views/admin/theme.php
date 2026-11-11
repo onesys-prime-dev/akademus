@@ -497,6 +497,7 @@ if (!empty($logo)) {
                 <iframe id="preview-iframe"
                         src="<?= base_url('admin/theme/preview?page=dashboard') ?>"
                         frameborder="0"
+                        sandbox="allow-scripts allow-same-origin"
                         title="Portal Preview"></iframe>
             </div>
         </div>
