@@ -168,6 +168,7 @@ function bindContentEvents() {
             const action = actionBtn.dataset.action;
 
             if (action === 'view') {
+                state.selectedScheduleId = id;
                 const details = await fetchScheduleDetails(id);
                 renderScheduleDetails(details);
                 openModal('schedule-details-modal');
@@ -205,11 +206,18 @@ function bindContentEvents() {
         if (checkInBtn) {
             const bookingId = checkInBtn.dataset.checkIn;
 
-            await postForm(`/admission-officer/exam-schedule/bookings/check-in/${bookingId}`, new FormData());
+            try {
+                await postForm(`/admission-officer/exam-schedule/bookings/check-in/${bookingId}`, new FormData());
 
-            const details = await fetchScheduleDetails(state.selectedScheduleId);
-            renderScheduleDetails(details);
-            await refreshContent();
+                if (state.selectedScheduleId) {
+                    const details = await fetchScheduleDetails(state.selectedScheduleId);
+                    renderScheduleDetails(details);
+                }
+            } catch (err) {
+                console.error('Check-in refresh failed:', err);
+            } finally {
+                await refreshContent();
+            }
             return;
         }
 
@@ -219,11 +227,18 @@ function bindContentEvents() {
             const ok = confirm('Cancel this booking?');
             if (!ok) return;
 
-            await postForm(`/admission-officer/exam-schedule/bookings/cancel/${bookingId}`, new FormData());
+            try {
+                await postForm(`/admission-officer/exam-schedule/bookings/cancel/${bookingId}`, new FormData());
 
-            const details = await fetchScheduleDetails(state.selectedScheduleId);
-            renderScheduleDetails(details);
-            await refreshContent();
+                if (state.selectedScheduleId) {
+                    const details = await fetchScheduleDetails(state.selectedScheduleId);
+                    renderScheduleDetails(details);
+                }
+            } catch (err) {
+                console.error('Cancel refresh failed:', err);
+            } finally {
+                await refreshContent();
+            }
             return;
         }
 

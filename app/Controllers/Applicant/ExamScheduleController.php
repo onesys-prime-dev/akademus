@@ -112,11 +112,18 @@ class ExamScheduleController extends BaseController
         $db = \Config\Database::connect();
         $booking = $db->table('exam_bookings')
             ->where('applicant_id', (int) $applicant['applicant_id'])
-            ->whereIn('status', ['booked'])
+            ->whereIn('status', ['booked', 'attended'])
             ->get()->getRowArray();
 
         if (! $booking) {
             return $this->jsonError('No active booking found to cancel.');
+        }
+
+        // Block cancellation once a result has been recorded, even if the officer never
+        // checked the applicant in (status can still be 'booked' in that case).
+        $resultStatus = strtoupper(trim((string) ($booking['result_status'] ?? '')));
+        if ($booking['status'] === 'attended' || ($resultStatus !== '' && $resultStatus !== 'PENDING')) {
+            return $this->jsonError('This booking can no longer be cancelled because the exam was already attended or a result has been recorded.');
         }
 
         $ok = $this->service->cancelBooking((int) $booking['exam_booking_id']);
