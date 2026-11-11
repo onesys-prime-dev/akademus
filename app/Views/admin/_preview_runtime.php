@@ -3,7 +3,8 @@
 // ThemeController::preview()) — never rendered for real applicant/visitor
 // traffic. Gives the admin Theme Customizer's live preview two things:
 // 1) instant CSS-variable updates as the admin edits colors, without a reload
-// 2) working in-preview navigation between the 13 real pages it supports
+// 2) an inert page: links/forms inside the preview never navigate; the page
+//    only changes through the admin's page selector
 ?>
 <script>
 (function () {
@@ -41,55 +42,18 @@
         }
     });
 
-    // ── 2. In-preview navigation ─────────────────────────────────────────────
-    var PATH_TO_PAGE = {
-        '/dashboard': 'dashboard',
-        '/applicant-form': 'appform',
-        '/requirements': 'documents',
-        '/tracking-progress': 'track',
-        '/exam-schedule': 'exam',
-        '/admission-processing-fee': 'admission-fee',
-        '/reservation-fee': 'reservation-fee',
-        '/faq': 'faq',
-        '/follow-up-messages': 'followup',
-        '/tuition-fee-calculator': 'tuition-calc',
-    };
-
-    function pageForHref(href) {
-        try {
-            var path = new URL(href, window.location.href).pathname;
-            for (var key in PATH_TO_PAGE) {
-                if (path === key || path.endsWith(key)) return PATH_TO_PAGE[key];
-            }
-        } catch (e) { /* ignore malformed hrefs */ }
-        return null;
-    }
-
-    // Every real internal link (Logout, Sign Up/Sign In cross-links,
-    // "Forgot Password", etc.) is blocked by default inside the sandbox —
-    // only the 13 known preview pages above are ever actually navigated to.
-    // This is deliberately an allow-list, not a deny-list: a link hitting
-    // /logout (which calls session()->destroy() — wiping the ADMIN's own
-    // session, not just an applicant one) is exactly the kind of thing this
-    // guards against, along with anything else not explicitly mapped.
+    // ── 2. Inert preview ─────────────────────────────────────────────────────
+    // The preview page only ever changes via the admin's "Previewing:" page
+    // selector (which reloads the iframe from the parent). Nothing clicked
+    // inside the preview may navigate: every link click and form submit is
+    // cancelled. (The iframe sandbox also blocks form submission and
+    // top-level navigation as a second layer.)
     document.addEventListener('click', function (e) {
-        var link = e.target.closest('a[href]');
-        if (!link) return;
+        if (e.target.closest('a[href]')) e.preventDefault();
+    }, true);
 
-        var href = link.getAttribute('href');
-        if (!href || href.startsWith('#') || href.startsWith('javascript:') || href.startsWith('mailto:')) return;
-
-        var isSameOrigin = true;
-        try { isSameOrigin = new URL(href, window.location.href).origin === window.location.origin; } catch (e) { /* relative href */ }
-        if (!isSameOrigin) return; // external links (marketing nav, etc.) are harmless, leave them alone
-
+    document.addEventListener('submit', function (e) {
         e.preventDefault();
-
-        var page = pageForHref(href);
-        if (!page || page === currentPreviewPage) return;
-
-        if (window.parent) window.parent.postMessage({ type: 'preview-navigating' }, '*');
-        window.location.href = '?page=' + page;
     }, true);
 
     // Tell the parent which page we're actually showing, so its
