@@ -33,7 +33,8 @@ class SisSync extends BaseCommand
         $db = db_connect();
 
         if (CLI::getOption('status') !== null) {
-            return $this->status();
+            $this->status();
+            return;
         }
 
         $requeue = CLI::getOption('requeue');
