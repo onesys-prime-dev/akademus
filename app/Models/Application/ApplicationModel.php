@@ -2,6 +2,7 @@
 
 namespace App\Models\Application;
 
+use App\Casts\EncryptedJsonCast;
 use CodeIgniter\Model;
 
 class ApplicationModel extends Model
@@ -22,6 +23,16 @@ class ApplicationModel extends Model
         'revision_note',
         'revision_pages',
         'is_fast_track',
+        'custom_fields',
+    ];
+
+    protected array $castHandlers = [
+        'encrypted_json' => EncryptedJsonCast::class,
+    ];
+
+    // Answers to admin-created fields, keyed by field_key; encrypted at rest.
+    protected array $casts = [
+        'custom_fields' => '?encrypted_json',
     ];
 
     protected $useTimestamps = true;

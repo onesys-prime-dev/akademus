@@ -9,6 +9,8 @@ use App\Models\Application\ApplicationModel;
 use App\Models\Application\PersonalInformationModel;
 use App\Models\Application\FamilyBackgroundModel;
 use App\Models\Application\EducationalBackgroundModel;
+use App\Models\FormFieldConfigModel;
+use App\Models\FormFieldOptionConfigModel;
 use App\Models\FormPageModel;
 use App\Models\ThemeModel;
 use App\Services\NotificationService;
@@ -54,7 +56,87 @@ class ApplicantFormController extends BaseController
             ]),
         ];
 
-        return $map[$pageId] ?? [];
+        $pageData = $map[$pageId] ?? [];
+        unset($pageData['custom_fields']); // page 1 spreads the application row; don't leak other pages' answers
+
+        // Answers to admin-created fields live in applications.custom_fields, keyed by field_key.
+        $customValues = $application['custom_fields'] ?? [];
+        foreach ($this->getCustomFieldConfigs($pageId) as $key => $cfg) {
+            if (array_key_exists($key, $customValues)) {
+                $pageData[$key] = $customValues[$key];
+            }
+        }
+
+        return $pageData;
+    }
+
+    /** Admin-created (non-system) field configs for a page, keyed by field_key. */
+    private function getCustomFieldConfigs(int $pageId): array
+    {
+        $configs = [];
+        foreach ((new FormFieldConfigModel())->getAllForPage($pageId) as $key => $cfg) {
+            if (empty($cfg['is_system'])) {
+                $configs[$key] = $cfg;
+            }
+        }
+        return $configs;
+    }
+
+    /**
+     * Validates and collects the posted answers for a page's custom fields.
+     * Only keys of this page's non-system fields are accepted. Returns
+     * [field_key => value], or null (with $stepValidationError set) if invalid.
+     */
+    private function collectCustomFieldValues(?int $pageId, array $data, string $action): ?array
+    {
+        if (!$pageId) {
+            return [];
+        }
+
+        $configs = array_filter($this->getCustomFieldConfigs($pageId), fn($c) => !empty($c['is_visible']));
+        $options = (new FormFieldOptionConfigModel())->getNamesForFields(
+            array_map('intval', array_column(array_filter($configs, fn($c) => $c['field_type'] === 'select'), 'id'))
+        );
+
+        $values = [];
+        foreach ($configs as $key => $cfg) {
+            if (!array_key_exists($key, $data) || is_array($data[$key])) {
+                continue;
+            }
+
+            $value = trim((string) $data[$key]);
+
+            if ($action === 'submit' && !empty($cfg['is_required']) && $value === '') {
+                $this->stepValidationError = $cfg['label'] . ' is required.';
+                return null;
+            }
+            if (mb_strlen($value) > 2000) {
+                $this->stepValidationError = $cfg['label'] . ' is too long.';
+                return null;
+            }
+            if ($cfg['field_type'] === 'select' && $value !== ''
+                && !in_array($value, $options[(int) $cfg['id']] ?? [], true)) {
+                $this->stepValidationError = 'Please choose a valid option for ' . $cfg['label'] . '.';
+                return null;
+            }
+
+            $values[$key] = $value;
+        }
+
+        return $values;
+    }
+
+    private function saveCustomFieldValues(int $applicationId, array $values): bool
+    {
+        if (!$values) {
+            return true;
+        }
+
+        $applicationModel = new ApplicationModel();
+        $merged = array_merge($applicationModel->find($applicationId)['custom_fields'] ?? [], $values);
+        $merged = array_filter($merged, fn($v) => $v !== '');
+
+        return (bool) $applicationModel->update($applicationId, ['custom_fields' => $merged]);
     }
 
     private function requireLogin(): void
@@ -286,6 +368,16 @@ class ApplicantFormController extends BaseController
             ]);
         }
 
+        // Validate admin-created fields up front so a bad value doesn't leave a half-saved step.
+        $customValues = $this->collectCustomFieldValues($pageId, $data, $action);
+        if ($customValues === null) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => $this->stepValidationError,
+                'reload'  => false,
+            ]);
+        }
+
         if (!$existingApplication) {
             $applicationId = $applicationModel->insert([
                 'applicant_id'       => $applicantId,
@@ -313,6 +405,10 @@ class ApplicantFormController extends BaseController
             4 => $this->updateEducationalBackground($data, $applicationId, $action), // Educational Background
             default => true,
         };
+
+        if ($result) {
+            $result = $this->saveCustomFieldValues((int) $applicationId, $customValues);
+        }
 
         $isFastTrack = $existingApplication
             ? !empty($existingApplication['is_fast_track'])

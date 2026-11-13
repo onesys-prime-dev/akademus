@@ -75,7 +75,8 @@
              data-key="<?= esc($f['field_key']) ?>"
              data-page="<?= (int)$f['page_id'] ?>"
              data-section="<?= esc($sectionId) ?>"
-             data-system="<?= $f['is_system'] ? '1' : '0' ?>">
+             data-system="<?= $f['is_system'] ? '1' : '0' ?>"
+             data-options="<?= esc(json_encode($f['options'] ?? [])) ?>">
 
             <div class="ff-drag-handle">
                 <svg width="12" height="16" viewBox="0 0 12 16" fill="currentColor">

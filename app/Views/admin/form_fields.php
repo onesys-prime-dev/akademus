@@ -157,6 +157,12 @@ $grouped = $grouped ?? [];
         .ff-modal-field input:focus, .ff-modal-field select:focus, .ff-modal-field textarea:focus { border-color:var(--primary,#0040a6); background:var(--primary-soft,#e8f0ff); }
         .ff-modal-actions { display:flex; justify-content:flex-end; gap:10px; }
         .ff-req-check { width:16px; height:16px; accent-color:var(--primary,#0040a6); cursor:pointer; }
+        .ff-modal { max-height:90vh; overflow-y:auto; }
+        .ff-options-list { display:flex; flex-direction:column; gap:6px; max-height:200px; overflow-y:auto; }
+        .ff-option-row { display:flex; gap:6px; }
+        .ff-option-row input { flex:1; min-width:0; }
+        .ff-option-row .ff-icon-btn { flex-shrink:0; width:34px; height:auto; }
+        .ff-options-empty { font-size:12px; color:#999; padding:2px 0; }
 
         /* ── PAGE MODAL ── */
         .page-modal-bg { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:200; display:none; align-items:center; justify-content:center; }
@@ -311,7 +317,8 @@ $grouped = $grouped ?? [];
                              data-key="<?= esc($f['field_key']) ?>"
                              data-page="<?= (int)$f['page_id'] ?>"
                              data-section="<?= esc($sectionId) ?>"
-                             data-system="<?= $f['is_system'] ? '1' : '0' ?>">
+                             data-system="<?= $f['is_system'] ? '1' : '0' ?>"
+                             data-options="<?= esc(json_encode($f['options'] ?? [])) ?>">
                             <div class="ff-drag-handle">
                                 <svg width="12" height="16" viewBox="0 0 12 16" fill="currentColor"><circle cx="4" cy="3" r="1.5"/><circle cx="8" cy="3" r="1.5"/><circle cx="4" cy="8" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="4" cy="13" r="1.5"/><circle cx="8" cy="13" r="1.5"/></svg>
                             </div>
@@ -410,6 +417,11 @@ $grouped = $grouped ?? [];
                     <input type="checkbox" id="modal-visible" class="ff-req-check" checked> Visible on Form
                 </label>
             </div>
+            <div class="ff-modal-field" id="modal-options-wrap" style="display:none;">
+                <label>Options</label>
+                <div class="ff-options-list" id="modal-options-list"></div>
+                <button type="button" class="ff-btn ff-btn-ghost" onclick="ffAddOptionRow()" style="padding:6px 14px;font-size:12px;align-self:flex-start;margin-top:4px;">+ Add Option</button>
+            </div>
         </div>
         <div class="ff-modal-actions">
             <button class="ff-btn ff-btn-ghost" onclick="ffCloseModal()">Cancel</button>
@@ -439,6 +451,7 @@ $grouped = $grouped ?? [];
 // ── STATE ────────────────────────────────────────────────────
 let ffChanges = 0;
 let editRowEl = null;
+const ffDeletedKeys = new Set(); // custom fields removed in the UI, deleted server-side on save
 let currentPageId = <?= (int)(($pages[0]['id'] ?? 1)) ?>;
 const ffCsrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
@@ -447,6 +460,7 @@ function ffSelectPage(pageId, el) {
     document.querySelectorAll('.page-item').forEach(i => i.classList.remove('active'));
     el.classList.add('active');
     currentPageId = pageId;
+    ffDeletedKeys.clear(); // unsaved edits are dropped on page switch, so pending deletions are too
 
     fetch('<?= base_url('admin/form-fields/page-data') ?>?page_id=' + pageId, {
         headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -709,6 +723,7 @@ function ffAddCustomField(sectionId, pageId) {
     const placeholder = document.getElementById('add-placeholder-' + sectionId).value.trim();
     if (!label) { ffToast('Please enter a field label.', 'error'); return; }
     const key = keyInput || ffAutoKey(label);
+    ffDeletedKeys.delete(key); // re-adding a key deleted earlier in this session
     const list = document.getElementById(sectionId);
     const row = document.createElement('div');
     row.className = 'ff-field-row';
@@ -716,6 +731,7 @@ function ffAddCustomField(sectionId, pageId) {
     row.dataset.page    = pageId;
     row.dataset.section = sectionId;
     row.dataset.system  = '0';
+    row.dataset.options = '[]';
     row.innerHTML = `
         <div class="ff-drag-handle"><svg width="12" height="16" viewBox="0 0 12 16" fill="currentColor"><circle cx="4" cy="3" r="1.5"/><circle cx="8" cy="3" r="1.5"/><circle cx="4" cy="8" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="4" cy="13" r="1.5"/><circle cx="8" cy="13" r="1.5"/></svg></div>
         <div class="ff-field-name">
@@ -742,6 +758,7 @@ function ffAddCustomField(sectionId, pageId) {
 function ffDeleteField(btn) {
     const row = btn.closest('.ff-field-row');
     if (!confirm(`Delete field "${row.dataset.key}"?`)) return;
+    if (row.dataset.system === '0') ffDeletedKeys.add(row.dataset.key);
     row.remove();
     ffMarkChange();
     ffToast('Field removed.', 'success');
@@ -754,7 +771,48 @@ function ffEditField(btn) {
     document.getElementById('modal-label').value       = row.querySelector('.ff-field-label').childNodes[0].textContent.trim();
     document.getElementById('modal-placeholder').value = row.querySelector('.ff-field-placeholder').textContent.replace('—','').trim();
     document.getElementById('modal-visible').checked   = row.querySelector('input[type=checkbox]').checked;
+
+    // Options editor: only custom Select fields (system selects use hardcoded options).
+    const isCustomSelect = row.dataset.system === '0'
+        && row.querySelector('.ff-field-type').textContent.trim().toLowerCase() === 'select';
+    const optionsList = document.getElementById('modal-options-list');
+    optionsList.innerHTML = '';
+    document.getElementById('modal-options-wrap').style.display = isCustomSelect ? '' : 'none';
+    if (isCustomSelect) {
+        let opts = [];
+        try { opts = JSON.parse(row.dataset.options || '[]'); } catch (e) {}
+        opts.forEach(o => ffAddOptionRow(o));
+        if (!opts.length) ffAddOptionRow('');
+    }
+
     document.getElementById('ff-edit-modal').classList.add('open');
+}
+
+function ffAddOptionRow(value = '') {
+    const list = document.getElementById('modal-options-list');
+    const wrap = document.createElement('div');
+    wrap.className = 'ff-option-row';
+    wrap.innerHTML = `
+        <input type="text" maxlength="255" placeholder="Option name" value="${escHtml(value)}">
+        <button type="button" class="ff-icon-btn delete" title="Remove option" onclick="this.parentElement.remove()">✕</button>`;
+    const input = wrap.querySelector('input');
+    // Enter adds the next option instead of submitting/closing anything.
+    input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); ffAddOptionRow(''); }
+    });
+    list.appendChild(wrap);
+    if (value === '') input.focus();
+}
+
+// Trimmed, case-insensitively de-duplicated option names from the modal editor.
+function ffReadOptionRows() {
+    const seen = new Set();
+    const names = [];
+    document.querySelectorAll('#modal-options-list input').forEach(i => {
+        const name = i.value.trim();
+        if (name && !seen.has(name.toLowerCase())) { seen.add(name.toLowerCase()); names.push(name); }
+    });
+    return names;
 }
 
 function ffCloseModal() { document.getElementById('ff-edit-modal').classList.remove('open'); editRowEl = null; }
@@ -765,6 +823,13 @@ function ffApplyModal() {
     const newPlaceholder = document.getElementById('modal-placeholder').value.trim();
     const newVisible     = document.getElementById('modal-visible').checked;
     if (!newLabel) { ffToast('Label cannot be empty.', 'error'); return; }
+
+    if (document.getElementById('modal-options-wrap').style.display !== 'none') {
+        const names = ffReadOptionRows();
+        if (!names.length) { ffToast('Add at least one option for a Select field.', 'error'); return; }
+        editRowEl.dataset.options = JSON.stringify(names);
+    }
+
     const labelEl = editRowEl.querySelector('.ff-field-label');
     labelEl.childNodes[0].textContent = newLabel + ' ';
     editRowEl.querySelector('.ff-field-placeholder').textContent = newPlaceholder || '—';
@@ -782,8 +847,16 @@ document.getElementById('ff-edit-modal').addEventListener('click', function(e) {
 // ── SAVE ALL ─────────────────────────────────────────────────
 function ffSaveAll() {
     const payload = [];
+    const emptySelects = [];
     document.querySelectorAll('.ff-field-row').forEach(row => {
+        const type = row.querySelector('.ff-field-type').textContent.trim().toLowerCase();
+        const entry = {};
+        if (type === 'select' && row.dataset.system === '0') {
+            try { entry.options = JSON.parse(row.dataset.options || '[]'); } catch (e) { entry.options = []; }
+            if (!entry.options.length) emptySelects.push(row.querySelector('.ff-field-label').childNodes[0].textContent.trim());
+        }
         payload.push({
+            ...entry,
             key:         row.dataset.key,
             page_id:     parseInt(row.dataset.page),
             section:     row.dataset.section,
@@ -794,15 +867,20 @@ function ffSaveAll() {
             type:        row.querySelector('.ff-field-type').textContent.toLowerCase(),
         });
     });
+    if (emptySelects.length) {
+        ffToast(`Add options to the Select field "${emptySelects[0]}" (Edit → Options) before saving.`, 'error');
+        return;
+    }
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
     fetch('<?= base_url('admin/form-fields/save') ?>', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': csrf },
-        body: JSON.stringify({ fields: payload })
+        body: JSON.stringify({ fields: payload, deleted: [...ffDeletedKeys] })
     })
     .then(r => r.json())
     .then(data => {
         if (data.status === 'success') {
+            ffDeletedKeys.clear();
             ffChanges = 0;
             document.getElementById('ff-change-count').textContent = '0 changes';
             ffToast('All changes saved!', 'success');
