@@ -311,7 +311,7 @@
                 ">🎓</div>
                 <div style="flex:1;min-width:0;">
                     <p style="margin:0;font-size:12.5px;font-weight:600;color:#1a202c;line-height:1.4;">
-                        Admission Officer replied to your message
+                        Admission Officer sent you a message
                     </p>
                     <p style="
                         margin:3px 0 0;font-size:12px;color:#4a5568;

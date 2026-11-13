@@ -403,6 +403,7 @@ class ApplicantsController extends BaseController
             'activeTab'      => $activeTab,
             'initialContent' => $initialContent,
             'formPages'      => (new \App\Models\FormPageModel())->getEnabledOrdered(),
+            'incompleteSteps' => $this->applicantProfileService->getIncompleteSteps($applicantId),
         ]);
     }
 

@@ -352,6 +352,7 @@ class ApplicationProgressService
             'form_complete'      => $formComplete,
             'form_submitted'     => $formSubmitted,
             'docs_complete'      => $docsComplete,
+            'docs_verified'      => $docsVerified,
             'exam_enabled'       => $examEnabled,
             'exam_booking'       => $examBooking,
             'is_fast_track'      => $isFastTrack,

@@ -16,7 +16,7 @@
             value="<?= esc($program['program_id']) ?>"
             <?= isset($selected) && $selected == $program['program_id'] ? 'selected' : '' ?>
         >
-            <?= esc($programName) ?>
+            <?= esc($program['program_code'] ?: $program['program_name']) ?>
         </option>
     <?php endforeach; ?>
 </select>

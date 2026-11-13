@@ -196,8 +196,9 @@ class Database extends Config
 
         // Ensure that we always set the database group to 'tests' if
         // we are currently running an automated test suite, so that
-        // we don't overwrite live data on accident.
-        if (ENVIRONMENT === 'testing') {
+        // we don't overwrite live data on accident. The Playwright E2E
+        // suite opts in through E2E_USE_TEST_DB in .env.
+        if (ENVIRONMENT === 'testing' || env('E2E_USE_TEST_DB')) {
             $this->defaultGroup = 'tests';
         }
     }

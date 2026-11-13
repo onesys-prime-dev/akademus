@@ -104,6 +104,16 @@ class SendEmails extends BaseCommand
                             $success = EmailService::sendPaymentRejectedNotification($email['to_email'], $payload['reference_num'] ?? '', $payload['fee_type'] ?? '');
                             break;
 
+                        case 'exam.schedule_cancelled':
+                            $success = EmailService::sendExamScheduleCancelledNotification(
+                                $email['to_email'],
+                                $payload['exam_date'] ?? '',
+                                $payload['start_time'] ?? '',
+                                $payload['end_time'] ?? '',
+                                $payload['location'] ?? ''
+                            );
+                            break;
+
                         case 'application.submitted':
                             $success = EmailService::sendApplicationSubmittedNotification($email['to_email']);
                             break;

@@ -336,9 +336,10 @@ function updateApplicantsPerProgram(perProgram = []) {
 function updateApplicantsPerStatus(counts = {}) {
   const body = document.querySelector('.applicants-per-status__body');
   const svg = document.querySelector('.applicants-per-status__svg');
+  const chart = document.querySelector('.applicants-per-status__chart');
   const legends = document.querySelector('.applicants-per-status__legends');
 
-  if (!body || !svg || !legends) return;
+  if (!body || !svg || !chart || !legends) return;
 
   const values = [
     Number(counts.in_progress) || 0,
@@ -355,7 +356,7 @@ function updateApplicantsPerStatus(counts = {}) {
   let emptyEl = body.querySelector('.applicants-empty');
 
   if (total === 0) {
-    svg.style.display = 'none';
+    chart.style.display = 'none';
     legends.style.display = 'none';
 
     if (!emptyEl) {
@@ -373,7 +374,7 @@ function updateApplicantsPerStatus(counts = {}) {
   // =========================
   if (emptyEl) emptyEl.remove();
 
-  svg.style.display = '';
+  chart.style.display = '';
   legends.style.display = '';
 
   // =========================
@@ -399,9 +400,11 @@ function updateApplicantsPerStatus(counts = {}) {
 
   // =========================
   // SAFE LABEL REBUILD
+  // (HTML overlay, so text isn't distorted by the stretched SVG)
   // =========================
-  if (barsGroup) {
-    barsGroup.querySelectorAll('text').forEach(el => el.remove());
+  const valuesEl = chart.querySelector('.applicants-per-status__values');
+  if (valuesEl) {
+    valuesEl.innerHTML = '';
 
     rects.forEach((rect, i) => {
       const value = values[i];
@@ -410,15 +413,12 @@ function updateApplicantsPerStatus(counts = {}) {
       const x = parseFloat(rect.getAttribute('x')) + 70;
       const y = parseFloat(rect.getAttribute('y')) - 6;
 
-      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('x', x);
-      text.setAttribute('y', y);
-      text.setAttribute('text-anchor', 'middle');
-      text.setAttribute('fill', '#555');
-      text.setAttribute('font-size', '13');
-      text.textContent = format(value);
+      const span = document.createElement('span');
+      span.style.left = `${x / 10}%`;
+      span.style.top = `${y}px`;
+      span.textContent = format(value);
 
-      barsGroup.appendChild(text);
+      valuesEl.appendChild(span);
     });
   }
 }

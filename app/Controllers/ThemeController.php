@@ -178,31 +178,22 @@ class ThemeController extends BaseController
 
         $built = (new \App\Services\ThemePreviewDataService())->build($page);
 
-        // A few real partials (sidebar, applicant-form step-1) read applicant
-        // identity straight from session() rather than $data. Swap in the fake
-        // persona for just this render, then restore whatever was there before —
-        // net effect is zero persistence beyond this single response.
-        $sessionKeys = array_keys(\App\Services\ThemePreviewDataService::SESSION_PERSONA);
-        $original    = [];
-        foreach ($sessionKeys as $key) {
-            $original[$key] = session()->get($key);
-        }
-        session()->set(\App\Services\ThemePreviewDataService::SESSION_PERSONA);
+        // A few real partials/models (sidebar, step-1, ExamBookingModel…) read
+        // applicant identity straight from session() rather than $data. Instead
+        // of writing the fake persona into the REAL session (which the admin
+        // shares with this iframe), replace the session service for the rest of
+        // this request with an in-memory one. The real session is never read
+        // or written from here on, so there is nothing to snapshot or restore.
+        // The admin auth check above already ran against the real session.
+        \Config\Services::injectMock(
+            'session',
+            new \App\Libraries\PreviewSession(\App\Services\ThemePreviewDataService::SESSION_PERSONA)
+        );
 
         $data = $built['data'];
         $data['isPreview'] = true;
 
-        $html = view($built['view'], $data);
-
-        foreach ($sessionKeys as $key) {
-            if ($original[$key] === null) {
-                session()->remove($key);
-            } else {
-                session()->set($key, $original[$key]);
-            }
-        }
-
-        return $this->response->setBody($html);
+        return $this->response->setBody(view($built['view'], $data));
     }
 
     /**

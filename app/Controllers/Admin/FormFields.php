@@ -33,11 +33,19 @@ class FormFields extends BaseController
             return $this->response->setStatusCode(401)->setJSON(['status' => 'error', 'message' => 'Unauthorized']);
         }
         $body   = $this->request->getJSON(true);
-        $fields = $body['fields'] ?? [];
-        if (empty($fields)) {
+        $fields  = $body['fields']  ?? [];
+        $deleted = $body['deleted'] ?? [];
+        if (empty($fields) && empty($deleted)) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'No fields received']);
         }
-        (new FormFieldConfigModel())->bulkSave($fields);
+
+        $model = new FormFieldConfigModel();
+        if (!empty($deleted)) {
+            $model->deleteCustomFields((array) $deleted);
+        }
+        if (!empty($fields)) {
+            $model->bulkSave($fields);
+        }
         return $this->response->setJSON(['status' => 'success']);
     }
 

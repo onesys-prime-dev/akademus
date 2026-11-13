@@ -1,0 +1,31 @@
+{
+  "name": "akademus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "e2e": "playwright test",
+    "e2e:db:on": "node e2e/test-db.js on",
+    "e2e:db:off": "node e2e/test-db.js off",
+    "e2e:db:seed": "php spark db:seed E2ETestSeeder"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onesys-prime-dev/akademus.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/onesys-prime-dev/akademus/issues"
+  },
+  "homepage": "https://github.com/onesys-prime-dev/akademus#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.5"
+  }
+}

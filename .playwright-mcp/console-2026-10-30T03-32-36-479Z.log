@@ -1,0 +1,6 @@
+[     316ms] [ERROR] Error: <path> attribute d: Expected number, "…6 14.8256 13.343₁ ₁4.435₁9.707₁ …". @ http://localhost/akademus/public/:196
+[    7827ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/akademus/public/applynowpage:0
+[    7912ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost/akademus/public/systems/unknown:0
+[    7995ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost/akademus/public/no-such-page:0
+[   14044ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost/akademus/public/systems/unknown:0
+[   14153ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/akademus/public/applynowpage:0

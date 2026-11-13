@@ -1,0 +1,126 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Akademus Logo AKADEMUS" [ref=e4] [cursor=pointer]:
+        - /url: http://localhost/akademus/public/homepage
+        - img "Akademus Logo" [ref=e5]
+        - generic [ref=e6]: AKADEMUS
+      - navigation [ref=e7]:
+        - link "Home" [ref=e8] [cursor=pointer]:
+          - /url: http://localhost/akademus/public/homepage
+        - link "About Us" [ref=e9] [cursor=pointer]:
+          - /url: http://localhost/akademus/public/about-us
+        - link "Features" [ref=e10] [cursor=pointer]:
+          - /url: http://localhost/akademus/public/features
+        - link "Contact" [ref=e11] [cursor=pointer]:
+          - /url: http://localhost/akademus/public/contact
+      - link "Get Started" [ref=e12] [cursor=pointer]:
+        - /url: http://localhost/akademus/public/sign-in
+  - main [ref=e13]:
+    - generic [ref=e14]:
+      - img "Hero Background" [ref=e15]
+      - generic [ref=e16]:
+        - paragraph [ref=e17]: WELCOME TO AKADEMUS
+        - heading "Where Smart Learning Begins and Grows" [level=1] [ref=e18]
+        - button "Learn More" [ref=e19] [cursor=pointer]
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - heading "Featured Systems" [level=2] [ref=e24]
+        - generic [ref=e25]:
+          - link [ref=e26] [cursor=pointer]:
+            - /url: http://localhost/akademus/public/systems/akademus
+            - img "Akademus" [ref=e27]
+            - generic [ref=e29]:
+              - heading "Akademus" [level=3] [ref=e30]
+              - paragraph [ref=e31]: Akademus is a modern learning platform designed to provide a structured, reliable, and convenient environment where learners can access high-quality lessons, courses, and academic materials. By organizing a clear content from basic concepts to advanced topics.
+          - link [ref=e32] [cursor=pointer]:
+            - /url: http://localhost/akademus/public/systems/mentora
+            - img "Mentora" [ref=e33]
+            - generic [ref=e35]:
+              - heading "Mentora" [level=3] [ref=e36]
+              - paragraph [ref=e37]: Mentora is a smart Learning Management System (LMS) designed to help teachers, and students in managing their classes. Mentora allows teachers to upload lessons, create activities and track student progress in one platform.
+          - link [ref=e38] [cursor=pointer]:
+            - /url: http://localhost/akademus/public/systems/learnix
+            - img "Learnix" [ref=e39]
+            - generic [ref=e41]:
+              - heading "Learnix" [level=3] [ref=e42]
+              - paragraph [ref=e43]: Learnix is the game-based learning portal under Mentora. It is designed to make learning more engaging, and motivating through educational games and challenges that support different subjects.
+      - generic [ref=e44]:
+        - heading "Other Systems" [level=2] [ref=e47]
+        - generic [ref=e48]:
+          - link "Akademus Akademus is an AI-powered school ERP that centralizes academic, administrative, and student services into one intelligent platform. It streamlines operations, automates workflows, and provides real-time insights to help institutions operate efficiently and make better decisions. Explore" [ref=e49] [cursor=pointer]:
+            - /url: http://localhost/akademus/public/systems/akademus
+            - heading "Akademus" [level=3] [ref=e51]
+            - paragraph [ref=e52]: Akademus is an AI-powered school ERP that centralizes academic, administrative, and student services into one intelligent platform. It streamlines operations, automates workflows, and provides real-time insights to help institutions operate efficiently and make better decisions.
+            - generic [ref=e53]: Explore
+          - link "Mentora Mentora is a modern Learning Management System designed to help educators deliver structured lessons, manage activities, and monitor student progress. It simplifies teaching workflows while creating an engaging and organized learning experience for students. Explore" [ref=e57] [cursor=pointer]:
+            - /url: http://localhost/akademus/public/systems/mentora
+            - heading "Mentora" [level=3] [ref=e59]
+            - paragraph [ref=e60]: Mentora is a modern Learning Management System designed to help educators deliver structured lessons, manage activities, and monitor student progress. It simplifies teaching workflows while creating an engaging and organized learning experience for students.
+            - generic [ref=e61]: Explore
+          - link "Learnix Learnix is a game-based learning platform that transforms education into an interactive experience. Through challenges, rewards, and educational games, it increases student engagement while reinforcing key concepts across different subjects. Explore" [ref=e65] [cursor=pointer]:
+            - /url: http://localhost/akademus/public/systems/learnix
+            - heading "Learnix" [level=3] [ref=e67]
+            - paragraph [ref=e68]: Learnix is a game-based learning platform that transforms education into an interactive experience. Through challenges, rewards, and educational games, it increases student engagement while reinforcing key concepts across different subjects.
+            - generic [ref=e69]: Explore
+          - link "SIS The Student Information System (SIS) manages student records, enrollment, academic history, and personal data in a secure and organized environment. It ensures accurate data tracking and easy access for administrators and faculty. Explore" [ref=e73] [cursor=pointer]:
+            - /url: http://localhost/akademus/public/systems/sis
+            - heading "SIS" [level=3] [ref=e75]
+            - paragraph [ref=e76]: The Student Information System (SIS) manages student records, enrollment, academic history, and personal data in a secure and organized environment. It ensures accurate data tracking and easy access for administrators and faculty.
+            - generic [ref=e77]: Explore
+          - link "Attendance The Attendance System provides real-time tracking of student and staff attendance through automated and digital methods. It improves accuracy, reduces manual recording, and enables quick reporting for better monitoring and accountability. Explore" [ref=e81] [cursor=pointer]:
+            - /url: http://localhost/akademus/public/systems/attendance
+            - heading "Attendance" [level=3] [ref=e83]
+            - paragraph [ref=e84]: The Attendance System provides real-time tracking of student and staff attendance through automated and digital methods. It improves accuracy, reduces manual recording, and enables quick reporting for better monitoring and accountability.
+            - generic [ref=e85]: Explore
+          - link "OTIS OTIS is an operations and tracking system designed to manage internal workflows, tasks, and institutional processes. It enhances coordination, improves transparency, and ensures that daily operations run smoothly across departments. Explore" [ref=e89] [cursor=pointer]:
+            - /url: http://localhost/akademus/public/systems/otis
+            - heading "OTIS" [level=3] [ref=e91]
+            - paragraph [ref=e92]: OTIS is an operations and tracking system designed to manage internal workflows, tasks, and institutional processes. It enhances coordination, improves transparency, and ensures that daily operations run smoothly across departments.
+            - generic [ref=e93]: Explore
+  - contentinfo [ref=e97]:
+    - generic [ref=e98]:
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - img "Akademus Logo" [ref=e101]
+          - generic [ref=e102]: Akademus
+        - paragraph [ref=e103]: Akademus is a modern learning platform that provides structured and reliable access to courses and academic resources.
+      - generic [ref=e104]:
+        - heading "Resources" [level=4] [ref=e105]
+        - link "About" [ref=e106] [cursor=pointer]:
+          - /url: "#"
+        - link "Career" [ref=e107] [cursor=pointer]:
+          - /url: "#"
+        - link "Contact" [ref=e108] [cursor=pointer]:
+          - /url: "#"
+        - link "Partners" [ref=e109] [cursor=pointer]:
+          - /url: "#"
+      - generic [ref=e110]:
+        - heading "Product" [level=4] [ref=e111]
+        - link "Akademus" [ref=e112] [cursor=pointer]:
+          - /url: systems/akademus.html
+        - link "Mentora" [ref=e113] [cursor=pointer]:
+          - /url: systems/mentora.html
+        - link "Learnix" [ref=e114] [cursor=pointer]:
+          - /url: systems/learnix.html
+        - link "OTIS" [ref=e115] [cursor=pointer]:
+          - /url: systems/otis.html
+      - generic [ref=e116]:
+        - heading "Company" [level=4] [ref=e117]
+        - link "About" [ref=e118] [cursor=pointer]:
+          - /url: "#"
+        - link "Career" [ref=e119] [cursor=pointer]:
+          - /url: "#"
+        - link "Contact" [ref=e120] [cursor=pointer]:
+          - /url: "#"
+        - link "Partners" [ref=e121] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=e123]:
+      - paragraph [ref=e124]: 2026 Akademus. All rights reserved.
+      - generic [ref=e125]:
+        - link "Privacy Policy" [ref=e126] [cursor=pointer]:
+          - /url: "#"
+        - link "Terms of Service" [ref=e127] [cursor=pointer]:
+          - /url: "#"
+        - link "Cookie Settings" [ref=e128] [cursor=pointer]:
+          - /url: "#"
