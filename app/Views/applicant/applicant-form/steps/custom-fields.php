@@ -1,7 +1,9 @@
 <?php
 /**
- * Renders the admin-created (non-system) fields of a page, e.g. a "Religion" field
- * added in the Form Field Manager. Answers are stored in applications.custom_fields.
+ * Checks a page for admin-created (non-system) fields, e.g. a "Religion" field added
+ * in the Form Field Manager, and renders each one with the template for its type
+ * (applicant/applicant-form/field-types/{type}.php). Answers are stored in
+ * applications.custom_fields.
  *
  * Expects: $fields (get_field_configs() for the page), $data (saved values by field_key).
  */
@@ -11,15 +13,18 @@ $customFields = array_filter(
 );
 
 if ($customFields):
+    // One query for every select field's options, instead of one per field.
     $selectIds = array_map('intval', array_column(
         array_filter($customFields, fn($f) => $f['field_type'] === 'select'),
         'id'
     ));
     $optionsByField = (new \App\Models\FormFieldOptionConfigModel())->getNamesForFields($selectIds);
-    $inputTypes     = ['text', 'number', 'email', 'tel', 'date'];
+
+    // Must match a file in field-types/ and the types offered in the admin Form Field Manager.
+    $templates = ['text', 'number', 'email', 'tel', 'date', 'textarea', 'select'];
 ?>
 <?php foreach ($customFields as $key => $f):
-    $value    = (string) ($data[$key] ?? '');
+    $template = in_array($f['field_type'], $templates, true) ? $f['field_type'] : 'text';
     $required = !empty($f['is_required']);
 ?>
 <div class="application-form-input-field-row">
@@ -28,29 +33,13 @@ if ($customFields):
             <?= esc($f['label']) ?>
             <?php if ($required): ?><span class="required-field">*</span><?php endif; ?>
         </label>
-
-        <?php if ($f['field_type'] === 'textarea'): ?>
-        <textarea name="<?= esc($key) ?>"
-                  placeholder="<?= esc($f['placeholder'] ?? '') ?>"
-                  <?= $required ? 'required' : '' ?>
-                  style="height:100px;padding:10px 16px;border-radius:var(--radius);border:0;background:rgba(217,217,217,.4);font-family:var(--font),sans-serif;font-size:14px;resize:vertical;"
-        ><?= esc($value) ?></textarea>
-
-        <?php elseif ($f['field_type'] === 'select'): ?>
-        <select name="<?= esc($key) ?>" <?= $required ? 'required' : '' ?>>
-            <option value="" disabled <?= $value === '' ? 'selected' : '' ?>><?= esc(($f['placeholder'] ?? '') ?: 'Select an option') ?></option>
-            <?php foreach ($optionsByField[(int) $f['id']] ?? [] as $optionName): ?>
-            <option value="<?= esc($optionName) ?>" <?= $value === $optionName ? 'selected' : '' ?>><?= esc($optionName) ?></option>
-            <?php endforeach; ?>
-        </select>
-
-        <?php else: ?>
-        <input type="<?= in_array($f['field_type'], $inputTypes, true) ? esc($f['field_type']) : 'text' ?>"
-               name="<?= esc($key) ?>"
-               placeholder="<?= esc($f['placeholder'] ?? '') ?>"
-               value="<?= esc($value) ?>"
-               <?= $required ? 'required' : '' ?>>
-        <?php endif; ?>
+        <?= view('applicant/applicant-form/field-types/' . $template, [
+            'key'      => $key,
+            'f'        => $f,
+            'value'    => (string) ($data[$key] ?? ''),
+            'required' => $required,
+            'options'  => $optionsByField[(int) $f['id']] ?? [],
+        ]) ?>
     </div>
 </div>
 <?php endforeach; ?>
