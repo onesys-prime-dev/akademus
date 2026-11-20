@@ -15,16 +15,35 @@ class ApplicantDocumentService
         'image/png',
         'image/gif',
         'image/webp',
+        'application/msword',                                                      // .doc
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
     ];
+
+    // Some OS/PHP builds' fileinfo sniff .doc/.docx as a generic container type
+    // (e.g. application/zip for the OOXML-based .docx) instead of the specific
+    // Word mime above, so a mime-only check rejects a perfectly real file. As a
+    // second check we accept by extension — but via UploadedFile::getExtension(),
+    // which cross-checks the *sniffed* mime against Config\Mimes' known mimes for
+    // that extension, so a disguised file (e.g. a renamed .exe) still won't match.
+    private const ALLOWED_EXTENSIONS = ['pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'doc', 'docx'];
 
     public function __construct() {
         $this->applicantDocumentModel = new ApplicantDocumentModel();
     }
 
+    private function isAllowedUpload($file): bool
+    {
+        return in_array($file->getMimeType(), self::ALLOWED_MIME_TYPES, true)
+            || in_array(strtolower($file->getExtension()), self::ALLOWED_EXTENSIONS, true);
+    }
+
+    /**
+     * @return array{uploaded: list<array{requirement_name: string}>, rejected: list<array{program_requirement_id: mixed, message: string}>}
+     */
     public function insertDocuments($applicant_id, $files): array
     {
         if (empty($files['documents'])) {
-            return [];
+            return ['uploaded' => [], 'rejected' => []];
         }
 
         $db = db_connect();
@@ -36,14 +55,29 @@ class ApplicantDocumentService
         }
 
         $uploaded = [];
+        $rejected = [];
 
         foreach ($files['documents'] as $program_requirement_id => $file) {
 
-            if (!$file->isValid() || $file->getError() == 4) {
+            // No file chosen for this slot in this submit — normal (only some
+            // upload fields change per save), not an error worth reporting.
+            if ($file->getError() === UPLOAD_ERR_NO_FILE) {
                 continue;
             }
 
-            if (!in_array($file->getMimeType(), self::ALLOWED_MIME_TYPES, true)) {
+            if (!$file->isValid()) {
+                $rejected[] = [
+                    'program_requirement_id' => $program_requirement_id,
+                    'message'                => $file->getErrorString(),
+                ];
+                continue;
+            }
+
+            if (!$this->isAllowedUpload($file)) {
+                $rejected[] = [
+                    'program_requirement_id' => $program_requirement_id,
+                    'message'                => "\"{$file->getClientName()}\" isn't a supported file type. Please upload a PDF, Word document (.doc/.docx), or image.",
+                ];
                 continue;
             }
 
@@ -75,7 +109,7 @@ class ApplicantDocumentService
             ];
         }
 
-        return $uploaded;
+        return ['uploaded' => $uploaded, 'rejected' => $rejected];
     }
 
     public function getDocument($applicant_id, $program_requirement_id)

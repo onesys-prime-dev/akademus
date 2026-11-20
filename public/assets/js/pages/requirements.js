@@ -156,7 +156,7 @@ function populateForm(formId, data) {
 
 async function processForm(step) {
     const form = document.getElementById(`requirements-${step}`);
-    if (!form) return;
+    if (!form) return { success: false };
 
     const formData = new FormData(form);
 
@@ -173,12 +173,12 @@ async function processForm(step) {
 
         await loadForm(step);
 
-        return data.status === 'success';
+        return { success: data.status === 'success', message: data.message };
 
     } catch (error) {
         console.error('Form submission error:', error);
         alert('An error occurred while saving.');
-        return false;
+        return { success: false };
     }
 }
 
@@ -262,14 +262,17 @@ async function autoSaveHandler(e) {
 
     // Wait 1 second after last change before saving
     autoSaveTimeout = setTimeout(async () => {
-        const success = await processForm(currentStep);
+        const { success, message } = await processForm(currentStep);
         clearCardSaving();
 
         if (success) {
             autosaveText.textContent = 'Auto-saved changes';
             // loadForm (called inside processForm) already updates the counter
         } else {
-            autosaveText.textContent = 'Auto-save failed';
+            // Surface the real reason (e.g. unsupported file type) instead of
+            // a generic failure message, so a rejected upload isn't silent.
+            autosaveText.textContent = message || 'Auto-save failed';
+            if (message) alert(message);
         }
     }, 1000);
 }
@@ -378,8 +381,12 @@ saveAndContinueBtn.addEventListener('click', async () => {
     autosaveText.textContent = 'Saving...';
 
     // Upload any selected files before advancing
-    const success = await processForm(currentStep);
-    if (!success) return;
+    const { success, message } = await processForm(currentStep);
+    if (!success) {
+        autosaveText.textContent = message || 'Save failed';
+        if (message) alert(message);
+        return;
+    }
 
     if (currentStep < maxSteps) {
         currentStep++;

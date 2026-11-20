@@ -221,9 +221,10 @@ class RequirementsController extends BaseController
 
         $files = $this->request->getFiles();
 
-        $uploaded = $this->documentService->insertDocuments($applicant_id, $files);
+        $result = $this->documentService->insertDocuments($applicant_id, $files);
 
-        // check completion
+        // check completion (reflects whatever did get stored above, even if
+        // one of several files in this submit was rejected)
         $program_id = session()->get('selected_program_id') ?? session()->get('program_id');
 
         if ($this->documentService->allRequiredCompleted($applicant_id, $program_id, $this->isApplicantFastTrack($applicant_id))) {
@@ -239,6 +240,16 @@ class RequirementsController extends BaseController
                     $key
                 );
             }
+        }
+
+        // Surface the first rejection (unsupported type, failed upload, etc.) —
+        // previously this always reported "success" even when nothing was
+        // actually saved, so a rejected upload looked like a silent no-op.
+        if (!empty($result['rejected'])) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => $result['rejected'][0]['message'] ?? 'One or more files could not be uploaded.',
+            ]);
         }
 
         return $this->response->setJSON([
