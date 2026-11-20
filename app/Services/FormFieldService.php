@@ -19,10 +19,45 @@ class FormFieldService
      */
     public function getMergedFormFields($programId)
     {
-        $programId = (int) $programId;
+        // Admin "what's actually active for this program" view — visible fields only.
+        $fields = array_filter(
+            $this->mergedFieldRows((int) $programId),
+            fn($f) => (int) $f['is_visible'] === 1
+        );
 
+        // Group by section for easier frontend rendering
+        return $this->groupFieldsBySection($fields);
+    }
+
+    /**
+     * Get merged (base + program override) field configs for a single page,
+     * keyed by field_key — the shape the applicant-facing form expects
+     * (see FormFieldConfigModel::getAllForPage()). Unlike getMergedFormFields(),
+     * this returns hidden fields too: callers (field_visible(), custom-fields.php)
+     * decide what to do with is_visible themselves, same as the non-override path.
+     */
+    public function getMergedFieldConfigsForPage(int $programId, int $pageId): array
+    {
+        $result = [];
+        foreach ($this->mergedFieldRows($programId, $pageId) as $row) {
+            $result[$row['field_key']] = $row;
+        }
+        return $result;
+    }
+
+    /**
+     * Shared query behind getMergedFormFields()/getMergedFieldConfigsForPage():
+     * base form_field_configs left-joined to this program's overrides, with
+     * each overridable column coalesced down to the base value when no
+     * override row (or no override for that column) exists.
+     */
+    private function mergedFieldRows(int $programId, ?int $pageId = null): array
+    {
+        // select() takes one comma-joined string (or array), not a variadic
+        // argument list — passing the columns as separate args silently kept
+        // only the first ("ffc.id") and dropped the rest.
         $query = $this->db->table('form_field_configs ffc')
-            ->select(
+            ->select([
                 'ffc.id',
                 'ffc.page_id',
                 'ffc.field_key',
@@ -31,25 +66,29 @@ class FormFieldService
                 'ffc.label',
                 'ffc.field_type',
                 'ffc.placeholder',
+                'ffc.is_system',
                 'COALESCE(pffo.is_visible, ffc.is_visible) as is_visible',
                 'COALESCE(pffo.is_required, ffc.is_required) as is_required',
                 'COALESCE(pffo.sort_order, ffc.sort_order) as sort_order',
-                'ffc.is_system'
-            )
-            ->leftJoin(
+            ])
+            ->join(
                 'program_form_field_overrides pffo',
-                "pffo.field_config_id = ffc.id AND pffo.program_id = {$programId}",
+                'pffo.field_config_id = ffc.id AND pffo.program_id = ' . $programId,
                 'left'
-            )
-            ->where('ffc.is_visible', 1)
-            ->orWhere('COALESCE(pffo.is_visible, ffc.is_visible)', 1)
-            ->orderBy('sort_order', 'ASC')
-            ->orderBy('ffc.id', 'ASC');
+            );
 
-        $fields = $query->get()->getResultArray();
+        if ($pageId !== null) {
+            $query->where('ffc.page_id', $pageId);
+        }
 
-        // Group by section for easier frontend rendering
-        return $this->groupFieldsBySection($fields);
+        // Order by the coalesce expression itself, not the bare "sort_order" alias —
+        // both ffc and pffo have a real sort_order column, so the bare name is
+        // ambiguous once they're joined (MySQL prefers the column over the alias).
+        return $query
+            ->orderBy('COALESCE(pffo.sort_order, ffc.sort_order)', 'ASC', false)
+            ->orderBy('ffc.id', 'ASC')
+            ->get()
+            ->getResultArray();
     }
 
     /**

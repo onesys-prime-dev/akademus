@@ -13,6 +13,7 @@ use App\Models\FormFieldConfigModel;
 use App\Models\FormFieldOptionConfigModel;
 use App\Models\FormPageModel;
 use App\Models\ThemeModel;
+use App\Services\FormFieldService;
 use App\Services\NotificationService;
 
 class ApplicantFormController extends BaseController
@@ -70,11 +71,22 @@ class ApplicantFormController extends BaseController
         return $pageData;
     }
 
-    /** Admin-created (non-system) field configs for a page, keyed by field_key. */
+    /**
+     * Admin-created (non-system) field configs for a page, keyed by field_key.
+     * Merges in the applicant's selected program's overrides, same as
+     * get_field_configs() on the render side, so a program override (e.g.
+     * making a field required, or hiding it) is actually enforced on save —
+     * not just reflected in what gets rendered.
+     */
     private function getCustomFieldConfigs(int $pageId): array
     {
+        $programId  = session()->get('selected_program_id');
+        $allConfigs = $programId
+            ? (new FormFieldService())->getMergedFieldConfigsForPage((int) $programId, $pageId)
+            : (new FormFieldConfigModel())->getAllForPage($pageId);
+
         $configs = [];
-        foreach ((new FormFieldConfigModel())->getAllForPage($pageId) as $key => $cfg) {
+        foreach ($allConfigs as $key => $cfg) {
             if (empty($cfg['is_system'])) {
                 $configs[$key] = $cfg;
             }

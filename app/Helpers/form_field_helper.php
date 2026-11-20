@@ -2,16 +2,31 @@
 
 use App\Models\FormFieldConfigModel;
 use App\Models\FormPageModel;
+use App\Services\FormFieldService;
 
 if (!function_exists('get_field_configs')) {
+    /**
+     * Field configs for a page, keyed by field_key. When the applicant has a
+     * selected program (session 'selected_program_id'), this merges in that
+     * program's overrides (program_form_field_overrides) on top of the base
+     * form_field_configs row, so admin per-program customization actually
+     * takes effect on the form — not just in the Program Form Fields admin screen.
+     */
     function get_field_configs(int $pageId): array
     {
         static $cache = [];
-        if (!isset($cache[$pageId])) {
-            $model = new FormFieldConfigModel();
-            $cache[$pageId] = $model->getAllForPage($pageId);
+
+        $programId = session()->get('selected_program_id');
+        $cacheKey  = $pageId . ':' . ($programId ? (int) $programId : 'default');
+
+        if (!isset($cache[$cacheKey])) {
+            if ($programId) {
+                $cache[$cacheKey] = (new FormFieldService())->getMergedFieldConfigsForPage((int) $programId, $pageId);
+            } else {
+                $cache[$cacheKey] = (new FormFieldConfigModel())->getAllForPage($pageId);
+            }
         }
-        return $cache[$pageId];
+        return $cache[$cacheKey];
     }
 }
 
