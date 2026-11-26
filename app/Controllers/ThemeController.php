@@ -41,6 +41,7 @@ class ThemeController extends BaseController
         if (session()->get('admin_logged_in')) {
             return redirect()->to('admin/theme');
         }
+        $data          = [];
         $data['theme'] = $this->themeModel->getAllSettings();
 
         return view('admin/login', $data);
@@ -112,6 +113,7 @@ class ThemeController extends BaseController
             return redirect()->to('admin/login');
         }
 
+        $data                  = [];
         $data['theme']         = $this->themeModel->getAllSettings();
         $data['title']         = 'Theme Customizer';
         $data['saved']         = session()->getFlashdata('saved');

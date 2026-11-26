@@ -34,6 +34,7 @@ class AuthController extends BaseController
 
         $themeModel = new ThemeModel();
 
+        $data                    = [];
         $data['theme']           = $themeModel->getAllSettings();
         $data['title']           = 'Sign In';
         $data['auth_header']     = 'Welcome Back!';
@@ -85,6 +86,7 @@ class AuthController extends BaseController
             return redirect()->to('/sign-in');
         }
 
+        $data                     = [];
         $data['title']            = 'Success';
         $data['auth_header']      = 'Account Created!';
         $data['auth_sub_header']  = 'Your unique Applicant ID has been assigned.';

@@ -15,6 +15,7 @@ class AuthController extends BaseController
             return redirect()->to('admission-officer/dashboard');
         }
 
+        $data          = [];
         $data['theme'] = (new ThemeModel())->getAllSettings();
 
         return view('admission-officer/login', $data);
