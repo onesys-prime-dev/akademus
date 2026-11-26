@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Filters\AdminAuth;
 use App\Filters\OfficerAuth;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
@@ -36,6 +37,7 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         'officerAuth'   => OfficerAuth::class,
+        'adminAuth'     => AdminAuth::class,
     ];
 
     /**
@@ -113,6 +115,13 @@ class Filters extends BaseFilters
             'before' => [
                 'admission-officer',
                 'admission-officer/*',
+            ],
+        ],
+        // admin/login and admin/logout are let through inside the filter.
+        'adminAuth' => [
+            'before' => [
+                'admin',
+                'admin/*',
             ],
         ],
     ];
