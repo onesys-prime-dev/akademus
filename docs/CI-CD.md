@@ -75,7 +75,7 @@ not succeed (`php-next` and the Firefox/WebKit E2E runs are informational and ne
 | Job | What it checks | Fails when | Fix |
 |---|---|---|---|
 | **Dependencies & lockfiles** (`deps`) | `composer validate --strict` (lock in sync), `composer dump-autoload --strict-psr` (namespace/path case — Linux is case-sensitive), `npm ci` + `npm ls` | lock out of date, PSR-4 mismatch, broken npm lock | `composer update --lock`, fix the namespace or folder name, `npm install` |
-| **Code style** | `php-cs-fixer` with CodeIgniter's coding standard (`.php-cs-fixer.dist.php`, `app/Views` excluded) | any file not formatted | `composer cs:fix` and commit |
+| **Code style** | `php-cs-fixer` with CodeIgniter's coding standard (`.php-cs-fixer.dist.php`, `app/Views` excluded). **All risky rules are off**: the formatter only changes layout, never behaviour (e.g. it will not turn `==` into `===` — MySQLi returns IDs as strings) | any file not formatted | `composer cs:fix` and commit |
 | **Static analysis** | PHPStan level 5 (`phpstan.neon`) | any error | fix the code; do not suppress |
 | **Maintainability & architecture** | PHPMD (`phpmd.xml`) and deptrac layer rules (`deptrac.yaml`) — existing findings are in `phpmd.baseline.xml` / `deptrac.baseline.yaml` | a **new** finding | refactor; regenerate a baseline (`composer md:baseline` / `deptrac:baseline`) only for a deliberate, reviewed exception |
 | **Security** | `composer audit --locked`; Gitleaks CLI (PR commits, or the whole tree when deploying); Semgrep (`p/php`, `p/secrets`, `p/security-audit`) | any advisory, any secret, any high-severity (error) Semgrep finding | update the package; **remove and rotate** a leaked secret; fix the code. Results are also uploaded to code scanning when available. |
