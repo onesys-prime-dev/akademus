@@ -9,12 +9,17 @@ class TuitionFeeCalculatorController extends BaseController
 {
     public function tuitionCalculator()
     {
+        if (! session()->get('logged_in')) {
+            return redirect()->to('/sign-in');
+        }
+
         $themeModel = new ThemeModel();
 
         if ($themeModel->getSetting('tuition_calculator_enabled', '1') !== '1') {
             return redirect()->to(base_url('/dashboard'));
         }
 
+        $data                 = [];
         $data['theme']        = $themeModel->getAllSettings();
         $data['title']        = 'Tuition Fee Calculator';
         $data['active_menu']  = 'tuition_calculator';

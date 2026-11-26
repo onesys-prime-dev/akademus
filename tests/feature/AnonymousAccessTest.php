@@ -36,6 +36,18 @@ final class AnonymousAccessTest extends DatabaseTestCase
      */
     private const REFUSE_IN_BODY = ['follow-up-messages/fetch', 'follow-up-messages/unread-count'];
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Turn every feature on: a page that is only redirected because its feature is disabled
+        // must not hide a missing login check.
+        foreach (['exam_enabled', 'fast_track_enabled', 'tuition_calculator_enabled'] as $flag) {
+            $this->db->table('theme_settings')->where('setting_key', $flag)->update(['setting_value' => '1']);
+        }
+        cache()->clean();
+    }
+
     #[DataProvider('provideAnonymousVisitorIsRefused')]
     public function testAnonymousVisitorIsRefused(string $pattern, string $uri): void
     {
