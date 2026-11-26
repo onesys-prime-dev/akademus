@@ -14,6 +14,7 @@
         "codeigniter4/framework": "^4.7"
     },
     "require-dev": {
+        "codeigniter/coding-standard": "^1.9",
         "fakerphp/faker": "^1.9",
         "mikey179/vfsstream": "^1.6",
         "phpstan/phpstan": "^2.2",
@@ -40,6 +41,8 @@
         "sort-packages": true
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "cs": "php-cs-fixer fix --dry-run --diff --ansi",
+        "cs:fix": "php-cs-fixer fix --ansi"
     }
 }
