@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use CodeIgniter\Controller;
 use CodeIgniter\Exceptions\PageNotFoundException;
+use CodeIgniter\HTTP\Exceptions\RedirectException;
 
 class BaseAdminController extends Controller
 {
@@ -14,9 +15,8 @@ class BaseAdminController extends Controller
     public function __construct()
     {
         if (! session()->get('admin_logged_in')) {
-            redirect()->to('admin/login')->send();
-
-            exit;
+            // The framework turns this into the redirect response (no exit, so it also works under test).
+            throw new RedirectException(redirect()->to('admin/login'));
         }
     }
 

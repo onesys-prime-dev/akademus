@@ -18,6 +18,7 @@ use App\Services\FormFieldService;
 use App\Services\NotificationService;
 use App\Services\PresetService;
 use CodeIgniter\Exceptions\PageNotFoundException;
+use CodeIgniter\HTTP\Exceptions\RedirectException;
 
 class ApplicantFormController extends BaseController
 {
@@ -165,9 +166,8 @@ class ApplicantFormController extends BaseController
     private function requireLogin(): void
     {
         if (! session()->get('logged_in')) {
-            redirect()->to('sign-in')->send();
-
-            exit;
+            // The framework turns this into the redirect response (no exit, so it also works under test).
+            throw new RedirectException(redirect()->to('sign-in'));
         }
     }
 

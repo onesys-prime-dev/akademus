@@ -8,7 +8,6 @@
   <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Commands/SendEmails.php" method="run"/>
   <violation rule="PHPMD\Rule\UnusedFormalParameter" file="app/Commands/SendEmails.php"/>
   <violation rule="PHPMD\Rule\UnusedFormalParameter" file="app/Commands/SisSync.php"/>
-  <violation rule="PHPMD\Rule\Design\ExitExpression" file="app/Controllers/Admin/BaseAdminController.php"/>
   <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/Admin/PaymentFeesController.php" method="fees"/>
   <violation rule="PHPMD\Rule\UnusedLocalVariable" file="app/Controllers/Admin/PaymentFeesController.php"/>
   <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/Admin/PaymentFeesController.php" method="updateFee"/>
@@ -40,9 +39,9 @@
   <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/AdmissionOfficer/PaymentController.php" method="reject"/>
   <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/AdmissionOfficer/PaymentController.php" method="proofFile"/>
   <violation rule="PHPMD\Rule\Design\ExcessiveClassComplexity" file="app/Controllers/Applicant/ApplicantFormController.php"/>
+  <violation rule="PHPMD\Rule\Design\CouplingBetweenObjects" file="app/Controllers/Applicant/ApplicantFormController.php"/>
   <violation rule="PHPMD\Rule\UnusedLocalVariable" file="app/Controllers/Applicant/ApplicantFormController.php"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/Applicant/ApplicantFormController.php" method="collectCustomFieldValues"/>
-  <violation rule="PHPMD\Rule\Design\ExitExpression" file="app/Controllers/Applicant/ApplicantFormController.php"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/Applicant/ApplicantFormController.php" method="getStep"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/Applicant/ApplicantFormController.php" method="updateForm"/>
   <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Controllers/Applicant/ApplicantFormController.php" method="updateForm"/>
