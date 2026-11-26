@@ -227,23 +227,27 @@ class ThemeController extends BaseController
             return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
         }
 
-        $file = $this->request->getFile('logo_file');
+        $file         = $this->request->getFile('logo_file');
+        $invalidImage = ['status' => 'error', 'message' => 'Logo must be a JPEG, PNG, GIF, or WebP image under 2 MB.'];
 
         if (! $file || ! $file->isValid()) {
+            // A file over PHP's upload_max_filesize / the form's MAX_FILE_SIZE never reaches the app:
+            // report it like any other too-large logo instead of a generic error.
+            if ($file && in_array($file->getError(), [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true)) {
+                return $this->response->setJSON($invalidImage)->setStatusCode(422);
+            }
+
             return $this->response->setJSON([
                 'status'  => 'error',
-                'message' => 'Invalid file',
-            ]);
+                'message' => $file ? $file->getErrorString() : 'No file was uploaded.',
+            ])->setStatusCode(400);
         }
 
         $valid = $this->validate([
             'logo_file' => 'is_image[logo_file]|mime_in[logo_file,image/jpeg,image/png,image/gif,image/webp]|max_size[logo_file,2048]',
         ]);
         if (! $valid) {
-            return $this->response->setJSON([
-                'status'  => 'error',
-                'message' => 'Logo must be a JPEG, PNG, GIF, or WebP image under 2 MB.',
-            ])->setStatusCode(422);
+            return $this->response->setJSON($invalidImage)->setStatusCode(422);
         }
 
         $newName = $file->getRandomName();
