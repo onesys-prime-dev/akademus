@@ -1,0 +1,515 @@
+# Mandatory CI gate. See docs/CI-CD.md.
+#
+# Runs on every PR into main, and is called by deploy-staging.yml / deploy-production.yml for the exact
+# commit being deployed. The single required status check is "CI / CI gate" (job ci-gate).
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_call:
+    inputs:
+      sha:
+        description: Exact commit to test (the commit about to be deployed).
+        type: string
+        required: true
+  schedule:
+    - cron: '0 2 * * 1' # Mondays 02:00 UTC: full CI on main + cross-browser E2E
+  workflow_dispatch:
+    inputs:
+      browsers:
+        description: E2E browsers
+        type: choice
+        options: [chromium, all]
+        default: chromium
+
+permissions: {}
+
+concurrency:
+  # One run per PR (a new push cancels the old run); called runs are keyed by the commit.
+  group: ci-${{ github.event.pull_request.number || inputs.sha || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # Commit under test: the deploy's SHA when called, otherwise the event's commit (PR merge commit / main).
+  SHA: ${{ inputs.sha || github.sha }}
+  PHP_NEXT: '8.3'
+  COMPOSER_NO_INTERACTION: '1'
+  # spark commands run as development. Never set 'testing' here: CodeIgniter then expects SUPPORTPATH,
+  # which only PHPUnit's bootstrap defines (PHPUnit switches to 'testing' by itself).
+  CI_ENVIRONMENT: development
+  app_baseURL: http://127.0.0.1:8080/
+  # MySQL service container (throwaway; credentials are not secrets)
+  DB_HOST: 127.0.0.1
+  DB_PORT: '3306'
+  DB_USER: root
+  DB_PASSWORD: ci-root
+  database_tests_hostname: 127.0.0.1
+  database_tests_port: '3306'
+  database_tests_username: root
+  database_tests_password: ci-root
+  database_default_hostname: 127.0.0.1
+  database_default_port: '3306'
+  database_default_username: root
+  database_default_password: ci-root
+  database_default_DBDriver: MySQLi
+
+jobs:
+  # ---------------------------------------------------------------- dependencies
+  deps:
+    name: Dependencies & lockfiles
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.SHA }}
+          persist-credentials: false
+      - uses: ./.github/actions/setup-app
+      - name: Validate composer.json and composer.lock (lock must match composer.json)
+        run: composer validate --strict
+      - name: PSR-4 autoload compliance (namespace / path case must match - Linux is case-sensitive)
+        run: composer dump-autoload --optimize --strict-psr
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: lts/*
+          cache: npm
+      - name: Validate package-lock.json
+        run: npm ci --ignore-scripts --no-audit --no-fund && npm ls --depth=0
+
+  # ---------------------------------------------------------------- static analysis
+  code-style:
+    name: Code style (php-cs-fixer)
+    needs: deps
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.SHA }}
+          persist-credentials: false
+      - uses: ./.github/actions/setup-app
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: build/.php-cs-fixer.cache
+          key: php-cs-fixer-${{ hashFiles('composer.lock', '.php-cs-fixer.dist.php') }}-${{ github.sha }}
+          restore-keys: php-cs-fixer-${{ hashFiles('composer.lock', '.php-cs-fixer.dist.php') }}-
+      - name: php-cs-fixer (dry run)
+        run: mkdir -p build && vendor/bin/php-cs-fixer fix --dry-run --diff --format=checkstyle --show-progress=none | tee build/php-cs-fixer.xml
+      - name: Explain how to fix
+        if: failure()
+        run: echo "::error title=Code style::Run 'composer cs:fix' locally and commit the result."
+
+  static-analysis:
+    name: Static analysis (PHPStan)
+    needs: deps
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.SHA }}
+          persist-credentials: false
+      - uses: ./.github/actions/setup-app
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: build/phpstan
+          key: phpstan-${{ hashFiles('composer.lock', 'phpstan.neon') }}-${{ github.sha }}
+          restore-keys: phpstan-${{ hashFiles('composer.lock', 'phpstan.neon') }}-
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G --error-format=github
+
+  maintainability:
+    name: Maintainability & architecture (PHPMD, deptrac)
+    needs: deps
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.SHA }}
+          persist-credentials: false
+      - uses: ./.github/actions/setup-app
+      - name: PHPMD (new findings only; baseline in phpmd.baseline.xml)
+        run: composer md -- --format=github
+      - name: deptrac (layer rules in deptrac.yaml)
+        run: vendor/bin/deptrac analyse --no-progress --formatter=github-actions
+
+  # ---------------------------------------------------------------- security
+  security:
+    name: Security (composer audit, Gitleaks, Semgrep)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      security-events: write # upload Semgrep SARIF to code scanning
+      actions: read          # required by upload-sarif in private repositories
+    env:
+      GITLEAKS_VERSION: 8.30.1
+      GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb # linux_x64.tar.gz
+      SEMGREP_IMAGE: semgrep/semgrep:1.187.0@sha256:0c8dfa7aa1ca8c50233ec9110e8cd88d139dedd603d56507493f74c6f4b3e062
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.SHA }}
+          fetch-depth: 0 # Gitleaks scans the commits of the PR
+          persist-credentials: false
+
+      - name: Install Gitleaks ${{ env.GITLEAKS_VERSION }} (checksum verified)
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/gitleaks.tgz" \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  $RUNNER_TEMP/gitleaks.tgz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/gitleaks.tgz" -C "$RUNNER_TEMP" gitleaks
+      - name: Gitleaks - secrets in this PR's commits / in the deployed tree
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [[ -n "$BASE_SHA" ]]; then
+            "$RUNNER_TEMP/gitleaks" git . --config .gitleaks.toml --redact --no-banner --log-opts="${BASE_SHA}..${HEAD_SHA}"
+          else
+            "$RUNNER_TEMP/gitleaks" dir . --config .gitleaks.toml --redact --no-banner
+          fi
+
+      - uses: ./.github/actions/setup-app
+      - name: Composer security audit
+        run: composer audit --locked --abandoned=report
+
+      - name: Semgrep (PHP, secrets, security-audit rule packs)
+        run: |
+          docker run --rm -v "$PWD:/src" -w /src "$SEMGREP_IMAGE" \
+            semgrep scan --metrics=off --config p/php --config p/secrets --config p/security-audit \
+              --exclude vendor --sarif --output semgrep.sarif
+          errors=$(jq '[.runs[].results[] | select(.level == "error")] | length' semgrep.sarif)
+          echo "Semgrep: $(jq '[.runs[].results[]] | length' semgrep.sarif) finding(s), ${errors} at error (high) severity"
+          jq -r '.runs[].results[] | select(.level == "error") | "::error file=\(.locations[0].physicalLocation.artifactLocation.uri),line=\(.locations[0].physicalLocation.region.startLine),title=Semgrep \(.ruleId)::\(.message.text)"' semgrep.sarif
+          [[ "$errors" -eq 0 ]]
+      - name: Upload Semgrep results to code scanning
+        if: always() && hashFiles('semgrep.sarif') != '' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        continue-on-error: true # needs GitHub code scanning on private repos; the gate above already enforces
+        uses: github/codeql-action/upload-sarif@915412ff23e8b7659517e607487dbeae018f2934 # v4.39.5
+        with:
+          sarif_file: semgrep.sarif
+          category: semgrep
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always() && hashFiles('semgrep.sarif') != ''
+        with:
+          name: semgrep-sarif
+          path: semgrep.sarif
+          retention-days: 14
+
+  # ---------------------------------------------------------------- database
+  database:
+    name: Database (migrate, rollback, seed, integrity)
+    needs: deps
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    services:
+      mysql:
+        image: mysql:8.4@sha256:8c233bad33d520a7aae1c1e619c3a9775f4a1ba2d463d692fada04ec7f40be00
+        env:
+          MYSQL_ROOT_PASSWORD: ci-root
+          MYSQL_DATABASE: akademus_ci
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -pci-root" --health-interval=5s --health-timeout=5s --health-retries=20
+    env:
+      DB_NAME: akademus_ci
+      database_tests_database: akademus_ci
+      database_default_database: akademus_ci
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.SHA }}
+          persist-credentials: false
+      - uses: ./.github/actions/setup-app
+      - name: Migrate an empty database
+        run: bash .ci/spark.sh migrate
+      - name: Every migration applied
+        run: |
+          php spark migrate:status
+          ! php spark migrate:status | grep -E '^\|.*\|\s*---\s*\|' || { echo "::error::Pending migrations after migrate"; exit 1; }
+      - name: Roll back everything (down() of every migration)
+        run: |
+          bash .ci/spark.sh migrate:rollback -b 0 -f
+          left=$(mysql -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASSWORD" -N -e \
+            "SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA='${DB_NAME}' AND TABLE_NAME <> 'migrations'")
+          [[ "$left" -eq 0 ]] || { echo "::error title=Rollback::$left table(s)/view(s) left after rolling back all migrations"; exit 1; }
+      - name: Migrate again (forward after rollback)
+        run: bash .ci/spark.sh migrate
+      - name: Seed (twice - seeders must be idempotent)
+        run: |
+          bash .ci/spark.sh db:seed DatabaseSeeder
+          bash .ci/spark.sh db:seed DatabaseSeeder
+      - name: Schema & data integrity
+        run: php .ci/schema-integrity.php
+      - name: Export schema
+        if: always()
+        run: mkdir -p build && mysqldump -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASSWORD" --no-data --skip-dump-date "$DB_NAME" > build/schema.sql
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: schema
+          path: build/schema.sql
+          retention-days: 14
+
+  # ---------------------------------------------------------------- PHPUnit
+  tests:
+    name: PHPUnit (unit, database, feature) + coverage
+    needs: deps
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    services:
+      mysql:
+        image: mysql:8.4@sha256:8c233bad33d520a7aae1c1e619c3a9775f4a1ba2d463d692fada04ec7f40be00
+        env:
+          MYSQL_ROOT_PASSWORD: ci-root
+          MYSQL_DATABASE: akademus_ci
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -pci-root" --health-interval=5s --health-timeout=5s --health-retries=20
+    env:
+      database_tests_database: akademus_ci
+      database_default_database: akademus_ci
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.SHA }}
+          persist-credentials: false
+      - uses: ./.github/actions/setup-app
+        with:
+          coverage: pcov
+      - name: PHPUnit
+        run: vendor/bin/phpunit --colors=never
+      - name: Coverage must not drop (.ci/coverage-baseline.txt)
+        run: php .ci/coverage-ratchet.php build/logs/clover.xml
+      - name: No errors, warnings or deprecations logged during the tests
+        run: bash .ci/assert-clean-logs.sh
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: phpunit-reports
+          path: |
+            build/logs/
+            writable/logs/
+          retention-days: 7
+
+  # ---------------------------------------------------------------- app config & content
+  app-config:
+    name: Routes, filters, translations, filesystem
+    needs: deps
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.SHA }}
+          persist-credentials: false
+      - uses: ./.github/actions/setup-app
+      - name: Routes load
+        run: php spark routes > build-routes.txt && wc -l build-routes.txt
+      - name: Auth filters are attached to the protected areas
+        run: |
+          check() { php spark filter:check GET "$1" | tee /dev/stderr | grep -q "$2" || { echo "::error title=Route filters::$1 is missing the $2 filter"; exit 1; }; }
+          check admin/presets adminAuth
+          check admin/users adminAuth
+          check admission-officer/dashboard officerAuth
+      - name: Translation completeness
+        run: php .ci/check-lang-keys.php
+      - name: Filesystem, uploads and writable/ layout
+        run: bash .ci/check-writable.sh
+      - name: Shell scripts (shellcheck 0.11.0, checksum verified - same version as used locally)
+        env:
+          SHELLCHECK_SHA256: 8c3be12b05d5c177a04c29e3c78ce89ac86f1595681cab149b65b97c4e227198
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/shellcheck.tar.xz" https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.x86_64.tar.xz
+          echo "${SHELLCHECK_SHA256}  $RUNNER_TEMP/shellcheck.tar.xz" | sha256sum -c -
+          tar -xJf "$RUNNER_TEMP/shellcheck.tar.xz" -C "$RUNNER_TEMP"
+          "$RUNNER_TEMP/shellcheck-v0.11.0/shellcheck" -S info .ci/*.sh deploy/*.sh
+      - name: Workflows (actionlint 1.7.12, checksum verified)
+        env:
+          ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/actionlint.tgz" https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz
+          echo "${ACTIONLINT_SHA256}  $RUNNER_TEMP/actionlint.tgz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/actionlint.tgz" -C "$RUNNER_TEMP" actionlint
+          PATH="$RUNNER_TEMP/shellcheck-v0.11.0:$PATH" "$RUNNER_TEMP/actionlint" -color
+
+  # ---------------------------------------------------------------- deploy script rehearsal
+  deploy-rehearsal:
+    name: Deploy rehearsal (remote-deploy.sh on the runner)
+    needs: deps
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    services:
+      mysql:
+        image: mysql:8.4@sha256:8c233bad33d520a7aae1c1e619c3a9775f4a1ba2d463d692fada04ec7f40be00
+        env:
+          MYSQL_ROOT_PASSWORD: ci-root
+          MYSQL_DATABASE: akademus_rehearsal
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -pci-root" --health-interval=5s --health-timeout=5s --health-retries=20
+    env:
+      DB_NAME: akademus_rehearsal
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.SHA }}
+          persist-credentials: false
+      - uses: ./.github/actions/setup-app
+        with:
+          install: 'false'
+      - name: Normal deploy, failed migration, failed health check -> rollback
+        run: bash .ci/deploy-rehearsal.sh
+
+  # ---------------------------------------------------------------- browser tests
+  e2e:
+    name: E2E (${{ matrix.browser }})
+    needs: database
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: ${{ fromJSON((github.event_name == 'schedule' || inputs.browsers == 'all') && '["chromium","firefox","webkit"]' || '["chromium"]') }}
+    # Only Chromium gates; Firefox/WebKit (weekly / on demand) report without blocking.
+    continue-on-error: ${{ matrix.browser != 'chromium' }}
+    services:
+      mysql:
+        image: mysql:8.4@sha256:8c233bad33d520a7aae1c1e619c3a9775f4a1ba2d463d692fada04ec7f40be00
+        env:
+          MYSQL_ROOT_PASSWORD: ci-root
+          MYSQL_DATABASE: akademus_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -pci-root" --health-interval=5s --health-timeout=5s --health-retries=20
+    env:
+      CI_DEBUG_TOOLBAR: 'false' # the debug toolbar copies flash messages / form data into pages
+      database_tests_database: akademus_test
+      database_default_database: akademus_test
+      E2E_BASE_URL: http://127.0.0.1:8080/
+      PHP_BIN: php
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.SHA }}
+          persist-credentials: false
+      - uses: ./.github/actions/setup-app
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: lts/*
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Playwright version
+        id: pw
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-${{ matrix.browser }}
+      - name: Install ${{ matrix.browser }}
+        run: |
+          if [[ "${{ steps.pw-cache.outputs.cache-hit }}" == "true" ]]; then
+            npx playwright install-deps "${{ matrix.browser }}"
+          else
+            npx playwright install --with-deps "${{ matrix.browser }}"
+          fi
+      - name: Throwaway credentials and encryption key (masked)
+        run: |
+          creds=$(bash .ci/e2e-credentials.sh)
+          while IFS='=' read -r k v; do [[ "$k" == *PASSWORD ]] && echo "::add-mask::$v"; done <<<"$creds"
+          echo "$creds" >> "$GITHUB_ENV"
+          key=$(php -r 'echo bin2hex(random_bytes(32));')
+          echo "::add-mask::$key"
+          echo "encryption_key=hex2bin:$key" >> "$GITHUB_ENV"
+      - name: Migrate and seed the E2E database
+        run: |
+          bash .ci/spark.sh migrate
+          bash .ci/spark.sh db:seed DatabaseSeeder
+      - name: Start the app (php spark serve)
+        run: |
+          nohup php spark serve --host 127.0.0.1 --port 8080 > "$RUNNER_TEMP/serve.log" 2>&1 &
+          for _ in $(seq 1 30); do curl -sf "${E2E_BASE_URL}health" > /dev/null && exit 0; sleep 1; done
+          echo "::error::App did not become healthy"; cat "$RUNNER_TEMP/serve.log"; exit 1
+      - name: Playwright (${{ matrix.browser }})
+        run: npx playwright test --project="${{ matrix.browser }}"
+      - name: Collect server logs
+        if: failure()
+        run: mkdir -p test-results && cp "$RUNNER_TEMP/serve.log" test-results/ && cp -r writable/logs test-results/app-logs || true
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: failure() || cancelled()
+        with:
+          name: playwright-${{ matrix.browser }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  # ---------------------------------------------------------------- non-blocking forward compatibility
+  php-next:
+    name: Next PHP version compatibility (non-blocking)
+    needs: deps
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.SHA }}
+          persist-credentials: false
+      - uses: ./.github/actions/setup-app
+        with:
+          php-version: ${{ env.PHP_NEXT }}
+      - run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G --error-format=github
+      - run: vendor/bin/phpunit --no-coverage --testsuite unit
+
+  # ---------------------------------------------------------------- the gate
+  ci-gate:
+    name: CI gate
+    if: always()
+    needs: [deps, code-style, static-analysis, maintainability, security, database, tests, app-config, deploy-rehearsal, e2e]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: All required jobs passed
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          {
+            echo "### CI gate for \`${SHA}\`"
+            echo "| Job | Result |"
+            echo "|---|---|"
+            jq -r 'to_entries[] | "| \(.key) | \(.value.result) |"' <<<"$RESULTS"
+          } >> "$GITHUB_STEP_SUMMARY"
+          failed=$(jq -r '[to_entries[] | select(.value.result != "success") | .key] | join(", ")' <<<"$RESULTS")
+          if [[ -n "$failed" ]]; then
+            echo "::error title=CI gate::Not passed: ${failed}"
+            exit 1
+          fi
+          echo "All required CI jobs passed."

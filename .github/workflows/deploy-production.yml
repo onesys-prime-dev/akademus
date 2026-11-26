@@ -1,0 +1,120 @@
+# Production: pushing a release tag vX.Y.Z deploys exactly the tagged commit, after
+#   1. the tag is strict SemVer, newer than every existing release tag, and points at a commit on main;
+#   2. the CI gate passed for that exact commit (reused from the main/staging run, or run here if missing);
+#   3. a required reviewer approves the "production" environment.
+# A GitHub Release is created afterwards. See docs/CI-CD.md.
+name: Deploy production
+
+on:
+  push:
+    tags: ['v*']
+
+permissions: {}
+
+concurrency:
+  group: production-pipeline
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read # look up earlier CI runs for this commit
+    outputs:
+      sha: ${{ steps.release.outputs.sha }}
+      tag: ${{ steps.release.outputs.tag }}
+      ci-passed: ${{ steps.ci.outputs.passed }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Tag format, commit and ancestry
+        id: release
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          [[ "$TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]] \
+            || { echo "::error::Release tags must be vMAJOR.MINOR.PATCH (e.g. v1.4.0); got '$TAG'"; exit 1; }
+
+          sha=$(git rev-parse "refs/tags/${TAG}^{commit}")
+          git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+          git merge-base --is-ancestor "$sha" origin/main \
+            || { echo "::error::$TAG points at $sha, which is not on main. Release only merged code."; exit 1; }
+
+          newest=$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | grep -vx "$TAG" | sort -V | tail -n 1 || true)
+          if [[ -n "$newest" && "$(printf '%s\n%s\n' "$newest" "$TAG" | sort -V | tail -n 1)" != "$TAG" ]]; then
+            echo "::error::$TAG is not newer than the latest release $newest. To roll back, tag the older commit with a NEW version."; exit 1
+          fi
+
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Release $TAG -> $sha (previous release: ${newest:-none})"
+
+      - name: Did the CI gate already pass for this exact commit?
+        id: ci
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ steps.release.outputs.sha }}
+        run: |
+          # A successful ci.yml run (e.g. the weekly run on main) or a successful deploy-staging.yml run
+          # (which runs the full CI gate before deploying) for this exact head SHA counts.
+          runs=$(gh api -X GET "repos/${REPO}/actions/runs" -f head_sha="$SHA" -f status=success -f per_page=100 \
+                   --jq '[.workflow_runs[] | select(.path == ".github/workflows/ci.yml" or .path == ".github/workflows/deploy-staging.yml") | "\(.path) #\(.run_number) \(.html_url)"]')
+          if [[ "$(jq length <<<"$runs")" -gt 0 ]]; then
+            echo "CI already passed for $SHA:"; jq -r '.[]' <<<"$runs"
+            echo "passed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No successful CI run found for $SHA - CI will run now."
+            echo "passed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  ci:
+    name: CI
+    needs: validate
+    if: needs.validate.outputs.ci-passed != 'true'
+    uses: ./.github/workflows/ci.yml
+    with:
+      sha: ${{ needs.validate.outputs.sha }}
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+  deploy:
+    name: Production
+    needs: [validate, ci]
+    # Runs when validation passed and CI either passed now or had already passed (ci skipped).
+    if: ${{ !cancelled() && needs.validate.result == 'success' && (needs.ci.result == 'success' || needs.ci.result == 'skipped') }}
+    uses: ./.github/workflows/deploy-reusable.yml
+    with:
+      environment: production
+      sha: ${{ needs.validate.outputs.sha }}
+      release-label: ${{ needs.validate.outputs.tag }}
+    permissions:
+      contents: read
+
+  release:
+    name: GitHub Release
+    needs: [validate, deploy]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Create release notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ needs.validate.outputs.tag }}
+        run: |
+          if gh release view "$TAG" --repo "$REPO" > /dev/null 2>&1; then
+            echo "Release $TAG already exists."
+          else
+            gh release create "$TAG" --repo "$REPO" --verify-tag --generate-notes --title "$TAG"
+          fi

@@ -1,0 +1,37 @@
+# Keeps pinned GitHub Actions (commit SHAs) and dependencies current. Every update arrives as a PR into
+# main and must pass the CI gate like any other change. See docs/CI-CD.md.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directories: ['/', '/.github/actions/*']
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      github-actions:
+        patterns: ['*']
+    commit-message:
+      prefix: ci
+
+  - package-ecosystem: composer
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      dev-tools:
+        dependency-type: development
+        update-types: [minor, patch]
+    commit-message:
+      prefix: build(deps)
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      playwright:
+        patterns: ['@playwright/*', '@types/node']
+    commit-message:
+      prefix: build(deps)

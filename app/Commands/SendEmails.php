@@ -2,13 +2,14 @@
 
 namespace App\Commands;
 
-use CodeIgniter\CLI\BaseCommand;
 use App\Services\EmailService;
+use CodeIgniter\CLI\BaseCommand;
+use Throwable;
 
 class SendEmails extends BaseCommand
 {
-    protected $group = 'Notifications';
-    protected $name = 'emails:send';
+    protected $group       = 'Notifications';
+    protected $name        = 'emails:send';
     protected $description = 'Process email queue';
 
     public function run(array $params)
@@ -17,13 +18,12 @@ class SendEmails extends BaseCommand
 
         // @phpstan-ignore-next-line
         while (true) {
-
             $emails = $db->table('email_queue')
                 ->where('status', 'pending')
                 ->where('attempts <', 3)
                 ->groupStart()
-                    ->where('send_after <=', date('Y-m-d H:i:s'))
-                    ->orWhere('send_after IS NULL') // 🔥 immediate emails
+                ->where('send_after <=', date('Y-m-d H:i:s'))
+                ->orWhere('send_after IS NULL') // 🔥 immediate emails
                 ->groupEnd()
                 ->limit(10)
                 ->get()
@@ -31,18 +31,18 @@ class SendEmails extends BaseCommand
 
             if (empty($emails)) {
                 sleep(2);
+
                 continue;
             }
 
             foreach ($emails as $email) {
-
                 // 🔒 LOCK (avoid duplicate processing)
                 $locked = $db->table('email_queue')
                     ->where('email_id', $email['email_id'])
                     ->where('status', 'pending')
                     ->update(['status' => 'processing']);
 
-                if (!$locked || $db->affectedRows() === 0) {
+                if (! $locked || $db->affectedRows() === 0) {
                     continue;
                 }
 
@@ -51,20 +51,18 @@ class SendEmails extends BaseCommand
                 $success = false;
 
                 try {
-
                     switch ($email['type']) {
-
                         case 'auth.welcome':
                             $success = EmailService::sendWelcomeEmail(
                                 $email['to_email'],
-                                $payload['temp_password'] ?? ''
+                                $payload['temp_password'] ?? '',
                             );
                             break;
 
                         case 'auth.password_reset':
                             $success = EmailService::sendPasswordReset(
                                 $email['to_email'],
-                                $payload['reset_url'] ?? ''
+                                $payload['reset_url'] ?? '',
                             );
                             break;
 
@@ -78,12 +76,12 @@ class SendEmails extends BaseCommand
 
                         case 'followup.new_message':
                             $messages = $payload['messages'] ?? [];
-                            $success = EmailService::sendFollowUpNotification(
+                            $success  = EmailService::sendFollowUpNotification(
                                 $email['to_email'],
-                                $messages
+                                $messages,
                             );
                             break;
-                        
+
                         case 'admission_fee.pending':
                             $success = EmailService::sendAdmissionFeePendingNotification($email['to_email'], $payload['reference_num'] ?? '');
                             break;
@@ -104,6 +102,16 @@ class SendEmails extends BaseCommand
                             $success = EmailService::sendPaymentRejectedNotification($email['to_email'], $payload['reference_num'] ?? '', $payload['fee_type'] ?? '');
                             break;
 
+                        case 'exam.schedule_cancelled':
+                            $success = EmailService::sendExamScheduleCancelledNotification(
+                                $email['to_email'],
+                                $payload['exam_date'] ?? '',
+                                $payload['start_time'] ?? '',
+                                $payload['end_time'] ?? '',
+                                $payload['location'] ?? '',
+                            );
+                            break;
+
                         case 'application.submitted':
                             $success = EmailService::sendApplicationSubmittedNotification($email['to_email']);
                             break;
@@ -111,41 +119,41 @@ class SendEmails extends BaseCommand
                         case 'application.not_started':
                             $success = EmailService::sendApplicationNotStarted(
                                 $email['to_email'],
-                                $payload['level'] ?? 1
+                                $payload['level'] ?? 1,
                             );
                             break;
 
                         case 'application.in_progress':
                             $success = EmailService::sendApplicationInProgress(
                                 $email['to_email'],
-                                $payload['level'] ?? 1
+                                $payload['level'] ?? 1,
                             );
                             break;
 
                         case 'requirements.uploaded':
                             $success = EmailService::sendRequirementUploadedNotification(
                                 $email['to_email'],
-                                $payload['requirement_name'] ?? ''
+                                $payload['requirement_name'] ?? '',
                             );
                             break;
-                        
+
                         case 'requirements.completed':
                             $success = EmailService::sendRequirementsCompletedNotification(
-                                $email['to_email']
+                                $email['to_email'],
                             );
                             break;
-                        
+
                         case 'requirements.not_started':
                             $success = EmailService::sendRequirementsNotStarted(
                                 $email['to_email'],
-                                $payload['level'] ?? 1
+                                $payload['level'] ?? 1,
                             );
                             break;
 
                         case 'requirements.incomplete':
                             $success = EmailService::sendRequirementsIncomplete(
                                 $email['to_email'],
-                                $payload['level'] ?? 1
+                                $payload['level'] ?? 1,
                             );
                             break;
 
@@ -153,8 +161,7 @@ class SendEmails extends BaseCommand
                             log_message('error', 'Unknown email type: ' . $email['type']);
                             $success = false;
                     }
-
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     log_message('error', 'Email worker error: ' . $e->getMessage());
                     $success = false;
                 }
@@ -163,16 +170,16 @@ class SendEmails extends BaseCommand
                 $db->table('email_queue')
                     ->where('email_id', $email['email_id'])
                     ->update([
-                        'status' => $success ? 'sent' : 'failed',
-                        'attempts' => $email['attempts'] + ($success ? 0 : 1),
-                        'last_attempt_at' => date('Y-m-d H:i:s')
+                        'status'          => $success ? 'sent' : 'failed',
+                        'attempts'        => $email['attempts'] + ($success ? 0 : 1),
+                        'last_attempt_at' => date('Y-m-d H:i:s'),
                     ]);
 
                 // ⏱ throttle: Gmail SMTP flags rapid back-to-back connections as abuse
                 usleep(500000);
             }
 
-            echo "Processed " . count($emails) . " emails\n";
+            echo 'Processed ' . count($emails) . " emails\n";
         }
     }
 }

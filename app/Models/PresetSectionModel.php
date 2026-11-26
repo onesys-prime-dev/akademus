@@ -6,15 +6,17 @@ use CodeIgniter\Model;
 
 class PresetSectionModel extends Model
 {
-    protected $table      = 'preset_sections';
-    protected $primaryKey = 'id';
+    protected $table            = 'preset_sections';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType = 'array';
-    protected $useSoftDeletes = false;
-    protected $allowedFields = ['preset_id', 'form_page_id', 'sort_order', 'is_required'];
+    protected $returnType       = 'array';
+    protected $useSoftDeletes   = false;
+    protected $allowedFields    = ['preset_id', 'form_page_id', 'sort_order', 'is_required'];
 
     /**
      * Get sections with page details
+     *
+     * @param mixed $presetId
      */
     public function getSectionsWithDetails($presetId)
     {
@@ -29,6 +31,8 @@ class PresetSectionModel extends Model
 
     /**
      * Get form page IDs for a preset
+     *
+     * @param mixed $presetId
      */
     public function getPageIds($presetId)
     {
@@ -40,6 +44,9 @@ class PresetSectionModel extends Model
 
     /**
      * Update section order
+     *
+     * @param mixed $presetId
+     * @param mixed $sections
      */
     public function updateSectionOrder($presetId, $sections)
     {

@@ -10,7 +10,4 @@ class AboutUsController extends BaseController
     {
         return view('landing-pages/about-us.php');
     }
-
 }
-
-?>

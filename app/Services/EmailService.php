@@ -2,26 +2,32 @@
 
 namespace App\Services;
 
+use Config\Services;
+
 class EmailService
 {
     private static function send(string $to, string $subject, string $message): bool
     {
-        $email = \Config\Services::email();
+        $email = Services::email();
         $email->clear();
 
-        $email->setFrom('testakademusmentora@gmail.com', 'Akademus Portal');
+        // Sender comes from email.fromEmail / email.fromName in .env (per environment), not from code.
+        $config = config('Email');
+        $email->setFrom($config->fromEmail, $config->fromName !== '' ? $config->fromName : 'Akademus Portal');
         $email->setTo($to);
         $email->setSubject($subject);
         $email->setMailType('html');
         $email->setMessage($message);
 
-        if (!$email->send()) {
+        if (! $email->send()) {
             log_message('error', 'EmailService failed: ' . $email->printDebugger(['headers', 'subject', 'body']));
+
             return false;
         }
 
         return true;
     }
+
     public static function sendWelcomeEmail(string $to, string $tempPassword): bool
     {
         $loginUrl = base_url('sign-in');
@@ -123,34 +129,34 @@ class EmailService
 
     public static function sendDocumentReceived(string $to): bool
     {
-        $message = "
+        $message = '
             <h2>Document Received</h2>
             <p>Your uploaded document has been successfully received.</p>
             <p>Admissions will review it shortly.</p>
             <p>Thank you and have a great day!</p>
-        ";
+        ';
 
         return self::send($to, 'Document Received - Akademus', $message);
     }
 
     public static function sendApplicationApproved(string $to): bool
     {
-        $message = "
+        $message = '
             <h2>Application Approved</h2>
             <p>Congratulations! Your application has been approved.</p>
             <p>You may now proceed with the enrollment process.</p>
-        ";
+        ';
 
         return self::send($to, 'Application Approved - Akademus', $message);
     }
 
     public static function sendApplicationDeclined(string $to): bool
     {
-        $message = "
+        $message = '
             <h2>Application Status Update</h2>
             <p>We regret to inform you that your application was not approved.</p>
             <p>If you have questions, please contact admissions.</p>
-        ";
+        ';
 
         return self::send($to, 'Application Status Update - Akademus', $message);
     }
@@ -197,9 +203,9 @@ class EmailService
             $formatted .= "<li style='margin-bottom:8px;'>{$safe}</li>";
         }
 
-        $message = "
+        $message = '
             <h2>New Messages from Admissions</h2>
-            <p>You have " . count($messages) . " new message(s):</p>
+            <p>You have ' . count($messages) . " new message(s):</p>
 
             <ul style='padding-left:16px;color:#4b5563;'>
                 {$formatted}
@@ -278,14 +284,35 @@ class EmailService
         return self::send($to, "{$feeTypeName} Payment Rejected - Akademus", $message);
     }
 
+    public static function sendExamScheduleCancelledNotification(string $to, string $examDate, string $startTime, string $endTime, string $location): bool
+    {
+        $date  = $examDate ? date('l, F j, Y', strtotime($examDate)) : '';
+        $time  = $startTime ? date('g:i A', strtotime($startTime)) . ($endTime ? ' - ' . date('g:i A', strtotime($endTime)) : '') : '';
+        $venue = esc($location);
+
+        $message = "
+            <h2>Exam Schedule Cancelled</h2>
+            <p>The entrance exam schedule you booked has been cancelled by the admissions office:</p>
+            <ul>
+                <li><strong>Date:</strong> {$date}</li>
+                <li><strong>Time:</strong> {$time}</li>
+                <li><strong>Venue:</strong> {$venue}</li>
+            </ul>
+            <p>Your booking has been released. Please log in to your portal and choose a new exam slot.</p>
+            <p><a href='" . base_url('exam-schedule') . "'>Choose a New Exam Slot</a></p>
+        ";
+
+        return self::send($to, 'Exam Schedule Cancelled - Akademus', $message);
+    }
+
     public static function sendApplicationSubmittedNotification(string $to): bool
     {
-        $message = "
+        $message = '
             <h2>Application Submitted</h2>
             <p>Your application has been successfully submitted and is now under review by the admissions committee.</p>
             <p>We will notify you of any updates regarding your application status.</p>
             <p>Thank you for applying to our institution!</p>
-        ";
+        ';
 
         return self::send($to, 'Application Submitted - Akademus', $message);
     }
@@ -327,11 +354,11 @@ class EmailService
 
     public static function sendRequirementsCompletedNotification(string $to): bool
     {
-        $message = "
+        $message = '
             <h2>All Requirements Completed</h2>
             <p>Congratulations! You have uploaded all the required documents for your application.</p>
             <p>Admissions will review your complete application shortly. We will notify you of any updates regarding your application status.</p>
-        ";
+        ';
 
         return self::send($to, 'All Requirements Completed - Akademus', $message);
     }

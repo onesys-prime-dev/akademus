@@ -3,25 +3,25 @@
 namespace App\Controllers\Applicant;
 
 use App\Controllers\BaseController;
-
 use App\Models\Applicant\ApplicantModel;
-use App\Models\Application\PersonalInformationModel;
-use App\Models\Application\FamilyBackgroundModel;
 use App\Models\Application\EducationalBackgroundModel;
+use App\Models\Application\FamilyBackgroundModel;
+use App\Models\Application\PersonalInformationModel;
 use App\Models\FormPageModel;
-use App\Models\Payment\PaymentModel;
 use App\Models\Payment\PaymentFeeTypeModel;
+use App\Models\Payment\PaymentModel;
 use App\Models\ThemeModel;
-
-use App\Services\RequirementService;
 use App\Services\ApplicantDocumentService;
 use App\Services\ApplicationProgressService;
+use App\Services\PresetService;
+use App\Services\RequirementService;
+use Config\Database;
 
 class DashboardController extends BaseController
 {
     public function index()
     {
-        if (!session()->get('logged_in')) {
+        if (! session()->get('logged_in')) {
             return redirect()->to('/sign-in');
         }
 
@@ -32,11 +32,11 @@ class DashboardController extends BaseController
             ->where('user_id', session()->get('user_id'))
             ->first();
 
-        if (!$applicant) {
+        if (! $applicant) {
             return redirect()->to('/sign-in');
         }
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $application = $db->table('applications')
             ->where('applicant_id', $applicant['applicant_id'])
@@ -74,7 +74,7 @@ class DashboardController extends BaseController
         |
         */
 
-        $steps = [];
+        $steps        = [];
         $stepStatuses = [];
 
         foreach ($progressSteps as $index => $step) {
@@ -91,7 +91,7 @@ class DashboardController extends BaseController
 
         $doneSteps = count(array_filter(
             $progressSteps,
-            fn($step) => in_array($step['status'], ['done', 'rejected'])
+            fn ($step) => in_array($step['status'], ['done', 'rejected']),
         ));
 
         $overallProgress = count($progressSteps) > 0
@@ -108,7 +108,7 @@ class DashboardController extends BaseController
             ?? session()->get('selected_program_id');
 
         if ($programId) {
-            $presetSvc = new \App\Services\PresetService();
+            $presetSvc = new PresetService();
             $formPages = $presetSvc->getFormPagesForApplicant((int) $programId);
 
             if (empty($formPages)) {
@@ -140,10 +140,10 @@ class DashboardController extends BaseController
                 $pageId = (int) $page['id'];
 
                 $formCompletion[$pageId] = match ($pageId) {
-                    1 => !empty($application['applicant_type']),
-                    2 => !empty($pi['firstname']),
-                    3 => !empty($fb['father_lastname']) || !empty($fb['guardian_name']),
-                    4 => !empty($eb['school_name']),
+                    1       => ! empty($application['applicant_type']),
+                    2       => ! empty($pi['firstname']),
+                    3       => ! empty($fb['father_lastname']) || ! empty($fb['guardian_name']),
+                    4       => ! empty($eb['school_name']),
                     default => false,
                 };
             }
@@ -168,32 +168,30 @@ class DashboardController extends BaseController
         if ($programId) {
             $allReqs = (new RequirementService())->getRequirements($programId);
 
-            if (!empty($allReqs)) {
+            if (! empty($allReqs)) {
                 $uploadedDocs = (new ApplicantDocumentService())
                     ->getStepDocuments($applicant['applicant_id'], $allReqs);
 
                 $totalRequired = count(array_filter(
                     $allReqs,
-                    fn($r) => $r['is_required']
+                    fn ($r) => $r['is_required'],
                 ));
 
                 $uploadedRequired = count(array_filter(
                     $allReqs,
-                    fn($r) =>
-                    $r['is_required']
-                        && isset($uploadedDocs[$r['program_requirement_id']])
+                    fn ($r) => $r['is_required']
+                        && isset($uploadedDocs[$r['program_requirement_id']]),
                 ));
 
                 $totalOptional = count(array_filter(
                     $allReqs,
-                    fn($r) => !$r['is_required']
+                    fn ($r) => ! $r['is_required'],
                 ));
 
                 $uploadedOptional = count(array_filter(
                     $allReqs,
-                    fn($r) =>
-                    !$r['is_required']
-                        && isset($uploadedDocs[$r['program_requirement_id']])
+                    fn ($r) => ! $r['is_required']
+                        && isset($uploadedDocs[$r['program_requirement_id']]),
                 ));
 
                 $docStats = [
@@ -210,7 +208,7 @@ class DashboardController extends BaseController
 
         $docProgress = $docStats['total_required'] > 0
             ? (int) round(
-                ($docStats['uploaded_required'] / $docStats['total_required']) * 100
+                ($docStats['uploaded_required'] / $docStats['total_required']) * 100,
             )
             : 0;
 
@@ -252,17 +250,17 @@ class DashboardController extends BaseController
         | Payments
         |--------------------------------------------------------------------------
         */
-        $reservationFee = (new PaymentFeeTypeModel())->getByCode(PaymentFeeTypeModel::CODE_RESERVATION);
+        $reservationFee       = (new PaymentFeeTypeModel())->getByCode(PaymentFeeTypeModel::CODE_RESERVATION);
         $reservationFeeAmount = $reservationFee['amount'] ?? 2000;
 
-        $fastTrackFee = (new PaymentFeeTypeModel())->getByCode(PaymentFeeTypeModel::CODE_FAST_TRACK);
+        $fastTrackFee       = (new PaymentFeeTypeModel())->getByCode(PaymentFeeTypeModel::CODE_FAST_TRACK);
         $fastTrackFeeAmount = $fastTrackFee['amount'] ?? 1000;
 
         $payments = (new PaymentModel())
             ->select('payment.payment_status, payment_fee_type.code')
             ->join(
                 'payment_fee_type',
-                'payment_fee_type.payment_fee_type_id = payment.payment_fee_type_id'
+                'payment_fee_type.payment_fee_type_id = payment.payment_fee_type_id',
             )
             ->where('payment.applicant_id', $applicant['applicant_id'])
             ->findAll();
@@ -295,9 +293,8 @@ class DashboardController extends BaseController
             ];
         }
 
-        $showPaymentNotification =
-            $appStatus === 'approved'
-            && !isset($paidMap['RESERVATION_FEE']);
+        $showPaymentNotification = $appStatus === 'approved'
+            && ! isset($paidMap['RESERVATION_FEE']);
 
         /*
         |--------------------------------------------------------------------------
@@ -312,34 +309,34 @@ class DashboardController extends BaseController
             'theme'            => $themeModel->getAllSettings(),
 
             // shared progress
-            'steps'            => $steps,
-            'progress'         => $overallProgress,
-            'banner_message'   => $bannerMessage,
-            'step_statuses'    => $stepStatuses,
+            'steps'          => $steps,
+            'progress'       => $overallProgress,
+            'banner_message' => $bannerMessage,
+            'step_statuses'  => $stepStatuses,
 
             // merged shared meta
-            'app_status'         => $progressData['app_status'],
-            'decision_remarks'   => $progressData['decision_remarks'],
-            'form_complete'      => $progressData['form_complete'],
-            'form_submitted'     => $progressData['form_submitted'],
-            'docs_complete'      => $progressData['docs_complete'],
-            'exam_enabled'       => $progressData['exam_enabled'],
-            'exam_booking'       => $progressData['exam_booking'],
-            'revision_requested' => $progressData['revision_requested'],
-            'revision_note'      => $progressData['revision_note'],
-            'revision_pages'     => $progressData['revision_pages'],
-            'is_fast_track'         => $isFastTrack,
+            'app_status'               => $progressData['app_status'],
+            'decision_remarks'         => $progressData['decision_remarks'],
+            'form_complete'            => $progressData['form_complete'],
+            'form_submitted'           => $progressData['form_submitted'],
+            'docs_complete'            => $progressData['docs_complete'],
+            'exam_enabled'             => $progressData['exam_enabled'],
+            'exam_booking'             => $progressData['exam_booking'],
+            'revision_requested'       => $progressData['revision_requested'],
+            'revision_note'            => $progressData['revision_note'],
+            'revision_pages'           => $progressData['revision_pages'],
+            'is_fast_track'            => $isFastTrack,
             'pending_fast_track_pages' => $progressData['pending_fast_track_pages'],
 
             // checklist cards
-            'form_pages'       => $formPages,
-            'form_completion'  => $formCompletion,
-            'form_completed'   => $formPagesCompleted,
-            'form_total'       => $formPageCount,
-            'form_progress'    => $formProgress,
+            'form_pages'      => $formPages,
+            'form_completion' => $formCompletion,
+            'form_completed'  => $formPagesCompleted,
+            'form_total'      => $formPageCount,
+            'form_progress'   => $formProgress,
 
-            'doc_stats'        => $docStats,
-            'doc_progress'     => $docProgress,
+            'doc_stats'    => $docStats,
+            'doc_progress' => $docProgress,
 
             // payment
             'reservation_fee_amount'  => $reservationFeeAmount,
@@ -356,11 +353,11 @@ class DashboardController extends BaseController
 
     public function dismissTour()
     {
-        if (!session()->get('logged_in')) {
+        if (! session()->get('logged_in')) {
             return $this->response->setJSON(['success' => false])->setStatusCode(401);
         }
 
-        \Config\Database::connect()
+        Database::connect()
             ->table('applicants')
             ->where('user_id', session()->get('user_id'))
             ->update(['has_seen_tour' => 1]);

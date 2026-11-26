@@ -10,8 +10,8 @@ class DashboardController extends BaseAdminController
 
         $data = [
             'sidebarActive' => 'dashboard',
-            'stats' => [
-                'total_courses' => model('CourseModel')->countAll(),
+            'stats'         => [
+                'total_courses'        => model('CourseModel')->countAll(),
                 'pending_applications' => model('ApplicationModel')
                     ->where('status', 'pending')
                     ->countAllResults(),

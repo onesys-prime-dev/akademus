@@ -1,0 +1,55 @@
+# Architecture rules: which layer of the CodeIgniter 4 app may depend on which.
+# Existing violations are recorded in deptrac.baseline.yaml; CI fails only on new ones.
+#
+#   composer deptrac             check (what CI runs)
+#   composer deptrac:baseline    regenerate the baseline (only when you deliberately accept violations)
+#
+# Key rules: nothing depends on Controllers (except routing config), Models never depend on
+# Services/Controllers, Libraries stay low-level.
+imports:
+  - deptrac.baseline.yaml
+
+deptrac:
+  paths:
+    - ./app
+  exclude_files:
+    - '#.*/app/Views/.*#'
+    - '#.*/app/ThirdParty/.*#'
+  layers:
+    - name: Controller
+      collectors:
+        - { type: directory, value: app/Controllers/.* }
+    - name: Filter
+      collectors:
+        - { type: directory, value: app/Filters/.* }
+    - name: Command
+      collectors:
+        - { type: directory, value: app/Commands/.* }
+    - name: Service
+      collectors:
+        - { type: directory, value: app/Services/.* }
+    - name: Model
+      collectors:
+        - { type: directory, value: app/Models/.* }
+    - name: Cast
+      collectors:
+        - { type: directory, value: app/Casts/.* }
+    - name: Library
+      collectors:
+        - { type: directory, value: app/Libraries/.* }
+    - name: Database
+      collectors:
+        - { type: directory, value: app/Database/.* }
+    - name: Config
+      collectors:
+        - { type: directory, value: app/Config/.* }
+  ruleset:
+    Controller: [Service, Model, Library, Cast, Config]
+    Filter:     [Service, Model, Library, Config]
+    Command:    [Service, Model, Library, Config]
+    Service:    [Model, Library, Cast, Config]
+    Model:      [Cast, Library, Config]
+    Cast:       [Library, Config]
+    Library:    [Config]
+    Database:   [Service, Model, Library, Cast, Config]
+    Config:     [Filter, Library, Service]

@@ -1,0 +1,4 @@
+# /etc/sudoers.d/akademus-deploy  (rendered by deploy/server-setup.sh, validated with visudo -cf)
+# The deploy user may ONLY reload PHP-FPM (clears OPcache after the release switch) and restart the
+# Akademus email workers. Nothing else runs as root during a deploy.
+__DEPLOY_USER__ ALL=(root) NOPASSWD: /usr/bin/systemctl reload __FPM_SERVICE__, /usr/bin/systemctl restart akademus-mail@staging, /usr/bin/systemctl restart akademus-mail@production

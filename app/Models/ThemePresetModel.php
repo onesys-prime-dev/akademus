@@ -6,8 +6,8 @@ use CodeIgniter\Model;
 
 class ThemePresetModel extends Model
 {
-    protected $table      = 'theme_presets';
-    protected $primaryKey = 'id';
+    protected $table         = 'theme_presets';
+    protected $primaryKey    = 'id';
     protected $useTimestamps = false;
     protected $allowedFields = [
         'name',
@@ -28,6 +28,7 @@ class ThemePresetModel extends Model
     public function createPreset(array $data): int
     {
         $data['created_at'] = date('Y-m-d H:i:s');
+
         return (int) $this->insert($data);
     }
 }

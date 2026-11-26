@@ -6,11 +6,10 @@ use CodeIgniter\Model;
 
 class ProgramModel extends Model
 {
-    protected $table = 'programs';
-    protected $primaryKey = 'program_id';
-
+    protected $table         = 'programs';
+    protected $primaryKey    = 'program_id';
     protected $allowedFields = [
         'program_code',
-        'program_name'
+        'program_name',
     ];
 }

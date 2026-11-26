@@ -134,7 +134,8 @@
         </main>
     </div>
 
-    <?php if (uri_string() !== 'faq'): ?>
+    <?php // Not on the FAQ page, nor on the follow-up messages page, where the floating button covered the send button. ?>
+    <?php if (! in_array(uri_string(), ['faq', 'follow-up-messages'], true)): ?>
         <?= view('applicant/components/chat_widget', ['theme' => $theme]) ?>
     <?php endif; ?>
 
@@ -311,7 +312,7 @@
                 ">🎓</div>
                 <div style="flex:1;min-width:0;">
                     <p style="margin:0;font-size:12.5px;font-weight:600;color:#1a202c;line-height:1.4;">
-                        Admission Officer replied to your message
+                        Admission Officer sent you a message
                     </p>
                     <p style="
                         margin:3px 0 0;font-size:12px;color:#4a5568;

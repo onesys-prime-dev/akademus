@@ -1,0 +1,5 @@
+# Regexes (one per line) for log lines that are expected during the test run and must not fail CI.
+# Keep this list short and explain each entry.
+
+# AnonymousAccessTest deliberately requests IDs that do not exist; CodeIgniter logs the resulting 404s.
+^CRITICAL - .* --> CodeIgniter\\Exceptions\\PageNotFoundException:

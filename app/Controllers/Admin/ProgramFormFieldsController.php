@@ -2,6 +2,9 @@
 
 namespace App\Controllers\Admin;
 
+use CodeIgniter\Exceptions\PageNotFoundException;
+use Config\Database;
+
 class ProgramFormFieldsController extends BaseAdminController
 {
     protected $formFieldService;
@@ -12,8 +15,8 @@ class ProgramFormFieldsController extends BaseAdminController
     {
         parent::__construct();
         $this->formFieldService = service('FormFieldService');
-        $this->programModel = model('ProgramModel');
-        $this->db = \Config\Database::connect();
+        $this->programModel     = model('ProgramModel');
+        $this->db               = Database::connect();
     }
 
     /**
@@ -27,8 +30,8 @@ class ProgramFormFieldsController extends BaseAdminController
 
         $data = [
             'sidebarActive' => 'forms',
-            'fields' => $this->formFieldService->getBaseFormFields(),
-            'pages' => $this->formFieldService->getFormPages(),
+            'fields'        => $this->formFieldService->getBaseFormFields(),
+            'pages'         => $this->formFieldService->getFormPages(),
         ];
 
         return $this->renderAdmin('admin/forms/base-fields', $data);
@@ -36,12 +39,14 @@ class ProgramFormFieldsController extends BaseAdminController
 
     /**
      * Manage program-specific form field overrides
+     *
+     * @param mixed $programId
      */
     public function programFields($programId)
     {
         $program = $this->programModel->find($programId);
-        if (!$program) {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException();
+        if (! $program) {
+            throw new PageNotFoundException();
         }
 
         $this->pageTitle = "Customize Form for {$program['program_name']}";
@@ -50,21 +55,21 @@ class ProgramFormFieldsController extends BaseAdminController
 
         // Get merged fields (with overrides applied)
         $mergedFields = $this->formFieldService->getMergedFormFields($programId);
-        
+
         // Get base fields
         $baseFields = $this->formFieldService->getBaseFormFields();
-        
+
         // Get existing overrides
-        $overrides = $this->formFieldService->getProgramOverrides($programId);
+        $overrides   = $this->formFieldService->getProgramOverrides($programId);
         $overrideMap = array_column($overrides, null, 'field_config_id');
 
         $data = [
             'sidebarActive' => 'forms',
-            'program' => $program,
-            'programId' => $programId,
-            'mergedFields' => $mergedFields,
-            'baseFields' => $baseFields,
-            'overrideMap' => $overrideMap,
+            'program'       => $program,
+            'programId'     => $programId,
+            'mergedFields'  => $mergedFields,
+            'baseFields'    => $baseFields,
+            'overrideMap'   => $overrideMap,
         ];
 
         return $this->renderAdmin('admin/forms/program-fields', $data);
@@ -72,11 +77,14 @@ class ProgramFormFieldsController extends BaseAdminController
 
     /**
      * Save field override for a program
+     *
+     * @param mixed $programId
+     * @param mixed $fieldConfigId
      */
     public function saveFieldOverride($programId, $fieldConfigId)
     {
         $program = $this->programModel->find($programId);
-        if (!$program) {
+        if (! $program) {
             return $this->response->setStatusCode(404)->setJSON(['error' => 'Program not found']);
         }
 
@@ -84,15 +92,15 @@ class ProgramFormFieldsController extends BaseAdminController
 
         // Only include fields that are actually being overridden
         if ($this->request->getPost('is_required') !== null) {
-            $overrides['is_required'] = (bool)$this->request->getPost('is_required');
+            $overrides['is_required'] = (bool) $this->request->getPost('is_required');
         }
 
         if ($this->request->getPost('is_visible') !== null) {
-            $overrides['is_visible'] = (bool)$this->request->getPost('is_visible');
+            $overrides['is_visible'] = (bool) $this->request->getPost('is_visible');
         }
 
         if ($this->request->getPost('sort_order') !== null) {
-            $overrides['sort_order'] = (int)$this->request->getPost('sort_order');
+            $overrides['sort_order'] = (int) $this->request->getPost('sort_order');
         }
 
         if (empty($overrides)) {
@@ -108,31 +116,37 @@ class ProgramFormFieldsController extends BaseAdminController
 
     /**
      * Remove field override for a program
+     *
+     * @param mixed $programId
+     * @param mixed $fieldConfigId
      */
     public function removeFieldOverride($programId, $fieldConfigId)
     {
         $this->formFieldService->removeProgramFieldOverride($programId, $fieldConfigId);
+
         return redirect()->back()->with('success', 'Field override removed');
     }
 
     /**
      * Bulk update field overrides
+     *
+     * @param mixed $programId
      */
     public function bulkUpdateOverrides($programId)
     {
         $program = $this->programModel->find($programId);
-        if (!$program) {
+        if (! $program) {
             return $this->response->setStatusCode(404)->setJSON(['error' => 'Program not found']);
         }
 
         $overrides = $this->request->getPost('overrides');
 
-        if (!$overrides || !is_array($overrides)) {
+        if (! $overrides || ! is_array($overrides)) {
             return redirect()->back()->with('error', 'No overrides provided');
         }
 
         foreach ($overrides as $fieldConfigId => $override) {
-            if (!empty($override)) {
+            if (! empty($override)) {
                 $this->formFieldService->saveProgramFieldOverride($programId, $fieldConfigId, $override);
             } else {
                 $this->formFieldService->removeProgramFieldOverride($programId, $fieldConfigId);

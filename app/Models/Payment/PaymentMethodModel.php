@@ -6,16 +6,14 @@ use CodeIgniter\Model;
 
 class PaymentMethodModel extends Model
 {
-    protected $table      = 'payment_method';
-    protected $primaryKey = 'payment_method_id';
-
+    protected $table         = 'payment_method';
+    protected $primaryKey    = 'payment_method_id';
     protected $allowedFields = [
         'code',
         'name',
         'description',
         'is_active',
     ];
-
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -39,7 +37,7 @@ class PaymentMethodModel extends Model
                 ->join(
                     'payment_method_account pma',
                     'pma.payment_method_id = pm.payment_method_id AND pma.is_active = 1',
-                    'left'
+                    'left',
                 )
                 ->where('pm.is_active', 1)
                 ->orderBy('pm.payment_method_id', 'ASC')

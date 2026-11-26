@@ -1,0 +1,11 @@
+# Paths Semgrep skips (CI security job; see docs/CI-CD.md).
+vendor/
+node_modules/
+writable/
+build/
+tests/
+e2e/
+playwright-report/
+test-results/
+public/assets/
+*.min.js

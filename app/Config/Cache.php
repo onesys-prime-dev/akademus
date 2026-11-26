@@ -23,7 +23,7 @@ class Cache extends BaseConfig
      * it is not available, the $backupHandler will be used in its place.
      */
     public string $handler = 'file';
-    /*public string $handler = 'dummy';*/
+    // public string $handler = 'dummy';
 
     /**
      * --------------------------------------------------------------------------
@@ -196,6 +196,4 @@ class Cache extends BaseConfig
      * @var list<int>
      */
     public array $cacheStatusCodes = [];
-
-    
 }

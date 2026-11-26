@@ -1,0 +1,87 @@
+- generic [active] [ref=f9e1]:
+  - generic [ref=f9e2]:
+    - navigation [ref=f9e4]:
+      - generic [ref=f9e5]:
+        - generic [ref=f9e6]:
+          - link "Akademus Portal Admission Portal" [ref=f9e7] [cursor=pointer]:
+            - /url: http://localhost/akademus/public/dashboard
+            - generic [ref=f9e9]:
+              - paragraph [ref=f9e10]: Akademus Portal
+              - generic [ref=f9e11]: Admission Portal
+          - generic [ref=f9e12]:
+            - generic [ref=f9e13]: Applicant ID
+            - paragraph [ref=f9e14]: "#APP-2026-09111"
+        - generic [ref=f9e15]:
+          - generic [ref=f9e16]:
+            - paragraph [ref=f9e17]: MENU
+            - generic [ref=f9e18]:
+              - link "Dashboard" [ref=f9e19] [cursor=pointer]:
+                - /url: http://localhost/akademus/public/dashboard
+              - link "Applicant Form" [ref=f9e22] [cursor=pointer]:
+                - /url: http://localhost/akademus/public/applicant-form
+              - link "Requirements" [ref=f9e25] [cursor=pointer]:
+                - /url: http://localhost/akademus/public/requirements
+              - link "Tracking Progress" [ref=f9e28] [cursor=pointer]:
+                - /url: http://localhost/akademus/public/tracking-progress
+          - generic [ref=f9e31]:
+            - paragraph [ref=f9e33]: PAYMENTS
+            - generic [ref=f9e34]:
+              - link "Admission Processing Fee" [ref=f9e35] [cursor=pointer]:
+                - /url: http://localhost/akademus/public/admission-processing-fee
+              - link "Reservation Fee":
+                - /url: javascript:void(0)
+          - generic [ref=f9e42]:
+            - paragraph [ref=f9e43]: SUPPORT
+            - generic [ref=f9e44]:
+              - link "FAQ & Chat Support" [ref=f9e45] [cursor=pointer]:
+                - /url: http://localhost/akademus/public/faq
+              - link "Follow-Up Messages" [ref=f9e48] [cursor=pointer]:
+                - /url: http://localhost/akademus/public/follow-up-messages
+      - generic [ref=f9e51]:
+        - generic [ref=f9e52]:
+          - generic [ref=f9e53]: CC
+          - generic [ref=f9e55]:
+            - paragraph [ref=f9e56]: Chuckie Chocolate
+            - generic [ref=f9e57]: Applicant
+        - link "Logout" [ref=f9e58] [cursor=pointer]:
+          - /url: http://localhost/akademus/public/logout
+    - main [ref=f9e60]:
+      - generic [ref=f9e61]:
+        - heading "Applicant Information Form" [level=1] [ref=f9e62]
+        - button [ref=f9e64] [cursor=pointer]
+      - generic [ref=f9e69]:
+        - generic [ref=f9e70]:
+          - heading [level=4]
+          - generic [ref=f9e71]:
+            - generic [ref=f9e72]:
+              - generic [ref=f9e73]: "1"
+              - generic [ref=f9e74]: Applicati…
+            - generic [ref=f9e76]:
+              - generic [ref=f9e77]: "2"
+              - generic [ref=f9e78]: Personal …
+            - generic [ref=f9e80]:
+              - generic [ref=f9e81]: "3"
+              - generic [ref=f9e82]: Family Ba…
+            - generic [ref=f9e84]:
+              - generic [ref=f9e85]: "4"
+              - generic [ref=f9e86]: Education…
+        - generic [ref=f9e87]: Auto-saved as draft
+  - button "1" [ref=f9e90] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic: 🎓
+      - generic:
+        - paragraph: Akademus Portal Assistant
+        - text: Admissions Support Only
+    - generic:
+      - generic:
+        - generic: 🎓
+        - generic:
+          - generic: Hi! I can answer questions about admissions, programs, and fees. 👋
+          - generic:
+            - button "Requirements?"
+            - button "Programs?"
+            - button "How to apply?"
+    - generic:
+      - textbox "Ask about admissions..."
+      - button

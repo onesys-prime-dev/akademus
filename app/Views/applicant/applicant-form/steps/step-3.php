@@ -315,4 +315,9 @@ $fields = get_field_configs(3);
 
         </div>
     </div>
+<div class="program-sched-container">
+    <div class="application-form-fields-container">
+        <?= view('applicant/applicant-form/steps/custom-fields', ['fields' => $fields, 'data' => $data ?? []]) ?>
+    </div>
+</div>
 </form>

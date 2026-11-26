@@ -6,11 +6,11 @@ use CodeIgniter\Model;
 
 class PresetRequirementCategoryModel extends Model
 {
-    protected $table      = 'preset_requirement_categories';
-    protected $primaryKey = 'id';
-    protected $returnType = 'array';
+    protected $table            = 'preset_requirement_categories';
+    protected $primaryKey       = 'id';
+    protected $returnType       = 'array';
     protected $useAutoIncrement = true;
-    protected $allowedFields = ['preset_id', 'requirement_category_id', 'sort_order'];
+    protected $allowedFields    = ['preset_id', 'requirement_category_id', 'sort_order'];
 
     public function getCategoriesForPreset(int $presetId): array
     {
@@ -25,6 +25,7 @@ class PresetRequirementCategoryModel extends Model
     public function getCategoryIdsForPreset(int $presetId): array
     {
         $rows = $this->where('preset_id', $presetId)->findAll();
+
         return array_column($rows, 'requirement_category_id');
     }
 }

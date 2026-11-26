@@ -163,17 +163,19 @@ class Database extends Config
      * @var array<string, mixed>
      */
     public array $tests = [
-        'DSN'         => '',
+        'DSN' => '',
+        // MySQL like the default group (the app uses MySQL-only SQL and views). Credentials come from
+        // database.tests.* in .env locally, or database_tests_* environment variables in CI.
         'hostname'    => '127.0.0.1',
         'username'    => '',
         'password'    => '',
-        'database'    => ':memory:',
-        'DBDriver'    => 'SQLite3',
-        'DBPrefix'    => 'db_',  // Needed to ensure we're working correctly with prefixes live. DO NOT REMOVE FOR CI DEVS
+        'database'    => 'akademus_test',
+        'DBDriver'    => 'MySQLi',
+        'DBPrefix'    => '',
         'pConnect'    => false,
         'DBDebug'     => true,
-        'charset'     => 'utf8',
-        'DBCollat'    => '',
+        'charset'     => 'utf8mb4',
+        'DBCollat'    => 'utf8mb4_general_ci',
         'swapPre'     => '',
         'encrypt'     => false,
         'compress'    => false,
@@ -196,8 +198,9 @@ class Database extends Config
 
         // Ensure that we always set the database group to 'tests' if
         // we are currently running an automated test suite, so that
-        // we don't overwrite live data on accident.
-        if (ENVIRONMENT === 'testing') {
+        // we don't overwrite live data on accident. The Playwright E2E
+        // suite opts in through E2E_USE_TEST_DB in .env.
+        if (ENVIRONMENT === 'testing' || env('E2E_USE_TEST_DB')) {
             $this->defaultGroup = 'tests';
         }
     }

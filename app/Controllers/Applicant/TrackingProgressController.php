@@ -6,12 +6,13 @@ use App\Controllers\BaseController;
 use App\Models\Applicant\ApplicantModel;
 use App\Models\ThemeModel;
 use App\Services\ApplicationProgressService;
+use Config\Database;
 
 class TrackingProgressController extends BaseController
 {
     public function index()
     {
-        if (!session()->get('logged_in')) {
+        if (! session()->get('logged_in')) {
             return redirect()->to('/sign-in');
         }
 
@@ -22,11 +23,11 @@ class TrackingProgressController extends BaseController
             ->where('user_id', session()->get('user_id'))
             ->first();
 
-        if (!$applicant) {
+        if (! $applicant) {
             return redirect()->to('/sign-in');
         }
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $application = $db->table('applications')
             ->where('applicant_id', $applicant['applicant_id'])

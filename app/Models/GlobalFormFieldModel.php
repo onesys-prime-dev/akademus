@@ -6,11 +6,11 @@ use CodeIgniter\Model;
 
 class GlobalFormFieldModel extends Model
 {
-    protected $table = 'global_form_fields';
-    protected $primaryKey = 'id';
+    protected $table            = 'global_form_fields';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType = 'array';
-    protected $allowedFields = [
+    protected $returnType       = 'array';
+    protected $allowedFields    = [
         'field_name',
         'field_type',
         'label',
@@ -22,8 +22,8 @@ class GlobalFormFieldModel extends Model
         'is_active',
     ];
     protected $useTimestamps = true;
-    protected $createdField = 'created_at';
-    protected $updatedField = 'updated_at';
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
 
     public function getActiveFields()
     {

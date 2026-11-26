@@ -7,13 +7,11 @@ use CodeIgniter\Model;
 
 class FamilyBackgroundModel extends Model
 {
-    protected $table = 'family_backgrounds';
-    protected $primaryKey = 'id';
-
+    protected $table            = 'family_backgrounds';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType = 'array';
-
-    protected $allowedFields = [
+    protected $returnType       = 'array';
+    protected $allowedFields    = [
         'application_id',
         'father_firstname',
         'father_middlename',
@@ -30,13 +28,11 @@ class FamilyBackgroundModel extends Model
         'guardian_name',
         'guardian_relationship',
         'guardian_contact_number',
-        'annual_family_income'
+        'annual_family_income',
     ];
-
     protected array $castHandlers = [
         'encrypted' => EncryptedCast::class,
     ];
-
     protected array $casts = [
         'father_firstname'        => '?encrypted',
         'father_middlename'       => '?encrypted',
@@ -53,7 +49,6 @@ class FamilyBackgroundModel extends Model
         'guardian_contact_number' => '?encrypted',
         'annual_family_income'    => '?encrypted',
     ];
-
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';

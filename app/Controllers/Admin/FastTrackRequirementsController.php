@@ -25,6 +25,7 @@ class FastTrackRequirementsController extends BaseAdminController
 
         // Group by category so the view can render one card per category.
         $byCategory = [];
+
         foreach ($documents as $doc) {
             $byCategory[$doc['category_id']]['category_name'] = $doc['category_name'];
             $byCategory[$doc['category_id']]['documents'][]   = $doc;

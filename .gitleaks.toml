@@ -1,0 +1,24 @@
+# Gitleaks secret scanning (run by CI on every PR and deploy; see docs/CI-CD.md).
+# Uses the built-in rule set plus project allowlists. A real secret must be removed and rotated,
+# never allowlisted. Add a path or regex here only for a confirmed false positive.
+title = "Akademus gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Project-wide allowlist"
+paths = [
+  '''(^|/)vendor/''',
+  '''(^|/)node_modules/''',
+  '''(^|/)writable/''',
+  '''(^|/)build/''',
+  '''(^|/)composer\.lock$''',
+  '''(^|/)package-lock\.json$''',
+  # CodeIgniter's env template ships empty placeholders only.
+  '''^env$''',
+]
+regexes = [
+  # Placeholder account numbers in PaymentMethodAccountSeeder.
+  '''09XX-XXX-XXXX''',
+]

@@ -45,9 +45,18 @@ class View extends BaseView
      * any callable. Can be single or tag pair.
      *
      * @var array<string, callable|list<string>|string>
+     *
      * @phpstan-ignore property.phpDocType
      */
     public $plugins = [];
+
+    /**
+     * When true, Parser conditionals may only contain variables, literals,
+     * arithmetic, comparison and logical operators, and parentheses. Enable
+     * this when less-trusted users can edit Parser templates. Can be overridden per
+     * call with the `restrictConditionals` render option.
+     */
+    public bool $restrictParserConditionals = false;
 
     /**
      * View Decorators are class methods that will be run in sequence to

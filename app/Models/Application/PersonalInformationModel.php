@@ -7,13 +7,11 @@ use CodeIgniter\Model;
 
 class PersonalInformationModel extends Model
 {
-    protected $table = 'personal_informations';
-    protected $primaryKey = 'id';
-
+    protected $table            = 'personal_informations';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType = 'array';
-
-    protected $allowedFields = [
+    protected $returnType       = 'array';
+    protected $allowedFields    = [
         'application_id',
         'firstname',
         'middlename',
@@ -26,13 +24,11 @@ class PersonalInformationModel extends Model
         'phone_code_id',
         'home_address',
         'contact_number',
-        'email_address'
+        'email_address',
     ];
-
     protected array $castHandlers = [
         'encrypted' => EncryptedCast::class,
     ];
-
     protected array $casts = [
         'firstname'      => '?encrypted',
         'middlename'     => '?encrypted',
@@ -43,7 +39,6 @@ class PersonalInformationModel extends Model
         'contact_number' => '?encrypted',
         'email_address'  => '?encrypted',
     ];
-
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';

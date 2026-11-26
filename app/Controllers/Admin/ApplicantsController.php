@@ -2,6 +2,8 @@
 
 namespace App\Controllers\Admin;
 
+use CodeIgniter\Exceptions\PageNotFoundException;
+
 class ApplicantsController extends BaseAdminController
 {
     protected $applicationModel;
@@ -11,7 +13,7 @@ class ApplicantsController extends BaseAdminController
     {
         parent::__construct();
         $this->applicationModel = model('ApplicationModel');
-        $this->applicantModel = model('UserModel'); // Assuming UserModel exists
+        $this->applicantModel   = model('UserModel'); // Assuming UserModel exists
     }
 
     public function index()
@@ -20,7 +22,7 @@ class ApplicantsController extends BaseAdminController
         $this->setBreadcrumb('Applicants');
 
         $status = $this->request->getGet('status');
-        $query = $this->applicationModel;
+        $query  = $this->applicationModel;
 
         if ($status && in_array($status, ['pending', 'reviewed', 'approved', 'rejected'])) {
             $query = $query->where('status', $status);
@@ -28,8 +30,8 @@ class ApplicantsController extends BaseAdminController
 
         $data = [
             'sidebarActive' => 'applicants',
-            'applications' => $query->orderBy('submitted_at', 'DESC')->paginate(20),
-            'pager' => $this->applicationModel->pager,
+            'applications'  => $query->orderBy('submitted_at', 'DESC')->paginate(20),
+            'pager'         => $this->applicationModel->pager,
             'currentStatus' => $status,
         ];
 
@@ -39,23 +41,23 @@ class ApplicantsController extends BaseAdminController
     public function view($applicationId)
     {
         $application = $this->applicationModel->getApplicationWithAnswers($applicationId);
-        if (!$application) {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException();
+        if (! $application) {
+            throw new PageNotFoundException();
         }
 
         $this->pageTitle = 'View Application';
         $this->setBreadcrumb('Applicants', '/admin/applicants');
         $this->setBreadcrumb('Application');
 
-        $course = model('CourseModel')->find($application['course_id']);
+        $course       = model('CourseModel')->find($application['course_id']);
         $mergedFields = service('FormFieldService')
             ->getMergedFormFields($application['course_id']);
 
         $data = [
             'sidebarActive' => 'applicants',
-            'application' => $application,
-            'course' => $course,
-            'fields' => $mergedFields,
+            'application'   => $application,
+            'course'        => $course,
+            'fields'        => $mergedFields,
         ];
 
         return $this->renderAdmin('admin/applicants/view', $data);
@@ -65,7 +67,7 @@ class ApplicantsController extends BaseAdminController
     {
         $status = $this->request->getPost('status');
 
-        if (!in_array($status, ['pending', 'reviewed', 'approved', 'rejected'])) {
+        if (! in_array($status, ['pending', 'reviewed', 'approved', 'rejected'])) {
             return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid status']);
         }
 

@@ -797,3 +797,8 @@
 .decision-modal__submit--decline { background: #dc2626; }
 .decision-modal__submit:hover    { opacity: 0.88; }
 .decision-modal__submit:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* Incomplete-steps confirmation (shown before the Approve modal) */
+.incomplete-modal__text { margin: 0 0 10px; font-size: 14px; color: #374151; }
+.incomplete-modal__list { margin: 0 0 14px; padding-left: 20px; font-size: 14px; color: #b45309; font-weight: 600; }
+.incomplete-modal__list li { margin-bottom: 4px; }

@@ -1,6 +1,6 @@
 <?php
 
-if (!function_exists('cache_remember')) {
+if (! function_exists('cache_remember')) {
     /**
      * Safe replacement for CacheInterface::remember().
      *

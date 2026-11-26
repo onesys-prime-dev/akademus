@@ -98,7 +98,7 @@
         justify-content: space-between;
         padding: 20px 20px;
         background: color-mix(in srgb, var(--color-warning) 20%, transparent);
-        cursor: pointer;
+        cursor: default;
         border: 1px solid color-mix(in srgb, var(--color-warning) 60%, transparent);
         border-radius: var(--radius-md);
     }
@@ -148,6 +148,21 @@
         .upload-rejected:hover {
             background: color-mix(in srgb, var(--color-danger) 30%, transparent);
         }
+
+    /* Card whose file is currently being uploaded */
+    .upload-saving {
+        opacity: 0.55;
+        filter: grayscale(1);
+        pointer-events: none;
+        transition: opacity 0.2s;
+    }
+
+    .requirement-saving-text {
+        margin: 4px 0 0;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-secondary, #6b7280);
+    }
 
     .requirement-upload-info {
         display: flex;
@@ -230,6 +245,28 @@
 
     .requirement-view-action:hover {
         background: color-mix(in srgb, var(--primary) 16%, transparent);
+    }
+
+    .requirement-reupload-action {
+        font-size: 13px;
+        font-weight: 600;
+        font-family: inherit;
+        color: var(--text-primary);
+        padding: 8px 14px;
+        border-radius: var(--radius-md);
+        border: 1px solid color-mix(in srgb, var(--text-secondary, #6b7280) 50%, transparent);
+        background: transparent;
+        cursor: pointer;
+        transition: background 0.2s;
+        white-space: nowrap;
+    }
+
+    .requirement-reupload-action:hover {
+        background: color-mix(in srgb, var(--text-secondary, #6b7280) 15%, transparent);
+    }
+
+    .requirement-reupload-action.hidden {
+        display: none;
     }
 
 /* ════════════════════════════════════════════════

@@ -1,0 +1,85 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - link "Akademus Portal" [ref=e3] [cursor=pointer]:
+      - /url: http://localhost/akademus/public/
+    - generic [ref=e6]:
+      - link [ref=e7] [cursor=pointer]:
+        - /url: http://localhost/akademus/public/about.php
+        - paragraph [ref=e8]: About Us
+      - link [ref=e9] [cursor=pointer]:
+        - /url: http://localhost/akademus/public/features
+        - paragraph [ref=e10]: Features
+      - paragraph [ref=e12] [cursor=pointer]: Services ▾
+      - link [ref=e13] [cursor=pointer]:
+        - /url: http://localhost/akademus/public/contact
+        - paragraph [ref=e14]: Contact
+  - generic [ref=e15]:
+    - link "About Us" [ref=e16] [cursor=pointer]:
+      - /url: http://localhost/akademus/public/about-us
+    - link "Features" [ref=e17] [cursor=pointer]:
+      - /url: http://localhost/akademus/public/features
+    - generic [ref=e18]: Services ▾
+    - link "Contact" [ref=e20] [cursor=pointer]:
+      - /url: http://localhost/akademus/public/contact
+    - link "Get Started" [ref=e21] [cursor=pointer]:
+      - /url: http://localhost/akademus/public/sign-in
+  - generic [ref=e23]:
+    - generic [ref=e25]:
+      - link "Akademus Portal Admission System" [ref=e26] [cursor=pointer]:
+        - /url: http://localhost/akademus/public/
+        - generic [ref=e28]:
+          - paragraph [ref=e29]: Akademus Portal
+          - generic [ref=e30]: Admission System
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - paragraph [ref=e33]: Your Future
+          - paragraph [ref=e34]: Starts Here
+        - generic [ref=e35]: Complete your admission entirely online — from document submission to enrollment.
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - generic [ref=e38]: "1"
+            - generic [ref=e39]: Create your applicant account
+          - generic [ref=e40]:
+            - generic [ref=e41]: "2"
+            - generic [ref=e42]: Submit required documents
+          - generic [ref=e43]:
+            - generic [ref=e44]: "3"
+            - generic [ref=e45]: Track your application status
+    - generic [ref=e46]:
+      - generic [ref=e47]:
+        - heading "Create Account" [level=2] [ref=e48]
+        - generic [ref=e49]: Start your admission journey today.
+      - generic [ref=e50]:
+        - generic [ref=e51]: Sign In
+        - generic [ref=e52]: Sign Up
+      - generic [ref=e86]:
+        - generic [ref=e87]:
+          - generic [ref=e88]:
+            - generic [ref=e89]:
+              - generic [ref=e90]: FIRST NAME
+              - textbox "John" [ref=e91]
+            - generic [ref=e92]:
+              - generic [ref=e93]: LAST NAME
+              - textbox "Doe" [ref=e94]
+          - generic [ref=e95]:
+            - generic [ref=e96]: EMAIL ADDRESS
+            - textbox "yourname@email.com" [ref=e97]
+          - generic [ref=e98]:
+            - generic [ref=e99]: MOBILE NUMBER
+            - textbox "09XXXXXXXXX" [ref=e100]
+          - generic [ref=e101]:
+            - generic [ref=e102]: CHOICE OF PROGRAM
+            - generic [ref=e103]:
+              - generic [ref=e104] [cursor=pointer]: Select a Program
+              - generic [ref=e112]:
+                - textbox "Search program..." [active] [ref=e114]
+                - generic [ref=e115]:
+                  - generic [ref=e116] [cursor=pointer]: Bachelor of Science in Computer Science
+                  - generic [ref=e117] [cursor=pointer]: Bachelor of Science in Information Technology
+                  - generic [ref=e118] [cursor=pointer]: Bachelor of Science in Information Systems
+                  - generic [ref=e119] [cursor=pointer]: Bachelor of Science in Nursing
+        - generic [ref=e108]:
+          - generic [ref=e109]: "Note:"
+          - paragraph [ref=e110]: Your final program will be confirmed in the Applicant Information Form. These preferences help us process your application.
+        - button "CREATE ACCOUNT" [ref=e111]
+  - generic [ref=e81] [cursor=pointer]

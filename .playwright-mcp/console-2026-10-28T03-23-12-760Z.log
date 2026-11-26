@@ -1,0 +1,6 @@
+[     230ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost/Akademus/akademus/public/assets/images/logos/1788335034_b3125ff455dec4259bb1.png:0
+[     299ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost/Akademus/akademus/public/assets/images/logos/1788335034_b3125ff455dec4259bb1.png:0
+[    3005ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost/akademus/public/sign-in:0
+[    6226ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost/Akademus/akademus/public/assets/images/logos/1788335034_b3125ff455dec4259bb1.png:0
+[    6302ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost/Akademus/akademus/public/assets/images/logos/1788335034_b3125ff455dec4259bb1.png:0
+[    9073ms] [ERROR] Error: <path> attribute d: Expected number, "…6 14.8256 13.343₁ ₁4.435₁9.707₁ …". @ http://localhost/akademus/public/:196

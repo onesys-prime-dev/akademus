@@ -1,0 +1,46 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - link "AK Akademus Portal Admin Panel" [ref=e4] [cursor=pointer]:
+      - /url: http://localhost/akademus/public/
+      - generic [ref=e5]: AK
+      - generic [ref=e7]:
+        - generic [ref=e8]: Akademus Portal
+        - generic [ref=e9]: Admin Panel
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - paragraph [ref=e12]: Admin
+        - paragraph [ref=e13]: Control Panel
+      - generic [ref=e14]: Manage your admission system — applicants, forms, and settings all in one place.
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]: "1"
+          - generic [ref=e18]: Manage applicants & applications
+        - generic [ref=e19]:
+          - generic [ref=e20]: "2"
+          - generic [ref=e21]: Customize forms and requirements
+        - generic [ref=e22]:
+          - generic [ref=e23]: "3"
+          - generic [ref=e24]: Configure theme & system settings
+  - generic [ref=e25]:
+    - generic [ref=e26]:
+      - heading "Admin Sign In" [level=2] [ref=e27]
+      - paragraph [ref=e28]: Enter your credentials to continue
+    - generic [ref=e29]:
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]: Email Address
+          - textbox "admin@akademus.edu.ph" [ref=e33]
+        - generic [ref=e34]:
+          - generic [ref=e35]: Password
+          - generic [ref=e36]:
+            - textbox "••••••••" [ref=e37]
+            - button "Show password" [ref=e38] [cursor=pointer]
+      - button "Sign In to Admin" [ref=e42] [cursor=pointer]
+    - generic [ref=e43]:
+      - generic [ref=e44]: Default Credentials
+      - generic [ref=e45]:
+        - generic [ref=e46]: Email
+        - code [ref=e47]: admin@akademus.edu.ph
+      - generic [ref=e48]:
+        - generic [ref=e49]: Password
+        - code [ref=e50]: Admin@123

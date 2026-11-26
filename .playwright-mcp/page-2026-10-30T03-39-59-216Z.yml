@@ -1,0 +1,95 @@
+- generic [ref=f10e2]:
+  - navigation [ref=f10e4]:
+    - generic [ref=f10e5]:
+      - generic [ref=f10e6]:
+        - link "Akademus Portal Admission Portal" [ref=f10e7] [cursor=pointer]:
+          - /url: http://localhost/akademus/public/dashboard
+          - generic [ref=f10e9]:
+            - paragraph [ref=f10e10]: Akademus Portal
+            - generic [ref=f10e11]: Admission Portal
+        - generic [ref=f10e12]:
+          - generic [ref=f10e13]: Applicant ID
+          - paragraph [ref=f10e14]: "#APP-2026-09111"
+      - generic [ref=f10e15]:
+        - generic [ref=f10e16]:
+          - paragraph [ref=f10e17]: MENU
+          - generic [ref=f10e18]:
+            - link "Dashboard" [ref=f10e19] [cursor=pointer]:
+              - /url: http://localhost/akademus/public/dashboard
+            - link "Applicant Form" [ref=f10e22] [cursor=pointer]:
+              - /url: http://localhost/akademus/public/applicant-form
+            - link "Requirements" [ref=f10e25] [cursor=pointer]:
+              - /url: http://localhost/akademus/public/requirements
+            - link "Tracking Progress" [ref=f10e28] [cursor=pointer]:
+              - /url: http://localhost/akademus/public/tracking-progress
+        - generic [ref=f10e31]:
+          - paragraph [ref=f10e33]: PAYMENTS
+          - generic [ref=f10e34]:
+            - link "Admission Processing Fee" [ref=f10e35] [cursor=pointer]:
+              - /url: http://localhost/akademus/public/admission-processing-fee
+            - link "Reservation Fee":
+              - /url: javascript:void(0)
+        - generic [ref=f10e42]:
+          - paragraph [ref=f10e43]: SUPPORT
+          - generic [ref=f10e44]:
+            - link "FAQ & Chat Support" [ref=f10e45] [cursor=pointer]:
+              - /url: http://localhost/akademus/public/faq
+            - link "Follow-Up Messages" [ref=f10e48] [cursor=pointer]:
+              - /url: http://localhost/akademus/public/follow-up-messages
+    - generic [ref=f10e51]:
+      - generic [ref=f10e52]:
+        - generic [ref=f10e53]: CC
+        - generic [ref=f10e55]:
+          - paragraph [ref=f10e56]: Chuckie Chocolate
+          - generic [ref=f10e57]: Applicant
+      - link "Logout" [ref=f10e58] [cursor=pointer]:
+        - /url: http://localhost/akademus/public/logout
+  - main [ref=f10e60]:
+    - generic [ref=f10e61]:
+      - heading "FAQ & Chat Support" [level=1] [ref=f10e62]
+      - button [ref=f10e64] [cursor=pointer]
+    - generic [ref=f10e69]:
+      - generic [ref=f10e70]:
+        - paragraph [ref=f10e71]: 📋 Admission Requirements
+        - generic [ref=f10e72]:
+          - generic [ref=f10e73] [cursor=pointer]: What documents do I need to submit?
+          - paragraph [ref=f10e78]: "You need to submit: (1) Original Form 138 / Report Card, (2) PSA Birth Certificate, (3) Certificate of Good Moral Character, (4) 2x2 ID photo, and (5) Accomplished application form. Additional documents may be required depending on your applicant type."
+        - generic [ref=f10e79]:
+          - generic [ref=f10e80] [cursor=pointer]: What are the requirements for transferees?
+          - paragraph [ref=f10e85]: "Transferees must submit: Transcript of Records (TOR) or True Copy of Grades, Certificate of Transfer Credential (Honorable Dismissal), and all standard admission requirements. A validation exam may also be required."
+        - paragraph [ref=f10e86]: 🎓 Programs Offered
+        - generic [ref=f10e87]:
+          - generic [ref=f10e88] [cursor=pointer]: What programs are available for enrollment?
+          - paragraph [ref=f10e93]: The school offers programs across various colleges. Please check with the Registrar or Admissions Office for the complete and updated list of programs currently open for enrollment.
+        - paragraph [ref=f10e94]: 📅 Application Process
+        - generic [ref=f10e95]:
+          - generic [ref=f10e96] [cursor=pointer]: How does the application process work?
+          - paragraph [ref=f10e101]: "The process is: (1) Create an account and fill out the online application form, (2) Submit required documents, (3) Pay the admission processing fee, (4) Take the entrance exam (if applicable), (5) Await results and enrollment schedule."
+        - generic [ref=f10e102]:
+          - generic [ref=f10e103] [cursor=pointer]: When is the application deadline?
+          - paragraph [ref=f10e108]: Application deadlines vary per semester. Please monitor announcements on the portal or contact the Admissions Office directly for the latest schedule.
+        - paragraph [ref=f10e109]: 💰 Tuition & Fees
+        - generic [ref=f10e110]:
+          - generic [ref=f10e111] [cursor=pointer]: How much is the admission processing fee?
+          - paragraph [ref=f10e116]: The admission processing fee varies by program. Please check the Payments section of the portal or contact the Cashier's Office for the exact amount.
+        - generic [ref=f10e117]:
+          - generic [ref=f10e118] [cursor=pointer]: Are there available scholarships?
+          - paragraph [ref=f10e123]: Yes, scholarships are available including academic, athletic, and financial assistance grants. Contact the Scholarship Office or Student Affairs for eligibility details.
+      - generic [ref=f10e124]:
+        - generic [ref=f10e125]:
+          - generic [ref=f10e126]: 🎓
+          - generic [ref=f10e127]:
+            - paragraph [ref=f10e128]: Akademus Portal AI Assistant
+            - text: Admissions Support · SY 2025-2026
+        - generic [ref=f10e131]:
+          - generic [ref=f10e132]: 🎓
+          - generic [ref=f10e133]:
+            - generic [ref=f10e134]: Hi! I'm the Akademus Portal AI Assistant. I can answer questions about admission requirements, programs offered, the application process, and fees. How can I help you?
+            - generic [ref=f10e135]:
+              - button "What are the requirements?" [ref=f10e136] [cursor=pointer]
+              - button "Programs offered?" [ref=f10e137] [cursor=pointer]
+              - button "Application deadline?" [ref=f10e138] [cursor=pointer]
+              - button "Tuition fees?" [ref=f10e139] [cursor=pointer]
+        - generic [ref=f10e140]:
+          - textbox "Ask about admissions, programs, fees..." [ref=f10e141]
+          - button [ref=f10e142] [cursor=pointer]

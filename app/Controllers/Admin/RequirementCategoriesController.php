@@ -6,6 +6,7 @@ use App\Models\RequirementCategoryModel;
 use App\Models\RequirementDocumentModel;
 use App\Models\ThemeModel;
 use App\Services\ProgramRequirementSyncService;
+use Config\Database;
 
 class RequirementCategoriesController extends BaseAdminController
 {
@@ -54,23 +55,23 @@ class RequirementCategoriesController extends BaseAdminController
             'description'   => 'permit_empty|max_length[1000]',
         ];
 
-        if (!$this->validate($rules)) {
+        if (! $this->validate($rules)) {
             return view('admin/requirement_categories/form', [
-                'theme'    => $this->theme(),
-                'action'   => 'create',
-                'title'    => 'Create Requirement Category',
-                'category' => [],
+                'theme'     => $this->theme(),
+                'action'    => 'create',
+                'title'     => 'Create Requirement Category',
+                'category'  => [],
                 'documents' => [],
-                'errors'   => $this->validator->getErrors(),
-                'oldInput' => $this->request->getPost(),
+                'errors'    => $this->validator->getErrors(),
+                'oldInput'  => $this->request->getPost(),
             ]);
         }
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $db->transStart();
 
         // Get next display_order
-        $maxOrder = $db->table('requirement_categories')->selectMax('display_order')->get()->getRowArray();
+        $maxOrder     = $db->table('requirement_categories')->selectMax('display_order')->get()->getRowArray();
         $displayOrder = ($maxOrder['display_order'] ?? 0) + 10;
 
         $this->categoryModel->insert([
@@ -86,14 +87,16 @@ class RequirementCategoriesController extends BaseAdminController
         $db->transComplete();
 
         session()->setFlashdata('success', 'Requirement category created successfully!');
+
         return redirect()->to(base_url('admin/requirement-categories'));
     }
 
     public function edit($categoryId)
     {
         $category = $this->categoryModel->find($categoryId);
-        if (!$category) {
+        if (! $category) {
             session()->setFlashdata('error', 'Category not found.');
+
             return redirect()->to(base_url('admin/requirement-categories'));
         }
 
@@ -102,15 +105,16 @@ class RequirementCategoriesController extends BaseAdminController
             'action'    => 'edit',
             'title'     => 'Edit Category: ' . $category['category_name'],
             'category'  => $category,
-            'documents' => $this->docModel->getDocumentsForCategory((int)$categoryId),
+            'documents' => $this->docModel->getDocumentsForCategory((int) $categoryId),
         ]);
     }
 
     public function update($categoryId)
     {
         $category = $this->categoryModel->find($categoryId);
-        if (!$category) {
+        if (! $category) {
             session()->setFlashdata('error', 'Category not found.');
+
             return redirect()->to(base_url('admin/requirement-categories'));
         }
 
@@ -119,19 +123,19 @@ class RequirementCategoriesController extends BaseAdminController
             'description'   => 'permit_empty|max_length[1000]',
         ];
 
-        if (!$this->validate($rules)) {
+        if (! $this->validate($rules)) {
             return view('admin/requirement_categories/form', [
                 'theme'     => $this->theme(),
                 'action'    => 'edit',
                 'title'     => 'Edit Category: ' . $category['category_name'],
                 'category'  => $category,
-                'documents' => $this->docModel->getDocumentsForCategory((int)$categoryId),
+                'documents' => $this->docModel->getDocumentsForCategory((int) $categoryId),
                 'errors'    => $this->validator->getErrors(),
                 'oldInput'  => $this->request->getPost(),
             ]);
         }
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $db->transStart();
 
         $this->categoryModel->update($categoryId, [
@@ -145,29 +149,32 @@ class RequirementCategoriesController extends BaseAdminController
         $db->transComplete();
 
         session()->setFlashdata('success', 'Category updated successfully!');
+
         return redirect()->to(base_url('admin/requirement-categories'));
     }
 
     public function delete($categoryId)
     {
         $category = $this->categoryModel->find($categoryId);
-        if (!$category) {
+        if (! $category) {
             session()->setFlashdata('error', 'Category not found.');
+
             return redirect()->to(base_url('admin/requirement-categories'));
         }
 
-        $db = \Config\Database::connect();
-        $db->table('requirements')->where('category_id', (int)$categoryId)->delete();
+        $db = Database::connect();
+        $db->table('requirements')->where('category_id', (int) $categoryId)->delete();
         $this->categoryModel->delete($categoryId);
 
         session()->setFlashdata('success', 'Category deleted successfully!');
+
         return redirect()->to(base_url('admin/requirement-categories'));
     }
 
     private function saveDocuments(int $categoryId, array $documents): void
     {
         log_message('debug', 'saveDocuments payload: ' . json_encode($documents));
-        
+
         $seenIds = [];
 
         foreach ($documents as $order => $doc) {
@@ -176,13 +183,13 @@ class RequirementCategoriesController extends BaseAdminController
             }
 
             $data = [
-                'category_id'             => $categoryId,
-                'requirement_name'        => trim($doc['requirement_name']),
-                'description'             => $doc['description'] ?? null,
-                'is_required'             => !empty($doc['is_required']) ? 1 : 0,
-                'is_fast_track_required'  => !empty($doc['is_fast_track_required']) ? 1 : 0,
-                'display_order'           => (int) $order,
-                'is_active'               => 1,
+                'category_id'            => $categoryId,
+                'requirement_name'       => trim($doc['requirement_name']),
+                'description'            => $doc['description'] ?? null,
+                'is_required'            => ! empty($doc['is_required']) ? 1 : 0,
+                'is_fast_track_required' => ! empty($doc['is_fast_track_required']) ? 1 : 0,
+                'display_order'          => (int) $order,
+                'is_active'              => 1,
             ];
 
             $requirementId = $doc['requirement_id'] ?? null;
@@ -216,7 +223,7 @@ class RequirementCategoriesController extends BaseAdminController
                 ]);
 
                 $this->syncService->deactivateRequirement(
-                    (int) $row['requirement_id']
+                    (int) $row['requirement_id'],
                 );
             }
         }

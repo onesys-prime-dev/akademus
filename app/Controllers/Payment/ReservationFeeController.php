@@ -3,11 +3,13 @@
 namespace App\Controllers\Payment;
 
 use App\Controllers\BaseController;
-use App\Models\Payment\PaymentModel;
+use App\Models\ExamBookingModel;
 use App\Models\Payment\PaymentFeeTypeModel;
-use App\Models\Payment\PaymentMethodModel;
 use App\Models\Payment\PaymentMethodAccountModel;
+use App\Models\Payment\PaymentMethodModel;
+use App\Models\Payment\PaymentModel;
 use App\Services\NotificationService;
+use CodeIgniter\Exceptions\PageNotFoundException;
 
 class ReservationFeeController extends BaseController
 {
@@ -19,10 +21,10 @@ class ReservationFeeController extends BaseController
 
     public function __construct()
     {
-        $this->paymentModel = new PaymentModel();
-        $this->methodModel  = new PaymentMethodModel();
-        $this->accountModel = new PaymentMethodAccountModel();
-        $this->feeModel     = new PaymentFeeTypeModel();
+        $this->paymentModel        = new PaymentModel();
+        $this->methodModel         = new PaymentMethodModel();
+        $this->accountModel        = new PaymentMethodAccountModel();
+        $this->feeModel            = new PaymentFeeTypeModel();
         $this->notificationService = new NotificationService();
     }
 
@@ -34,6 +36,11 @@ class ReservationFeeController extends BaseController
             return redirect()->to('/sign-in');
         }
 
+        $examPassed = (new ExamBookingModel())->getResultStatus('result_status', '') === 'PASSED';
+        if (! $examPassed) {
+            return redirect()->to('/dashboard');
+        }
+
         $applicantId = (int) session()->get('applicant_id');
 
         $fee = $this->feeModel->getByCode(PaymentFeeTypeModel::CODE_RESERVATION);
@@ -43,7 +50,7 @@ class ReservationFeeController extends BaseController
 
         $existingPayment = $this->paymentModel->getByApplicantAndFeeType(
             $applicantId,
-            PaymentFeeTypeModel::CODE_RESERVATION
+            PaymentFeeTypeModel::CODE_RESERVATION,
         );
 
         $data = [
@@ -56,7 +63,7 @@ class ReservationFeeController extends BaseController
 
         return $this->renderApplicant(
             'applicant/payments/reservation-fee',
-            $data
+            $data,
         );
     }
 
@@ -74,10 +81,10 @@ class ReservationFeeController extends BaseController
 
         if ($this->paymentModel->hasActivePayment(
             $applicantId,
-            PaymentFeeTypeModel::CODE_RESERVATION
+            PaymentFeeTypeModel::CODE_RESERVATION,
         )) {
             return $this->jsonError(
-                'You have already submitted a reservation fee payment that is being processed or has been approved.'
+                'You have already submitted a reservation fee payment that is being processed or has been approved.',
             );
         }
 
@@ -95,8 +102,8 @@ class ReservationFeeController extends BaseController
                 ],
             ],
             'proof_of_payment' => [
-                'label'  => 'Proof of Payment',
-                'rules'  => 'uploaded[proof_of_payment]'
+                'label' => 'Proof of Payment',
+                'rules' => 'uploaded[proof_of_payment]'
                           . '|max_size[proof_of_payment,10240]'
                           . '|ext_in[proof_of_payment,jpg,jpeg,png,pdf]',
                 'errors' => [
@@ -109,7 +116,7 @@ class ReservationFeeController extends BaseController
 
         if (! $this->validate($rules)) {
             return $this->jsonError(
-                implode(' ', $this->validator->getErrors())
+                implode(' ', $this->validator->getErrors()),
             );
         }
 
@@ -117,7 +124,7 @@ class ReservationFeeController extends BaseController
 
         if ($this->paymentModel->findByReferenceNum($referenceNum)) {
             return $this->jsonError(
-                'This reference number has already been submitted. Please double-check your transaction details.'
+                'This reference number has already been submitted. Please double-check your transaction details.',
             );
         }
 
@@ -143,19 +150,19 @@ class ReservationFeeController extends BaseController
 
         $paymentMethodId = (int) $this->request->getPost('payment_method_id');
 
-        $rawAccountId = $this->request->getPost('payment_method_account_id');
+        $rawAccountId           = $this->request->getPost('payment_method_account_id');
         $paymentMethodAccountId = ($rawAccountId !== '' && $rawAccountId !== null)
             ? (int) $rawAccountId
             : null;
 
-        $fee = $this->feeModel->getByCode(PaymentFeeTypeModel::CODE_RESERVATION);
+        $fee       = $this->feeModel->getByCode(PaymentFeeTypeModel::CODE_RESERVATION);
         $feeTypeId = $fee['payment_fee_type_id'] ?? null;
 
         if (! $fee || ! $feeTypeId) {
             @unlink($uploadDir . $newFileName);
 
             return $this->jsonError(
-                'Reservation fee is not available at the moment. Please try again later.'
+                'Reservation fee is not available at the moment. Please try again later.',
             );
         }
 
@@ -175,18 +182,18 @@ class ReservationFeeController extends BaseController
             @unlink($uploadDir . $newFileName);
 
             return $this->jsonError(
-                'Could not record your payment. Please try again.'
+                'Could not record your payment. Please try again.',
             );
         }
 
         $this->notificationService->trigger(
             'reservation_fee.pending',
             $applicantId,
-            ['reference_num' => $referenceNum]
+            ['reference_num' => $referenceNum],
         );
 
         return $this->jsonSuccess(
-            'Your reservation fee payment has been submitted and is awaiting verification by the finance office.'
+            'Your reservation fee payment has been submitted and is awaiting verification by the finance office.',
         );
     }
 
@@ -197,11 +204,11 @@ class ReservationFeeController extends BaseController
         $payment = $this->paymentModel->find($paymentId);
 
         if (
-            ! $payment ||
-            (int) $payment['applicant_id'] !== $applicantId ||
-            empty($payment['proof_of_payment'])
+            ! $payment
+            || (int) $payment['applicant_id'] !== $applicantId
+            || empty($payment['proof_of_payment'])
         ) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            throw PageNotFoundException::forPageNotFound();
         }
 
         return $this->serveProofFile($payment['proof_of_payment']);
@@ -212,7 +219,7 @@ class ReservationFeeController extends BaseController
         $filePath = WRITEPATH . $proofPath;
 
         if (! file_exists($filePath)) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            throw PageNotFoundException::forPageNotFound();
         }
 
         $mime = mime_content_type($filePath);
@@ -221,7 +228,7 @@ class ReservationFeeController extends BaseController
             ->setHeader('Content-Type', $mime)
             ->setHeader(
                 'Content-Disposition',
-                'inline; filename="' . basename($filePath) . '"'
+                'inline; filename="' . basename($filePath) . '"',
             )
             ->setBody(file_get_contents($filePath));
     }
@@ -244,9 +251,9 @@ class ReservationFeeController extends BaseController
                 'payment_method_account_id' => ! empty($row['payment_method_account_id'])
                                                 ? (int) $row['payment_method_account_id']
                                                 : null,
-                'account_number'            => $row['account_number'] ?? null,
-                'account_name'              => $row['account_name'] ?? null,
-                'label'                     => 'Send payment via ' . $row['name'],
+                'account_number' => $row['account_number'] ?? null,
+                'account_name'   => $row['account_name'] ?? null,
+                'label'          => 'Send payment via ' . $row['name'],
             ];
         }
 
@@ -260,8 +267,8 @@ class ReservationFeeController extends BaseController
             ->setJSON(
                 array_merge(
                     ['success' => true, 'message' => $message],
-                    $payload
-                )
+                    $payload,
+                ),
             );
     }
 

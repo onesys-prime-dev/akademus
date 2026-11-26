@@ -23,9 +23,9 @@ class ProgramRequirementSyncService
             return;
         }
 
-        $isMandatory        = (int) $requirement['is_required'];
+        $isMandatory         = (int) $requirement['is_required'];
         $isFastTrackRequired = (int) $requirement['is_fast_track_required'];
-        $isActive           = (int) $requirement['is_active'];
+        $isActive            = (int) $requirement['is_active'];
 
         /*
         |--------------------------------------------------------------------------
@@ -40,13 +40,12 @@ class ProgramRequirementSyncService
             ->getResultArray();
 
         foreach ($programCategories as $pc) {
-            $programRequirementCategoryId =
-                (int) $pc['program_requirement_category_id'];
+            $programRequirementCategoryId = (int) $pc['program_requirement_category_id'];
 
             $existing = $db->table('program_requirements')
                 ->where([
                     'program_requirement_category_id' => $programRequirementCategoryId,
-                    'requirement_id'                 => $requirementId,
+                    'requirement_id'                  => $requirementId,
                 ])
                 ->get()
                 ->getRowArray();
@@ -60,13 +59,13 @@ class ProgramRequirementSyncService
                 $db->table('program_requirements')
                     ->where(
                         'program_requirement_id',
-                        $existing['program_requirement_id']
+                        $existing['program_requirement_id'],
                     )
                     ->update([
-                        'is_mandatory'            => $isMandatory,
-                        'is_fast_track_required'  => $isFastTrackRequired,
-                        'is_active'               => $isActive,
-                        'updated_at'              => date('Y-m-d H:i:s'),
+                        'is_mandatory'           => $isMandatory,
+                        'is_fast_track_required' => $isFastTrackRequired,
+                        'is_active'              => $isActive,
+                        'updated_at'             => date('Y-m-d H:i:s'),
                     ]);
 
                 continue;
@@ -81,7 +80,7 @@ class ProgramRequirementSyncService
                 ->selectMax('display_order')
                 ->where(
                     'program_requirement_category_id',
-                    $programRequirementCategoryId
+                    $programRequirementCategoryId,
                 )
                 ->get()
                 ->getRowArray();
@@ -90,11 +89,11 @@ class ProgramRequirementSyncService
 
             $db->table('program_requirements')->insert([
                 'program_requirement_category_id' => $programRequirementCategoryId,
-                'requirement_id'                 => $requirementId,
-                'display_order'                  => $displayOrder,
-                'is_active'                      => $isActive,
-                'is_mandatory'                   => $isMandatory, // ← synced
-                'is_fast_track_required'         => $isFastTrackRequired, // ← synced
+                'requirement_id'                  => $requirementId,
+                'display_order'                   => $displayOrder,
+                'is_active'                       => $isActive,
+                'is_mandatory'                    => $isMandatory, // ← synced
+                'is_fast_track_required'          => $isFastTrackRequired, // ← synced
             ]);
         }
     }

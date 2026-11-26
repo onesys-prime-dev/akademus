@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use Config\Database;
+
 class ApplicantService
 {
     private function baseQuery($filters = [])
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $builder = $db->table('applicants a')
             ->join('users u', 'u.user_id = a.user_id')
@@ -17,38 +19,39 @@ class ApplicantService
                 GROUP BY applicant_id) latest_app',
                 'latest_app.applicant_id = a.applicant_id',
                 'left',
-                false
+                false,
             )
 
             ->join(
                 'applications ass',
                 'ass.applicant_id = latest_app.applicant_id 
                 AND ass.application_date = latest_app.latest_created',
-                'left'
+                'left',
             )
 
             ->join('programs p', 'p.program_id = a.program_id');
 
         // filters
-        if (!empty($filters['status']) && $filters['status'] !== 'all') {
+        if (! empty($filters['status']) && $filters['status'] !== 'all') {
             $builder->where('a.application_status', $filters['status']);
         }
 
-        if (!empty($filters['program'])) {
+        if (! empty($filters['program'])) {
             $builder->where('a.program_id', $filters['program']);
         }
 
-        if (!empty($filters['search'])) {
+        if (! empty($filters['search'])) {
             $terms = explode(' ', $filters['search']);
 
             $builder->groupStart();
+
             foreach ($terms as $term) {
                 $builder->groupStart()
                     ->like('u.firstname', $term)
                     ->orLike('u.lastname', $term)
                     ->orLike('u.email', $term)
                     ->orLike('a.applicant_number', $term)
-                ->groupEnd();
+                    ->groupEnd();
             }
             $builder->groupEnd();
         }
@@ -101,12 +104,12 @@ class ApplicantService
 
         // default structure
         $counts = [
-            'all' => 0,
+            'all'         => 0,
             'in_progress' => 0,
-            'pending' => 0,
-            'approved' => 0,
-            'rejected' => 0,
-            'completed' => 0, // since you added this in JS
+            'pending'     => 0,
+            'approved'    => 0,
+            'rejected'    => 0,
+            'completed'   => 0, // since you added this in JS
         ];
 
         foreach ($results as $row) {
@@ -125,17 +128,18 @@ class ApplicantService
 
     public function bulkUpdateStatus(array $ids, string $status): bool
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         return $db->table('applicants')
             ->whereIn('applicant_id', $ids)
             ->update(['application_status' => $status]);
     }
 
-    public function dashboardSearchApplicants($query, $limit = 10) {
+    public function dashboardSearchApplicants($query, $limit = 10)
+    {
         $builder = $this->baseQuery(['search' => $query]);
 
-        $db = \Config\Database::connect();
+        $db           = Database::connect();
         $escapedQuery = $db->escapeLikeString($query);
 
         return $builder
@@ -164,7 +168,7 @@ class ApplicantService
 
     public function getDashboardData($filters = [], $limit = 10, $offset = 0)
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         // =========================
         // STATUS COUNTS
@@ -174,7 +178,7 @@ class ApplicantService
         // =========================
         // PASSING RATE
         // =========================
-        $processed = $statusCounts['approved'] + $statusCounts['completed'];
+        $processed  = $statusCounts['approved'] + $statusCounts['completed'];
         $ratedTotal = $processed + $statusCounts['rejected'];
 
         $passingRate = $ratedTotal > 0
@@ -188,11 +192,11 @@ class ApplicantService
             ->select('p.program_name, p.program_code, COUNT(*) as total')
             ->join('programs p', 'p.program_id = a.program_id');
 
-        if (!empty($filters['program'])) {
+        if (! empty($filters['program'])) {
             $builder->where('a.program_id', $filters['program']);
         }
 
-        if (!empty($filters['status']) && $filters['status'] !== 'all') {
+        if (! empty($filters['status']) && $filters['status'] !== 'all') {
             $builder->where('a.application_status', $filters['status']);
         }
 

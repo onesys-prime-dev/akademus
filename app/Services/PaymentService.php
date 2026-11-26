@@ -3,11 +3,12 @@
 namespace App\Services;
 
 use App\Models\Applicant\ApplicantModel;
-use App\Models\Payment\PaymentModel;
 use App\Models\Payment\PaymentFeeTypeModel;
-use App\Models\Payment\PaymentMethodModel;
 use App\Models\Payment\PaymentGatewayTransactionModel;
+use App\Models\Payment\PaymentMethodModel;
+use App\Models\Payment\PaymentModel;
 use App\Models\User\UserModel;
+use Exception;
 
 class PaymentService
 {
@@ -17,18 +18,17 @@ class PaymentService
     protected $userModel;
     protected $paymentModel;
     protected $gatewayTransactionModel;
-
     protected string $baseUrl;
     protected string $secretKey;
 
     public function __construct()
     {
-        $this->applicantModel           = new ApplicantModel();
-        $this->paymentFeeTypeModel      = new PaymentFeeTypeModel();
-        $this->paymentMethodModel       = new PaymentMethodModel();
-        $this->userModel                = new UserModel();
-        $this->paymentModel             = new PaymentModel();
-        $this->gatewayTransactionModel  = new PaymentGatewayTransactionModel();
+        $this->applicantModel          = new ApplicantModel();
+        $this->paymentFeeTypeModel     = new PaymentFeeTypeModel();
+        $this->paymentMethodModel      = new PaymentMethodModel();
+        $this->userModel               = new UserModel();
+        $this->paymentModel            = new PaymentModel();
+        $this->gatewayTransactionModel = new PaymentGatewayTransactionModel();
 
         $this->baseUrl   = 'https://api-sandbox.smartpay.ph/';
         $this->secretKey = env('SMARTPAY_SECRET_KEY');
@@ -41,13 +41,13 @@ class PaymentService
         $applicant = $this->applicantModel->find($applicantId);
 
         if (! $applicant) {
-            throw new \Exception('Applicant not found.');
+            throw new Exception('Applicant not found.');
         }
 
         $user = $this->userModel->find($applicant['user_id']);
 
         if (! $user) {
-            throw new \Exception('User not found.');
+            throw new Exception('User not found.');
         }
 
         $paymentFeeType = $this->paymentFeeTypeModel
@@ -56,7 +56,7 @@ class PaymentService
             ->first();
 
         if (! $paymentFeeType) {
-            throw new \Exception('Payment fee type not found.');
+            throw new Exception('Payment fee type not found.');
         }
 
         $paymentMethod = $this->paymentMethodModel
@@ -64,21 +64,20 @@ class PaymentService
             ->first();
 
         if (! $paymentMethod) {
-            throw new \Exception('Payment method not found.');
+            throw new Exception('Payment method not found.');
         }
 
         if ($this->paymentModel->hasActivePayment($applicantId, $feeTypeCode)) {
-            throw new \Exception('You already have an existing payment for this fee.');
+            throw new Exception('You already have an existing payment for this fee.');
         }
 
         $restrictChannels = match ($paymentMethodCode) {
             'gcash', 'maya' => ['Wallet'],
-            'bdo', 'bpi'   => ['Card'],
-            default        => throw new \Exception('Invalid payment method.'),
+            'bdo', 'bpi'    => ['Card'],
+            default         => throw new Exception('Invalid payment method.'),
         };
 
-        $serviceReference =
-            ($feeTypeCode === PaymentFeeTypeModel::CODE_ADMISSION ? 'ADM' : 'RSV')
+        $serviceReference = ($feeTypeCode === PaymentFeeTypeModel::CODE_ADMISSION ? 'ADM' : 'RSV')
             . '-'
             . $applicantId
             . '-'
@@ -114,7 +113,7 @@ class PaymentService
         ]);
 
         if (! $paymentId) {
-            throw new \Exception('Could not create payment record.');
+            throw new Exception('Could not create payment record.');
         }
 
         $this->gatewayTransactionModel->insert([
@@ -133,7 +132,7 @@ class PaymentService
         $db->transComplete();
 
         if (! $db->transStatus()) {
-            throw new \Exception('Could not save SmartPay transaction.');
+            throw new Exception('Could not save SmartPay transaction.');
         }
 
         return [
@@ -166,7 +165,7 @@ class PaymentService
             $error = curl_error($curl);
             curl_close($curl);
 
-            throw new \Exception('SmartPay CURL Error: ' . $error);
+            throw new Exception('SmartPay CURL Error: ' . $error);
         }
 
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
@@ -177,13 +176,13 @@ class PaymentService
         log_message('debug', 'SmartPay HTTP ' . $httpCode . ' response: ' . json_encode($decodedResponse));
 
         if ($httpCode >= 400) {
-            throw new \Exception(
-                $decodedResponse['message'] ?? 'SmartPay API request failed.'
+            throw new Exception(
+                $decodedResponse['message'] ?? 'SmartPay API request failed.',
             );
         }
 
         if (empty($decodedResponse['data']['redirect_url'])) {
-            throw new \Exception('SmartPay checkout URL was not returned.');
+            throw new Exception('SmartPay checkout URL was not returned.');
         }
 
         return $decodedResponse;

@@ -127,4 +127,9 @@ $programName = 'BS ' . preg_replace(
 
         </div>
     </div>
+<div class="program-sched-container">
+    <div class="application-form-fields-container">
+        <?= view('applicant/applicant-form/steps/custom-fields', ['fields' => $fields, 'data' => $data ?? []]) ?>
+    </div>
+</div>
 </form>

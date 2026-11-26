@@ -1,17 +1,25 @@
 <?php
+
 // app/Controllers/ApplicantForm.php
 
 namespace App\Controllers\Applicant;
 
 use App\Controllers\BaseController;
-
 use App\Models\Application\ApplicationModel;
-use App\Models\Application\PersonalInformationModel;
-use App\Models\Application\FamilyBackgroundModel;
 use App\Models\Application\EducationalBackgroundModel;
+use App\Models\Application\FamilyBackgroundModel;
+use App\Models\Application\PersonalInformationModel;
+use App\Models\FormFieldConfigModel;
+use App\Models\FormFieldOptionConfigModel;
 use App\Models\FormPageModel;
+use App\Models\Payment\PaymentFeeTypeModel;
 use App\Models\ThemeModel;
+use App\Services\FormFieldService;
 use App\Services\NotificationService;
+use App\Services\PresetService;
+use CodeIgniter\Exceptions\PageNotFoundException;
+use CodeIgniter\HTTP\Exceptions\RedirectException;
+use CodeIgniter\Model;
 
 class ApplicantFormController extends BaseController
 {
@@ -22,16 +30,17 @@ class ApplicantFormController extends BaseController
     {
         $this->notificationService = new NotificationService();
     }
-    
+
     private function getEnabledPages(): array
     {
         $programId = session()->get('selected_program_id');
         if ($programId) {
-            $pages = (new \App\Services\PresetService())->getFormPagesForApplicant($programId);
-            if (!empty($pages)) {
+            $pages = (new PresetService())->getFormPagesForApplicant($programId);
+            if (! empty($pages)) {
                 return array_values($pages);
             }
         }
+
         return (new FormPageModel())->getEnabledOrdered();
     }
 
@@ -45,23 +54,121 @@ class ApplicantFormController extends BaseController
         // ── Keyed by ACTUAL page_id from your form_pages table ──
         $map = [
             1 => array_merge($application ?? [], [  // Application Type
-                'sy_semester' => ($application['school_year'] ?? '') . ', ' . ($application['semester'] ?? '')
+                'sy_semester' => ($application['school_year'] ?? '') . ', ' . ($application['semester'] ?? ''),
             ]),
             2 => $personal ?? [],                   // Personal Information
-            3 => $family   ?? [],                   // Family Background
+            3 => $family ?? [],                   // Family Background
             4 => array_merge($education ?? [], [    // Educational Background
-                'school_year' => ($education['school_year_start'] ?? '') . '-' . ($education['school_year_end'] ?? '')
+                'school_year' => ($education['school_year_start'] ?? '') . '-' . ($education['school_year_end'] ?? ''),
             ]),
         ];
 
-        return $map[$pageId] ?? [];
+        $pageData = $map[$pageId] ?? [];
+        unset($pageData['custom_fields']); // page 1 spreads the application row; don't leak other pages' answers
+
+        // Answers to admin-created fields live in applications.custom_fields, keyed by field_key.
+        $customValues = $application['custom_fields'] ?? [];
+
+        foreach ($this->getCustomFieldConfigs($pageId) as $key => $cfg) {
+            if (array_key_exists($key, $customValues)) {
+                $pageData[$key] = $customValues[$key];
+            }
+        }
+
+        return $pageData;
+    }
+
+    /**
+     * Admin-created (non-system) field configs for a page, keyed by field_key.
+     * Merges in the applicant's selected program's overrides, same as
+     * get_field_configs() on the render side, so a program override (e.g.
+     * making a field required, or hiding it) is actually enforced on save —
+     * not just reflected in what gets rendered.
+     */
+    private function getCustomFieldConfigs(int $pageId): array
+    {
+        $programId  = session()->get('selected_program_id');
+        $allConfigs = $programId
+            ? (new FormFieldService())->getMergedFieldConfigsForPage((int) $programId, $pageId)
+            : (new FormFieldConfigModel())->getAllForPage($pageId);
+
+        $configs = [];
+
+        foreach ($allConfigs as $key => $cfg) {
+            if (empty($cfg['is_system'])) {
+                $configs[$key] = $cfg;
+            }
+        }
+
+        return $configs;
+    }
+
+    /**
+     * Validates and collects the posted answers for a page's custom fields.
+     * Only keys of this page's non-system fields are accepted. Returns
+     * [field_key => value], or null (with $stepValidationError set) if invalid.
+     */
+    private function collectCustomFieldValues(?int $pageId, array $data, string $action): ?array
+    {
+        if (! $pageId) {
+            return [];
+        }
+
+        $configs = array_filter($this->getCustomFieldConfigs($pageId), fn ($c) => ! empty($c['is_visible']));
+        $options = (new FormFieldOptionConfigModel())->getNamesForFields(
+            array_map('intval', array_column(array_filter($configs, fn ($c) => $c['field_type'] === 'select'), 'id')),
+        );
+
+        $values = [];
+
+        foreach ($configs as $key => $cfg) {
+            if (! array_key_exists($key, $data) || is_array($data[$key])) {
+                continue;
+            }
+
+            $value = trim((string) $data[$key]);
+
+            if ($action === 'submit' && ! empty($cfg['is_required']) && $value === '') {
+                $this->stepValidationError = $cfg['label'] . ' is required.';
+
+                return null;
+            }
+            if (mb_strlen($value) > 2000) {
+                $this->stepValidationError = $cfg['label'] . ' is too long.';
+
+                return null;
+            }
+            if ($cfg['field_type'] === 'select' && $value !== ''
+                && ! in_array($value, $options[(int) $cfg['id']] ?? [], true)) {
+                $this->stepValidationError = 'Please choose a valid option for ' . $cfg['label'] . '.';
+
+                return null;
+            }
+
+            $values[$key] = $value;
+        }
+
+        return $values;
+    }
+
+    private function saveCustomFieldValues(int $applicationId, array $values): bool
+    {
+        if (! $values) {
+            return true;
+        }
+
+        $applicationModel = new ApplicationModel();
+        $merged           = array_merge($applicationModel->find($applicationId)['custom_fields'] ?? [], $values);
+        $merged           = array_filter($merged, fn ($v) => $v !== '');
+
+        return (bool) $applicationModel->update($applicationId, ['custom_fields' => $merged]);
     }
 
     private function requireLogin(): void
     {
-        if (!session()->get('logged_in')) {
-            redirect()->to('sign-in')->send();
-            exit;
+        if (! session()->get('logged_in')) {
+            // The framework turns this into the redirect response (no exit, so it also works under test).
+            throw new RedirectException(redirect()->to('sign-in'));
         }
     }
 
@@ -75,13 +182,13 @@ class ApplicantFormController extends BaseController
             : null;
 
         // Restore program from any existing application (draft or submitted)
-        if ($application && !session()->get('selected_program_id') && !empty($application['program_id'])) {
-            session()->set('selected_program_id', (int)$application['program_id']);
+        if ($application && ! session()->get('selected_program_id') && ! empty($application['program_id'])) {
+            session()->set('selected_program_id', (int) $application['program_id']);
         }
 
         // Brand-new applicant, hasn't picked a path yet — send them to the chooser
         // before they ever see the step wizard.
-        if (!$application && session()->get('fast_track_choice') === null) {
+        if (! $application && session()->get('fast_track_choice') === null) {
             return redirect()->to('applicant-form/choose-path');
         }
 
@@ -107,13 +214,14 @@ class ApplicantFormController extends BaseController
         // never sees the option (not even grayed out), same as exam_enabled gating.
         if ($themeModel->getSetting('fast_track_enabled', '1') !== '1') {
             session()->set('fast_track_choice', false);
+
             return redirect()->to('applicant-form');
         }
 
-        $theme      = $themeModel->getAllSettings();
+        $theme                 = $themeModel->getAllSettings();
         $theme['primary_soft'] = $this->lightenHex($theme['primary_color'] ?? '#0040a6', 0.88);
 
-        $fastTrackFee = (new \App\Models\Payment\PaymentFeeTypeModel())
+        $fastTrackFee = (new PaymentFeeTypeModel())
             ->where('code', 'FAST_TRACK_FEE')
             ->first();
 
@@ -138,22 +246,26 @@ class ApplicantFormController extends BaseController
     private function isSubmitted(): bool
     {
         $applicantId = session()->get('applicant_id');
-        if (!$applicantId) return false;
+        if (! $applicantId) {
+            return false;
+        }
 
         $application = (new ApplicationModel())
             ->where('applicant_id', $applicantId)
             ->first();
 
         // Any status other than 'draft' (or no application) means not yet submitted
-        if (!$application) return false;
+        if (! $application) {
+            return false;
+        }
 
-        return !in_array($application['application_status'], ['draft']);
+        return ! in_array($application['application_status'], ['draft']);
     }
 
     private function renderLayout(int $step)
     {
-        $themeModel = new \App\Models\ThemeModel();
-        $theme      = $themeModel->getAllSettings();
+        $themeModel            = new ThemeModel();
+        $theme                 = $themeModel->getAllSettings();
         $theme['primary_soft'] = $this->lightenHex($theme['primary_color'] ?? '#0040a6', 0.88);
 
         $pages    = $this->getEnabledPages();
@@ -176,7 +288,7 @@ class ApplicantFormController extends BaseController
         $maxSteps = count($pages);
 
         if ($step < 1 || $step > $maxSteps) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            throw PageNotFoundException::forPageNotFound();
         }
 
         $page   = $pages[$step - 1];
@@ -200,13 +312,13 @@ class ApplicantFormController extends BaseController
         // for a Fast Track applicant — they were never required to reach 'pending' in the
         // first place, so there's nothing to "lock" once the initial pages are submitted.
         $isDeferredPage = $application
-            && !empty($application['is_fast_track'])
+            && ! empty($application['is_fast_track'])
             && in_array($pageId, [3, 4], true);
 
         $isSubmitted = $application
-            && !in_array($application['application_status'], ['draft'])
-            && !($application['application_status'] === 'needs_revision' && in_array($pageId, $revisionPageIds, true))
-            && !$isDeferredPage;
+            && ! in_array($application['application_status'], ['draft'])
+            && ! ($application['application_status'] === 'needs_revision' && in_array($pageId, $revisionPageIds, true))
+            && ! $isDeferredPage;
 
         if ($application) {
             $formData = $this->getFormDataForPage($pageId, $application['application_id']);
@@ -219,7 +331,7 @@ class ApplicantFormController extends BaseController
 
         // Load view by page_id — step_1.php = Application Type, step_4.php = Educational Background, etc.
         $viewFile = "applicant/applicant-form/steps/step-{$pageId}";
-        if (!file_exists(APPPATH . "Views/{$viewFile}.php")) {
+        if (! file_exists(APPPATH . "Views/{$viewFile}.php")) {
             $viewFile = 'applicant/applicant-form/steps/step-generic';
         }
 
@@ -231,13 +343,13 @@ class ApplicantFormController extends BaseController
 
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([
-                'title'        => 'Applicant Information Form',
-                'step_num'     => $step,
-                'page_id'      => $pageId,
-                'is_submitted' => $isSubmitted,
-                'is_fast_track' => !empty($application['is_fast_track']),
-                'form'         => view($viewFile, $viewData),
-                'formData'     => $formData,
+                'title'         => 'Applicant Information Form',
+                'step_num'      => $step,
+                'page_id'       => $pageId,
+                'is_submitted'  => $isSubmitted,
+                'is_fast_track' => ! empty($application['is_fast_track']),
+                'form'          => view($viewFile, $viewData),
+                'formData'      => $formData,
             ]);
         }
 
@@ -252,7 +364,7 @@ class ApplicantFormController extends BaseController
 
         $pages  = $this->getEnabledPages();
         $page   = $pages[$step - 1] ?? null;
-        $pageId = $page ? (int)$page['id'] : null;
+        $pageId = $page ? (int) $page['id'] : null;
 
         $applicantId      = session()->get('applicant_id');
         $applicationModel = new ApplicationModel();
@@ -274,24 +386,34 @@ class ApplicantFormController extends BaseController
         // Family/Educational Background stay editable indefinitely for a Fast Track
         // applicant — they were deferred, not "submitted then locked".
         $isDeferredStep = $existingApplication
-            && !empty($existingApplication['is_fast_track'])
+            && ! empty($existingApplication['is_fast_track'])
             && in_array($pageId, [3, 4], true);
 
         // Block edits on already-submitted applications, except for steps flagged for
         // revision or deferred Fast Track steps.
-        if ($existingApplication && !$isDraft && !$isRevisableStep && !$isDeferredStep) {
+        if ($existingApplication && ! $isDraft && ! $isRevisableStep && ! $isDeferredStep) {
             return $this->response->setJSON([
                 'status'  => 'error',
                 'message' => 'Your application has already been submitted and cannot be edited.',
             ]);
         }
 
-        if (!$existingApplication) {
+        // Validate admin-created fields up front so a bad value doesn't leave a half-saved step.
+        $customValues = $this->collectCustomFieldValues($pageId, $data, $action);
+        if ($customValues === null) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => $this->stepValidationError,
+                'reload'  => false,
+            ]);
+        }
+
+        if (! $existingApplication) {
             $applicationId = $applicationModel->insert([
-                'applicant_id'       => $applicantId,
-                'applicant_type'     => $data['applicant_type'] ?? null,
-                'program_id'         => $data['program_id']     ?? null,
-                'sy_semester'        => $data['sy_semester']    ?? null,
+                'applicant_id'   => $applicantId,
+                'applicant_type' => $data['applicant_type'] ?? null,
+                'program_id'     => $data['program_id'] ?? null,
+                'sy_semester'    => $data['sy_semester'] ?? null,
                 // Decided on the Choose Your Path screen before the wizard was ever
                 // reached (ApplicantFormController::submitChoosePath()), not from this POST.
                 'is_fast_track'      => session()->get('fast_track_choice') ? 1 : 0,
@@ -299,23 +421,27 @@ class ApplicantFormController extends BaseController
             ]);
 
             (new PersonalInformationModel())->insert(['application_id' => $applicationId]);
-            (new FamilyBackgroundModel())->insert(['application_id'    => $applicationId]);
-            (new EducationalBackgroundModel())->insert(['application_id'=> $applicationId]);
+            (new FamilyBackgroundModel())->insert(['application_id' => $applicationId]);
+            (new EducationalBackgroundModel())->insert(['application_id' => $applicationId]);
         } else {
             $applicationId = $existingApplication['application_id'];
         }
 
         // Route to correct model using page_id, NOT step position
-        $result = match($pageId) {
-            1 => $this->updateApplication($data, $applicationId, $action, $isRevisableStep), // Application Type
-            2 => $this->updatePersonalInformation($data, $applicationId),            // Personal Information
-            3 => $this->updateFamilyBackground($data, $applicationId),               // Family Background
-            4 => $this->updateEducationalBackground($data, $applicationId, $action), // Educational Background
+        $result = match ($pageId) {
+            1       => $this->updateApplication($data, $applicationId, $action, $isRevisableStep), // Application Type
+            2       => $this->updatePersonalInformation($data, $applicationId),            // Personal Information
+            3       => $this->updateFamilyBackground($data, $applicationId),               // Family Background
+            4       => $this->updateEducationalBackground($data, $applicationId, $action), // Educational Background
             default => true,
         };
 
+        if ($result) {
+            $result = $this->saveCustomFieldValues((int) $applicationId, $customValues);
+        }
+
         $isFastTrack = $existingApplication
-            ? !empty($existingApplication['is_fast_track'])
+            ? ! empty($existingApplication['is_fast_track'])
             : (bool) session()->get('fast_track_choice');
 
         // A Fast Track applicant finalizes right after Personal Information (page 2) —
@@ -323,7 +449,7 @@ class ApplicantFormController extends BaseController
         // A revision-mode step is only ever autosaved (action stays 'draft' client-side),
         // but guard defensively against finalizing submission mid-revision anyway.
         $isFinalizingStep = $isFastTrack ? ($pageId === 2) : ($step === count($pages));
-        if ($isFinalizingStep && $action === 'submit' && !$isRevisableStep) {
+        if ($isFinalizingStep && $action === 'submit' && ! $isRevisableStep) {
             $applicationModel->update($applicationId, ['application_status' => 'pending']);
 
             $this->notificationService->trigger('application.submitted', $applicantId, [
@@ -335,8 +461,8 @@ class ApplicantFormController extends BaseController
         $reload = false;
         if ($pageId === 1 && $action !== 'draft') {
             $programId = $this->request->getPost('program_id');
-            if ($programId && (int)$programId !== (int)session()->get('selected_program_id')) {
-                session()->set('selected_program_id', (int)$programId);
+            if ($programId && (int) $programId !== (int) session()->get('selected_program_id')) {
+                session()->set('selected_program_id', (int) $programId);
                 $reload = true;
             }
         }
@@ -355,9 +481,9 @@ class ApplicantFormController extends BaseController
         $pageId      = $this->request->getPost('page_id');
 
         $applicationModel = new ApplicationModel();
-        $application = $applicationModel->where('applicant_id', $applicantId)->first();
+        $application      = $applicationModel->where('applicant_id', $applicantId)->first();
 
-        if (!$application || $application['application_status'] !== 'needs_revision') {
+        if (! $application || $application['application_status'] !== 'needs_revision') {
             return $this->response->setJSON([
                 'status'  => 'error',
                 'message' => 'There is no pending revision to resubmit.',
@@ -398,61 +524,79 @@ class ApplicantFormController extends BaseController
     {
         $fields = [
             'applicant_type' => $data['applicant_type'] ?? null,
-            'program_id'     => $data['program_id']     ?? null,
-            'school_year'    => $data['school_year']    ?? null,
-            'semester'       => $data['semester']       ?? null,
+            'program_id'     => $data['program_id'] ?? null,
+            'school_year'    => $data['school_year'] ?? null,
+            'semester'       => $data['semester'] ?? null,
             // is_fast_track is decided once on the Choose Your Path screen and set at
             // insert time (see updateForm()) — not resubmitted from this form anymore.
         ];
 
         // While a revision is in progress, autosaving page 1 must not stomp
         // 'needs_revision' back to 'draft'/'pending'.
-        if (!$preserveStatus) {
+        if (! $preserveStatus) {
             $fields['application_status'] = $action === 'submit' ? 'pending' : 'draft';
         }
 
         return (new ApplicationModel())->update($applicationId, $fields);
     }
 
+    /**
+     * Applications created outside step 1 (e.g. seeded, or older data) may lack their child rows.
+     * The step saves below are UPDATEs, which would then silently change nothing while reporting
+     * success, so create the empty row first - exactly as step 1 does when it creates an application.
+     *
+     * @param mixed $applicationId
+     */
+    private function ensureChildRow(Model $model, $applicationId): void
+    {
+        if ($model->where('application_id', $applicationId)->countAllResults() === 0) {
+            $model->insert(['application_id' => $applicationId]);
+        }
+    }
+
     private function updatePersonalInformation($data, $applicationId)
     {
+        $this->ensureChildRow(new PersonalInformationModel(), $applicationId);
+
         return (new PersonalInformationModel())
             ->where('application_id', $applicationId)
             ->set([
-                'firstname'      => $data['firstname']      ?? null,
-                'middlename'     => $data['middlename']     ?? null,
-                'lastname'       => $data['lastname']       ?? null,
-                'suffix'         => $data['suffix']         ?? null,
-                'gender'         => $data['gender']         ?? null,
-                'date_of_birth'  => $data['date_of_birth']  ?? null,
+                'firstname'      => $data['firstname'] ?? null,
+                'middlename'     => $data['middlename'] ?? null,
+                'lastname'       => $data['lastname'] ?? null,
+                'suffix'         => $data['suffix'] ?? null,
+                'gender'         => $data['gender'] ?? null,
+                'date_of_birth'  => $data['date_of_birth'] ?? null,
                 'place_of_birth' => $data['place_of_birth'] ?? null,
-                'citizenship'    => $data['citizenship']    ?? null,
-                'home_address'   => $data['home_address']   ?? null,
-                'phone_code'     => $data['phone_code']     ?? null,
+                'citizenship'    => $data['citizenship'] ?? null,
+                'home_address'   => $data['home_address'] ?? null,
+                'phone_code'     => $data['phone_code'] ?? null,
                 'contact_number' => $data['contact_number'] ?? null,
-                'email_address'  => $data['email_address']  ?? null,
+                'email_address'  => $data['email_address'] ?? null,
             ])->update();
     }
 
     private function updateFamilyBackground($data, $applicationId)
     {
+        $this->ensureChildRow(new FamilyBackgroundModel(), $applicationId);
+
         return (new FamilyBackgroundModel())
             ->where('application_id', $applicationId)
             ->set([
-                'father_firstname'        => $data['father_firstname']        ?? null,
-                'father_middlename'       => $data['father_middlename']       ?? null,
-                'father_lastname'         => $data['father_lastname']         ?? null,
-                'father_occupation'       => $data['father_occupation']       ?? null,
-                'father_contact_number'   => $data['father_contact_number']   ?? null,
-                'mother_firstname'        => $data['mother_firstname']        ?? null,
-                'mother_middlename'       => $data['mother_middlename']       ?? null,
-                'mother_lastname'         => $data['mother_lastname']         ?? null,
-                'mother_occupation'       => $data['mother_occupation']       ?? null,
-                'mother_contact_number'   => $data['mother_contact_number']   ?? null,
-                'guardian_name'           => $data['guardian_name']           ?? null,
-                'guardian_relationship'   => $data['guardian_relationship']   ?? null,
+                'father_firstname'        => $data['father_firstname'] ?? null,
+                'father_middlename'       => $data['father_middlename'] ?? null,
+                'father_lastname'         => $data['father_lastname'] ?? null,
+                'father_occupation'       => $data['father_occupation'] ?? null,
+                'father_contact_number'   => $data['father_contact_number'] ?? null,
+                'mother_firstname'        => $data['mother_firstname'] ?? null,
+                'mother_middlename'       => $data['mother_middlename'] ?? null,
+                'mother_lastname'         => $data['mother_lastname'] ?? null,
+                'mother_occupation'       => $data['mother_occupation'] ?? null,
+                'mother_contact_number'   => $data['mother_contact_number'] ?? null,
+                'guardian_name'           => $data['guardian_name'] ?? null,
+                'guardian_relationship'   => $data['guardian_relationship'] ?? null,
                 'guardian_contact_number' => $data['guardian_contact_number'] ?? null,
-                'annual_family_income'    => $data['annual_family_income']    ?? null,
+                'annual_family_income'    => $data['annual_family_income'] ?? null,
             ])->update();
     }
 
@@ -461,31 +605,38 @@ class ApplicantFormController extends BaseController
         $yearError = $this->validateSchoolYears($data['school_year_start'] ?? '', $data['school_year_end'] ?? '');
         if ($yearError !== null) {
             $this->stepValidationError = $yearError;
+
             return false;
         }
 
         $gwaError = $this->validateGwa($data['gwa'] ?? '');
         if ($gwaError !== null) {
             $this->stepValidationError = $gwaError;
+
             return false;
         }
+
+        $this->ensureChildRow(new EducationalBackgroundModel(), $applicationId);
 
         return (new EducationalBackgroundModel())
             ->where('application_id', $applicationId)
             ->set([
-                'school_name'       => $data['school_name']     ?? null,
+                'school_name'       => $data['school_name'] ?? null,
                 'school_location'   => $data['school_location'] ?? null,
-                'strand'            => $data['strand']          ?? null,
+                'strand'            => $data['strand'] ?? null,
                 'school_year_start' => $data['school_year_start'] ?? null,
-                'school_year_end'   => $data['school_year_end']   ?? null,
-                'gwa'               => $data['gwa']             ?? null,
-                'school_type'       => $data['school_type']     ?? null,
+                'school_year_end'   => $data['school_year_end'] ?? null,
+                'gwa'               => $data['gwa'] ?? null,
+                'school_type'       => $data['school_type'] ?? null,
             ])->update();
     }
 
     /**
      * Returns an error message if the given school year start/end are invalid,
      * or null if they're valid (or left blank, e.g. an in-progress draft).
+     *
+     * @param mixed $start
+     * @param mixed $end
      */
     private function validateSchoolYears($start, $end): ?string
     {
@@ -499,7 +650,7 @@ class ApplicantFormController extends BaseController
             if ($value === '') {
                 continue;
             }
-            if (!ctype_digit((string) $value) || (int) $value < 2000 || (int) $value > $currentYear) {
+            if (! ctype_digit((string) $value) || (int) $value < 2000 || (int) $value > $currentYear) {
                 return 'School year must be between 2000 and ' . $currentYear . '.';
             }
         }
@@ -514,6 +665,8 @@ class ApplicantFormController extends BaseController
     /**
      * Returns an error message if the given GWA is invalid, or null if it's
      * valid (or left blank, e.g. an in-progress draft).
+     *
+     * @param mixed $gwa
      */
     private function validateGwa($gwa): ?string
     {
@@ -521,7 +674,7 @@ class ApplicantFormController extends BaseController
             return null;
         }
 
-        if (!is_numeric($gwa) || (float) $gwa < 60 || (float) $gwa > 100) {
+        if (! is_numeric($gwa) || (float) $gwa < 60 || (float) $gwa > 100) {
             return 'General average (GWA) must be between 60 and 100.';
         }
 
@@ -531,9 +684,10 @@ class ApplicantFormController extends BaseController
     private function lightenHex(string $hex, float $amount = 0.88): string
     {
         $hex = ltrim($hex, '#');
-        $r   = (int)round(hexdec(substr($hex, 0, 2)) + (255 - hexdec(substr($hex, 0, 2))) * $amount);
-        $g   = (int)round(hexdec(substr($hex, 2, 2)) + (255 - hexdec(substr($hex, 2, 2))) * $amount);
-        $b   = (int)round(hexdec(substr($hex, 4, 2)) + (255 - hexdec(substr($hex, 4, 2))) * $amount);
+        $r   = (int) round(hexdec(substr($hex, 0, 2)) + (255 - hexdec(substr($hex, 0, 2))) * $amount);
+        $g   = (int) round(hexdec(substr($hex, 2, 2)) + (255 - hexdec(substr($hex, 2, 2))) * $amount);
+        $b   = (int) round(hexdec(substr($hex, 4, 2)) + (255 - hexdec(substr($hex, 4, 2))) * $amount);
+
         return sprintf('#%02x%02x%02x', $r, $g, $b);
     }
 }

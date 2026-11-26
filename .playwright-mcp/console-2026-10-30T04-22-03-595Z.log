@@ -1,0 +1,2 @@
+[     569ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost/akademus/public/http:/localhost/Akademus/akademus/public/assets/images/logos/1788335034_b3125ff455dec4259bb1.png:0
+[     645ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost/akademus/public/admin/login:0

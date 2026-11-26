@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\Payment\PaymentFeeTypeModel;
 use App\Models\Payment\PaymentModel;
 use App\Services\PaymentService;
+use Throwable;
 
 class SmartPayController extends BaseController
 {
@@ -19,14 +20,14 @@ class SmartPayController extends BaseController
     public function getAdmissionFeePayment()
     {
         return $this->handlePayment(
-            PaymentFeeTypeModel::CODE_ADMISSION
+            PaymentFeeTypeModel::CODE_ADMISSION,
         );
     }
 
     public function getReservationFeePayment()
     {
         return $this->handlePayment(
-            PaymentFeeTypeModel::CODE_RESERVATION
+            PaymentFeeTypeModel::CODE_RESERVATION,
         );
     }
 
@@ -47,6 +48,7 @@ class SmartPayController extends BaseController
 
         if (! hash_equals($expected, $signature)) {
             log_message('warning', '[SmartPay] Webhook rejected — invalid signature.');
+
             return $this->response->setStatusCode(401)->setJSON(['success' => false]);
         }
 
@@ -78,10 +80,11 @@ class SmartPayController extends BaseController
         */
 
         $paymentModel = new PaymentModel();
-        $payment = $paymentModel->where('reference_num', $serviceReference)->first();
+        $payment      = $paymentModel->where('reference_num', $serviceReference)->first();
 
         if (! $payment) {
             log_message('error', '[SmartPay] Webhook: no payment found for reference ' . $serviceReference);
+
             return $this->response->setStatusCode(404)->setJSON(['success' => false]);
         }
 
@@ -106,12 +109,14 @@ class SmartPayController extends BaseController
             $expectedAmount = round((float) $payment['amount_paid'], 2);
 
             if ($webhookAmount !== $expectedAmount) {
-                log_message('critical',
+                log_message(
+                    'critical',
                     '[SmartPay] Amount mismatch on webhook! '
                     . 'Expected: ' . $expectedAmount
                     . ', Got: ' . $webhookAmount
-                    . ', Ref: ' . $serviceReference
+                    . ', Ref: ' . $serviceReference,
                 );
+
                 return $this->response->setStatusCode(422)->setJSON(['success' => false]);
             }
         }
@@ -139,7 +144,6 @@ class SmartPayController extends BaseController
     private function handlePayment(string $feeTypeCode)
     {
         try {
-
             /*
             |--------------------------------------------------------------------------
             | Get JSON payload
@@ -155,10 +159,9 @@ class SmartPayController extends BaseController
             */
 
             if (empty($payload['payment_method'])) {
-
                 return $this->response->setJSON([
                     'success' => false,
-                    'message' => 'Payment method is required.'
+                    'message' => 'Payment method is required.',
                 ])->setStatusCode(400);
             }
 
@@ -170,11 +173,10 @@ class SmartPayController extends BaseController
 
             $applicantId = session()->get('applicant_id');
 
-            if (!$applicantId) {
-
+            if (! $applicantId) {
                 return $this->response->setJSON([
                     'success' => false,
-                    'message' => 'Applicant session not found.'
+                    'message' => 'Applicant session not found.',
                 ])->setStatusCode(401);
             }
 
@@ -187,19 +189,17 @@ class SmartPayController extends BaseController
             $result = $this->paymentService->getPayment(
                 $applicantId,
                 $payload,
-                $feeTypeCode
+                $feeTypeCode,
             );
 
             return $this->response->setJSON([
                 'success' => true,
-                'data' => $result
+                'data'    => $result,
             ]);
-
-        } catch (\Throwable $e) {
-
+        } catch (Throwable $e) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ])->setStatusCode(500);
         }
     }

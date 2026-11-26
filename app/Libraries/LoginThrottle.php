@@ -25,7 +25,7 @@ class LoginThrottle
 
     /**
      * @param string $scope Distinguishes login surfaces (applicant/officer/admin)
-     *                       so exhausting one doesn't block the others.
+     *                      so exhausting one doesn't block the others.
      */
     public static function tooManyAttempts(string $scope): bool
     {

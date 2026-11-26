@@ -2,6 +2,8 @@
 
 namespace Config;
 
+use App\Filters\AdminAuth;
+use App\Filters\OfficerAuth;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
@@ -12,7 +14,6 @@ use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\PageCache;
 use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
-use App\Filters\OfficerAuth;
 
 class Filters extends BaseFilters
 {
@@ -36,6 +37,7 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         'officerAuth'   => OfficerAuth::class,
+        'adminAuth'     => AdminAuth::class,
     ];
 
     /**
@@ -115,5 +117,23 @@ class Filters extends BaseFilters
                 'admission-officer/*',
             ],
         ],
+        // admin/login and admin/logout are let through inside the filter.
+        'adminAuth' => [
+            'before' => [
+                'admin',
+                'admin/*',
+            ],
+        ],
     ];
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // CI_DEBUG_TOOLBAR=false switches the debug toolbar off in development (used by the E2E job:
+        // the toolbar copies flash messages and form data into the page, confusing text locators).
+        if (env('CI_DEBUG_TOOLBAR', true) === false) {
+            $this->required['after'] = array_values(array_diff($this->required['after'], ['toolbar']));
+        }
+    }
 }

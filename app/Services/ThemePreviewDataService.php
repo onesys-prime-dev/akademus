@@ -3,10 +3,10 @@
 namespace App\Services;
 
 use App\Models\FormPageModel;
-use App\Models\ProgramModel;
-use App\Models\ThemeModel;
 use App\Models\Payment\PaymentFeeTypeModel;
 use App\Models\Payment\PaymentMethodModel;
+use App\Models\ProgramModel;
+use App\Models\ThemeModel;
 
 /**
  * Builds fake-but-realistic $data payloads for the admin Theme Customizer's
@@ -23,9 +23,9 @@ use App\Models\Payment\PaymentMethodModel;
  */
 class ThemePreviewDataService
 {
-    private const PERSONA_FIRSTNAME  = 'Juan';
-    private const PERSONA_LASTNAME   = 'Dela Cruz';
-    private const PERSONA_NUMBER     = 'APP-2026-00001';
+    private const PERSONA_FIRSTNAME    = 'Juan';
+    private const PERSONA_LASTNAME     = 'Dela Cruz';
+    private const PERSONA_NUMBER       = 'APP-2026-00001';
     private const PERSONA_APPLICANT_ID = 999999999;
     private const PERSONA_PROGRAM_ID   = 1;
     private const PERSONA_PROGRAM_NAME = 'Bachelor of Science in Computer Science';
@@ -35,7 +35,7 @@ class ThemePreviewDataService
      * ThemeController snapshots + restores these around the render.
      */
     public const SESSION_PERSONA = [
-        'firstname'          => self::PERSONA_FIRSTNAME,
+        'firstname'           => self::PERSONA_FIRSTNAME,
         'lastname'            => self::PERSONA_LASTNAME,
         'applicant_number'    => self::PERSONA_NUMBER,
         'applicant_id'        => self::PERSONA_APPLICANT_ID,
@@ -54,20 +54,20 @@ class ThemePreviewDataService
     public function build(string $page): array
     {
         return match ($page) {
-            'dashboard'      => $this->buildDashboard(),
-            'appform'        => $this->buildApplicantForm(),
-            'documents'      => $this->buildRequirements(),
-            'track'          => $this->buildTrackingProgress(),
-            'exam'           => $this->buildExamSchedule(),
-            'admission-fee'  => $this->buildAdmissionFee(),
+            'dashboard'       => $this->buildDashboard(),
+            'appform'         => $this->buildApplicantForm(),
+            'documents'       => $this->buildRequirements(),
+            'track'           => $this->buildTrackingProgress(),
+            'exam'            => $this->buildExamSchedule(),
+            'admission-fee'   => $this->buildAdmissionFee(),
             'reservation-fee' => $this->buildReservationFee(),
-            'faq'            => $this->buildFaq(),
-            'followup'       => $this->buildFollowUp(),
-            'tuition-calc'   => $this->buildTuitionCalculator(),
-            'signin'         => $this->buildSignIn(),
-            'signup'         => $this->buildSignUp(),
-            'success'        => $this->buildSuccess(),
-            default          => $this->buildDashboard(),
+            'faq'             => $this->buildFaq(),
+            'followup'        => $this->buildFollowUp(),
+            'tuition-calc'    => $this->buildTuitionCalculator(),
+            'signin'          => $this->buildSignIn(),
+            'signup'          => $this->buildSignUp(),
+            'success'         => $this->buildSuccess(),
+            default           => $this->buildDashboard(),
         };
     }
 
@@ -111,18 +111,19 @@ class ThemePreviewDataService
 
         $progressData = (new ApplicationProgressService())->build($applicant, $application);
 
-        $steps = [];
+        $steps        = [];
         $stepStatuses = [];
+
         foreach ($progressData['steps'] as $index => $step) {
-            $num = $index + 1;
-            $steps[$num] = $step['title'];
+            $num                = $index + 1;
+            $steps[$num]        = $step['title'];
             $stepStatuses[$num] = match ($step['status']) {
                 'done', 'rejected' => 'done',
                 'active'           => 'inprogress',
                 default            => '',
             };
         }
-        $doneSteps = count(array_filter($progressData['steps'], fn ($s) => in_array($s['status'], ['done', 'rejected'], true)));
+        $doneSteps       = count(array_filter($progressData['steps'], fn ($s) => in_array($s['status'], ['done', 'rejected'], true)));
         $overallProgress = count($progressData['steps']) > 0
             ? (int) round(($doneSteps / count($progressData['steps'])) * 100)
             : 0;
@@ -131,20 +132,20 @@ class ThemePreviewDataService
         if (empty($formPages)) {
             $formPages = (new FormPageModel())->getEnabledOrdered();
         }
-        $formPageCount  = count($formPages);
-        $formCompletion = array_fill_keys(array_column($formPages, 'id'), false);
+        $formPageCount      = count($formPages);
+        $formCompletion     = array_fill_keys(array_column($formPages, 'id'), false);
         $formPagesCompleted = 0;
-        $formProgress = 0;
+        $formProgress       = 0;
 
-        $allReqs = (new RequirementService())->getRequirements($programId);
-        $uploadedDocs = !empty($allReqs)
+        $allReqs      = (new RequirementService())->getRequirements($programId);
+        $uploadedDocs = ! empty($allReqs)
             ? (new ApplicantDocumentService())->getStepDocuments(self::PERSONA_APPLICANT_ID, $allReqs)
             : [];
 
         $totalRequired    = count(array_filter($allReqs, fn ($r) => $r['is_required']));
         $uploadedRequired = count(array_filter($allReqs, fn ($r) => $r['is_required'] && isset($uploadedDocs[$r['program_requirement_id']])));
-        $totalOptional    = count(array_filter($allReqs, fn ($r) => !$r['is_required']));
-        $uploadedOptional = count(array_filter($allReqs, fn ($r) => !$r['is_required'] && isset($uploadedDocs[$r['program_requirement_id']])));
+        $totalOptional    = count(array_filter($allReqs, fn ($r) => ! $r['is_required']));
+        $uploadedOptional = count(array_filter($allReqs, fn ($r) => ! $r['is_required'] && isset($uploadedDocs[$r['program_requirement_id']])));
 
         $docStats = [
             'total_required'    => $totalRequired,
@@ -168,39 +169,39 @@ class ThemePreviewDataService
         return [
             'view' => 'applicant/main',
             'data' => [
-                'title'            => 'Dashboard',
-                'page_content'     => 'applicant/dashboard/dashboard',
-                'applicant_number' => self::PERSONA_NUMBER,
-                'firstname'        => self::PERSONA_FIRSTNAME,
-                'theme'            => $this->theme(),
-                'steps'            => $steps,
-                'progress'         => $overallProgress,
-                'banner_message'   => 'Welcome! Start your application by filling out the applicant form below.',
-                'step_statuses'    => $stepStatuses,
-                'app_status'         => $progressData['app_status'],
-                'decision_remarks'   => $progressData['decision_remarks'],
-                'form_complete'      => $progressData['form_complete'],
-                'form_submitted'     => $progressData['form_submitted'],
-                'docs_complete'      => $progressData['docs_complete'],
-                'exam_enabled'       => $progressData['exam_enabled'],
-                'exam_booking'       => $progressData['exam_booking'],
-                'revision_requested' => $progressData['revision_requested'],
-                'revision_note'      => $progressData['revision_note'],
-                'revision_pages'     => $progressData['revision_pages'],
-                'is_fast_track'         => false,
+                'title'                    => 'Dashboard',
+                'page_content'             => 'applicant/dashboard/dashboard',
+                'applicant_number'         => self::PERSONA_NUMBER,
+                'firstname'                => self::PERSONA_FIRSTNAME,
+                'theme'                    => $this->theme(),
+                'steps'                    => $steps,
+                'progress'                 => $overallProgress,
+                'banner_message'           => 'Welcome! Start your application by filling out the applicant form below.',
+                'step_statuses'            => $stepStatuses,
+                'app_status'               => $progressData['app_status'],
+                'decision_remarks'         => $progressData['decision_remarks'],
+                'form_complete'            => $progressData['form_complete'],
+                'form_submitted'           => $progressData['form_submitted'],
+                'docs_complete'            => $progressData['docs_complete'],
+                'exam_enabled'             => $progressData['exam_enabled'],
+                'exam_booking'             => $progressData['exam_booking'],
+                'revision_requested'       => $progressData['revision_requested'],
+                'revision_note'            => $progressData['revision_note'],
+                'revision_pages'           => $progressData['revision_pages'],
+                'is_fast_track'            => false,
                 'pending_fast_track_pages' => [],
-                'form_pages'       => $formPages,
-                'form_completion'  => $formCompletion,
-                'form_completed'   => $formPagesCompleted,
-                'form_total'       => $formPageCount,
-                'form_progress'    => $formProgress,
-                'doc_stats'        => $docStats,
-                'doc_progress'     => $docProgress,
-                'reservation_fee_amount'  => $reservationFee['amount'] ?? 2000,
-                'fast_track_fee_amount'   => $fastTrackFee['amount'] ?? 1000,
-                'fast_track_fee_paid'     => false,
-                'paymentCheckList'        => $paymentCheckList,
-                'showPaymentNotification' => false,
+                'form_pages'               => $formPages,
+                'form_completion'          => $formCompletion,
+                'form_completed'           => $formPagesCompleted,
+                'form_total'               => $formPageCount,
+                'form_progress'            => $formProgress,
+                'doc_stats'                => $docStats,
+                'doc_progress'             => $docProgress,
+                'reservation_fee_amount'   => $reservationFee['amount'] ?? 2000,
+                'fast_track_fee_amount'    => $fastTrackFee['amount'] ?? 1000,
+                'fast_track_fee_paid'      => false,
+                'paymentCheckList'         => $paymentCheckList,
+                'showPaymentNotification'  => false,
             ],
         ];
     }
@@ -208,18 +209,18 @@ class ThemePreviewDataService
     // ── Applicant Form ────────────────────────────────────────
     private function buildApplicantForm(): array
     {
-        $theme = $this->theme();
+        $theme                 = $this->theme();
         $theme['primary_soft'] = $this->lightenHex($theme['primary_color'] ?? '#0040a6', 0.88);
 
         return [
             'view' => 'applicant/main',
             'data' => [
-                'title'         => 'Applicant Form',
-                'page_content'  => 'applicant/applicant-form/applicant-form',
-                'initial_step'  => 1,
-                'max_steps'     => 4,
-                'is_submitted'  => false,
-                'theme'         => $theme,
+                'title'        => 'Applicant Form',
+                'page_content' => 'applicant/applicant-form/applicant-form',
+                'initial_step' => 1,
+                'max_steps'    => 4,
+                'is_submitted' => false,
+                'theme'        => $theme,
             ],
         ];
     }
@@ -227,7 +228,7 @@ class ThemePreviewDataService
     // ── Requirements ──────────────────────────────────────────
     private function buildRequirements(): array
     {
-        $theme = $this->theme();
+        $theme                 = $this->theme();
         $theme['primary_soft'] = $this->lightenHex($theme['primary_color'] ?? '#0040a6', 0.88);
 
         $categories = (new RequirementService())->getCategories(self::PERSONA_PROGRAM_ID);
@@ -235,15 +236,15 @@ class ThemePreviewDataService
         return [
             'view' => 'applicant/main',
             'data' => [
-                'title'                 => 'Requirements',
-                'page_content'          => 'applicant/requirements/requirements',
-                'initial_step'          => 1,
-                'max_steps'             => count($categories) + 1,
-                'categories'            => $categories,
-                'theme'                 => $theme,
-                'application_status'    => '',
-                'requiredDocsVerified'  => false,
-                'is_fast_track'         => false,
+                'title'                    => 'Requirements',
+                'page_content'             => 'applicant/requirements/requirements',
+                'initial_step'             => 1,
+                'max_steps'                => count($categories) + 1,
+                'categories'               => $categories,
+                'theme'                    => $theme,
+                'application_status'       => '',
+                'requiredDocsVerified'     => false,
+                'is_fast_track'            => false,
                 'fast_track_required_docs' => [],
             ],
         ];
@@ -252,8 +253,8 @@ class ThemePreviewDataService
     // ── Tracking Progress ─────────────────────────────────────
     private function buildTrackingProgress(): array
     {
-        $applicant   = $this->fakeApplicant();
-        $application = $this->fakeApplication();
+        $applicant    = $this->fakeApplicant();
+        $application  = $this->fakeApplication();
         $progressData = (new ApplicationProgressService())->build($applicant, $application);
 
         return [
@@ -273,11 +274,11 @@ class ThemePreviewDataService
         return [
             'view' => 'applicant/main',
             'data' => [
-                'title'     => 'Exam Schedule',
+                'title'        => 'Exam Schedule',
                 'page_content' => 'applicant/exam-schedule/exam-schedule',
-                'theme'     => $this->theme(),
-                'booking'   => null,
-                'available' => (new ExamScheduleService())->getAvailableSchedules(),
+                'theme'        => $this->theme(),
+                'booking'      => null,
+                'available'    => (new ExamScheduleService())->getAvailableSchedules(),
             ],
         ];
     }
@@ -324,6 +325,7 @@ class ThemePreviewDataService
     {
         $rows = (new PaymentMethodModel())->getActiveWithAccounts();
         $map  = [];
+
         foreach ($rows as $row) {
             $code = $row['code'];
             if (isset($map[$code])) {
@@ -333,12 +335,13 @@ class ThemePreviewDataService
                 'payment_method_id'         => (int) $row['payment_method_id'],
                 'code'                      => $code,
                 'name'                      => $row['name'],
-                'payment_method_account_id' => !empty($row['payment_method_account_id']) ? (int) $row['payment_method_account_id'] : null,
+                'payment_method_account_id' => ! empty($row['payment_method_account_id']) ? (int) $row['payment_method_account_id'] : null,
                 'account_number'            => $row['account_number'] ?? null,
                 'account_name'              => $row['account_name'] ?? null,
                 'label'                     => 'Send payment via ' . $row['name'],
             ];
         }
+
         return array_values($map);
     }
 
@@ -361,11 +364,11 @@ class ThemePreviewDataService
         return [
             'view' => 'applicant/main',
             'data' => [
-                'title'         => 'Follow-Up Messages',
-                'page_content'  => 'applicant/follow-up-messages/follow_up_messages',
-                'theme'         => $this->theme(),
-                'applicant_id'  => self::PERSONA_APPLICANT_ID,
-                'messages'      => [],
+                'title'        => 'Follow-Up Messages',
+                'page_content' => 'applicant/follow-up-messages/follow_up_messages',
+                'theme'        => $this->theme(),
+                'applicant_id' => self::PERSONA_APPLICANT_ID,
+                'messages'     => [],
             ],
         ];
     }
@@ -403,7 +406,7 @@ class ThemePreviewDataService
     {
         $programs = array_map(
             fn ($p) => ['id' => $p['program_id'], 'name' => $p['program_name']],
-            (new ProgramModel())->findAll()
+            (new ProgramModel())->findAll(),
         );
 
         return [
@@ -449,6 +452,7 @@ class ThemePreviewDataService
         $r = (int) round($r + (255 - $r) * $amount);
         $g = (int) round($g + (255 - $g) * $amount);
         $b = (int) round($b + (255 - $b) * $amount);
+
         return sprintf('#%02x%02x%02x', $r, $g, $b);
     }
 }

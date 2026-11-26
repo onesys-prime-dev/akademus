@@ -142,6 +142,35 @@ $revisionPending = $formStatus === 'needs_revision';
     </div>
 </div>
 
+<!-- ── Incomplete Steps Confirmation Modal ── -->
+<div class="decision-modal-overlay" id="incomplete-modal-overlay">
+    <div class="decision-modal">
+        <div class="decision-modal__header decision-modal__header--revision">
+            <div class="decision-modal__header-icon" style="background:#ffedd5;color:#c2410c;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div>
+                <h3 class="decision-modal__title">Incomplete Application</h3>
+                <p class="decision-modal__subtitle"><?= esc($profile['applicant_name'] ?? '') ?> · #<?= esc($profile['applicant_number'] ?? '') ?></p>
+            </div>
+            <button class="decision-modal__close" id="incomplete-modal-close">&times;</button>
+        </div>
+        <div class="decision-modal__body">
+            <p class="incomplete-modal__text">This applicant has not completed the following steps:</p>
+            <ul class="incomplete-modal__list">
+                <?php foreach (($incompleteSteps ?? []) as $stepLabel): ?>
+                    <li><?= esc($stepLabel) ?></li>
+                <?php endforeach; ?>
+            </ul>
+            <p class="incomplete-modal__text">Do you still want to continue with approving this application?</p>
+        </div>
+        <div class="decision-modal__footer">
+            <button class="decision-modal__cancel" id="incomplete-modal-cancel">No, go back</button>
+            <button class="decision-modal__submit decision-modal__submit--approve" id="incomplete-modal-confirm">Yes, continue</button>
+        </div>
+    </div>
+</div>
+
 <!-- ── Message Modal ── -->
 <div class="decision-modal-overlay" id="message-modal-overlay">
     <div class="decision-modal">
@@ -341,7 +370,26 @@ window.applicantsConfig = <?= json_encode([
     // Decision modal wiring
     const btnApprove = document.getElementById('btn-approve');
     const btnDecline = document.getElementById('btn-decline');
-    if (btnApprove) btnApprove.addEventListener('click', () => openModal('approved'));
+    // Under-qualified applicants (missing steps) need an extra confirmation
+    // before the Approve Application modal opens.
+    const INCOMPLETE_STEPS = <?= json_encode(array_values($incompleteSteps ?? [])) ?>;
+    const incOverlay = document.getElementById('incomplete-modal-overlay');
+    const closeIncompleteModal = () => incOverlay.classList.remove('active');
+
+    if (btnApprove) btnApprove.addEventListener('click', () => {
+        if (INCOMPLETE_STEPS.length) {
+            incOverlay.classList.add('active');
+        } else {
+            openModal('approved');
+        }
+    });
+    document.getElementById('incomplete-modal-confirm').addEventListener('click', () => {
+        closeIncompleteModal();
+        openModal('approved');
+    });
+    document.getElementById('incomplete-modal-cancel').addEventListener('click', closeIncompleteModal);
+    document.getElementById('incomplete-modal-close').addEventListener('click', closeIncompleteModal);
+    incOverlay.addEventListener('click', e => { if (e.target === incOverlay) closeIncompleteModal(); });
     if (btnDecline) btnDecline.addEventListener('click', () => openModal('rejected'));
     document.getElementById('decision-modal-close').addEventListener('click', closeDecisionModal);
     document.getElementById('decision-modal-cancel').addEventListener('click', closeDecisionModal);
@@ -471,7 +519,7 @@ window.applicantsConfig = <?= json_encode([
 
     // Global ESC closes whichever modal is open
     document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') { closeDecisionModal(); closeMessageModal(); closeRevisionModal(); }
+        if (e.key === 'Escape') { closeIncompleteModal(); closeDecisionModal(); closeMessageModal(); closeRevisionModal(); }
     });
 
     // ── Toast ──────────────────────────────────────────────────────

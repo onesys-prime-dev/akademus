@@ -4,22 +4,27 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\ThemeModel;
+use Config\Database;
+use Exception;
 
 class UsersController extends BaseController
 {
     private function requireAdmin()
     {
-        if (!session()->get('admin_logged_in')) {
+        if (! session()->get('admin_logged_in')) {
             return redirect()->to(base_url('admin/login'));
         }
+
         return null;
     }
 
     public function index()
     {
-        if ($r = $this->requireAdmin()) return $r;
+        if ($r = $this->requireAdmin()) {
+            return $r;
+        }
 
-        $db    = \Config\Database::connect();
+        $db    = Database::connect();
         $theme = (new ThemeModel())->getAllSettings();
 
         $users = $db->table('users')
@@ -36,34 +41,37 @@ class UsersController extends BaseController
 
     public function store()
     {
-        if ($r = $this->requireAdmin()) return $r;
+        if ($r = $this->requireAdmin()) {
+            return $r;
+        }
 
         $firstname = trim($this->request->getPost('firstname') ?? '');
-        $lastname  = trim($this->request->getPost('lastname')  ?? '');
-        $email     = trim($this->request->getPost('email')     ?? '');
-        $password  = $this->request->getPost('password')       ?? '';
-        $role      = $this->request->getPost('role')           ?? '';
+        $lastname  = trim($this->request->getPost('lastname') ?? '');
+        $email     = trim($this->request->getPost('email') ?? '');
+        $password  = $this->request->getPost('password') ?? '';
+        $role      = $this->request->getPost('role') ?? '';
 
-        if (!in_array($role, ['admin', 'admission_officer'])) {
+        if (! in_array($role, ['admin', 'admission_officer'])) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid role.']);
         }
-        if (!$firstname || !$lastname || !$email || !$password) {
+        if (! $firstname || ! $lastname || ! $email || ! $password) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'All fields are required.']);
         }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid email address.']);
         }
         if (strlen($password) < 8) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Password must be at least 8 characters.']);
         }
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         if ($db->table('users')->where('email', $email)->countAllResults() > 0) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Email is already in use.']);
         }
 
         $db->transBegin();
+
         try {
             $hashed = password_hash($password, PASSWORD_DEFAULT);
 
@@ -84,34 +92,38 @@ class UsersController extends BaseController
             }
 
             $db->transComplete();
+
             return $this->response->setJSON(['status' => 'success', 'message' => 'User created successfully.']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $db->transRollback();
             log_message('error', 'UsersController::store — ' . $e->getMessage());
+
             return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to create user.']);
         }
     }
 
     public function update($id)
     {
-        if ($r = $this->requireAdmin()) return $r;
+        if ($r = $this->requireAdmin()) {
+            return $r;
+        }
 
         $firstname = trim($this->request->getPost('firstname') ?? '');
-        $lastname  = trim($this->request->getPost('lastname')  ?? '');
-        $email     = trim($this->request->getPost('email')     ?? '');
-        $role      = $this->request->getPost('role')           ?? '';
+        $lastname  = trim($this->request->getPost('lastname') ?? '');
+        $email     = trim($this->request->getPost('email') ?? '');
+        $role      = $this->request->getPost('role') ?? '';
 
-        if (!in_array($role, ['admin', 'admission_officer'])) {
+        if (! in_array($role, ['admin', 'admission_officer'])) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid role.']);
         }
-        if (!$firstname || !$lastname || !$email) {
+        if (! $firstname || ! $lastname || ! $email) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'All fields are required.']);
         }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid email address.']);
         }
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $existing = $db->table('users')->where('email', $email)->where('user_id !=', $id)->countAllResults();
         if ($existing > 0) {
@@ -119,11 +131,12 @@ class UsersController extends BaseController
         }
 
         $user = $db->table('users')->where('user_id', $id)->whereIn('role', ['admin', 'admission_officer'])->get()->getRowArray();
-        if (!$user) {
+        if (! $user) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'User not found.']);
         }
 
         $db->transBegin();
+
         try {
             $oldRole = $user['role'];
 
@@ -154,17 +167,21 @@ class UsersController extends BaseController
             }
 
             $db->transComplete();
+
             return $this->response->setJSON(['status' => 'success', 'message' => 'User updated successfully.']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $db->transRollback();
             log_message('error', 'UsersController::update — ' . $e->getMessage());
+
             return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to update user.']);
         }
     }
 
     public function resetPassword($id)
     {
-        if ($r = $this->requireAdmin()) return $r;
+        if ($r = $this->requireAdmin()) {
+            return $r;
+        }
 
         $password = $this->request->getPost('password') ?? '';
 
@@ -172,10 +189,10 @@ class UsersController extends BaseController
             return $this->response->setJSON(['status' => 'error', 'message' => 'Password must be at least 8 characters.']);
         }
 
-        $db   = \Config\Database::connect();
+        $db   = Database::connect();
         $user = $db->table('users')->where('user_id', $id)->whereIn('role', ['admin', 'admission_officer'])->get()->getRowArray();
 
-        if (!$user) {
+        if (! $user) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'User not found.']);
         }
 
@@ -197,28 +214,33 @@ class UsersController extends BaseController
 
     public function delete($id)
     {
-        if ($r = $this->requireAdmin()) return $r;
+        if ($r = $this->requireAdmin()) {
+            return $r;
+        }
 
         // Prevent deleting self
         if ((int) $id === (int) session()->get('admin_id')) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'You cannot delete your own account.']);
         }
 
-        $db   = \Config\Database::connect();
+        $db   = Database::connect();
         $user = $db->table('users')->where('user_id', $id)->whereIn('role', ['admin', 'admission_officer'])->get()->getRowArray();
 
-        if (!$user) {
+        if (! $user) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'User not found.']);
         }
 
         $db->transBegin();
+
         try {
             $db->table('admin_credentials')->where('user_id', $id)->delete();
             $db->table('users')->where('user_id', $id)->delete();
             $db->transComplete();
+
             return $this->response->setJSON(['status' => 'success', 'message' => 'User deleted.']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $db->transRollback();
+
             return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to delete user.']);
         }
     }

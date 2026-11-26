@@ -1,0 +1,12 @@
+# /etc/cron.d/akademus-__ENV__  (rendered by deploy/server-setup.sh)
+# One-shot Akademus commands. flock -n skips a run while the previous one is still busy.
+# Output goes to the shared logs so it survives releases.
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# SIS handoff: retries start at 1 minute (SisSyncService backoff 1, 5, 15, 60, 240, 720 min).
+* * * * *   __DEPLOY_USER__  cd __DEPLOY_PATH__/current && flock -n /tmp/akademus-__ENV__-sis.lock __PHP_BIN__ spark sis:sync >> __DEPLOY_PATH__/shared/writable/logs/cron-sis-sync.log 2>&1
+
+# Reminder emails: the shortest reminder level is 2 hours, so hourly is enough (offset to spread load).
+5 * * * *   __DEPLOY_USER__  cd __DEPLOY_PATH__/current && flock -n /tmp/akademus-__ENV__-app-reminders.lock __PHP_BIN__ spark notifications:application >> __DEPLOY_PATH__/shared/writable/logs/cron-notifications.log 2>&1
+35 * * * *  __DEPLOY_USER__  cd __DEPLOY_PATH__/current && flock -n /tmp/akademus-__ENV__-req-reminders.lock __PHP_BIN__ spark notifications:requirements >> __DEPLOY_PATH__/shared/writable/logs/cron-notifications.log 2>&1

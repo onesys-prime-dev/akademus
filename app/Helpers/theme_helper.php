@@ -1,6 +1,8 @@
 <?php
 
-if (!function_exists('theme_css_vars')) {
+use Config\Database;
+
+if (! function_exists('theme_css_vars')) {
     function theme_css_vars(): string
     {
         static $css = null;
@@ -10,34 +12,35 @@ if (!function_exists('theme_css_vars')) {
         }
 
         try {
-            $db = \Config\Database::connect();
+            $db   = Database::connect();
             $rows = $db->table('theme_settings')->get()->getResultArray();
-            $t = [];
+            $t    = [];
+
             foreach ($rows as $row) {
                 $t[$row['setting_key']] = $row['setting_value'];
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $t = [];
         }
 
-        $primary      = $t['primary_color']  ?? '#0040a6';
-        $primaryDark  = $t['primary_dark']   ?? '#002d7a';
-        $primaryLight = $t['primary_light']  ?? '#1a55c0';
-        $accent       = $t['accent_color']   ?? '#ffb200';
-        $accentText   = $t['accent_text']    ?? '#002d7a';
-        $sidebar      = $t['sidebar_color']  ?? '#002d7a';
-        $font         = $t['font_family']    ?? 'Sora';
-        $radius       = $t['border_radius']  ?? '8px';
+        $primary      = $t['primary_color'] ?? '#0040a6';
+        $primaryDark  = $t['primary_dark'] ?? '#002d7a';
+        $primaryLight = $t['primary_light'] ?? '#1a55c0';
+        $accent       = $t['accent_color'] ?? '#ffb200';
+        $accentText   = $t['accent_text'] ?? '#002d7a';
+        $sidebar      = $t['sidebar_color'] ?? '#002d7a';
+        $font         = $t['font_family'] ?? 'Sora';
+        $radius       = $t['border_radius'] ?? '8px';
 
-        $sidebarActive  = $t['sidebar_active_color']   ?? $accent;
-        $bannerBg       = $t['banner_bg_color']        ?? $primary;
-        $bannerBoxBg    = $t['banner_box_color']       ?? $primaryLight;
-        $buttonPrimaryBg   = $t['button_primary_bg']   ?? $primary;
+        $sidebarActive     = $t['sidebar_active_color'] ?? $accent;
+        $bannerBg          = $t['banner_bg_color'] ?? $primary;
+        $bannerBoxBg       = $t['banner_box_color'] ?? $primaryLight;
+        $buttonPrimaryBg   = $t['button_primary_bg'] ?? $primary;
         $buttonPrimaryText = $t['button_primary_text'] ?? '#ffffff';
-        $buttonAccentBg    = $t['button_accent_bg']    ?? $accent;
-        $buttonAccentText  = $t['button_accent_text']  ?? $accentText;
-        $headerText     = $t['header_text_color']      ?? $primary;
-        $progressActive = $t['progress_active_color']  ?? $accent;
+        $buttonAccentBg    = $t['button_accent_bg'] ?? $accent;
+        $buttonAccentText  = $t['button_accent_text'] ?? $accentText;
+        $headerText        = $t['header_text_color'] ?? $primary;
+        $progressActive    = $t['progress_active_color'] ?? $accent;
 
         $css = "
 <style>
@@ -62,26 +65,39 @@ if (!function_exists('theme_css_vars')) {
     --progress-active:     {$progressActive};
   }
 </style>
-<link href=\"https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap\" rel=\"stylesheet\">
+<link href=\"https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Raleway:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">
 ";
+
         return $css;
     }
 }
 
-if (!function_exists('theme_get')) {
+if (! function_exists('theme_font_link')) {
+    /**
+     * <link> tag loading every font offered in the theme editor, so whichever
+     * one is saved as font_family actually renders.
+     */
+    function theme_font_link(): string
+    {
+        return '<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Raleway:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">';
+    }
+}
+
+if (! function_exists('theme_get')) {
     function theme_get(string $key, string $default = ''): string
     {
         static $settings = null;
 
         if ($settings === null) {
             try {
-                $db = \Config\Database::connect();
-                $rows = $db->table('theme_settings')->get()->getResultArray();
+                $db       = Database::connect();
+                $rows     = $db->table('theme_settings')->get()->getResultArray();
                 $settings = [];
+
                 foreach ($rows as $row) {
                     $settings[$row['setting_key']] = $row['setting_value'];
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $settings = [];
             }
         }
@@ -90,7 +106,7 @@ if (!function_exists('theme_get')) {
     }
 }
 
-if (!function_exists('theme_favicon_tags')) {
+if (! function_exists('theme_favicon_tags')) {
     /**
      * Browser-tab icon links — uses the admin-uploaded logo if one is set,
      * otherwise falls back to the real Akademus brand mark (not a generic
@@ -102,7 +118,7 @@ if (!function_exists('theme_favicon_tags')) {
     {
         $logoUrl = theme_get('logo_url', '');
 
-        if (!empty($logoUrl)) {
+        if (! empty($logoUrl)) {
             $href32 = $href16 = $href180 = esc($logoUrl);
         } else {
             $href32  = base_url('assets/images/favicons/favicon-32x32.png');

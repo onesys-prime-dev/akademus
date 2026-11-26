@@ -2,10 +2,10 @@
 
 namespace App\Controllers;
 
-class ApplyNow extends BaseController 
+class ApplyNow extends BaseController
 {
-    public function index(): string 
+    public function index(): string
     {
-        return view('applynowpage');       
+        return view('applynowpage');
     }
 }

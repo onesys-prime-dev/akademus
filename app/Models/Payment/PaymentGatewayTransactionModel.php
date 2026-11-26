@@ -6,10 +6,8 @@ use CodeIgniter\Model;
 
 class PaymentGatewayTransactionModel extends Model
 {
-    protected $table = 'payment_gateway_transactions';
-
-    protected $primaryKey = 'gateway_transaction_id';
-
+    protected $table         = 'payment_gateway_transactions';
+    protected $primaryKey    = 'gateway_transaction_id';
     protected $allowedFields = [
         'payment_id',
         'gateway_name',
@@ -27,10 +25,8 @@ class PaymentGatewayTransactionModel extends Model
         'response_payload',
         'webhook_payload',
     ];
-
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
-
-    protected $returnType = 'array';
+    protected $returnType    = 'array';
 }

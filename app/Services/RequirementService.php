@@ -4,15 +4,15 @@ namespace App\Services;
 
 class RequirementService
 {
-    private ?array $categories = null;
+    private ?array $categories   = null;
     private ?array $requirements = null;
-    private $cachedProgId = null;
+    private $cachedProgId;
 
     private function resetIfNeeded($program_id): void
     {
         if ($this->cachedProgId !== $program_id) {
             $this->cachedProgId = $program_id;
-            $this->categories = null;
+            $this->categories   = null;
             $this->requirements = null;
         }
     }
@@ -34,7 +34,7 @@ class RequirementService
                     ])
                     ->join(
                         'requirement_categories rc',
-                        'rc.category_id = prc.category_id'
+                        'rc.category_id = prc.category_id',
                     )
                     ->where('prc.program_id', $program_id)
                     ->where('prc.is_active', 1)
@@ -68,11 +68,11 @@ class RequirementService
                     ])
                     ->join(
                         'requirements r',
-                        'r.requirement_id = pr.requirement_id'
+                        'r.requirement_id = pr.requirement_id',
                     )
                     ->join(
                         'program_requirement_categories prc',
-                        'prc.program_requirement_category_id = pr.program_requirement_category_id'
+                        'prc.program_requirement_category_id = pr.program_requirement_category_id',
                     )
                     ->where('prc.program_id', $program_id)
                     ->where('prc.is_active', 1)
@@ -85,32 +85,25 @@ class RequirementService
             });
 
             $this->requirements = array_map(
-                fn($row) => [
+                fn ($row) => [
                     // FIXED: real projected ID
                     'program_requirement_id' => (int) $row['program_requirement_id'],
 
-                    'program_requirement_category_id' =>
-                        (int) $row['program_requirement_category_id'],
+                    'program_requirement_category_id' => (int) $row['program_requirement_category_id'],
 
-                    'requirement_name' =>
-                        $row['requirement_name'],
+                    'requirement_name' => $row['requirement_name'],
 
-                    'requirement_description' =>
-                        $row['description'] ?? '',
+                    'requirement_description' => $row['description'] ?? '',
 
-                    'is_required' =>
-                        (int) $row['is_mandatory'],
+                    'is_required' => (int) $row['is_mandatory'],
 
-                    'is_fast_track_required' =>
-                        (int) $row['is_fast_track_required'],
+                    'is_fast_track_required' => (int) $row['is_fast_track_required'],
 
-                    'requirement_order' =>
-                        (int) $row['display_order'],
+                    'requirement_order' => (int) $row['display_order'],
 
-                    'is_active' =>
-                        (int) $row['is_active'],
+                    'is_active' => (int) $row['is_active'],
                 ],
-                $rows
+                $rows,
             );
         }
 
@@ -120,17 +113,16 @@ class RequirementService
     public function getStepRequirements($program_id, $step): array
     {
         $categories = $this->getCategories($program_id);
-        $category = $categories[$step - 1] ?? null;
+        $category   = $categories[$step - 1] ?? null;
 
-        if (!$category) {
+        if (! $category) {
             return [];
         }
 
         return array_values(array_filter(
             $this->getRequirements($program_id),
-            fn($req) =>
-                $req['program_requirement_category_id']
-                == $category['program_requirement_category_id']
+            fn ($req) => $req['program_requirement_category_id']
+                == $category['program_requirement_category_id'],
         ));
     }
 }

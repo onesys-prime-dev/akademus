@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use Config\Database;
 
 class FollowUpMessageModel extends Model
 {
@@ -18,8 +19,8 @@ class FollowUpMessageModel extends Model
     public function getMessagesForApplicant(int $applicantId): array
     {
         return $this->where('applicant_id', $applicantId)
-                    ->orderBy('message_id', 'ASC')
-                    ->findAll(100);
+            ->orderBy('message_id', 'ASC')
+            ->findAll(100);
     }
 
     /**
@@ -29,9 +30,9 @@ class FollowUpMessageModel extends Model
     public function getMessagesSince(int $applicantId, int $sinceId): array
     {
         return $this->where('applicant_id', $applicantId)
-                    ->where('message_id >', $sinceId)
-                    ->orderBy('message_id', 'ASC')
-                    ->findAll();
+            ->where('message_id >', $sinceId)
+            ->orderBy('message_id', 'ASC')
+            ->findAll();
     }
 
     /**
@@ -40,7 +41,7 @@ class FollowUpMessageModel extends Model
      */
     public function getConversationsSummary(): array
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         return $db->query("
             SELECT
@@ -77,10 +78,10 @@ class FollowUpMessageModel extends Model
     public function markAsRead(int $applicantId, string $senderRole): void
     {
         $this->where('applicant_id', $applicantId)
-             ->where('sender_role', $senderRole)
-             ->where('is_read', 0)
-             ->set('is_read', 1)
-             ->update();
+            ->where('sender_role', $senderRole)
+            ->where('is_read', 0)
+            ->set('is_read', 1)
+            ->update();
     }
 
     /**
@@ -89,7 +90,7 @@ class FollowUpMessageModel extends Model
      */
     public function getUnreadSummaryForApplicant(int $applicantId): array
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $notifications = $db->table('follow_up_messages')
             ->where('applicant_id', $applicantId)
@@ -111,15 +112,15 @@ class FollowUpMessageModel extends Model
     public function getUnreadCountForApplicant(int $applicantId): int
     {
         return $this->where('applicant_id', $applicantId)
-                    ->where('sender_role', 'officer')
-                    ->where('is_read', 0)
-                    ->countAllResults();
+            ->where('sender_role', 'officer')
+            ->where('is_read', 0)
+            ->countAllResults();
     }
 
     public function getTotalUnreadForOfficer(): int
     {
         return $this->where('sender_role', 'applicant')
-                    ->where('is_read', 0)
-                    ->countAllResults();
+            ->where('is_read', 0)
+            ->countAllResults();
     }
 }

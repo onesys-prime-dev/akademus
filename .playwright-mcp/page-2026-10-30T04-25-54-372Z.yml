@@ -1,0 +1,40 @@
+- generic [ref=f3e2]:
+  - generic [ref=f3e3]:
+    - link "AK Akademus Portal Admission Officer Portal" [ref=f3e4] [cursor=pointer]:
+      - /url: http://localhost/akademus/public/
+      - generic [ref=f3e5]: AK
+      - generic [ref=f3e7]:
+        - generic [ref=f3e8]: Akademus Portal
+        - generic [ref=f3e9]: Admission Officer Portal
+    - generic [ref=f3e10]:
+      - generic [ref=f3e11]:
+        - paragraph [ref=f3e12]: Admission
+        - paragraph [ref=f3e13]: Officer Portal
+      - generic [ref=f3e14]: Review applicants, manage documents, and make admission decisions all in one place.
+      - generic [ref=f3e15]:
+        - generic [ref=f3e16]:
+          - generic [ref=f3e17]: "1"
+          - generic [ref=f3e18]: View and review applicant profiles
+        - generic [ref=f3e19]:
+          - generic [ref=f3e20]: "2"
+          - generic [ref=f3e21]: Verify submitted documents
+        - generic [ref=f3e22]:
+          - generic [ref=f3e23]: "3"
+          - generic [ref=f3e24]: Approve or decline applications
+  - generic [ref=f3e25]:
+    - generic [ref=f3e26]:
+      - heading "Officer Sign In" [level=2] [ref=f3e27]
+      - paragraph [ref=f3e28]: Enter your credentials to continue
+    - generic [ref=f3e29]:
+      - generic [ref=f3e30]:
+        - generic [ref=f3e31]:
+          - generic [ref=f3e32]: Email Address
+          - textbox "officer@akademus.edu.ph" [ref=f3e33]
+        - generic [ref=f3e34]:
+          - generic [ref=f3e35]: Password
+          - textbox "••••••••" [ref=f3e36]
+      - button "Sign In" [ref=f3e37] [cursor=pointer]
+    - generic [ref=f3e38]:
+      - text: Are you an admin?
+      - link "Admin sign in" [ref=f3e39] [cursor=pointer]:
+        - /url: http://localhost/akademus/public/admin/login

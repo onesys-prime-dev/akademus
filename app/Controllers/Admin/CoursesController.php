@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Models\ProgramModel;
 use App\Models\ThemeModel;
+use Config\Database;
 
 class CoursesController extends BaseAdminController
 {
@@ -41,8 +42,12 @@ class CoursesController extends BaseAdminController
             $code = strtoupper(trim($this->request->getPost('program_code') ?? ''));
             $old  = ['program_name' => $name, 'program_code' => $code];
 
-            if ($name === '') $errors['program_name'] = 'Program name is required.';
-            if ($code === '') $errors['program_code'] = 'Program code is required.';
+            if ($name === '') {
+                $errors['program_name'] = 'Program name is required.';
+            }
+            if ($code === '') {
+                $errors['program_code'] = 'Program code is required.';
+            }
 
             if (empty($errors)) {
                 // Use plain where() — MySQL utf8mb4_general_ci handles case-insensitivity
@@ -62,6 +67,7 @@ class CoursesController extends BaseAdminController
 
                 if ($inserted) {
                     session()->setFlashdata('success', 'Program created successfully.');
+
                     return redirect()->to(base_url('admin/programs'));
                 }
 
@@ -81,8 +87,9 @@ class CoursesController extends BaseAdminController
     public function edit($programId)
     {
         $program = $this->programModel->find($programId);
-        if (!$program) {
+        if (! $program) {
             session()->setFlashdata('error', 'Program not found.');
+
             return redirect()->to(base_url('admin/programs'));
         }
 
@@ -94,8 +101,12 @@ class CoursesController extends BaseAdminController
             $code = strtoupper(trim($this->request->getPost('program_code') ?? ''));
             $old  = ['program_name' => $name, 'program_code' => $code];
 
-            if ($name === '') $errors['program_name'] = 'Program name is required.';
-            if ($code === '') $errors['program_code'] = 'Program code is required.';
+            if ($name === '') {
+                $errors['program_name'] = 'Program name is required.';
+            }
+            if ($code === '') {
+                $errors['program_code'] = 'Program code is required.';
+            }
 
             if (empty($errors)) {
                 if ($this->programModel->where('program_name', $name)->where('program_id !=', $programId)->countAllResults()) {
@@ -114,6 +125,7 @@ class CoursesController extends BaseAdminController
 
                 if ($updated) {
                     session()->setFlashdata('success', 'Program updated successfully.');
+
                     return redirect()->to(base_url('admin/programs'));
                 }
 
@@ -133,21 +145,24 @@ class CoursesController extends BaseAdminController
     public function delete($programId)
     {
         $program = $this->programModel->find($programId);
-        if (!$program) {
+        if (! $program) {
             session()->setFlashdata('error', 'Program not found.');
+
             return redirect()->to(base_url('admin/programs'));
         }
 
-        $db         = \Config\Database::connect();
+        $db         = Database::connect();
         $inUseCount = $db->table('applicants')->where('program_id', $programId)->countAllResults();
 
         if ($inUseCount > 0) {
             session()->setFlashdata('error', "Cannot delete \"{$program['program_name']}\" — {$inUseCount} applicant(s) are enrolled in this program.");
+
             return redirect()->to(base_url('admin/programs'));
         }
 
         $this->programModel->delete($programId);
         session()->setFlashdata('success', "\"{$program['program_name']}\" deleted successfully.");
+
         return redirect()->to(base_url('admin/programs'));
     }
 }
