@@ -34,11 +34,9 @@ class AdminAuth implements FilterInterface
             return null;
         }
 
+        // Same behaviour as OfficerAuth: every request without an admin session, AJAX included,
+        // is redirected to the admin login.
         if (! session()->get('admin_logged_in')) {
-            if ($request->isAJAX()) {
-                return service('response')->setStatusCode(401)->setJSON(['error' => 'Authentication required.']);
-            }
-
             return redirect()->to(base_url('admin/login'));
         }
 

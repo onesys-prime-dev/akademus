@@ -25,11 +25,11 @@ final class AdminAuthFilterTest extends DatabaseTestCase
         $this->assertSame($presets, $this->db->table('form_presets')->countAllResults(), 'The delete action must not run anonymously.');
     }
 
-    public function testAnonymousAjaxRequestGets401(): void
+    public function testAnonymousAjaxRequestIsRedirectedToo(): void
     {
         $result = $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest'])->get('admin/presets/1/json');
 
-        $result->assertStatus(401);
+        $result->assertRedirectTo(base_url('admin/login'));
     }
 
     public function testLoginAndLogoutStayReachable(): void
