@@ -212,6 +212,10 @@ class ThemeController extends BaseController
      */
     public function getThemeJson()
     {
+        if (! session()->get('admin_logged_in')) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
+        }
+
         $theme = $this->themeModel->getAllSettings();
 
         return $this->response->setJSON($theme);
