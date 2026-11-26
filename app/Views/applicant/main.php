@@ -134,7 +134,8 @@
         </main>
     </div>
 
-    <?php if (uri_string() !== 'faq'): ?>
+    <?php // Not on the FAQ page, nor on the follow-up messages page, where the floating button covered the send button. ?>
+    <?php if (! in_array(uri_string(), ['faq', 'follow-up-messages'], true)): ?>
         <?= view('applicant/components/chat_widget', ['theme' => $theme]) ?>
     <?php endif; ?>
 

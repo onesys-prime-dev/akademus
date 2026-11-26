@@ -133,7 +133,9 @@ test.describe('Applicant follow-up messages', () => {
   });
 
   test('Follow-up send button is clickable by a real user', async ({ page }) => {
-    test.fail(true, 'Observed live: <button id="chatWidgetFab"> intercepts pointer events over #fu-send-btn, so a real click opens the chat widget instead of sending');
+    // Regression: the floating chat button (#chatWidgetFab) used to cover #fu-send-btn. The chat widget is no
+    // longer rendered on this page (app/Views/applicant/main.php).
+    await expect(page.locator('#chatWidgetFab')).toHaveCount(0);
 
     // 1. Real (trial) click on the send button must not be blocked by another element
     await page.locator('#fu-send-btn').click({ trial: true, timeout: 5000 });
