@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<phpmd-baseline>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="app/Casts/EncryptedCast.php"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="app/Commands/ApplicationReminders.php"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="app/Commands/RequirementsReminders.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Commands/SendEmails.php" method="run"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Commands/SendEmails.php" method="run"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Commands/SendEmails.php" method="run"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="app/Commands/SendEmails.php"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="app/Commands/SisSync.php"/>
+  <violation rule="PHPMD\Rule\Design\ExitExpression" file="app/Controllers/Admin/BaseAdminController.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/Admin/PaymentFeesController.php" method="fees"/>
+  <violation rule="PHPMD\Rule\UnusedLocalVariable" file="app/Controllers/Admin/PaymentFeesController.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/Admin/PaymentFeesController.php" method="updateFee"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/Admin/PaymentFeesController.php" method="addMethod"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/Admin/PaymentFeesController.php" method="updateMethod"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/Admin/PaymentFeesController.php" method="toggleMethod"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/Admin/SettingsController.php" method="index"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/Admin/SettingsController.php" method="save"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/Admin/UsersController.php" method="index"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/Admin/UsersController.php" method="store"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/Admin/UsersController.php" method="store"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Controllers/Admin/UsersController.php" method="store"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/Admin/UsersController.php" method="update"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/Admin/UsersController.php" method="update"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Controllers/Admin/UsersController.php" method="update"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/Admin/UsersController.php" method="resetPassword"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/Admin/UsersController.php" method="delete"/>
+  <violation rule="PHPMD\Rule\Design\TooManyPublicMethods" file="app/Controllers/AdmissionOfficer/ApplicantsController.php"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveClassComplexity" file="app/Controllers/AdmissionOfficer/ApplicantsController.php"/>
+  <violation rule="PHPMD\Rule\Design\CouplingBetweenObjects" file="app/Controllers/AdmissionOfficer/ApplicantsController.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/AdmissionOfficer/ApplicantsController.php" method="bulkUpdate"/>
+  <violation rule="PHPMD\Rule\UnusedLocalVariable" file="app/Controllers/AdmissionOfficer/ApplicantsController.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\UndefinedVariable" file="app/Controllers/AdmissionOfficer/AuthController.php"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Controllers/AdmissionOfficer/DashboardController.php" method="index"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Controllers/AdmissionOfficer/DashboardController.php" method="index"/>
+  <violation rule="PHPMD\Rule\Design\CountInLoopExpression" file="app/Controllers/AdmissionOfficer/DashboardController.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/AdmissionOfficer/ExamScheduleController.php" method="resolveState"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/AdmissionOfficer/PaymentController.php" method="approve"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/AdmissionOfficer/PaymentController.php" method="reject"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="app/Controllers/AdmissionOfficer/PaymentController.php" method="proofFile"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveClassComplexity" file="app/Controllers/Applicant/ApplicantFormController.php"/>
+  <violation rule="PHPMD\Rule\UnusedLocalVariable" file="app/Controllers/Applicant/ApplicantFormController.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/Applicant/ApplicantFormController.php" method="collectCustomFieldValues"/>
+  <violation rule="PHPMD\Rule\Design\ExitExpression" file="app/Controllers/Applicant/ApplicantFormController.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/Applicant/ApplicantFormController.php" method="getStep"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/Applicant/ApplicantFormController.php" method="updateForm"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Controllers/Applicant/ApplicantFormController.php" method="updateForm"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Controllers/Applicant/ApplicantFormController.php" method="updateForm"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="app/Controllers/Applicant/ApplicantFormController.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/Applicant/ApplicantFormController.php" method="validateSchoolYears"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/Applicant/DashboardController.php" method="index"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Controllers/Applicant/DashboardController.php" method="index"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Controllers/Applicant/DashboardController.php" method="index"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="app/Controllers/Applicant/RequirementsController.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\UndefinedVariable" file="app/Controllers/Applicant/TuitionFeeCalculatorController.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\UndefinedVariable" file="app/Controllers/Auth.php"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Controllers/Auth.php" method="register"/>
+  <violation rule="PHPMD\Rule\UnusedLocalVariable" file="app/Controllers/Auth.php"/>
+  <violation rule="PHPMD\Rule\Design\TooManyPublicMethods" file="app/Controllers/Auth/AuthController.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\UndefinedVariable" file="app/Controllers/Auth/AuthController.php"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Controllers/Auth/AuthController.php" method="login"/>
+  <violation rule="PHPMD\Rule\Design\NumberOfChildren" file="app/Controllers/BaseController.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\ErrorControlOperator" file="app/Controllers/Payment/AdmissionProcessingFeeController.php" method="store"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/Payment/AdmissionProcessingFeeController.php" method="store"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Controllers/Payment/AdmissionProcessingFeeController.php" method="store"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Controllers/Payment/AdmissionProcessingFeeController.php" method="store"/>
+  <violation rule="PHPMD\Rule\CleanCode\ErrorControlOperator" file="app/Controllers/Payment/FastTrackFeeController.php" method="store"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/Payment/FastTrackFeeController.php" method="store"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Controllers/Payment/FastTrackFeeController.php" method="store"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Controllers/Payment/FastTrackFeeController.php" method="store"/>
+  <violation rule="PHPMD\Rule\CleanCode\ErrorControlOperator" file="app/Controllers/Payment/ReservationFeeController.php" method="store"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/Payment/ReservationFeeController.php" method="store"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Controllers/Payment/ReservationFeeController.php" method="store"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Controllers/Payment/ReservationFeeController.php" method="store"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Controllers/Payment/SmartPayController.php" method="webhook"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Controllers/Payment/SmartPayController.php" method="webhook"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Controllers/Payment/SmartpayWebhookController.php" method="index"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Controllers/Payment/SmartpayWebhookController.php" method="index"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Controllers/Payment/SmartpayWebhookController.php" method="index"/>
+  <violation rule="PHPMD\Rule\CleanCode\UndefinedVariable" file="app/Controllers/ThemeController.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Database/Seeds/DemoUserSeeder.php" method="run"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Database/Seeds/DemoUserSeeder.php" method="run"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveClassComplexity" file="app/Database/Seeds/E2ETestSeeder.php"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="app/Database/Seeds/E2ETestSeeder.php"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="app/Filters/OfficerAuth.php"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="app/Libraries/PreviewSession.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Models/FormFieldConfigModel.php" method="bulkSave"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Services/ApplicantProfileService.php" method="getIncompleteSteps"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Services/ApplicantProfileService.php" method="getIncompleteSteps"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="app/Services/ApplicantProfileService.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="app/Services/ApplicationProgressService.php" method="build"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Services/ApplicationProgressService.php" method="build"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Services/ApplicationProgressService.php" method="build"/>
+  <violation rule="PHPMD\Rule\Design\TooManyPublicMethods" file="app/Services/EmailService.php"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="app/Services/EmailService.php"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Services/PaymentService.php" method="getPayment"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Services/PaymentService.php" method="getPayment"/>
+  <violation rule="PHPMD\Rule\Design\NPathComplexity" file="app/Services/SisSyncService.php" method="buildPayload"/>
+  <violation rule="PHPMD\Rule\Design\ExcessiveMethodLength" file="app/Services/ThemePreviewDataService.php" method="buildDashboard"/>
+</phpmd-baseline>

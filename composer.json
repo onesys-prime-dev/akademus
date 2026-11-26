@@ -15,8 +15,10 @@
     },
     "require-dev": {
         "codeigniter/coding-standard": "^1.9",
+        "deptrac/deptrac": "^4.7",
         "fakerphp/faker": "^1.9",
         "mikey179/vfsstream": "^1.6",
+        "phpmd/phpmd": "^3.0",
         "phpstan/phpstan": "^2.2",
         "phpunit/phpunit": "^10.5.16",
         "roave/security-advisories": "dev-latest"
@@ -38,11 +40,33 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "process-timeout": 0
     },
     "scripts": {
         "test": "phpunit",
         "cs": "php-cs-fixer fix --dry-run --diff --ansi",
-        "cs:fix": "php-cs-fixer fix --ansi"
+        "cs:fix": "php-cs-fixer fix --ansi",
+        "stan": "phpstan analyse --no-progress --memory-limit=1G",
+        "md": "phpmd analyze app --ruleset=phpmd.xml --exclude=*app/Views/* --exclude=*app/Database/Migrations/* --exclude=*app/Config/* --no-progress",
+        "md:baseline": "phpmd analyze app --ruleset=phpmd.xml --exclude=*app/Views/* --exclude=*app/Database/Migrations/* --exclude=*app/Config/* --no-progress --generate-baseline",
+        "deptrac": "deptrac analyse --no-progress",
+        "deptrac:baseline": "deptrac analyse --no-progress --formatter=baseline --output=deptrac.baseline.yaml",
+        "check": [
+            "@cs",
+            "@stan",
+            "@md",
+            "@deptrac"
+        ]
+    },
+    "scripts-descriptions": {
+        "cs": "Check code style",
+        "cs:fix": "Fix code style",
+        "stan": "PHPStan static analysis",
+        "md": "PHPMD maintainability check (new findings only)",
+        "md:baseline": "Regenerate the PHPMD baseline",
+        "deptrac": "Architecture layer check (new violations only)",
+        "deptrac:baseline": "Regenerate the deptrac baseline",
+        "check": "All static checks CI runs"
     }
 }

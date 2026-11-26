@@ -135,3 +135,7 @@ node_modules/
 
 # Playwright credentials
 .env.e2e
+
+# Tool caches
+.phpmd.result-cache.php
+.deptrac.cache

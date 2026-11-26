@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+  PHPMD rules for Akademus (CodeIgniter 4).
+  Existing findings are recorded in phpmd.baseline.xml; CI fails only on new ones.
+
+    composer md                 check (what CI runs)
+    composer md:baseline        regenerate the baseline (only when you deliberately accept findings)
+
+  Rules left out on purpose, because they conflict with normal CodeIgniter 4 code:
+  - StaticAccess          CI4 uses static factories (Services::, Database::connect, Config\Factories)
+  - ElseExpression        style preference, not a defect
+  - BooleanArgumentFlag   CI4 APIs take boolean flags (e.g. Forge::addKey, Model::find)
+  - MissingImport         false positives on global classes
+  - naming ruleset        short names such as $db, $id, $to are CI4 conventions
+  - controversial ruleset camelCase rules clash with snake_case DB columns used as array keys
+-->
+<ruleset name="Akademus"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd">
+    <description>CodeIgniter 4 adapted maintainability rules.</description>
+
+    <rule ref="rulesets/cleancode.xml">
+        <exclude name="StaticAccess"/>
+        <exclude name="ElseExpression"/>
+        <exclude name="BooleanArgumentFlag"/>
+        <exclude name="MissingImport"/>
+    </rule>
+    <rule ref="rulesets/codesize.xml"/>
+    <rule ref="rulesets/design.xml"/>
+    <rule ref="rulesets/unusedcode.xml"/>
+</ruleset>
