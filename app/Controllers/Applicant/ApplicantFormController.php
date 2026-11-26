@@ -19,6 +19,7 @@ use App\Services\NotificationService;
 use App\Services\PresetService;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\HTTP\Exceptions\RedirectException;
+use CodeIgniter\Model;
 
 class ApplicantFormController extends BaseController
 {
@@ -113,9 +114,9 @@ class ApplicantFormController extends BaseController
             return [];
         }
 
-        $configs = array_filter($this->getCustomFieldConfigs($pageId), static fn ($c) => ! empty($c['is_visible']));
+        $configs = array_filter($this->getCustomFieldConfigs($pageId), fn ($c) => ! empty($c['is_visible']));
         $options = (new FormFieldOptionConfigModel())->getNamesForFields(
-            array_map('intval', array_column(array_filter($configs, static fn ($c) => $c['field_type'] === 'select'), 'id')),
+            array_map('intval', array_column(array_filter($configs, fn ($c) => $c['field_type'] === 'select'), 'id')),
         );
 
         $values = [];
@@ -158,7 +159,7 @@ class ApplicantFormController extends BaseController
 
         $applicationModel = new ApplicationModel();
         $merged           = array_merge($applicationModel->find($applicationId)['custom_fields'] ?? [], $values);
-        $merged           = array_filter($merged, static fn ($v) => $v !== '');
+        $merged           = array_filter($merged, fn ($v) => $v !== '');
 
         return (bool) $applicationModel->update($applicationId, ['custom_fields' => $merged]);
     }
@@ -258,7 +259,7 @@ class ApplicantFormController extends BaseController
             return false;
         }
 
-        return ! in_array($application['application_status'], ['draft'], true);
+        return ! in_array($application['application_status'], ['draft']);
     }
 
     private function renderLayout(int $step)
@@ -315,7 +316,7 @@ class ApplicantFormController extends BaseController
             && in_array($pageId, [3, 4], true);
 
         $isSubmitted = $application
-            && ! in_array($application['application_status'], ['draft'], true)
+            && ! in_array($application['application_status'], ['draft'])
             && ! ($application['application_status'] === 'needs_revision' && in_array($pageId, $revisionPageIds, true))
             && ! $isDeferredPage;
 
@@ -539,8 +540,24 @@ class ApplicantFormController extends BaseController
         return (new ApplicationModel())->update($applicationId, $fields);
     }
 
+    /**
+     * Applications created outside step 1 (e.g. seeded, or older data) may lack their child rows.
+     * The step saves below are UPDATEs, which would then silently change nothing while reporting
+     * success, so create the empty row first - exactly as step 1 does when it creates an application.
+     *
+     * @param mixed $applicationId
+     */
+    private function ensureChildRow(Model $model, $applicationId): void
+    {
+        if ($model->where('application_id', $applicationId)->countAllResults() === 0) {
+            $model->insert(['application_id' => $applicationId]);
+        }
+    }
+
     private function updatePersonalInformation($data, $applicationId)
     {
+        $this->ensureChildRow(new PersonalInformationModel(), $applicationId);
+
         return (new PersonalInformationModel())
             ->where('application_id', $applicationId)
             ->set([
@@ -561,6 +578,8 @@ class ApplicantFormController extends BaseController
 
     private function updateFamilyBackground($data, $applicationId)
     {
+        $this->ensureChildRow(new FamilyBackgroundModel(), $applicationId);
+
         return (new FamilyBackgroundModel())
             ->where('application_id', $applicationId)
             ->set([
@@ -596,6 +615,8 @@ class ApplicantFormController extends BaseController
 
             return false;
         }
+
+        $this->ensureChildRow(new EducationalBackgroundModel(), $applicationId);
 
         return (new EducationalBackgroundModel())
             ->where('application_id', $applicationId)
