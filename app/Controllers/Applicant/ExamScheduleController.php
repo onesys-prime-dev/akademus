@@ -11,6 +11,7 @@ use App\Services\ApplicantDocumentService;
 class ExamScheduleController extends BaseController
 {
     private ExamScheduleService $service;
+    private ApplicantDocumentService $documentService;
 
     public function __construct()
     {
