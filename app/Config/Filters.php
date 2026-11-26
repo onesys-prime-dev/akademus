@@ -125,4 +125,15 @@ class Filters extends BaseFilters
             ],
         ],
     ];
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // CI_DEBUG_TOOLBAR=false switches the debug toolbar off in development (used by the E2E job:
+        // the toolbar copies flash messages and form data into the page, confusing text locators).
+        if (env('CI_DEBUG_TOOLBAR', true) === false) {
+            $this->required['after'] = array_values(array_diff($this->required['after'], ['toolbar']));
+        }
+    }
 }

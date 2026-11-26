@@ -334,8 +334,14 @@ jobs:
         run: php .ci/check-lang-keys.php
       - name: Filesystem, uploads and writable/ layout
         run: bash .ci/check-writable.sh
-      - name: Shell scripts (shellcheck)
-        run: shellcheck .ci/*.sh deploy/*.sh
+      - name: Shell scripts (shellcheck 0.11.0, checksum verified - same version as used locally)
+        env:
+          SHELLCHECK_SHA256: 8c3be12b05d5c177a04c29e3c78ce89ac86f1595681cab149b65b97c4e227198
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/shellcheck.tar.xz" https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.x86_64.tar.xz
+          echo "${SHELLCHECK_SHA256}  $RUNNER_TEMP/shellcheck.tar.xz" | sha256sum -c -
+          tar -xJf "$RUNNER_TEMP/shellcheck.tar.xz" -C "$RUNNER_TEMP"
+          "$RUNNER_TEMP/shellcheck-v0.11.0/shellcheck" -S info .ci/*.sh deploy/*.sh
       - name: Workflows (actionlint 1.7.12, checksum verified)
         env:
           ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
@@ -343,7 +349,7 @@ jobs:
           curl -sSfL -o "$RUNNER_TEMP/actionlint.tgz" https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz
           echo "${ACTIONLINT_SHA256}  $RUNNER_TEMP/actionlint.tgz" | sha256sum -c -
           tar -xzf "$RUNNER_TEMP/actionlint.tgz" -C "$RUNNER_TEMP" actionlint
-          "$RUNNER_TEMP/actionlint" -color
+          PATH="$RUNNER_TEMP/shellcheck-v0.11.0:$PATH" "$RUNNER_TEMP/actionlint" -color
 
   # ---------------------------------------------------------------- deploy script rehearsal
   deploy-rehearsal:
@@ -399,6 +405,7 @@ jobs:
         options: >-
           --health-cmd="mysqladmin ping -h 127.0.0.1 -pci-root" --health-interval=5s --health-timeout=5s --health-retries=20
     env:
+      CI_DEBUG_TOOLBAR: 'false' # the debug toolbar copies flash messages / form data into pages
       database_tests_database: akademus_test
       database_default_database: akademus_test
       E2E_BASE_URL: http://127.0.0.1:8080/

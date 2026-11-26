@@ -26,6 +26,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
+  /* CI serves the app with the single-threaded `php spark serve`, which is slower than Apache */
+  timeout: process.env.CI ? 60_000 : 30_000,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */

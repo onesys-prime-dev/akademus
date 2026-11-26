@@ -45,7 +45,8 @@ runs:
         php-version: ${{ steps.version.outputs.version }}
         extensions: intl, mbstring, mysqli, curl, gd, fileinfo, openssl, sodium, zip
         coverage: ${{ inputs.coverage }}
-        ini-values: memory_limit=1G${{ inputs.coverage == 'pcov' && ', pcov.directory=app' || '' }}
+        # Upload limits above the app's largest upload (10 MB payment proofs), as required on the servers.
+        ini-values: memory_limit=1G, upload_max_filesize=12M, post_max_size=16M${{ inputs.coverage == 'pcov' && ', pcov.directory=app' || '' }}
         tools: composer:v2
 
     - name: Locate Composer cache
