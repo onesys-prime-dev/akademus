@@ -12,7 +12,7 @@ End-to-end tests for the Akademus admissions portal. They drive the real app thr
 
 1. **XAMPP** running (Apache and MySQL). The app is expected at `http://localhost/akademus/public/` (see `support/base.ts`).
 2. **Dependencies:** `npm ci`, then `npx playwright install`.
-3. **Test database `akademus_test`** must already exist and be migrated. See [Limitations](#9-limitations-and-known-gaps): this repo cannot build it from scratch yet. Credentials are the `database.tests.*` entries in the root `.env`.
+3. **Test database `akademus_test`** must exist and be migrated: create an empty database, then run `php spark migrate -g tests`. Credentials are the `database.tests.*` entries in the root `.env`.
 4. **Credentials file `.env.e2e`** in the repo root (git-ignored; Playwright loads it automatically, and the seeder reads it too):
 
    | Variable | Used for |
@@ -230,7 +230,7 @@ Each is a `test.fail` and flips to "unexpectedly passed" once fixed:
 
 ## 9. Limitations and known gaps
 
-- **The test database cannot be rebuilt from the repo.** The only schema file is `app/Database/Migrations/akademus_db_May5_2026.sql`; loading it and then running `php spark migrate -g tests` fails ("table already exists") because the dump's `migrations` table does not match the migration files. `akademus_test` has to be kept or copied by hand.
+- **The test database is built from migrations only.** Create an empty `akademus_test` and run `php spark migrate` against it (one migration per table, then the views). Migrations create the schema only, so run the seeders afterwards for data.
 - Several specs are shared-state sensitive (global settings, shared applicant). Prefer running the whole suite from a seeded baseline and avoid running two copies at once.
 - Most "approve/reject/submit" flows are `fixme` because they send real emails or trigger the SIS handoff, which cannot be intercepted from the browser.
 - Firefox and WebKit have not been run since the consolidation; chromium has.
