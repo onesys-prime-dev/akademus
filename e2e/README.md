@@ -216,17 +216,25 @@ Legend: ✅ covered · 🟡 partly covered · ⏳ written but `test.fixme` (bloc
 
 Each is a `test.fail` and flips to "unexpectedly passed" once fixed:
 - Admin login page shows the default credentials.
-- Four admin controllers (presets, program presets, requirement categories, fast track) skip the admin session check for anonymous requests.
-- Exam schedule create has no server-side validation (past date, end before start, capacity ≤ 0).
 - Personal-information step has no date-of-birth / mobile validation.
 - `GET /applicant-form/step/4` is served even when earlier steps are incomplete.
-- The floating chat button covers the follow-up send button.
 - Add Payment Method dialog omits the CSRF token (403).
 - `/applynowpage` returns 500; system pages use the title "Document"; the home page logs an SVG path error (Chromium/WebKit).
 
+Fixed (their tests are now regular regression tests): admin controllers skipping the session check
+(`adminAuth` route filter), exam schedule server-side validation, the chat button covering the follow-up
+send button.
+
 ## 8. CI
 
-[../.github/workflows/playwright.yml](../.github/workflows/playwright.yml) installs dependencies and runs `npx playwright test` on Ubuntu with no database, no seeding and no `.env.e2e`. As it stands, the DB-dependent tests will skip or fail there; it needs a MySQL service, the test schema, `npm run e2e:db:seed` and the credentials as secrets before it is meaningful.
+The `e2e` job of [../.github/workflows/ci.yml](../.github/workflows/ci.yml) runs the suite on every PR (Chromium, blocking; Firefox and WebKit weekly / on demand, non-blocking):
+
+- MySQL 8.4 service → `php spark migrate` → `php spark db:seed DatabaseSeeder` (reference data, demo users, E2E accounts).
+- Throwaway credentials for every account are generated per run by `.ci/e2e-credentials.sh` (no stored secrets).
+- The app is served by `php spark serve` at `E2E_BASE_URL` (`support/base.ts` falls back to the XAMPP URL locally); `PHP_BIN` replaces the XAMPP PHP path in `global-setup.js`.
+- On failure, the HTML report, traces, the server log and the app logs are uploaded as the `playwright-<browser>` artifact.
+
+See [../docs/CI-CD.md](../docs/CI-CD.md).
 
 ## 9. Limitations and known gaps
 

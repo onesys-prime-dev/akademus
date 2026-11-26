@@ -18,6 +18,8 @@ export async function loginAsAdmin(page: Page) {
   await page.locator('#admin-password').fill(process.env.ADMIN_PASSWORD!);
   await page.locator('#login-btn').click();
   await expect(page).toHaveURL(ADMIN_HOME, { timeout: 15_000 });
+  // The URL changes before the page finishes loading; wait so its DOMContentLoaded handlers are bound.
+  await page.waitForLoadState('load');
 }
 
 // Admin pages and their sidebar link targets (all of these exist as GET routes).

@@ -22,6 +22,8 @@ export async function loginAsApplicant(page: Page, opts: { dismissTour?: boolean
   await page.locator('#password').fill(process.env.E2E_PASSWORD!);
   await page.locator('#sign-in-button').click();
   await expect(page).toHaveURL(/\/(dashboard|applicant-form)/, { timeout: 15_000 });
+  // The URL changes before the page finishes loading; wait so its DOMContentLoaded handlers are bound.
+  await page.waitForLoadState('load');
   if (dismissTour) await skipTourIfShown(page);
 }
 

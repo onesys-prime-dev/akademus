@@ -136,6 +136,7 @@ test.describe('Applicants list and review', () => {
     await page.goto(OFFICER_BASE + 'applicants');
     await page.locator(`#applicants-table-body tr[data-id="${applicant.applicant_id}"]`).click();
     await expect(page).toHaveURL(new RegExp(`/admission-officer/detailed-applicant/${applicant.applicant_id}$`));
+    await page.waitForLoadState('load'); // tab handlers bind on DOMContentLoaded
 
     // Profile header
     await expect(page.locator('.applicant-profile__name')).toBeVisible();
@@ -243,6 +244,11 @@ test.describe('Applicants list and review', () => {
     await page.goto(OFFICER_BASE + 'detailed-applicant/' + pending[0].applicant_id);
 
     await page.locator('#btn-approve').click();
+    // Applicants with incomplete steps get an extra confirmation before the approve modal opens.
+    if (await page.locator('#incomplete-modal-overlay.active').isVisible()) {
+      await page.locator('#incomplete-modal-confirm').click();
+    }
+    await expect(page.locator('#decision-modal-overlay')).toHaveClass(/active/);
     await expect(page.locator('#decision-modal-title')).toHaveText('Approve Application');
     await page.locator('#decision-modal-submit').click();
     await expect(page.locator('#decision-error')).toHaveText('Please add remarks before submitting.');

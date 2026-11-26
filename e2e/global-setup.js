@@ -2,7 +2,8 @@ import { spawn, spawnSync } from 'node:child_process';
 import testDb from './test-db.js';
 
 const isTestDbOn = testDb.current;
-const PHP = 'C:\\xampp\\php\\php.exe';
+// PHP binary: XAMPP by default; override with PHP_BIN (CI uses `php` from PATH).
+const PHP = process.env.PHP_BIN || 'C:\\xampp\\php\\php.exe';
 
 // Puts the exam tables back to the seeded state (no leftover bookings, check-ins, results or QA schedules).
 function resetExamData(when) {

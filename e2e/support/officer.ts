@@ -19,6 +19,8 @@ export async function loginAsOfficer(page: Page) {
   await page.locator('input[name=password]').fill(process.env.OFFICER_PASSWORD!);
   await page.locator('#login-btn').click();
   await expect(page).toHaveURL(OFFICER_DASHBOARD, { timeout: 15_000 });
+  // The URL changes before the page finishes loading; wait so its DOMContentLoaded handlers are bound.
+  await page.waitForLoadState('load');
 }
 
 // Looks up applicants through the officer list endpoint (read only). Returns the raw JSON rows.

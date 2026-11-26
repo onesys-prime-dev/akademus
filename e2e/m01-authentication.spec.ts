@@ -918,14 +918,12 @@ test.describe('Admin authentication', () => {
   });
 
   test('Admin mutation endpoints without controller-level guard', async ({ request }) => {
-    // CONFIRMED APP BUG (live, non-mutating probe): PresetsController, ProgramPresetsController,
-    // RequirementCategoriesController and FastTrackRequirementsController extend BaseAdminController but
-    // override __construct() without calling parent::__construct(), and Routes.php has no admin filter.
-    // Their index views redirect (a header() check inside the view) but the controller actions still run for
-    // anonymous requests, so GET .../delete, .../deactivate and POST .../store|update|save|assign-preset are
-    // executable without a session. The probes below use ids that do not exist, so nothing is changed:
-    // a guarded endpoint answers with a redirect to /admin/login, an unguarded one redirects to its own list.
-    test.fail(true, 'App bug: four admin controllers skip the admin session check (anonymous requests reach the action)');
+    // Regression test (non-mutating probe). PresetsController, ProgramPresetsController,
+    // RequirementCategoriesController and FastTrackRequirementsController override BaseAdminController's
+    // constructor without calling the parent, so they skipped its admin session check and their actions ran
+    // for anonymous requests. Fixed by the adminAuth route filter (app/Filters/AdminAuth.php) on admin/*.
+    // The probes use ids that do not exist, so nothing is changed: a guarded endpoint redirects to
+    // /admin/login, an unguarded one would redirect to its own list.
 
     const probes: Array<[string, 'GET' | 'POST']> = [
       ['admin/requirement-categories/999999999/delete', 'GET'],

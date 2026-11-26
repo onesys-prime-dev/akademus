@@ -1,7 +1,8 @@
 import { Page } from '@playwright/test';
+import { BASE } from './base';
 import { sessionGet, sessionPostForm } from './session-http';
 
-export const EXAM_URL = 'http://localhost/akademus/public/admission-officer/exam-schedule';
+export const EXAM_URL = BASE + 'admission-officer/exam-schedule';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 

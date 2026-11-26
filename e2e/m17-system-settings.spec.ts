@@ -6,7 +6,7 @@
 import { test, expect } from './support/throttle';
 import { hasAdminCreds, loginAsAdmin, NO_ADMIN_CREDS_REASON } from './support/admin';
 import { BASE } from './support/base';
-import { hasApplicantCreds, loginAsApplicant } from './support/applicant';
+import { DOCS_APPLICANT_EMAIL, hasApplicantCreds, loginAsApplicant } from './support/applicant';
 import { hasOfficerCreds, loginAsOfficer } from './support/officer';
 import { acquireLock, releaseLock } from './support/exam-setting';
 
@@ -19,6 +19,9 @@ test.describe('System Settings', () => {
   });
 
   test('System settings save and exam toggle', async ({ page, browser }) => {
+    // Two settings saves plus four logins in extra browser contexts: longer than the default 30 s
+    // against the single-threaded `php spark serve` used in CI.
+    test.slow();
 
     await acquireLock();
     try {
@@ -60,7 +63,8 @@ test.describe('System Settings', () => {
           const ctx = await browser.newContext();
           try {
             const applicantPage = await ctx.newPage();
-            await loginAsApplicant(applicantPage);
+            // The exam page also requires verified documents, so use the seeded docs-verified applicant.
+            await loginAsApplicant(applicantPage, { email: DOCS_APPLICANT_EMAIL });
             await applicantPage.goto(BASE + 'exam-schedule');
             await expect(applicantPage).toHaveURL(BASE + (enabled ? 'exam-schedule' : 'dashboard'));
           } finally {
