@@ -20,6 +20,10 @@ inputs:
     description: Run composer install.
     required: false
     default: 'true'
+  cache:
+    description: Use the shared Composer cache. Release builds pass 'false' (clean build, no cache read or write).
+    required: false
+    default: 'true'
 
 outputs:
   php-version:
@@ -50,13 +54,13 @@ runs:
         tools: composer:v2
 
     - name: Locate Composer cache
-      if: inputs.install == 'true'
+      if: inputs.install == 'true' && inputs.cache == 'true'
       id: composer-cache
       shell: bash
       run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
 
     - name: Restore Composer cache
-      if: inputs.install == 'true'
+      if: inputs.install == 'true' && inputs.cache == 'true'
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ${{ steps.composer-cache.outputs.dir }}

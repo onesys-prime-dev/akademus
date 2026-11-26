@@ -58,6 +58,8 @@ jobs:
         uses: ./.github/actions/setup-app
         with:
           composer-flags: --no-dev --classmap-authoritative --no-scripts
+          # Clean build: never restore or save the shared Composer cache for a release bundle.
+          cache: 'false'
 
       - name: Build bundle
         id: bundle

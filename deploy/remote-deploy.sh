@@ -108,9 +108,22 @@ gzip -dc "$BACKUP" | tail -n 1 | grep -q 'Dump completed' || fail "Database back
 echo "Backup: $DEPLOY_PATH/$BACKUP"
 
 # ------------------------------------------------------------------ migrate (with the NEW code, before switching)
+# spark exits 0 even when a migration or seeder throws (the command catches the exception and only
+# prints it), so the exit code alone cannot be trusted: also fail on a printed exception block.
+spark_in_release() {
+  local out rc=0
+  out=$(cd "$RELEASE" && "$PHP_BIN" spark "$@" 2>&1) || rc=$?
+  printf '%s\n' "$out"
+  [[ $rc -eq 0 ]] || return 1
+  ! grep -qE '^\s*\[[A-Za-z0-9_\]*(Exception|Error)\]' <<<"$out"
+}
+
 log "Migrating"
-( cd "$RELEASE" && "$PHP_BIN" spark migrate ) || fail "Migration failed - the live release was NOT switched. Backup: $DEPLOY_PATH/$BACKUP"
-( cd "$RELEASE" && "$PHP_BIN" spark db:seed ReferenceDataSeeder ) || fail "Reference data seeding failed - the live release was NOT switched"
+spark_in_release migrate || fail "Migration failed - the live release was NOT switched. Backup: $DEPLOY_PATH/$BACKUP"
+# Authoritative check: nothing may still be pending (pending rows show --- as group / migration date).
+pending=$(cd "$RELEASE" && "$PHP_BIN" spark migrate:status 2>&1 | grep -cE '^\|.*\|\s*---\s*\|' || true)
+[[ "$pending" -eq 0 ]] || fail "Migration failed - $pending migration(s) still pending, the live release was NOT switched. Backup: $DEPLOY_PATH/$BACKUP"
+spark_in_release db:seed ReferenceDataSeeder || fail "Reference data seeding failed - the live release was NOT switched"
 
 # ------------------------------------------------------------------ switch
 PREVIOUS=$(readlink current 2>/dev/null || true)

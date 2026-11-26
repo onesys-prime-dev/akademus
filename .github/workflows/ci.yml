@@ -236,23 +236,23 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/setup-app
       - name: Migrate an empty database
-        run: php spark migrate
+        run: bash .ci/spark.sh migrate
       - name: Every migration applied
         run: |
           php spark migrate:status
           ! php spark migrate:status | grep -E '^\|.*\|\s*---\s*\|' || { echo "::error::Pending migrations after migrate"; exit 1; }
       - name: Roll back everything (down() of every migration)
         run: |
-          php spark migrate:rollback -b 0 -f
+          bash .ci/spark.sh migrate:rollback -b 0 -f
           left=$(mysql -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASSWORD" -N -e \
             "SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA='${DB_NAME}' AND TABLE_NAME <> 'migrations'")
           [[ "$left" -eq 0 ]] || { echo "::error title=Rollback::$left table(s)/view(s) left after rolling back all migrations"; exit 1; }
       - name: Migrate again (forward after rollback)
-        run: php spark migrate
+        run: bash .ci/spark.sh migrate
       - name: Seed (twice - seeders must be idempotent)
         run: |
-          php spark db:seed DatabaseSeeder
-          php spark db:seed DatabaseSeeder
+          bash .ci/spark.sh db:seed DatabaseSeeder
+          bash .ci/spark.sh db:seed DatabaseSeeder
       - name: Schema & data integrity
         run: php .ci/schema-integrity.php
       - name: Export schema
@@ -447,8 +447,8 @@ jobs:
           echo "encryption_key=hex2bin:$key" >> "$GITHUB_ENV"
       - name: Migrate and seed the E2E database
         run: |
-          php spark migrate
-          php spark db:seed DatabaseSeeder
+          bash .ci/spark.sh migrate
+          bash .ci/spark.sh db:seed DatabaseSeeder
       - name: Start the app (php spark serve)
         run: |
           nohup php spark serve --host 127.0.0.1 --port 8080 > "$RUNNER_TEMP/serve.log" 2>&1 &
