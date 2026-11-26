@@ -71,7 +71,8 @@ cat > "$STUBS/sudo" <<EOF
 if [[ "\$1 \$2" == "systemctl reload" ]]; then
   [[ -f "$SERVER_PID_FILE" ]] && kill "\$(cat "$SERVER_PID_FILE")" 2>/dev/null || true
   sleep 1
-  ( cd "$DEPLOY_PATH/current" && nohup php -S 127.0.0.1:${PORT} -t "\$(readlink -f public)" vendor/codeigniter4/framework/system/rewrite.php > "$WORK/server.log" 2>&1 & echo \$! > "$SERVER_PID_FILE" )
+  # Only the php process is backgrounded, so \$! is its PID and stop_server really stops it.
+  ( cd "$DEPLOY_PATH/current" && { nohup php -S 127.0.0.1:${PORT} -t "\$(readlink -f public)" vendor/codeigniter4/framework/system/rewrite.php > "$WORK/server.log" 2>&1 & echo \$! > "$SERVER_PID_FILE"; } )
   sleep 1
   echo "stub: reloaded (php dev server restarted on \$(readlink -f "$DEPLOY_PATH/current"))"
   exit 0
@@ -125,6 +126,8 @@ echo; echo "======== Scenario 3: failing health check (automatic code rollback)"
 sleep 1
 make_bundle "$BUILD"
 stop_server
+sleep 1
+curl -sf --max-time 3 "$SITE_URL/health" > /dev/null && die "scenario 3: the previous server is still answering, the scenario would be meaningless"
 touch "$WORK/break-reload-after-switch"
 # The reload after the switch "succeeds" but leaves the server down -> health fails -> rollback,
 # whose reload starts the server again on the previous release.
@@ -136,7 +139,8 @@ if [[ "\$1 \$2" == "systemctl reload" && -f "$WORK/break-reload-after-switch" ]]
   echo "stub: reloaded (server intentionally left down)"; exit 0
 fi
 if [[ "\$1 \$2" == "systemctl reload" ]]; then
-  ( cd "$DEPLOY_PATH/current" && nohup php -S 127.0.0.1:${PORT} -t "\$(readlink -f public)" vendor/codeigniter4/framework/system/rewrite.php > "$WORK/server.log" 2>&1 & echo \$! > "$SERVER_PID_FILE" )
+  # Only the php process is backgrounded, so \$! is its PID and stop_server really stops it.
+  ( cd "$DEPLOY_PATH/current" && { nohup php -S 127.0.0.1:${PORT} -t "\$(readlink -f public)" vendor/codeigniter4/framework/system/rewrite.php > "$WORK/server.log" 2>&1 & echo \$! > "$SERVER_PID_FILE"; } )
   sleep 1; echo "stub: reloaded"; exit 0
 fi
 exit 0
