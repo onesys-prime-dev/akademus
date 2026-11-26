@@ -327,7 +327,7 @@ function bindScheduleForm() {
                 form.reset(); // optional but good
                 await refreshContent();
             } else {
-                alert('Failed to save schedule');
+                alert(res.message || 'Failed to save schedule');
             }
 
         } catch (err) {
