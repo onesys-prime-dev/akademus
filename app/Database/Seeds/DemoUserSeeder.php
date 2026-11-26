@@ -2,6 +2,7 @@
 
 namespace App\Database\Seeds;
 
+use CodeIgniter\CLI\CLI;
 use CodeIgniter\Database\Seeder;
 use RuntimeException;
 
@@ -69,15 +70,25 @@ class DemoUserSeeder extends Seeder
         }
 
         if ($created === []) {
-            echo "DemoUserSeeder: demo accounts already exist; passwords unchanged (set DEMO_PASSWORD to reset them).\n";
+            $this->say('DemoUserSeeder: demo accounts already exist; passwords unchanged (set DEMO_PASSWORD to reset them).');
 
             return;
         }
 
-        echo "DemoUserSeeder: accounts with a new password:\n  " . implode("\n  ", $created) . "\n";
-        echo $fixedPassword !== null
-            ? "Password: the value of DEMO_PASSWORD.\n"
-            : "Generated password (shown only now): {$password}\n";
+        $this->say("DemoUserSeeder: accounts with a new password:\n  " . implode("\n  ", $created));
+        $this->say($fixedPassword !== null
+            ? 'Password: the value of DEMO_PASSWORD.'
+            : "Generated password (shown only now): {$password}");
+    }
+
+    /**
+     * Prints to the console unless the seeder runs silently (e.g. inside the test suite).
+     */
+    private function say(string $message): void
+    {
+        if (! $this->silent) {
+            CLI::write($message);
+        }
     }
 
     /**

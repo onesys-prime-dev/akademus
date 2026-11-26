@@ -1,118 +1,45 @@
-# Running Application Tests
+# Akademus PHPUnit tests
 
-This is the quick-start to CodeIgniter testing. Its intent is to describe what
-it takes to set up your application and get it ready to run unit tests.
-It is not intended to be a full description of the test features that you can
-use to test your application. Those details can be found in the documentation.
+| Suite | Folder | Needs a database | What it covers |
+|---|---|---|---|
+| `unit` | `tests/unit` | no | Bootstrap and configuration sanity |
+| `database` | `tests/database` | yes | Migrations build the full schema; seeders are complete and idempotent |
+| `feature` | `tests/feature` | yes | HTTP: public pages, `/health`, admin auth filter, and that **every non-public GET route refuses anonymous visitors** |
 
-## Resources
+Browser (Playwright) tests live in `e2e/` — see `e2e/README.md`.
 
-* [CodeIgniter 4 User Guide on Testing](https://codeigniter.com/user_guide/testing/index.html)
-* [PHPUnit docs](https://phpunit.de/documentation.html)
-* [Any tutorials on Unit testing in CI4?](https://forum.codeigniter.com/showthread.php?tid=81830)
+## Database
 
-## Requirements
+Tests use the `tests` database group (MySQL, no table prefix — `app/Config/Database.php`). Every database test
+class rolls the schema back, runs all `App` migrations and seeds `ReferenceDataSeeder` (`tests/_support/DatabaseTestCase.php`),
+so **use a dedicated, disposable database** — never the dev one.
 
-It is recommended to use the latest version of PHPUnit. At the time of this
-writing, we are running version 9.x. Support for this has been built into the
-**composer.json** file that ships with CodeIgniter and can easily be installed
-via [Composer](https://getcomposer.org/) if you don't already have it installed globally.
+Local setup (XAMPP):
 
-```console
-> composer install
-```
+1. Create an empty database, e.g. `akademus_ci` (`utf8mb4` / `utf8mb4_general_ci`).
+2. Add the connection to your `.env`:
 
-If running under macOS or Linux, you can create a symbolic link to make running tests a touch nicer.
+   ```ini
+   database.tests.hostname = localhost
+   database.tests.database = akademus_ci
+   database.tests.username = root
+   database.tests.password =
+   ```
 
-```console
-> ln -s ./vendor/bin/phpunit ./phpunit
-```
+   (CI sets the same values through `database_tests_*` environment variables.)
 
-You also need to install [XDebug](https://xdebug.org/docs/install) in order
-for code coverage to be calculated successfully. After installing `XDebug`, you must add `xdebug.mode=coverage` in the **php.ini** file to enable code coverage.
-
-## Setting Up
-
-A number of the tests use a running database.
-In order to set up the database edit the details for the `tests` group in
-**app/Config/Database.php** or **.env**.
-Make sure that you provide a database engine that is currently running on your machine.
-More details on a test database setup are in the
-[Testing Your Database](https://codeigniter.com/user_guide/testing/database.html) section of the documentation.
-
-## Running the tests
-
-The entire test suite can be run by simply typing one command-line command from the main directory.
+## Running
 
 ```console
-> ./phpunit
+composer test                                  # all suites
+vendor/bin/phpunit --testsuite unit            # one suite
+vendor/bin/phpunit --filter AnonymousAccess    # one test class
+composer test -- --coverage-text               # with coverage (needs PCOV or Xdebug)
 ```
 
-If you are using Windows, use the following command.
+## When a test fails
 
-```console
-> vendor\bin\phpunit
-```
-
-You can limit tests to those within a single test directory by specifying the
-directory name after phpunit.
-
-```console
-> ./phpunit app/Models
-```
-
-## Generating Code Coverage
-
-To generate coverage information, including HTML reports you can view in your browser,
-you can use the following command:
-
-```console
-> ./phpunit --colors --coverage-text=tests/coverage.txt --coverage-html=tests/coverage/ -d memory_limit=1024m
-```
-
-This runs all of the tests again collecting information about how many lines,
-functions, and files are tested. It also reports the percentage of the code that is covered by tests.
-It is collected in two formats: a simple text file that provides an overview as well
-as a comprehensive collection of HTML files that show the status of every line of code in the project.
-
-The text file can be found at **tests/coverage.txt**.
-The HTML files can be viewed by opening **tests/coverage/index.html** in your favorite browser.
-
-## PHPUnit XML Configuration
-
-The repository has a ``phpunit.xml.dist`` file in the project root that's used for
-PHPUnit configuration. This is used to provide a default configuration if you
-do not have your own configuration file in the project root.
-
-The normal practice would be to copy ``phpunit.xml.dist`` to ``phpunit.xml``
-(which is git ignored), and to tailor it as you see fit.
-For instance, you might wish to exclude database tests, or automatically generate
-HTML code coverage reports.
-
-## Test Cases
-
-Every test needs a *test case*, or class that your tests extend. CodeIgniter 4
-provides one class that you may use directly:
-* `CodeIgniter\Test\CIUnitTestCase`
-
-Most of the time you will want to write your own test cases that extend `CIUnitTestCase`
-to hold functions and services common to your test suites.
-
-## Creating Tests
-
-All tests go in the **tests/** directory. Each test file is a class that extends a
-**Test Case** (see above) and contains methods for the individual tests. These method
-names must start with the word "test" and should have descriptive names for precisely what
-they are testing:
-`testUserCanModifyFile()` `testOutputColorMatchesInput()` `testIsLoggedInFailsWithInvalidUser()`
-
-Writing tests is an art, and there are many resources available to help learn how.
-Review the links above and always pay attention to your code coverage.
-
-### Database Tests
-
-Tests can include migrating, seeding, and testing against a mock or live database.
-Be sure to modify the test case (or create your own) to point to your seed and migrations
-and include any additional steps to be run before tests in the `setUp()` method.
-See [Testing Your Database](https://codeigniter.com/user_guide/testing/database.html)
-for details.
+- **AnonymousAccessTest** — a GET route answered 200 to a visitor who is not logged in. Protect it (route filter or
+  controller check). Only if the page is public by design, add its route pattern to `PUBLIC_ROUTES` in the test.
+- **SeedersTest** — reference data changed. Update the seeder and the expected counts together.
+- **MigrationsTest** — a migration failed or a `Create<Name>Table` migration did not create `<name>`.
