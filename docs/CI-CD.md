@@ -253,6 +253,9 @@ Scheduled commands installed by `server-setup.sh` (each wrapped in `flock -n`, l
   environment and keep a copy in your password manager — without it the data cannot be decrypted.
 - **Health endpoint**: `GET /health` → `{"status","release","checks":{"database","writable","migrations"}}`,
   200 or 503, no details. Safe to use for uptime monitoring too.
+- **PHP upload limits**: payment proofs may be up to 10 MB, so PHP-FPM needs `upload_max_filesize ≥ 10M` and
+  `post_max_size ≥ 12M` (CI uses 12M / 16M). The deploy preflight warns when the CLI value is lower.
+- **Debug toolbar**: shown in `development` only; `CI_DEBUG_TOOLBAR=false` switches it off (the E2E job does).
 - **Email**: production must have working `email.*` settings; staging should use a test SMTP inbox (e.g. a
   sandbox service) so real applicants never receive staging mail.
 
