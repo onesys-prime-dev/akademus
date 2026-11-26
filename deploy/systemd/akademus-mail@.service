@@ -1,0 +1,27 @@
+# Email queue worker (php spark emails:send runs forever, polling email_queue every 2 s).
+# One instance per environment:  akademus-mail@staging, akademus-mail@production
+# Installed by deploy/server-setup.sh; restarted by every deploy so it runs the new release.
+# /etc/akademus/<instance>.conf provides DEPLOY_PATH and PHP_BIN (see server-setup.sh).
+[Unit]
+Description=Akademus email queue worker (%i)
+After=network-online.target mysql.service mariadb.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__DEPLOY_USER__
+Group=__WEB_GROUP__
+EnvironmentFile=/etc/akademus/%i.conf
+# "current" is resolved at start, so a restart switches the worker to the new release.
+ExecStart=/bin/bash -c 'cd "${DEPLOY_PATH}/current" && exec "${PHP_BIN}" spark emails:send'
+Restart=always
+RestartSec=5
+UMask=0027
+
+# Hardening (kept path-independent: the same unit serves both environments)
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target
