@@ -16,6 +16,9 @@
 # A failed migration leaves the live release untouched. A failed health check switches back.
 set -Eeuo pipefail
 umask 027
+# shared/.env alone decides the environment: an inherited CI_ENVIRONMENT (e.g. from a CI job or the
+# deploy user's shell) would override it - and 'testing' even crashes spark outside PHPUnit.
+unset CI_ENVIRONMENT
 
 ENVIRONMENT="$1"; SHA="$2"; DEPLOY_PATH="${3%/}"; PHP_BIN="$4"; SITE_URL="${5%/}"
 TLS_INSECURE="$6"; EXPECTED_PHP="$7"; BUNDLE="$8"

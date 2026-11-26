@@ -36,7 +36,9 @@ env:
   SHA: ${{ inputs.sha || github.sha }}
   PHP_NEXT: '8.3'
   COMPOSER_NO_INTERACTION: '1'
-  CI_ENVIRONMENT: testing
+  # spark commands run as development. Never set 'testing' here: CodeIgniter then expects SUPPORTPATH,
+  # which only PHPUnit's bootstrap defines (PHPUnit switches to 'testing' by itself).
+  CI_ENVIRONMENT: development
   app_baseURL: http://127.0.0.1:8080/
   # MySQL service container (throwaway; credentials are not secrets)
   DB_HOST: 127.0.0.1
@@ -397,7 +399,6 @@ jobs:
         options: >-
           --health-cmd="mysqladmin ping -h 127.0.0.1 -pci-root" --health-interval=5s --health-timeout=5s --health-retries=20
     env:
-      CI_ENVIRONMENT: development
       database_tests_database: akademus_test
       database_default_database: akademus_test
       E2E_BASE_URL: http://127.0.0.1:8080/
