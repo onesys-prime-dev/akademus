@@ -25,7 +25,12 @@ SERVER_PID_FILE="$WORK/server.pid"
 pass() { echo "PASS: $*"; }
 die()  { echo "::error title=Deploy rehearsal::$*"; exit 1; }
 
-stop_server() { [[ -f "$SERVER_PID_FILE" ]] && kill "$(cat "$SERVER_PID_FILE")" 2>/dev/null || true; rm -f "$SERVER_PID_FILE"; }
+stop_server() {
+  if [[ -f "$SERVER_PID_FILE" ]]; then
+    kill "$(cat "$SERVER_PID_FILE")" 2>/dev/null || true
+    rm -f "$SERVER_PID_FILE"
+  fi
+}
 trap 'stop_server; rm -rf "$WORK"' EXIT
 
 echo "== Build bundle (as deploy-reusable.yml does)"
@@ -107,7 +112,10 @@ class RehearsalBrokenMigration extends Migration
 EOF
 ( cd "$BROKEN" && composer dump-autoload --classmap-authoritative --no-dev -q )
 make_bundle "$BROKEN"
-if deploy; then die "scenario 2: deploy succeeded despite a broken migration"; fi
+# Must fail, and for the right reason (not e.g. a held lock).
+if out=$(deploy 2>&1); then echo "$out"; die "scenario 2: deploy succeeded despite a broken migration"; fi
+echo "$out"
+grep -q "Migration failed" <<<"$out" || die "scenario 2: deploy failed, but not because of the migration"
 [[ "$(current)" == "$first" ]] || die "scenario 2: current changed after a failed migration"
 [[ "$(find "$DEPLOY_PATH/releases" -mindepth 1 -maxdepth 1 -type d | wc -l)" -eq 1 ]] || die "scenario 2: half-built release left behind"
 curl -sf "$SITE_URL/health" | grep -q "$SHA" || die "scenario 2: site not healthy after failed deploy"
@@ -134,7 +142,10 @@ fi
 exit 0
 EOF
 chmod +x "$STUBS/sudo"
-if deploy; then die "scenario 3: deploy succeeded although the health check could not pass"; fi
+if out=$(deploy 2>&1); then echo "$out"; die "scenario 3: deploy succeeded although the health check could not pass"; fi
+echo "$out"
+grep -q "Health check failed" <<<"$out" || die "scenario 3: deploy failed, but not because of the health check"
+grep -q "rolling back" <<<"$out" || die "scenario 3: no rollback was performed"
 [[ "$(current)" == "$first" ]] || die "scenario 3: current was not rolled back to $first"
 curl -sf "$SITE_URL/health" | grep -q "$SHA" || die "scenario 3: site not healthy after rollback"
 pass "failed health check -> rolled back to $first"

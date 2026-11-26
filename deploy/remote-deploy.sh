@@ -38,6 +38,8 @@ cd "$DEPLOY_PATH"
 mkdir -p releases backups incoming
 
 # ------------------------------------------------------------------ lock (no parallel deploys)
+# The lock lives on file descriptor 9 for the whole script. Commands that may leave long-running
+# processes behind (service reloads) run with "9>&-", so nothing they start can keep holding the lock.
 exec 9> "$DEPLOY_PATH/.deploy.lock"
 flock -w 600 9 || fail "Another deploy holds $DEPLOY_PATH/.deploy.lock"
 
@@ -53,6 +55,8 @@ for d in cache logs session uploads debugbar; do
   [[ -d "shared/writable/$d" && -w "shared/writable/$d" ]] || fail "shared/writable/$d is missing or not writable"
 done
 grep -qE '^\s*CI_ENVIRONMENT\s*=\s*production' shared/.env || echo "::warning::shared/.env does not set CI_ENVIRONMENT = production (errors may be shown to users)"
+upload_mb=$("$PHP_BIN" -r 'echo (int) ini_get("upload_max_filesize");')
+(( upload_mb >= 10 )) || echo "::warning::upload_max_filesize is ${upload_mb}M for $PHP_BIN; payment proofs may be up to 10 MB (check the PHP-FPM ini too, docs/CI-CD.md)"
 avail_kb=$(df -Pk "$DEPLOY_PATH" | awk 'NR==2 {print $4}')
 (( avail_kb > 1048576 )) || fail "Less than 1 GB free on $DEPLOY_PATH"
 ( cd incoming && sha256sum -c "${BUNDLE}.sha256" ) || fail "Bundle checksum mismatch"
@@ -112,9 +116,9 @@ log "Migrating"
 PREVIOUS=$(readlink current 2>/dev/null || true)
 switch_to() { ln -sfn "$1" current.tmp && mv -Tf current.tmp current; }
 reload_services() {
-  sudo -n systemctl reload "$FPM_SERVICE" || return 1   # clears OPcache for the new paths
+  sudo -n systemctl reload "$FPM_SERVICE" 9>&- || return 1   # clears OPcache for the new paths
   if systemctl list-unit-files "akademus-mail@.service" --no-legend 2>/dev/null | grep -q akademus-mail; then
-    sudo -n systemctl restart "$WORKER_SERVICE" || return 1
+    sudo -n systemctl restart "$WORKER_SERVICE" 9>&- || return 1
   else
     echo "::warning::$WORKER_SERVICE is not installed - the email queue worker was not restarted (docs/CI-CD.md)"
   fi
