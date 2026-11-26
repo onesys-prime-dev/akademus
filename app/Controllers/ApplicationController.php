@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use CodeIgniter\Controller;
+use CodeIgniter\Exceptions\PageNotFoundException;
+use Config\Database;
 
 class ApplicationController extends Controller
 {
@@ -14,9 +16,9 @@ class ApplicationController extends Controller
     public function __construct()
     {
         $this->formFieldService = service('FormFieldService');
-        $this->programModel = model('ProgramModel');
+        $this->programModel     = model('ProgramModel');
         $this->applicationModel = model('Application');
-        $this->db = \Config\Database::connect();
+        $this->db               = Database::connect();
     }
 
     /**
@@ -25,7 +27,7 @@ class ApplicationController extends Controller
     public function programSelection()
     {
         $data = [
-            'title' => 'Select a Program',
+            'title'    => 'Select a Program',
             'programs' => $this->programModel->getAllPrograms(),
         ];
 
@@ -34,11 +36,13 @@ class ApplicationController extends Controller
 
     /**
      * Apply for a program - show the form
+     *
+     * @param mixed $programId
      */
     public function apply($programId)
     {
         $program = $this->programModel->find($programId);
-        if (!$program) {
+        if (! $program) {
             return redirect()->to('/apply')
                 ->with('error', 'Program not found');
         }
@@ -47,8 +51,8 @@ class ApplicationController extends Controller
         $formFields = $this->formFieldService->getMergedFormFields($programId);
 
         $data = [
-            'title' => "Apply for {$program['program_name']}",
-            'program' => $program,
+            'title'      => "Apply for {$program['program_name']}",
+            'program'    => $program,
             'formFields' => $formFields,
         ];
 
@@ -57,40 +61,42 @@ class ApplicationController extends Controller
 
     /**
      * Submit application form
+     *
+     * @param mixed $programId
      */
     public function submitApplication($programId)
     {
         $program = $this->programModel->find($programId);
-        if (!$program) {
+        if (! $program) {
             return $this->response->setStatusCode(404)->setJSON(['error' => 'Program not found']);
         }
 
         // Validate submission
         $validation = $this->formFieldService->validateSubmission(
             $programId,
-            $this->request->getPost()
+            $this->request->getPost(),
         );
 
         if ($validation !== true) {
             return $this->response->setStatusCode(422)->setJSON([
                 'success' => false,
-                'errors' => $validation,
+                'errors'  => $validation,
             ]);
         }
 
         // Get applicant ID from session/auth
         // Your existing applicant system uses applicants.applicant_id and users.user_id
         $applicantId = session()->get('applicant_id') ?? null;
-        if (!$applicantId) {
+        if (! $applicantId) {
             return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
         }
 
         // Create/update application record in your existing applications table
         $applicationData = [
-            'applicant_id' => $applicantId,
-            'program_id' => $programId,
+            'applicant_id'       => $applicantId,
+            'program_id'         => $programId,
             'application_status' => 'pending',
-            'application_date' => date('Y-m-d H:i:s'),
+            'application_date'   => date('Y-m-d H:i:s'),
         ];
 
         // Check if application already exists
@@ -103,26 +109,28 @@ class ApplicationController extends Controller
             $applicationId = $existingApp->application_id;
             $this->db->table('applications')->update(
                 ['application_id' => $applicationId],
-                $applicationData
+                $applicationData,
             );
         } else {
             $this->db->table('applications')->insert($applicationData);
             $applicationId = $this->db->insertID();
         }
 
-        // TODO: Store form answers in your existing personal_informations, 
+        // TODO: Store form answers in your existing personal_informations,
         // educational_backgrounds, family_backgrounds tables
         // This depends on your existing form step structure
 
         return $this->response->setJSON([
-            'success' => true,
-            'message' => 'Application submitted successfully',
+            'success'       => true,
+            'message'       => 'Application submitted successfully',
             'applicationId' => $applicationId,
         ]);
     }
 
     /**
      * Get form fields as JSON (for AJAX)
+     *
+     * @param mixed $programId
      */
     public function getFormFields($programId)
     {
@@ -130,12 +138,14 @@ class ApplicationController extends Controller
 
         return $this->response->setJSON([
             'success' => true,
-            'fields' => $fields,
+            'fields'  => $fields,
         ]);
     }
 
     /**
      * View submitted application
+     *
+     * @param mixed $applicationId
      */
     public function viewApplication($applicationId)
     {
@@ -143,28 +153,28 @@ class ApplicationController extends Controller
             ->where('application_id', $applicationId)
             ->first();
 
-        if (!$application) {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException();
+        if (! $application) {
+            throw new PageNotFoundException();
         }
 
         // Check authorization (ensure applicant owns this application)
         $applicantId = session()->get('applicant_id');
-        if ($application->applicant_id != $applicantId) {
+        if ($application->applicant_id !== $applicantId) {
             return redirect()->to('/')->with('error', 'Unauthorized');
         }
 
         $program = $this->programModel->find($application->program_id);
-        $fields = $this->formFieldService->getMergedFormFields($application->program_id);
+        $fields  = $this->formFieldService->getMergedFormFields($application->program_id);
 
         // TODO: Fetch stored answers from your existing tables
         $answers = [];
 
         $data = [
-            'title' => 'Your Application',
-            'application' => (array)$application,
-            'program' => $program,
-            'fields' => $fields,
-            'answers' => $answers,
+            'title'       => 'Your Application',
+            'application' => (array) $application,
+            'program'     => $program,
+            'fields'      => $fields,
+            'answers'     => $answers,
         ];
 
         return view('applicant/application-view', $data);

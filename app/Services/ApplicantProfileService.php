@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Application\FamilyBackgroundModel;
 use App\Models\Application\PersonalInformationModel;
+use App\Models\Payment\PaymentFeeTypeModel;
+use Config\Database;
 
 class ApplicantProfileService
 {
@@ -22,7 +24,7 @@ class ApplicantProfileService
 
     public function getApplicantProfile(int $applicantId): array
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $builder = $db->table('applicants a')
             ->select('
@@ -49,7 +51,7 @@ class ApplicantProfileService
 
         $row = $builder->getRowArray();
 
-        if (!$row) {
+        if (! $row) {
             return [];
         }
 
@@ -62,17 +64,17 @@ class ApplicantProfileService
      * applicant. Post-approval steps (reservation fee, clearance) are not
      * prerequisites and are intentionally excluded.
      *
-     * @return string[]
+     * @return list<string>
      */
     public function getIncompleteSteps(int $applicantId): array
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $applicant = $db->table('applicants')
             ->where('applicant_id', $applicantId)
             ->get()->getRowArray();
 
-        if (!$applicant) {
+        if (! $applicant) {
             return [];
         }
 
@@ -85,19 +87,19 @@ class ApplicantProfileService
 
         $missing = [];
 
-        if (!$progress['form_submitted'] || !$progress['form_complete']) {
-            if ($progress['form_submitted'] && !empty($progress['pending_fast_track_pages'])) {
+        if (! $progress['form_submitted'] || ! $progress['form_complete']) {
+            if ($progress['form_submitted'] && ! empty($progress['pending_fast_track_pages'])) {
                 $missing[] = 'Application Form (incomplete: ' . implode(', ', $progress['pending_fast_track_pages']) . ')';
             } else {
                 $missing[] = 'Application Form';
             }
         }
 
-        if (!$progress['docs_complete']) {
+        if (! $progress['docs_complete']) {
             $missing[] = 'Required Documents Submitted';
         }
 
-        if (!$progress['docs_verified']) {
+        if (! $progress['docs_verified']) {
             $missing[] = 'Documents Verified';
         }
 
@@ -109,15 +111,16 @@ class ApplicantProfileService
         }
 
         $feeTypes = [
-            'Admission Processing Fee' => \App\Models\Payment\PaymentFeeTypeModel::CODE_ADMISSION,
+            'Admission Processing Fee' => PaymentFeeTypeModel::CODE_ADMISSION,
         ];
-        if (!empty($application['is_fast_track'])) {
-            $feeTypes['Fast Track Fee'] = \App\Models\Payment\PaymentFeeTypeModel::CODE_FAST_TRACK;
+        if (! empty($application['is_fast_track'])) {
+            $feeTypes['Fast Track Fee'] = PaymentFeeTypeModel::CODE_FAST_TRACK;
         }
 
-        $feeModel = new \App\Models\Payment\PaymentFeeTypeModel();
+        $feeModel = new PaymentFeeTypeModel();
+
         foreach ($feeTypes as $label => $code) {
-            if (!$feeModel->getByCode($code)) {
+            if (! $feeModel->getByCode($code)) {
                 continue; // fee not active, nothing to pay
             }
 
@@ -128,7 +131,7 @@ class ApplicantProfileService
                 ->where('p.payment_status', 'PAID')
                 ->countAllResults() > 0;
 
-            if (!$paid) {
+            if (! $paid) {
                 $missing[] = $label . ' Paid';
             }
         }
@@ -136,7 +139,7 @@ class ApplicantProfileService
         return $missing;
     }
 
-    public function getTabPayload(int $applicantId, string $tab, array $filters = [], int $limit = null, int $offset = 0): array
+    public function getTabPayload(int $applicantId, string $tab, array $filters = [], ?int $limit = null, int $offset = 0): array
     {
         return match ($tab) {
             'applicant_form'  => $this->getApplicantFormPayload($applicantId, $filters, $limit, $offset),
@@ -152,14 +155,14 @@ class ApplicantProfileService
 
     private function getApplicantFormPayload(int $applicantId, array $filters, int $limit, int $offset): array
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $app = $db->table('applications')
             ->select('application_id')
             ->where('applicant_id', $applicantId)
             ->get()->getRowArray();
 
-        if (!$app) {
+        if (! $app) {
             return ['personal' => [], 'educational' => [], 'family' => []];
         }
 
@@ -186,7 +189,7 @@ class ApplicantProfileService
 
     private function getRequirementsPayload(int $applicantId, array $filters, int $limit, int $offset): array
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $builder = $db->table('program_requirements pr')
             ->select('
@@ -207,17 +210,17 @@ class ApplicantProfileService
             ->join(
                 'applicant_documents ad',
                 'ad.program_requirement_id = pr.program_requirement_id AND ad.applicant_id = a.applicant_id',
-                'left'
+                'left',
             )
             ->where('a.applicant_id', $applicantId);
 
         // ✅ STATUS FILTER
-        if (!empty($filters['status']) && $filters['status'] !== 'all') {
+        if (! empty($filters['status']) && $filters['status'] !== 'all') {
             $builder->where('ad.status', $filters['status']);
         }
 
         // ✅ SEARCH FILTER
-        if (!empty($filters['search'])) {
+        if (! empty($filters['search'])) {
             $builder->groupStart()
                 ->like('r.requirement_name', $filters['search'])
                 ->orLike('rc.category_name', $filters['search'])
@@ -246,7 +249,7 @@ class ApplicantProfileService
 
     private function getExamPayload(int $applicantId, array $filters, int $limit, int $offset): array
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $booking = $db->table('exam_bookings eb')
             ->select([
@@ -295,7 +298,7 @@ class ApplicantProfileService
 
     private function fetchPaymentRecord(int $applicantId, string $feeCode): ?array
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         return $db->table('payment p')
             ->select([
@@ -348,7 +351,7 @@ class ApplicantProfileService
 
     private function getRequirementStatusCounts(int $applicantId, array $filters = []): array
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         // ❗ remove status filter for counts
         $countFilters = $filters;
@@ -364,12 +367,12 @@ class ApplicantProfileService
             ->join(
                 'applicant_documents ad',
                 'ad.program_requirement_id = pr.program_requirement_id AND ad.applicant_id = a.applicant_id',
-                'left'
+                'left',
             )
             ->where('a.applicant_id', $applicantId);
 
         // ✅ SEARCH ONLY (no status filter here)
-        if (!empty($countFilters['search'])) {
+        if (! empty($countFilters['search'])) {
             $builder->groupStart()
                 ->like('r.requirement_name', $countFilters['search'])
                 ->orLike('rc.category_name', $countFilters['search'])
@@ -389,17 +392,17 @@ class ApplicantProfileService
     private function normalizeCounts(array $results): array
     {
         $counts = [
-            'all' => 0,
-            'pending' => 0,
+            'all'         => 0,
+            'pending'     => 0,
             'in_progress' => 0,
-            'approved' => 0,
-            'rejected' => 0,
-            'completed' => 0,
+            'approved'    => 0,
+            'rejected'    => 0,
+            'completed'   => 0,
         ];
 
         foreach ($results as $row) {
             $status = $row['status'] ?? null;
-            $total   = (int) ($row['total'] ?? 0);
+            $total  = (int) ($row['total'] ?? 0);
 
             if ($status !== null && isset($counts[$status])) {
                 $counts[$status] = $total;

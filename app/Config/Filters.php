@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Filters\OfficerAuth;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
@@ -12,7 +13,6 @@ use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\PageCache;
 use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
-use App\Filters\OfficerAuth;
 
 class Filters extends BaseFilters
 {

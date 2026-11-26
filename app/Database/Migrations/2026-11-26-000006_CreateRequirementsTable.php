@@ -10,15 +10,15 @@ class CreateRequirementsTable extends Migration
     public function up(): void
     {
         $this->forge->addField([
-            'requirement_id' => ['type' => 'INT', 'constraint' => 11, 'auto_increment' => true, 'null' => false],
-            'category_id' => ['type' => 'INT', 'constraint' => 11, 'null' => false],
-            'requirement_name' => ['type' => 'VARCHAR', 'constraint' => 150, 'null' => false],
-            'description' => ['type' => 'TEXT', 'null' => true],
-            'is_required' => ['type' => 'TINYINT', 'constraint' => 1, 'null' => true, 'default' => '1'],
+            'requirement_id'         => ['type' => 'INT', 'constraint' => 11, 'auto_increment' => true, 'null' => false],
+            'category_id'            => ['type' => 'INT', 'constraint' => 11, 'null' => false],
+            'requirement_name'       => ['type' => 'VARCHAR', 'constraint' => 150, 'null' => false],
+            'description'            => ['type' => 'TEXT', 'null' => true],
+            'is_required'            => ['type' => 'TINYINT', 'constraint' => 1, 'null' => true, 'default' => '1'],
             'is_fast_track_required' => ['type' => 'TINYINT', 'constraint' => 1, 'null' => false, 'default' => '0'],
-            'display_order' => ['type' => 'INT', 'constraint' => 11, 'null' => true, 'default' => '0'],
-            'is_active' => ['type' => 'TINYINT', 'constraint' => 1, 'null' => true, 'default' => '1'],
-            'created_at' => ['type' => 'DATETIME', 'null' => true, 'default' => new RawSql('CURRENT_TIMESTAMP')],
+            'display_order'          => ['type' => 'INT', 'constraint' => 11, 'null' => true, 'default' => '0'],
+            'is_active'              => ['type' => 'TINYINT', 'constraint' => 1, 'null' => true, 'default' => '1'],
+            'created_at'             => ['type' => 'DATETIME', 'null' => true, 'default' => new RawSql('CURRENT_TIMESTAMP')],
             '`updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
         ]);
         $this->forge->addPrimaryKey('requirement_id');

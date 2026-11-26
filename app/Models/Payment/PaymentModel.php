@@ -6,9 +6,13 @@ use CodeIgniter\Model;
 
 class PaymentModel extends Model
 {
-    protected $table      = 'payment';
-    protected $primaryKey = 'payment_id';
+    public const STATUS_PENDING    = 'PENDING';
+    public const STATUS_PROCESSING = 'PROCESSING';
+    public const STATUS_PAID       = 'PAID';
+    public const STATUS_REJECTED   = 'REJECTED';
 
+    protected $table         = 'payment';
+    protected $primaryKey    = 'payment_id';
     protected $allowedFields = [
         'applicant_id',
         'payment_fee_type_id',
@@ -25,15 +29,9 @@ class PaymentModel extends Model
         'reviewed_by',
         'reviewed_at',
     ];
-
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
-
-    const STATUS_PENDING   = 'PENDING';
-    const STATUS_PROCESSING = 'PROCESSING';
-    const STATUS_PAID       = 'PAID';
-    const STATUS_REJECTED   = 'REJECTED';
 
     // check if applicant already paid or not
     public function hasActivePayment(int $applicantId, string $feeTypeCode): bool
@@ -67,7 +65,7 @@ class PaymentModel extends Model
         return $count > 0;
     }
 
-    // check if reference number already submitted by applicant. 
+    // check if reference number already submitted by applicant.
     // AVOID DUPLICATION OF REFERENCE NUMBER
     public function findByReferenceNum(string $referenceNum): ?array
     {
@@ -86,8 +84,8 @@ class PaymentModel extends Model
                 'pma.account_number',
                 'pma.account_name',
             ])
-            ->join('payment_method pm',         'pm.payment_method_id = p.payment_method_id')
-            ->join('payment_fee_type pft',       'pft.payment_fee_type_id = p.payment_fee_type_id')
+            ->join('payment_method pm', 'pm.payment_method_id = p.payment_method_id')
+            ->join('payment_fee_type pft', 'pft.payment_fee_type_id = p.payment_fee_type_id')
             ->join('payment_method_account pma', 'pma.payment_method_account_id = p.payment_method_account_id', 'left')
             ->where('p.applicant_id', $applicantId)
             ->where('pft.code', $feeTypeCode)

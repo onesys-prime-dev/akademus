@@ -6,9 +6,8 @@ use CodeIgniter\Model;
 
 class ExamBookingModel extends Model
 {
-    protected $table      = 'exam_bookings';
-    protected $primaryKey = 'exam_booking_id';
-
+    protected $table         = 'exam_bookings';
+    protected $primaryKey    = 'exam_booking_id';
     protected $allowedFields = [
         'exam_schedule_id',
         'applicant_id',
@@ -21,15 +20,16 @@ class ExamBookingModel extends Model
         'result_recorded_at',
         'result_recorded_by',
     ];
-
     protected $useTimestamps = false;
 
     /**
      * Get a field from the applicant's latest exam booking.
+     *
+     * @param mixed|null $default
      */
     public function getResultStatus(
         string $field,
-        $default = null
+        $default = null,
     ) {
         $applicantId = (int) session()->get('applicant_id');
 

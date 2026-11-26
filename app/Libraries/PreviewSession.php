@@ -20,23 +20,40 @@ use CodeIgniter\Session\Session;
  */
 class PreviewSession extends Session
 {
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     private array $store = [];
 
-    /** @param array<string, mixed> $initial */
+    /**
+     * @param array<string, mixed> $initial
+     */
     public function __construct(array $initial = [])
     {
         $this->store = $initial;
     }
 
-    public function start() { return null; }
-    public function regenerate(bool $destroy = false) {}
-    public function destroy() {}
-    public function close() {}
+    public function start()
+    {
+        return null;
+    }
+
+    public function regenerate(bool $destroy = false)
+    {
+    }
+
+    public function destroy()
+    {
+    }
+
+    public function close()
+    {
+    }
 
     public function set($data, $value = null)
     {
         $data = is_array($data) ? $data : [$data => $value];
+
         foreach ($data as $k => $v) {
             $this->store[$k] = $v;
         }
@@ -47,6 +64,7 @@ class PreviewSession extends Session
         if ($key === null || $key === '') {
             return $this->store;
         }
+
         return $this->store[$key] ?? null;
     }
 
@@ -62,10 +80,27 @@ class PreviewSession extends Session
         }
     }
 
-    public function __set(string $key, $value): void { $this->store[$key] = $value; }
-    public function __get(string $key) { return $this->store[$key] ?? null; }
-    public function __isset(string $key): bool { return isset($this->store[$key]); }
+    public function __set(string $key, $value): void
+    {
+        $this->store[$key] = $value;
+    }
 
-    public function setFlashdata($data, $value = null) {}
-    public function getFlashdata(?string $key = null) { return $key === null ? [] : null; }
+    public function __get(string $key)
+    {
+        return $this->store[$key] ?? null;
+    }
+
+    public function __isset(string $key): bool
+    {
+        return isset($this->store[$key]);
+    }
+
+    public function setFlashdata($data, $value = null)
+    {
+    }
+
+    public function getFlashdata(?string $key = null)
+    {
+        return $key === null ? [] : null;
+    }
 }

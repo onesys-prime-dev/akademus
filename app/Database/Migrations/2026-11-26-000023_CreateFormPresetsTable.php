@@ -9,13 +9,13 @@ class CreateFormPresetsTable extends Migration
     public function up(): void
     {
         $this->forge->addField([
-            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true, 'null' => false],
-            'name' => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => false],
+            'id'          => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true, 'null' => false],
+            'name'        => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => false],
             'description' => ['type' => 'TEXT', 'null' => true],
-            'is_global' => ['type' => 'TINYINT', 'constraint' => 1, 'null' => false, 'default' => '0', 'comment' => '1 = applies to all programs, 0 = program-specific'],
-            'is_active' => ['type' => 'TINYINT', 'constraint' => 1, 'null' => false, 'default' => '1'],
-            'created_at' => ['type' => 'DATETIME', 'null' => true],
-            'updated_at' => ['type' => 'DATETIME', 'null' => true],
+            'is_global'   => ['type' => 'TINYINT', 'constraint' => 1, 'null' => false, 'default' => '0', 'comment' => '1 = applies to all programs, 0 = program-specific'],
+            'is_active'   => ['type' => 'TINYINT', 'constraint' => 1, 'null' => false, 'default' => '1'],
+            'created_at'  => ['type' => 'DATETIME', 'null' => true],
+            'updated_at'  => ['type' => 'DATETIME', 'null' => true],
         ]);
         $this->forge->addPrimaryKey('id');
         $this->forge->addKey('is_global', false, false, 'is_global');

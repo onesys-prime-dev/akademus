@@ -9,15 +9,15 @@ class CreateExamBookingsTable extends Migration
     public function up(): void
     {
         $this->forge->addField([
-            'exam_booking_id' => ['type' => 'INT', 'constraint' => 10, 'unsigned' => true, 'auto_increment' => true, 'null' => false],
-            'exam_schedule_id' => ['type' => 'INT', 'constraint' => 10, 'unsigned' => true, 'null' => false],
-            'applicant_id' => ['type' => 'INT', 'constraint' => 10, 'unsigned' => true, 'null' => false],
-            'status' => ['type' => 'ENUM', 'constraint' => ['booked', 'attended', 'cancelled'], 'null' => false, 'default' => 'booked'],
-            'booked_at' => ['type' => 'DATETIME', 'null' => true],
-            'checked_in_at' => ['type' => 'DATETIME', 'null' => true],
-            'result_status' => ['type' => 'ENUM', 'constraint' => ['PENDING', 'PASSED', 'FAILED'], 'null' => true, 'default' => 'PENDING'],
-            'score' => ['type' => 'DECIMAL', 'constraint' => '5,2', 'null' => true],
-            'result_remarks' => ['type' => 'TEXT', 'null' => true],
+            'exam_booking_id'    => ['type' => 'INT', 'constraint' => 10, 'unsigned' => true, 'auto_increment' => true, 'null' => false],
+            'exam_schedule_id'   => ['type' => 'INT', 'constraint' => 10, 'unsigned' => true, 'null' => false],
+            'applicant_id'       => ['type' => 'INT', 'constraint' => 10, 'unsigned' => true, 'null' => false],
+            'status'             => ['type' => 'ENUM', 'constraint' => ['booked', 'attended', 'cancelled'], 'null' => false, 'default' => 'booked'],
+            'booked_at'          => ['type' => 'DATETIME', 'null' => true],
+            'checked_in_at'      => ['type' => 'DATETIME', 'null' => true],
+            'result_status'      => ['type' => 'ENUM', 'constraint' => ['PENDING', 'PASSED', 'FAILED'], 'null' => true, 'default' => 'PENDING'],
+            'score'              => ['type' => 'DECIMAL', 'constraint' => '5,2', 'null' => true],
+            'result_remarks'     => ['type' => 'TEXT', 'null' => true],
             'result_recorded_at' => ['type' => 'DATETIME', 'null' => true],
             'result_recorded_by' => ['type' => 'INT', 'constraint' => 10, 'unsigned' => true, 'null' => true],
         ]);

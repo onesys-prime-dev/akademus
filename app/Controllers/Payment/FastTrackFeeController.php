@@ -3,11 +3,12 @@
 namespace App\Controllers\Payment;
 
 use App\Controllers\BaseController;
-use App\Models\Payment\PaymentModel;
 use App\Models\Payment\PaymentFeeTypeModel;
-use App\Models\Payment\PaymentMethodModel;
 use App\Models\Payment\PaymentMethodAccountModel;
+use App\Models\Payment\PaymentMethodModel;
+use App\Models\Payment\PaymentModel;
 use App\Services\NotificationService;
+use CodeIgniter\Exceptions\PageNotFoundException;
 
 class FastTrackFeeController extends BaseController
 {
@@ -19,10 +20,10 @@ class FastTrackFeeController extends BaseController
 
     public function __construct()
     {
-        $this->paymentModel = new PaymentModel();
-        $this->methodModel  = new PaymentMethodModel();
-        $this->accountModel = new PaymentMethodAccountModel();
-        $this->feeModel     = new PaymentFeeTypeModel();
+        $this->paymentModel        = new PaymentModel();
+        $this->methodModel         = new PaymentMethodModel();
+        $this->accountModel        = new PaymentMethodAccountModel();
+        $this->feeModel            = new PaymentFeeTypeModel();
         $this->notificationService = new NotificationService();
     }
 
@@ -43,7 +44,7 @@ class FastTrackFeeController extends BaseController
 
         $existingPayment = $this->paymentModel->getByApplicantAndFeeType(
             $applicantId,
-            PaymentFeeTypeModel::CODE_FAST_TRACK
+            PaymentFeeTypeModel::CODE_FAST_TRACK,
         );
 
         $data = [
@@ -56,7 +57,7 @@ class FastTrackFeeController extends BaseController
 
         return $this->renderApplicant(
             'applicant/payments/fast-track-fee',
-            $data
+            $data,
         );
     }
 
@@ -75,7 +76,7 @@ class FastTrackFeeController extends BaseController
 
         if ($this->paymentModel->hasActivePayment($applicantId, PaymentFeeTypeModel::CODE_FAST_TRACK)) {
             return $this->jsonError(
-                'You have already submitted a payment that is being processed or has been approved.'
+                'You have already submitted a payment that is being processed or has been approved.',
             );
         }
 
@@ -93,8 +94,8 @@ class FastTrackFeeController extends BaseController
                 ],
             ],
             'proof_of_payment' => [
-                'label'  => 'Proof of Payment',
-                'rules'  => 'uploaded[proof_of_payment]'
+                'label' => 'Proof of Payment',
+                'rules' => 'uploaded[proof_of_payment]'
                           . '|max_size[proof_of_payment,10240]'
                           . '|ext_in[proof_of_payment,jpg,jpeg,png,pdf]',
                 'errors' => [
@@ -107,7 +108,7 @@ class FastTrackFeeController extends BaseController
 
         if (! $this->validate($rules)) {
             return $this->jsonError(
-                implode(' ', $this->validator->getErrors())
+                implode(' ', $this->validator->getErrors()),
             );
         }
 
@@ -115,7 +116,7 @@ class FastTrackFeeController extends BaseController
 
         if ($this->paymentModel->findByReferenceNum($referenceNum)) {
             return $this->jsonError(
-                'This reference number has already been submitted. Please double-check your transaction details.'
+                'This reference number has already been submitted. Please double-check your transaction details.',
             );
         }
 
@@ -141,7 +142,7 @@ class FastTrackFeeController extends BaseController
             ? (int) $rawAccountId
             : null;
 
-        $fee = $this->feeModel->getByCode(PaymentFeeTypeModel::CODE_FAST_TRACK);
+        $fee       = $this->feeModel->getByCode(PaymentFeeTypeModel::CODE_FAST_TRACK);
         $feeTypeId = $fee['payment_fee_type_id'] ?? null;
 
         if (! $fee || ! $feeTypeId) {
@@ -164,13 +165,14 @@ class FastTrackFeeController extends BaseController
 
         if (! $inserted) {
             @unlink($uploadDir . $newFileName);
+
             return $this->jsonError('Could not record your payment. Please try again.');
         }
 
         $this->notificationService->trigger('fast_track_fee.pending', $applicantId, ['reference_num' => $referenceNum]);
 
         return $this->jsonSuccess(
-            'Your payment has been submitted and is awaiting verification by the finance office.'
+            'Your payment has been submitted and is awaiting verification by the finance office.',
         );
     }
 
@@ -181,11 +183,11 @@ class FastTrackFeeController extends BaseController
         $payment = $this->paymentModel->find($paymentId);
 
         if (
-            ! $payment ||
-            (int) $payment['applicant_id'] !== $applicantId ||
-            empty($payment['proof_of_payment'])
+            ! $payment
+            || (int) $payment['applicant_id'] !== $applicantId
+            || empty($payment['proof_of_payment'])
         ) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            throw PageNotFoundException::forPageNotFound();
         }
 
         return $this->serveProofFile($payment['proof_of_payment']);
@@ -196,7 +198,7 @@ class FastTrackFeeController extends BaseController
         $filePath = WRITEPATH . $proofPath;
 
         if (! file_exists($filePath)) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            throw PageNotFoundException::forPageNotFound();
         }
 
         $mime = mime_content_type($filePath);
@@ -205,7 +207,7 @@ class FastTrackFeeController extends BaseController
             ->setHeader('Content-Type', $mime)
             ->setHeader(
                 'Content-Disposition',
-                'inline; filename="' . basename($filePath) . '"'
+                'inline; filename="' . basename($filePath) . '"',
             )
             ->setBody(file_get_contents($filePath));
     }
@@ -228,9 +230,9 @@ class FastTrackFeeController extends BaseController
                 'payment_method_account_id' => ! empty($row['payment_method_account_id'])
                                                 ? (int) $row['payment_method_account_id']
                                                 : null,
-                'account_number'            => $row['account_number'] ?? null,
-                'account_name'              => $row['account_name']   ?? null,
-                'label'                     => 'Send payment via ' . $row['name'],
+                'account_number' => $row['account_number'] ?? null,
+                'account_name'   => $row['account_name'] ?? null,
+                'label'          => 'Send payment via ' . $row['name'],
             ];
         }
 

@@ -2,12 +2,15 @@
 
 namespace App\Controllers;
 
-use App\Models\User\UserModel;
-use App\Models\Program\ProgramModel;
 use App\Models\Applicant\ApplicantModel;
 use App\Models\Applicant\ApplicantsViewModel;
+use App\Models\Program\ProgramModel;
 use App\Models\ThemeModel;
+use App\Models\User\UserModel;
 use App\Services\EmailService;
+use Config\Database;
+use Config\Services;
+use Exception;
 
 class Auth extends BaseController
 {
@@ -18,7 +21,7 @@ class Auth extends BaseController
                 'title'     => 'Sign In',
                 'header'    => 'Welcome Back!',
                 'subheader' => 'Sign in to continue your application.',
-                'form'      => view('auth/sign-in')
+                'form'      => view('auth/sign-in'),
             ]);
         }
 
@@ -39,12 +42,10 @@ class Auth extends BaseController
         $programModel = new ProgramModel();
         $programs     = $programModel->findAll();
 
-        $programs = array_map(function($program) {
-            return [
-                'id'   => $program['program_id'],
-                'name' => preg_replace('/^Bachelor of Science in\s*/', '', $program['program_name'])
-            ];
-        }, $programs);
+        $programs = array_map(static fn ($program) => [
+            'id'   => $program['program_id'],
+            'name' => preg_replace('/^Bachelor of Science in\s*/', '', $program['program_name']),
+        ], $programs);
 
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([
@@ -52,7 +53,7 @@ class Auth extends BaseController
                 'header'    => 'Create Account',
                 'subheader' => 'Start your admission journey today.',
                 'form'      => view('auth/sign-in', ['programs' => $programs]),
-                'programs'  => $programs
+                'programs'  => $programs,
             ]);
         }
 
@@ -62,7 +63,7 @@ class Auth extends BaseController
             'auth_sub_header' => 'Start your admission journey today.',
             'auth_field'      => 'auth/sign-in',
             'programs'        => $programs,
-            'theme'           => $themeModel->getAllSettings()
+            'theme'           => $themeModel->getAllSettings(),
         ];
 
         return view('auth/main', $data);
@@ -73,7 +74,7 @@ class Auth extends BaseController
         $themeModel      = new ThemeModel();
         $applicantNumber = session()->getFlashdata('applicant_number');
 
-        if (!$applicantNumber) {
+        if (! $applicantNumber) {
             return redirect()->to('/sign-in');
         }
 
@@ -125,10 +126,10 @@ class Auth extends BaseController
             'program'   => 'required',
         ];
 
-        if (!$this->validate($rules)) {
+        if (! $this->validate($rules)) {
             return $this->response->setJSON([
                 'status'  => 'error',
-                'message' => implode(' ', $this->validator->getErrors())
+                'message' => implode(' ', $this->validator->getErrors()),
             ]);
         }
 
@@ -139,17 +140,17 @@ class Auth extends BaseController
         $programId = $this->request->getPost('program');
         $program   = $programModel->find($programId);
 
-        if (!$program) {
+        if (! $program) {
             return $this->response->setJSON([
                 'status'  => 'error',
-                'message' => 'Invalid program selected'
+                'message' => 'Invalid program selected',
             ]);
         }
 
         $tempPassword   = bin2hex(random_bytes(6));
         $hashedPassword = password_hash($tempPassword, PASSWORD_DEFAULT);
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $db->transBegin();
 
         try {
@@ -158,60 +159,61 @@ class Auth extends BaseController
                 'lastname'  => $this->request->getPost('lastname'),
                 'email'     => $this->request->getPost('email'),
                 'mobile'    => $this->request->getPost('mobile'),
-                'role'      => 'applicant'
+                'role'      => 'applicant',
             ]);
 
             $userId = $userModel->getInsertID();
 
-            if (!$userId) {
-                throw new \Exception('User insert failed');
+            if (! $userId) {
+                throw new Exception('User insert failed');
             }
 
-            if (!$applicantModel->insert([
+            if (! $applicantModel->insert([
                 'user_id'            => $userId,
                 'program_id'         => $programId,
                 'applicant_number'   => null,
                 'password'           => $hashedPassword,
                 'temp_password'      => 1,
                 'application_status' => 'pending',
-                'application_date'   => date('Y-m-d H:i:s')
+                'application_date'   => date('Y-m-d H:i:s'),
             ])) {
-                throw new \Exception('Applicant insert failed: ' . json_encode($applicantModel->errors()));
+                throw new Exception('Applicant insert failed: ' . json_encode($applicantModel->errors()));
             }
 
             $applicantId     = $applicantModel->getInsertID();
             $year            = date('Y');
             $sequence        = str_pad($applicantId, 5, '0', STR_PAD_LEFT);
-            $applicantNumber = "APP-$year-$sequence";
+            $applicantNumber = "APP-{$year}-{$sequence}";
 
             $applicantModel->update($applicantId, [
-                'applicant_number' => $applicantNumber
+                'applicant_number' => $applicantNumber,
             ]);
 
             $db->transComplete();
 
             $emailSent = EmailService::sendWelcomeEmail(
                 $this->request->getPost('email'),
-                $tempPassword
+                $tempPassword,
             );
 
-            if (!$emailSent) {
-                $email = \Config\Services::email();
-                //dd($email->printDebugger(['headers', 'subject', 'body']));
+            if (! $emailSent) {
+                $email = Services::email();
+                // dd($email->printDebugger(['headers', 'subject', 'body']));
             }
 
             session()->setFlashdata('applicant_number', $applicantNumber);
+
             return $this->response->setJSON([
                 'status'   => 'success',
-                'redirect' => base_url('success')
+                'redirect' => base_url('success'),
             ]);
-
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $db->transRollback();
             log_message('error', 'Registration failed: ' . $e->getMessage());
+
             return $this->response->setJSON([
                 'status'  => 'error',
-                'message' => 'Registration failed: ' . $e->getMessage()
+                'message' => 'Registration failed: ' . $e->getMessage(),
             ]);
         }
     }
@@ -224,22 +226,22 @@ class Auth extends BaseController
             ->where('email', $this->request->getPost('email'))
             ->first();
 
-        if (!$user) {
+        if (! $user) {
             return $this->response->setJSON([
                 'status'  => 'error',
-                'message' => 'User not found'
+                'message' => 'User not found',
             ]);
         }
 
-        if (!password_verify($this->request->getPost('password'), $user['password'])) {
+        if (! password_verify($this->request->getPost('password'), $user['password'])) {
             return $this->response->setJSON([
                 'status'  => 'error',
-                'message' => 'Invalid email or password'
+                'message' => 'Invalid email or password',
             ]);
         }
 
         if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) {
-            $db = \Config\Database::connect();
+            $db = Database::connect();
             $db->table('applicants')
                 ->where('applicant_id', $user['applicant_id'])
                 ->update(['password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT)]);
@@ -252,7 +254,7 @@ class Auth extends BaseController
             'role'             => $user['role'],
             'applicant_number' => $user['applicant_number'],
             'applicant_id'     => $user['applicant_id'],
-            'logged_in'        => true
+            'logged_in'        => true,
         ]);
 
         return redirect()->to('/dashboard');
@@ -261,6 +263,7 @@ class Auth extends BaseController
     public function logout()
     {
         session()->destroy();
+
         return redirect()->to('/sign-in');
     }
 }

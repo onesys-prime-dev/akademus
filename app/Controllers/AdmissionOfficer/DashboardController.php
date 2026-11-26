@@ -3,11 +3,12 @@
 namespace App\Controllers\AdmissionOfficer;
 
 use App\Controllers\BaseController;
-use App\Models\ThemeModel;
+use App\Models\FollowUpMessageModel;
 use App\Models\ProgramModel;
+use App\Models\ThemeModel;
 use App\Services\ApplicantService;
 use App\Services\ExamScheduleService;
-use App\Models\FollowUpMessageModel;
+use Config\Database;
 
 class DashboardController extends BaseController
 {
@@ -17,13 +18,14 @@ class DashboardController extends BaseController
 
         $themeModel   = new ThemeModel();
         $programModel = new ProgramModel();
-        $db           = \Config\Database::connect();
+        $db           = Database::connect();
 
         // --- Status counts (applicants + users + programs must exist) ---
         $statusCounts = [
-            'all' => 0, 'in_progress' => 0, 'pending' => 0,
+            'all'      => 0, 'in_progress' => 0, 'pending' => 0,
             'approved' => 0, 'rejected' => 0, 'completed' => 0,
         ];
+
         try {
             $applicantSvc = new ApplicantService();
             $statusCounts = $applicantSvc->getStatusCounts();
@@ -38,6 +40,7 @@ class DashboardController extends BaseController
 
         // --- Applicants per program ---
         $perProgram = [];
+
         try {
             $perProgram = $db->table('applicants a')
                 ->select('p.program_name, p.program_code, COUNT(*) as total')
@@ -52,6 +55,7 @@ class DashboardController extends BaseController
 
         // --- Upcoming exam schedules (next 5 from today) ---
         $upcomingSchedules = [];
+
         try {
             $upcomingSchedules = $db->table('exam_schedules')
                 ->where('exam_date >=', date('Y-m-d'))
@@ -69,6 +73,7 @@ class DashboardController extends BaseController
         $calYear         = (int) $now->format('Y');
         $calMonth        = (int) $now->format('n');
         $calendarSummary = [];
+
         try {
             $examSvc         = new ExamScheduleService();
             $calendarSummary = $examSvc->getCalendarSummary($calMonth, $calYear);
@@ -78,6 +83,7 @@ class DashboardController extends BaseController
 
         // --- Recent applicants (last 10) ---
         $rows = [];
+
         try {
             $applicantSvc = new ApplicantService();
             $rows         = $applicantSvc->getApplicants([], 10, 0);
@@ -87,6 +93,7 @@ class DashboardController extends BaseController
 
         // --- Unread messages ---
         $unreadMessages = 0;
+
         try {
             $followUpModel  = new FollowUpMessageModel();
             $unreadMessages = $followUpModel->getTotalUnreadForOfficer();
@@ -96,15 +103,17 @@ class DashboardController extends BaseController
 
         // --- To-do list data ---
         $totalConversations = 0;
+
         try {
             $totalConversations = (int) $db->query(
-                'SELECT COUNT(DISTINCT applicant_id) AS cnt FROM follow_up_messages'
+                'SELECT COUNT(DISTINCT applicant_id) AS cnt FROM follow_up_messages',
             )->getRow()->cnt;
         } catch (\Throwable $e) {
             log_message('error', 'Dashboard totalConversations: ' . $e->getMessage());
         }
 
         $examSlots = null;
+
         try {
             $examSlots = $db->table('exam_schedules')
                 ->select('SUM(booked_slots) as booked, SUM(max_slots) as total_slots')
@@ -135,9 +144,9 @@ class DashboardController extends BaseController
         ];
 
         return view('admission-officer/main', [
-            'title'             => 'Dashboard',
-            'page_content'      => 'admission-officer/dashboard/dashboard',
-            'breadcrumb'        => [
+            'title'        => 'Dashboard',
+            'page_content' => 'admission-officer/dashboard/dashboard',
+            'breadcrumb'   => [
                 ['label' => 'Dashboard', 'url' => base_url('/admission-officer/dashboard')],
                 ['label' => 'Overview'],
             ],
@@ -159,14 +168,15 @@ class DashboardController extends BaseController
     public function search()
     {
         $query = $this->request->getGet('q');
-        if (!$query) {
+        if (! $query) {
             return redirect()->to(base_url('admission-officer/dashboard'));
         }
 
         $applicantService = new ApplicantService();
         $results          = $applicantService->dashboardSearchApplicants($query, 10);
+
         return $this->response->setJSON([
-            'applicants' => $results
+            'applicants' => $results,
         ]);
     }
 
@@ -176,7 +186,7 @@ class DashboardController extends BaseController
 
         $filters = [];
 
-        if (!empty($program)) {
+        if (! empty($program)) {
             $filters['program'] = $program;
         }
 
@@ -192,20 +202,22 @@ class DashboardController extends BaseController
         $month = (int) $this->request->getGet('month');
         $year  = (int) $this->request->getGet('year');
 
-        $examSvc = new \App\Services\ExamScheduleService();
+        $examSvc         = new ExamScheduleService();
         $calendarSummary = $examSvc->getCalendarSummary($month, $year);
 
-        $monthName     = date('F', mktime(0, 0, 0, $month, 1, $year));
-        $daysInMonth   = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+        $monthName      = date('F', mktime(0, 0, 0, $month, 1, $year));
+        $daysInMonth    = cal_days_in_month(CAL_GREGORIAN, $month, $year);
         $firstDayOfWeek = (int) date('w', mktime(0, 0, 0, $month, 1, $year));
 
-        $today   = (int) date('j');
+        $today       = (int) date('j');
         $isCurrentMY = ((int) date('n') === $month && (int) date('Y') === $year);
 
         $cells = array_fill(0, $firstDayOfWeek, null);
+
         for ($d = 1; $d <= $daysInMonth; $d++) {
             $cells[] = $d;
         }
+
         while (count($cells) % 7 !== 0) {
             $cells[] = null;
         }
@@ -213,8 +225,8 @@ class DashboardController extends BaseController
 
         // HEADER HTML
         $header = '
-            <span class="calendar__current--month">'.$monthName.'</span>
-            <span class="calendar__current--year">'.$year.'</span>
+            <span class="calendar__current--month">' . $monthName . '</span>
+            <span class="calendar__current--year">' . $year . '</span>
         ';
 
         // GRID HTML
@@ -241,8 +253,12 @@ class DashboardController extends BaseController
                     $isToday = $isCurrentMY && ($day === $today);
 
                     $cls = 'calendar__day';
-                    if ($isToday) $cls .= ' calendar__day--active';
-                    if ($hasExam) $cls .= ' calendar__day--has-exam';
+                    if ($isToday) {
+                        $cls .= ' calendar__day--active';
+                    }
+                    if ($hasExam) {
+                        $cls .= ' calendar__day--has-exam';
+                    }
                     ?>
                     <div class="<?= $cls ?>">
                         <?= $day ?>

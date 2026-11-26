@@ -15,7 +15,7 @@ class GroqProxyController extends Controller
     // Admission-officer proxy — requires an active AO session.
     public function officerChat()
     {
-        if (!session()->get('ao_logged_in')) {
+        if (! session()->get('ao_logged_in')) {
             return $this->response->setJSON(['error' => 'Unauthorized'])->setStatusCode(401);
         }
 
@@ -27,13 +27,14 @@ class GroqProxyController extends Controller
         $body     = $this->request->getJSON(true);
         $messages = $body['messages'] ?? [];
 
-        if (empty($messages) || !is_array($messages)) {
+        if (empty($messages) || ! is_array($messages)) {
             return $this->response->setJSON(['error' => 'messages array is required'])->setStatusCode(400);
         }
 
         $allowed = ['user', 'assistant', 'system'];
+
         foreach ($messages as $msg) {
-            if (!isset($msg['role'], $msg['content']) || !in_array($msg['role'], $allowed, true)) {
+            if (! isset($msg['role'], $msg['content']) || ! in_array($msg['role'], $allowed, true)) {
                 return $this->response->setJSON(['error' => 'Invalid message format'])->setStatusCode(400);
             }
         }

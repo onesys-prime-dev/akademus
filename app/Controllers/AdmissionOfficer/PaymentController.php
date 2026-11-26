@@ -5,6 +5,7 @@ namespace App\Controllers\AdmissionOfficer;
 use App\Controllers\BaseController;
 use App\Models\Payment\PaymentModel;
 use App\Services\NotificationService;
+use CodeIgniter\Exceptions\PageNotFoundException;
 
 class PaymentController extends BaseController
 {
@@ -23,23 +24,26 @@ class PaymentController extends BaseController
                 'message' => 'Unauthorized.',
             ]);
         }
+
         return null;
     }
 
     public function approve(int $paymentId)
     {
-        if ($r = $this->requireOfficer()) return $r;
+        if ($r = $this->requireOfficer()) {
+            return $r;
+        }
 
         $remarks    = trim($this->request->getPost('remarks') ?? '');
         $reviewedBy = (int) session()->get('ao_id');
 
         $paymentModel = new PaymentModel();
-        $payment = $paymentModel->getWithFeeType($paymentId);
+        $payment      = $paymentModel->getWithFeeType($paymentId);
 
         if (! $payment) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Payment record not found.'
+                'message' => 'Payment record not found.',
             ]);
         }
 
@@ -61,13 +65,13 @@ class PaymentController extends BaseController
             $paymentId,
             PaymentModel::STATUS_PAID,
             $remarks,
-            $reviewedBy
+            $reviewedBy,
         );
 
         if (! $result) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Failed to update payment status.'
+                'message' => 'Failed to update payment status.',
             ]);
         }
 
@@ -76,8 +80,8 @@ class PaymentController extends BaseController
             $payment['applicant_id'],
             [
                 'reference_num' => $payment['reference_num'],
-                'fee_type'      => $payment['fee_type_name']
-            ]
+                'fee_type'      => $payment['fee_type_name'],
+            ],
         );
 
         return $this->response->setJSON([
@@ -89,7 +93,9 @@ class PaymentController extends BaseController
 
     public function reject(int $paymentId)
     {
-        if ($r = $this->requireOfficer()) return $r;
+        if ($r = $this->requireOfficer()) {
+            return $r;
+        }
 
         $remarks    = trim($this->request->getPost('remarks') ?? '');
         $reviewedBy = (int) session()->get('ao_id');
@@ -102,12 +108,12 @@ class PaymentController extends BaseController
         }
 
         $paymentModel = new PaymentModel();
-        $payment = $paymentModel->getWithFeeType($paymentId);
+        $payment      = $paymentModel->getWithFeeType($paymentId);
 
         if (! $payment) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Payment record not found.'
+                'message' => 'Payment record not found.',
             ]);
         }
 
@@ -129,13 +135,13 @@ class PaymentController extends BaseController
             $paymentId,
             PaymentModel::STATUS_REJECTED,
             $remarks,
-            $reviewedBy
+            $reviewedBy,
         );
 
         if (! $result) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Failed to update payment status.'
+                'message' => 'Failed to update payment status.',
             ]);
         }
 
@@ -144,8 +150,8 @@ class PaymentController extends BaseController
             $payment['applicant_id'],
             [
                 'reference_num' => $payment['reference_num'],
-                'fee_type'      => $payment['fee_type_name']
-            ]
+                'fee_type'      => $payment['fee_type_name'],
+            ],
         );
 
         return $this->response->setJSON([
@@ -160,19 +166,21 @@ class PaymentController extends BaseController
      */
     public function proofFile(int $paymentId)
     {
-        if ($r = $this->requireOfficer()) return $r;
+        if ($r = $this->requireOfficer()) {
+            return $r;
+        }
 
         $paymentModel = new PaymentModel();
-        $payment = $paymentModel->find($paymentId);
+        $payment      = $paymentModel->find($paymentId);
 
         if (! $payment || empty($payment['proof_of_payment'])) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            throw PageNotFoundException::forPageNotFound();
         }
 
         $filePath = WRITEPATH . $payment['proof_of_payment'];
 
         if (! file_exists($filePath)) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            throw PageNotFoundException::forPageNotFound();
         }
 
         $mime = mime_content_type($filePath);

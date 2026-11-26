@@ -2,13 +2,11 @@
 
 namespace App\Services;
 
-use App\Models\Application\PersonalInformationModel;
-use App\Models\Application\FamilyBackgroundModel;
 use App\Models\Application\EducationalBackgroundModel;
+use App\Models\Application\FamilyBackgroundModel;
+use App\Models\Application\PersonalInformationModel;
 use App\Models\FormPageModel;
 use App\Models\ThemeModel;
-use App\Services\RequirementService;
-use App\Services\ApplicantDocumentService;
 
 class ApplicationProgressService
 {
@@ -19,7 +17,7 @@ class ApplicationProgressService
         $applicantStatus = $applicant['application_status'] ?? 'pending';
         $decisionRemarks = $applicant['decision_remarks'] ?? null;
         $appStatus       = $application['application_status'] ?? '';
-        $isFastTrack     = !empty($application['is_fast_track']);
+        $isFastTrack     = ! empty($application['is_fast_track']);
 
         // ── Revision request ──────────────────────
         $revisionRequested = $appStatus === 'needs_revision';
@@ -32,7 +30,7 @@ class ApplicationProgressService
         if ($revisionPageIds) {
             $revisionPageTitles = array_column(
                 (new FormPageModel())->whereIn('id', $revisionPageIds)->orderBy('sort_order', 'ASC')->findAll(),
-                'title'
+                'title',
             );
         }
 
@@ -75,10 +73,10 @@ class ApplicationProgressService
                 $pageId = (int) $page['id'];
 
                 $formCompletion[$pageId] = match ($pageId) {
-                    1 => !empty($application['applicant_type']),
-                    2 => !empty($pi['firstname']),
-                    3 => !empty($fb['father_lastname']) || !empty($fb['guardian_name']),
-                    4 => !empty($eb['school_name']),
+                    1       => ! empty($application['applicant_type']),
+                    2       => ! empty($pi['firstname']),
+                    3       => ! empty($fb['father_lastname']) || ! empty($fb['guardian_name']),
+                    4       => ! empty($eb['school_name']),
                     default => false,
                 };
             }
@@ -89,7 +87,7 @@ class ApplicationProgressService
             && $formPagesCompleted >= $formPageCount;
 
         $formSubmitted = $application
-            && !in_array($appStatus, ['draft', '']);
+            && ! in_array($appStatus, ['draft', ''], true);
 
         // ── Fast Track deferred pages ──────────────
         // Family Background / Educational Background were never required to reach
@@ -99,14 +97,14 @@ class ApplicationProgressService
         if ($isFastTrack && $formSubmitted) {
             $incompleteIds = array_keys(array_filter(
                 $formCompletion,
-                fn($done, $pageId) => !$done && in_array($pageId, [3, 4], true),
-                ARRAY_FILTER_USE_BOTH
+                static fn ($done, $pageId) => ! $done && in_array($pageId, [3, 4], true),
+                ARRAY_FILTER_USE_BOTH,
             ));
 
             if ($incompleteIds) {
                 $pendingFastTrackPages = array_column(
                     (new FormPageModel())->whereIn('id', $incompleteIds)->orderBy('sort_order', 'ASC')->findAll(),
-                    'title'
+                    'title',
                 );
             }
         }
@@ -121,13 +119,13 @@ class ApplicationProgressService
         if ($programId) {
             $allReqs = (new RequirementService())->getRequirements($programId);
 
-            if (!empty($allReqs)) {
+            if (! empty($allReqs)) {
                 $uploadedDocs = (new ApplicantDocumentService())
                     ->getStepDocuments($applicant['applicant_id'], $allReqs);
 
                 $requiredReqs = array_filter(
                     $allReqs,
-                    fn($r) => $r['is_required']
+                    static fn ($r) => $r['is_required'],
                 );
 
                 $docStats['total_required'] = count($requiredReqs);
@@ -135,47 +133,44 @@ class ApplicationProgressService
                 $docStats['uploaded_required'] = count(
                     array_filter(
                         $requiredReqs,
-                        fn($r) =>
-                            isset($uploadedDocs[$r['program_requirement_id']])
-                    )
+                        static fn ($r) => isset($uploadedDocs[$r['program_requirement_id']]),
+                    ),
                 );
 
                 $docStats['approved_required'] = count(
                     array_filter(
                         $requiredReqs,
-                        fn($r) =>
-                            isset($uploadedDocs[$r['program_requirement_id']]) &&
-                            ($uploadedDocs[$r['program_requirement_id']]['status'] ?? null) === 'approved'
-                    )
+                        static fn ($r) => isset($uploadedDocs[$r['program_requirement_id']])
+                            && ($uploadedDocs[$r['program_requirement_id']]['status'] ?? null) === 'approved',
+                    ),
                 );
             }
         }
 
-        $docsVerified =
-            $docStats['total_required'] > 0 &&
-            $docStats['approved_required'] >= $docStats['total_required'];
+        $docsVerified = $docStats['total_required'] > 0
+            && $docStats['approved_required'] >= $docStats['total_required'];
 
-        $docsComplete =
-            $docStats['total_required'] > 0
+        $docsComplete = $docStats['total_required'] > 0
             && $docStats['uploaded_required'] >= $docStats['total_required'];
 
         // ── Decision ──────────────────────────────
         $decisionMade = in_array(
             $applicantStatus,
-            ['approved', 'rejected', 'enrolled']
+            ['approved', 'rejected', 'enrolled'],
+            true,
         );
 
         $isApproved = in_array(
             $applicantStatus,
-            ['approved', 'enrolled']
+            ['approved', 'enrolled'],
+            true,
         );
 
         $isRejected = $applicantStatus === 'rejected';
         $isEnrolled = $applicantStatus === 'enrolled';
 
         // ── Exam ──────────────────────────────────
-        $examEnabled =
-            (new ThemeModel())->getSetting('exam_enabled', '1') === '1';
+        $examEnabled = (new ThemeModel())->getSetting('exam_enabled', '1') === '1';
 
         $examBooking = null;
 
@@ -193,7 +188,7 @@ class ApplicationProgressService
                 ])
                 ->join(
                     'exam_schedules es',
-                    'es.exam_schedule_id = eb.exam_schedule_id'
+                    'es.exam_schedule_id = eb.exam_schedule_id',
                 )
                 ->where('eb.applicant_id', $applicant['applicant_id'])
                 ->whereIn('eb.status', ['booked', 'attended'])
@@ -218,10 +213,10 @@ class ApplicationProgressService
                 'date'     => $formSubmitted
                     ? ($application['application_date'] ?? null)
                     : null,
-                'status'   => $revisionRequested
+                'status' => $revisionRequested
                     ? 'active'
                     : (($isFastTrack ? $formSubmitted : $formComplete) ? 'done' : ($formPagesCompleted > 0 ? 'active' : 'pending')),
-                'remarks'  => null,
+                'remarks' => null,
             ],
             [
                 'title'    => 'Required Documents Submitted',
@@ -229,10 +224,10 @@ class ApplicationProgressService
                 'date'     => $docsComplete
                     ? ($application['updated_at'] ?? null)
                     : null,
-                'status'   => $docsComplete
+                'status' => $docsComplete
                     ? 'done'
                     : ($docStats['uploaded_required'] > 0 ? 'active' : 'pending'),
-                'remarks'  => null,
+                'remarks' => null,
             ],
             [
                 'title'    => 'Documents Verified',
@@ -240,10 +235,10 @@ class ApplicationProgressService
                 'date'     => $docsVerified
                     ? ($application['updated_at'] ?? null)
                     : null,
-                'status'   => $docsVerified
+                'status' => $docsVerified
                     ? 'done'
                     : ($docsComplete ? 'active' : 'pending'),
-                'remarks'  => null,
+                'remarks' => null,
             ],
         ];
 
@@ -261,52 +256,47 @@ class ApplicationProgressService
                 $examTitle = match ($examResult) {
                     'PASSED' => 'Entrance Examination Passed',
                     'FAILED' => 'Entrance Examination Failed',
-                    default => 'Entrance Examination',
+                    default  => 'Entrance Examination',
                 };
 
                 $examSubtitle = match (true) {
-                    $examResult === 'PASSED' =>
-                        'You passed the entrance examination. Please wait for the final admission decision.',
+                    $examResult === 'PASSED' => 'You passed the entrance examination. Please wait for the final admission decision.',
 
-                    $examResult === 'FAILED' =>
-                        'Your entrance examination result has been released. Please check your email or contact admissions for next steps.',
+                    $examResult === 'FAILED' => 'Your entrance examination result has been released. Please check your email or contact admissions for next steps.',
 
-                    $examBooking['booking_status'] === 'attended' =>
-                        'You have completed the exam. Your result is currently being reviewed.',
+                    $examBooking['booking_status'] === 'attended' => 'You have completed the exam. Your result is currently being reviewed.',
 
-                    $examBooking['booking_status'] === 'booked' =>
-                        'Your exam is scheduled on '
+                    $examBooking['booking_status'] === 'booked' => 'Your exam is scheduled on '
                         . $examDate
                         . ($examTime ? ' at ' . $examTime : '')
                         . ' • '
                         . $examVenue,
 
-                    default =>
-                        'Your entrance examination status is being updated.',
+                    default => 'Your entrance examination status is being updated.',
                 };
 
                 $steps[] = [
-                    'title' => $examTitle,
+                    'title'    => $examTitle,
                     'subtitle' => $examSubtitle,
-                    'date' => $examBooking['booking_status'] === 'attended'
+                    'date'     => $examBooking['booking_status'] === 'attended'
                         ? $examBooking['checked_in_at'] ?? $examBooking['booked_at']
                         : null,
                     'status' => match (true) {
-                        $examResult === 'PASSED' => 'done',
-                        $examResult === 'FAILED' => 'rejected',
+                        $examResult === 'PASSED'                      => 'done',
+                        $examResult === 'FAILED'                      => 'rejected',
                         $examBooking['booking_status'] === 'attended' => 'active',
-                        $examBooking['booking_status'] === 'booked' => 'active',
-                        default => 'pending',
+                        $examBooking['booking_status'] === 'booked'   => 'active',
+                        default                                       => 'pending',
                     },
                     'remarks' => $examBooking['result_remarks'] ?? null,
                 ];
             } else {
                 $steps[] = [
-                    'title' => 'Entrance Examination',
+                    'title'    => 'Entrance Examination',
                     'subtitle' => 'Please book your entrance examination schedule once available.',
-                    'date' => null,
-                    'status' => 'pending',
-                    'remarks' => null,
+                    'date'     => null,
+                    'status'   => 'pending',
+                    'remarks'  => null,
                 ];
             }
         }
@@ -332,30 +322,30 @@ class ApplicationProgressService
         ];
 
         $steps[] = [
-            'title' => 'Enrollment & Payment',
+            'title'    => 'Enrollment & Payment',
             'subtitle' => 'Accept offer; complete enrollment.',
-            'date' => $isEnrolled
+            'date'     => $isEnrolled
                 ? ($applicant['application_date'] ?? null)
                 : null,
-            'status' => $isEnrolled ? 'done' : 'pending',
+            'status'  => $isEnrolled ? 'done' : 'pending',
             'remarks' => null,
         ];
 
         return [
-            'steps'              => $steps,
-            'app_status'         => $applicantStatus,
-            'form_status'        => $appStatus,
-            'decision_remarks'   => $decisionRemarks,
-            'revision_requested' => $revisionRequested,
-            'revision_note'      => $revisionNote,
-            'revision_pages'     => $revisionPageTitles,
-            'form_complete'      => $formComplete,
-            'form_submitted'     => $formSubmitted,
-            'docs_complete'      => $docsComplete,
-            'docs_verified'      => $docsVerified,
-            'exam_enabled'       => $examEnabled,
-            'exam_booking'       => $examBooking,
-            'is_fast_track'      => $isFastTrack,
+            'steps'                    => $steps,
+            'app_status'               => $applicantStatus,
+            'form_status'              => $appStatus,
+            'decision_remarks'         => $decisionRemarks,
+            'revision_requested'       => $revisionRequested,
+            'revision_note'            => $revisionNote,
+            'revision_pages'           => $revisionPageTitles,
+            'form_complete'            => $formComplete,
+            'form_submitted'           => $formSubmitted,
+            'docs_complete'            => $docsComplete,
+            'docs_verified'            => $docsVerified,
+            'exam_enabled'             => $examEnabled,
+            'exam_booking'             => $examBooking,
+            'is_fast_track'            => $isFastTrack,
             'pending_fast_track_pages' => $pendingFastTrackPages,
         ];
     }

@@ -3,6 +3,7 @@
 namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
+use RuntimeException;
 
 /**
  * Fictional demo / test accounts, one per role and applicant state. Contains no personal data:
@@ -21,7 +22,9 @@ class DemoUserSeeder extends Seeder
 {
     public const EMAIL_DOMAIN = 'akademus.test';
 
-    /** local part => [first, last, role, program_code|null, application_status|null] */
+    /**
+     * local part => [first, last, role, program_code|null, application_status|null]
+     */
     private const ACCOUNTS = [
         'demo.admin'               => ['Demo', 'Admin', 'admin', null, null],
         'demo.officer'             => ['Demo', 'Officer', 'admission_officer', null, null],
@@ -33,18 +36,18 @@ class DemoUserSeeder extends Seeder
     public function run(): void
     {
         if (ENVIRONMENT === 'production') {
-            throw new \RuntimeException('DemoUserSeeder must not run in production.');
+            throw new RuntimeException('DemoUserSeeder must not run in production.');
         }
 
         $fixedPassword = env('DEMO_PASSWORD') ?: null;
-        $password = $fixedPassword ?? bin2hex(random_bytes(8)) . 'Aa1!';
-        $hash = password_hash($password, PASSWORD_DEFAULT);
-        $created = [];
+        $password      = $fixedPassword ?? bin2hex(random_bytes(8)) . 'Aa1!';
+        $hash          = password_hash($password, PASSWORD_DEFAULT);
+        $created       = [];
 
         foreach (self::ACCOUNTS as $local => [$first, $last, $role, $programCode, $status]) {
-            $email = $local . '@' . self::EMAIL_DOMAIN;
+            $email            = $local . '@' . self::EMAIL_DOMAIN;
             [$userId, $isNew] = $this->upsertUser($email, $first, $last, $role);
-            $setPassword = $isNew || $fixedPassword !== null;
+            $setPassword      = $isNew || $fixedPassword !== null;
 
             if ($role === 'admin') {
                 $this->seedAdminCredential($userId, $setPassword ? $hash : null);
@@ -53,7 +56,7 @@ class DemoUserSeeder extends Seeder
                     $this->db->table('users')->where('user_id', $userId)->update(['password' => $hash]);
                 }
             } else {
-                $programId = $this->programId($programCode);
+                $programId   = $this->programId($programCode);
                 $applicantId = $this->seedApplicant($userId, $programId, $setPassword ? $hash : null);
                 if ($status !== null) {
                     $this->seedApplication($applicantId, $programId, $status);
@@ -77,10 +80,12 @@ class DemoUserSeeder extends Seeder
             : "Generated password (shown only now): {$password}\n";
     }
 
-    /** @return array{0:int,1:bool} [user_id, created] */
+    /**
+     * @return array{0:int,1:bool} [user_id, created]
+     */
     private function upsertUser(string $email, string $first, string $last, string $role): array
     {
-        $row = $this->db->table('users')->where('email', $email)->get()->getRowArray();
+        $row  = $this->db->table('users')->where('email', $email)->get()->getRowArray();
         $data = ['firstname' => $first, 'lastname' => $last, 'role' => $role, 'mobile' => '09000000000'];
         if ($row !== null) {
             $this->db->table('users')->where('user_id', $row['user_id'])->update($data);
@@ -107,7 +112,7 @@ class DemoUserSeeder extends Seeder
     {
         $row = $this->db->table('programs')->where('program_code', $code)->get()->getRowArray();
         if ($row === null) {
-            throw new \RuntimeException("DemoUserSeeder: program {$code} is missing; run ReferenceDataSeeder first.");
+            throw new RuntimeException("DemoUserSeeder: program {$code} is missing; run ReferenceDataSeeder first.");
         }
 
         return (int) $row['program_id'];
@@ -125,9 +130,9 @@ class DemoUserSeeder extends Seeder
         }
 
         $this->db->table('applicants')->insert([
-            'user_id' => $userId, 'program_id' => $programId,
-            'password' => $hash ?? password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT),
-            'temp_password' => 0, 'application_status' => 'pending', 'has_seen_tour' => 0,
+            'user_id'          => $userId, 'program_id' => $programId,
+            'password'         => $hash ?? password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT),
+            'temp_password'    => 0, 'application_status' => 'pending', 'has_seen_tour' => 0,
             'application_date' => date('Y-m-d H:i:s'), 'form_step' => 1,
         ]);
         $applicantId = (int) $this->db->insertID();
@@ -143,8 +148,8 @@ class DemoUserSeeder extends Seeder
             return;
         }
         $this->db->table('applications')->insert([
-            'applicant_id' => $applicantId, 'applicant_type' => 'freshmen', 'is_fast_track' => 0,
-            'program_id' => $programId, 'school_year' => '2025-2026', 'semester' => '1st Semester',
+            'applicant_id'       => $applicantId, 'applicant_type' => 'freshmen', 'is_fast_track' => 0,
+            'program_id'         => $programId, 'school_year' => '2025-2026', 'semester' => '1st Semester',
             'application_status' => $status,
         ]);
     }

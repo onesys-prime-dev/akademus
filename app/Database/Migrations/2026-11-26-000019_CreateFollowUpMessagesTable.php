@@ -9,12 +9,12 @@ class CreateFollowUpMessagesTable extends Migration
     public function up(): void
     {
         $this->forge->addField([
-            'message_id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true, 'null' => false],
+            'message_id'   => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true, 'null' => false],
             'applicant_id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'null' => false],
-            'sender_role' => ['type' => 'ENUM', 'constraint' => ['applicant', 'officer'], 'null' => false],
-            'message' => ['type' => 'TEXT', 'null' => false],
-            'is_read' => ['type' => 'TINYINT', 'constraint' => 1, 'null' => false, 'default' => '0'],
-            'created_at' => ['type' => 'DATETIME', 'null' => true],
+            'sender_role'  => ['type' => 'ENUM', 'constraint' => ['applicant', 'officer'], 'null' => false],
+            'message'      => ['type' => 'TEXT', 'null' => false],
+            'is_read'      => ['type' => 'TINYINT', 'constraint' => 1, 'null' => false, 'default' => '0'],
+            'created_at'   => ['type' => 'DATETIME', 'null' => true],
         ]);
         $this->forge->addPrimaryKey('message_id');
         $this->forge->addKey('applicant_id', false, false, 'applicant_id');

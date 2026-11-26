@@ -10,11 +10,11 @@ class CreateProgramsTable extends Migration
     public function up(): void
     {
         $this->forge->addField([
-            'program_id' => ['type' => 'INT', 'constraint' => 11, 'auto_increment' => true, 'null' => false],
+            'program_id'   => ['type' => 'INT', 'constraint' => 11, 'auto_increment' => true, 'null' => false],
             'program_code' => ['type' => 'VARCHAR', 'constraint' => 20, 'null' => true],
             'program_name' => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => false],
-            'created_at' => ['type' => 'TIMESTAMP', 'null' => false, 'default' => new RawSql('CURRENT_TIMESTAMP')],
-            'preset_id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'null' => true, 'comment' => 'Foreign key to form_presets, null = use global preset'],
+            'created_at'   => ['type' => 'TIMESTAMP', 'null' => false, 'default' => new RawSql('CURRENT_TIMESTAMP')],
+            'preset_id'    => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'null' => true, 'comment' => 'Foreign key to form_presets, null = use global preset'],
         ]);
         $this->forge->addPrimaryKey('program_id');
         $this->forge->addUniqueKey('program_name', 'uq_program_name');

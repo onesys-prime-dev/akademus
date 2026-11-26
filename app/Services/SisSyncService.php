@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Config\Services;
+use RuntimeException;
 use Throwable;
 
 /**
@@ -84,7 +86,7 @@ class SisSyncService
         try {
             $payload = $this->buildPayload((int) $row['applicant_id']);
             $result  = $this->post($payload);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Bad data on our side (missing applicant/program code): retrying won't fix it.
             $result = ['ok' => false, 'retry' => false, 'error' => $e->getMessage()];
         } catch (Throwable $e) {
@@ -94,7 +96,9 @@ class SisSyncService
         return $this->record($row, $result);
     }
 
-    /** Rows due for (re)delivery — used by the spark worker. */
+    /**
+     * Rows due for (re)delivery — used by the spark worker.
+     */
     public function dueIds(int $limit = 20): array
     {
         $rows = db_connect()->table('sis_sync')
@@ -102,8 +106,8 @@ class SisSyncService
             ->whereIn('status', ['pending', 'failed'])
             ->where('attempts <', self::MAX_ATTEMPTS)
             ->groupStart()
-                ->where('next_attempt_at <=', date('Y-m-d H:i:s'))
-                ->orWhere('next_attempt_at IS NULL')
+            ->where('next_attempt_at <=', date('Y-m-d H:i:s'))
+            ->orWhere('next_attempt_at IS NULL')
             ->groupEnd()
             ->orderBy('sync_id')
             ->limit($limit)
@@ -124,7 +128,7 @@ class SisSyncService
             ->getRowArray();
 
         if (! $row) {
-            throw new \RuntimeException("Applicant {$applicantId} not found.");
+            throw new RuntimeException("Applicant {$applicantId} not found.");
         }
 
         $payment = db_connect()->table('sis_sync')
@@ -167,8 +171,8 @@ class SisSyncService
         // doesn't know yet — which is why the name travels with the code.
         // A program with no code can't be represented in the SIS at all.
         if (empty($row['program_code'])) {
-            throw new \RuntimeException(
-                'The applicant\'s program has no program code in Admissions. Set one, then run: php spark sis:sync --requeue ' . $applicantId
+            throw new RuntimeException(
+                'The applicant\'s program has no program code in Admissions. Set one, then run: php spark sis:sync --requeue ' . $applicantId,
             );
         }
 
@@ -205,7 +209,7 @@ class SisSyncService
             return ['ok' => false, 'retry' => false, 'error' => 'SIS_API_URL / SIS_API_KEY are not configured.'];
         }
 
-        $response = \Config\Services::curlrequest(['timeout' => 10, 'http_errors' => false])
+        $response = Services::curlrequest(['timeout' => 10, 'http_errors' => false])
             ->post($url . '/api/students/promote', [
                 'headers' => ['X-API-KEY' => $key, 'Accept' => 'application/json'],
                 'json'    => $payload,
@@ -261,7 +265,7 @@ class SisSyncService
         $delay  = self::BACKOFF_MINUTES[min($attempts - 1, count(self::BACKOFF_MINUTES) - 1)];
 
         $db->table('sis_sync')->where('sync_id', $row['sync_id'])->update([
-            'status'          => 'failed',
+            'status' => 'failed',
             // A permanent failure burns the remaining attempts so the worker skips it.
             'attempts'        => $giveUp ? self::MAX_ATTEMPTS : $attempts,
             'next_attempt_at' => $giveUp ? null : date('Y-m-d H:i:s', strtotime("+{$delay} minutes")),

@@ -15,7 +15,7 @@ class SystemsController extends BaseController
     {
         return view('landing-pages/systems/mentora.php');
     }
-    
+
     public function learnix(): string
     {
         return view('landing-pages/systems/learnix.php');

@@ -6,8 +6,8 @@ use CodeIgniter\Model;
 
 class ThemeModel extends Model
 {
-    protected $table      = 'theme_settings';
-    protected $primaryKey = 'id';
+    protected $table         = 'theme_settings';
+    protected $primaryKey    = 'id';
     protected $allowedFields = ['setting_key', 'setting_value'];
 
     /**
@@ -15,11 +15,13 @@ class ThemeModel extends Model
      */
     public function getAllSettings(): array
     {
-        $rows = $this->findAll();
+        $rows     = $this->findAll();
         $settings = [];
+
         foreach ($rows as $row) {
             $settings[$row['setting_key']] = $row['setting_value'];
         }
+
         return $settings;
     }
 
@@ -29,6 +31,7 @@ class ThemeModel extends Model
     public function getSetting(string $key, string $default = ''): string
     {
         $row = $this->where('setting_key', $key)->first();
+
         return $row ? $row['setting_value'] : $default;
     }
 

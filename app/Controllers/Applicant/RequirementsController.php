@@ -1,16 +1,17 @@
 <?php
+
 // Requirements.php
 
 namespace App\Controllers\Applicant;
 
 use App\Controllers\BaseController;
-
 use App\Libraries\EncryptedFileStorage;
-use App\Services\RequirementService;
+use App\Models\ThemeModel;
 use App\Services\ApplicantDocumentService;
 use App\Services\NotificationService;
-
-use App\Models\ThemeModel;
+use App\Services\RequirementService;
+use CodeIgniter\Exceptions\PageNotFoundException;
+use Config\Database;
 
 class RequirementsController extends BaseController
 {
@@ -18,25 +19,28 @@ class RequirementsController extends BaseController
     protected $documentService;
     protected $notificationService;
 
-    public function __construct() {
-        $this->requirementService = new RequirementService();
-        $this->documentService = new ApplicantDocumentService();
+    public function __construct()
+    {
+        $this->requirementService  = new RequirementService();
+        $this->documentService     = new ApplicantDocumentService();
         $this->notificationService = new NotificationService();
     }
 
-    public function index() {
+    public function index()
+    {
         // Default page load goes to step 1
         return $this->renderLayout(1);
     }
 
-    private function renderLayout(int $step) {
+    private function renderLayout(int $step)
+    {
         // Check user if logged in
-        if (!session()->get('logged_in')) {
+        if (! session()->get('logged_in')) {
             return redirect()->to('/sign-in');
         }
 
         $themeModel = new ThemeModel();
-        $theme = $themeModel->getAllSettings();
+        $theme      = $themeModel->getAllSettings();
 
         // Compute primary_soft (lightened tint) from primary_color
         $theme['primary_soft'] = $this->lightenHex($theme['primary_color'] ?? '#0040a6', 0.88);
@@ -45,12 +49,12 @@ class RequirementsController extends BaseController
         $program_id = session()->get('selected_program_id') ?? session()->get('program_id');
 
         $categories = $this->requirementService->getCategories($program_id);
-        $maxSteps = count($categories) + 1;
+        $maxSteps   = count($categories) + 1;
 
         // Application status for "passed" modal
-        $applicant_id = session()->get('applicant_id');
-        $db = \Config\Database::connect();
-        $application = $db->table('applications')->where('applicant_id', $applicant_id)->get()->getRowArray();
+        $applicant_id       = session()->get('applicant_id');
+        $db                 = Database::connect();
+        $application        = $db->table('applications')->where('applicant_id', $applicant_id)->get()->getRowArray();
         $application_status = $application['application_status'] ?? '';
 
         $isFastTrack = $this->isApplicantFastTrack($applicant_id);
@@ -65,35 +69,35 @@ class RequirementsController extends BaseController
         if ($isFastTrack && $program_id) {
             $reqs = $this->applyFastTrackRequiredFlag(
                 $this->requirementService->getRequirements($program_id),
-                true
+                true,
             );
             $fastTrackRequiredDocs = array_values(array_map(
-                fn($r) => $r['requirement_name'],
-                array_filter($reqs, fn($r) => $r['is_required'])
+                static fn ($r) => $r['requirement_name'],
+                array_filter($reqs, static fn ($r) => $r['is_required']),
             ));
         }
 
         return view('applicant/main', [
-            'title'              => 'Requirements',
-            'page_content'       => 'applicant/requirements/requirements',
-            'initial_step'       => $step,
-            'max_steps'          => $maxSteps,
-            'categories'         => $categories,
-            'theme'              => $theme,
-            'application_status' => $application_status,
-            'requiredDocsVerified' => $requiredDocsVerified,
-            'is_fast_track'         => $isFastTrack,
+            'title'                    => 'Requirements',
+            'page_content'             => 'applicant/requirements/requirements',
+            'initial_step'             => $step,
+            'max_steps'                => $maxSteps,
+            'categories'               => $categories,
+            'theme'                    => $theme,
+            'application_status'       => $application_status,
+            'requiredDocsVerified'     => $requiredDocsVerified,
+            'is_fast_track'            => $isFastTrack,
             'fast_track_required_docs' => $fastTrackRequiredDocs,
         ]);
     }
 
     private function isApplicantFastTrack($applicant_id): bool
     {
-        if (!$applicant_id) {
+        if (! $applicant_id) {
             return false;
         }
 
-        $application = \Config\Database::connect()
+        $application = Database::connect()
             ->table('applications')
             ->select('is_fast_track')
             ->where('applicant_id', $applicant_id)
@@ -101,7 +105,7 @@ class RequirementsController extends BaseController
             ->getRowArray();
 
         if ($application) {
-            return !empty($application['is_fast_track']);
+            return ! empty($application['is_fast_track']);
         }
 
         // No application row yet — they picked a path on the Choose Your Path
@@ -118,12 +122,13 @@ class RequirementsController extends BaseController
      */
     private function applyFastTrackRequiredFlag(array $requirements, bool $isFastTrack): array
     {
-        if (!$isFastTrack) {
+        if (! $isFastTrack) {
             return $requirements;
         }
 
-        return array_map(function ($r) {
+        return array_map(static function ($r) {
             $r['is_required'] = $r['is_fast_track_required'] ?? false;
+
             return $r;
         }, $requirements);
     }
@@ -131,9 +136,9 @@ class RequirementsController extends BaseController
     private function lightenHex(string $hex, float $amount = 0.88): string
     {
         $hex = ltrim($hex, '#');
-        $r = hexdec(substr($hex, 0, 2));
-        $g = hexdec(substr($hex, 2, 2));
-        $b = hexdec(substr($hex, 4, 2));
+        $r   = hexdec(substr($hex, 0, 2));
+        $g   = hexdec(substr($hex, 2, 2));
+        $b   = hexdec(substr($hex, 4, 2));
 
         $r = (int) round($r + (255 - $r) * $amount);
         $g = (int) round($g + (255 - $g) * $amount);
@@ -145,30 +150,27 @@ class RequirementsController extends BaseController
     public function getStep($step)
     {
         $step = (int) $step;
-        
+
         $program_id = session()->get('selected_program_id') ?? session()->get('program_id');
 
         $categories = $this->requirementService->getCategories($program_id);
-        $maxSteps = count($categories) + 1;
+        $maxSteps   = count($categories) + 1;
 
         if ($step < 1 || $step > $maxSteps) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            throw PageNotFoundException::forPageNotFound();
         }
 
-        if ($step == $maxSteps) {
-
+        if ($step === $maxSteps) {
             $requirements = $this->requirementService->getRequirements($program_id);
 
-            $category_name = 'Review';
+            $category_name        = 'Review';
             $category_description = 'Review all your uploaded documents';
-
         } else {
-
             $category = $categories[$step - 1];
 
             $requirements = $this->requirementService->getStepRequirements($program_id, $step);
 
-            $category_name = $category['category_name'];
+            $category_name        = $category['category_name'];
             $category_description = $category['description'];
         }
 
@@ -180,22 +182,21 @@ class RequirementsController extends BaseController
         $formData = $this->documentService->getStepDocuments($applicant_id, $requirements);
 
         // Compute upload counts for the counter shown in the step header
-        $totalRequired   = count(array_filter($requirements, fn($r) => $r['is_required']));
-        $uploadedRequired = count(array_filter($requirements, fn($r) => $r['is_required'] && isset($formData[$r['program_requirement_id']])));
-        $totalUploaded   = count($formData);
+        $totalRequired    = count(array_filter($requirements, static fn ($r) => $r['is_required']));
+        $uploadedRequired = count(array_filter($requirements, static fn ($r) => $r['is_required'] && isset($formData[$r['program_requirement_id']])));
+        $totalUploaded    = count($formData);
 
         // Check ALL requirements across every step (not just the current one)
         $allReqs          = $this->applyFastTrackRequiredFlag($this->requirementService->getRequirements($program_id), $isFastTrack);
         $allUploaded      = $this->documentService->getStepDocuments($applicant_id, $allReqs);
-        $allTotalRequired = count(array_filter($allReqs, fn($r) => $r['is_required']));
-        $allUploadedReq   = count(array_filter($allReqs, fn($r) => $r['is_required'] && isset($allUploaded[$r['program_requirement_id']])));
+        $allTotalRequired = count(array_filter($allReqs, static fn ($r) => $r['is_required']));
+        $allUploadedReq   = count(array_filter($allReqs, static fn ($r) => $r['is_required'] && isset($allUploaded[$r['program_requirement_id']])));
 
         if ($this->request->isAJAX()) {
-
             return $this->response->setJSON([
-                'title'              => 'Requirements',
-                'step_num'           => $step,
-                'form'               => view("applicant/requirements/steps/step", [
+                'title'    => 'Requirements',
+                'step_num' => $step,
+                'form'     => view('applicant/requirements/steps/step', [
                     'step_num'             => $step,
                     'requirements'         => $requirements,
                     'category_name'        => $category_name,
@@ -212,8 +213,9 @@ class RequirementsController extends BaseController
         return $this->renderLayout($step);
     }
 
-    public function updateDocument($step) {
-        if (!session()->get('logged_in')) {
+    public function updateDocument($step)
+    {
+        if (! session()->get('logged_in')) {
             return $this->response->setStatusCode(401)->setJSON(['status' => 'error', 'message' => 'Unauthorized']);
         }
 
@@ -228,16 +230,14 @@ class RequirementsController extends BaseController
         $program_id = session()->get('selected_program_id') ?? session()->get('program_id');
 
         if ($this->documentService->allRequiredCompleted($applicant_id, $program_id, $this->isApplicantFastTrack($applicant_id))) {
-
             $key = "requirements_completed_{$applicant_id}";
 
             if (! $this->alreadyQueued($key)) {
-
                 $this->notificationService->trigger(
                     'requirements.completed',
                     $applicant_id,
                     [],
-                    $key
+                    $key,
                 );
             }
         }
@@ -245,7 +245,7 @@ class RequirementsController extends BaseController
         // Surface the first rejection (unsupported type, failed upload, etc.) —
         // previously this always reported "success" even when nothing was
         // actually saved, so a rejected upload looked like a silent no-op.
-        if (!empty($result['rejected'])) {
+        if (! empty($result['rejected'])) {
             return $this->response->setJSON([
                 'status'  => 'error',
                 'message' => $result['rejected'][0]['message'] ?? 'One or more files could not be uploaded.',
@@ -253,27 +253,27 @@ class RequirementsController extends BaseController
         }
 
         return $this->response->setJSON([
-            'status' => 'success'
+            'status' => 'success',
         ]);
     }
 
     public function viewDocument($requirementId)
     {
-        if (!session()->get('logged_in')) {
+        if (! session()->get('logged_in')) {
             return redirect()->to('/sign-in');
         }
 
         $applicant_id = session()->get('applicant_id');
-        $doc = $this->documentService->getDocument($applicant_id, (int) $requirementId);
+        $doc          = $this->documentService->getDocument($applicant_id, (int) $requirementId);
 
-        if (!$doc) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        if (! $doc) {
+            throw PageNotFoundException::forPageNotFound();
         }
 
         $filePath = WRITEPATH . "uploads/applicants/{$applicant_id}/" . basename($doc['document_name']);
 
-        if (!file_exists($filePath)) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        if (! file_exists($filePath)) {
+            throw PageNotFoundException::forPageNotFound();
         }
 
         $mime = $doc['mime_type'] ?? 'application/octet-stream';
@@ -286,12 +286,12 @@ class RequirementsController extends BaseController
 
     public function submitApplication()
     {
-        if (!session()->get('logged_in')) {
+        if (! session()->get('logged_in')) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized']);
         }
 
         $applicant_id = session()->get('applicant_id');
-        $db = \Config\Database::connect();
+        $db           = Database::connect();
 
         $db->table('applications')
             ->where('applicant_id', $applicant_id)

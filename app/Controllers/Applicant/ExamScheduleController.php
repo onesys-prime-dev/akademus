@@ -3,10 +3,12 @@
 namespace App\Controllers\Applicant;
 
 use App\Controllers\BaseController;
-use App\Models\ThemeModel;
 use App\Models\Applicant\ApplicantModel;
-use App\Services\ExamScheduleService;
+use App\Models\ThemeModel;
 use App\Services\ApplicantDocumentService;
+use App\Services\ExamScheduleService;
+use CodeIgniter\HTTP\ResponseInterface;
+use Config\Database;
 
 class ExamScheduleController extends BaseController
 {
@@ -15,7 +17,7 @@ class ExamScheduleController extends BaseController
 
     public function __construct()
     {
-        $this->service = new ExamScheduleService();
+        $this->service         = new ExamScheduleService();
         $this->documentService = new ApplicantDocumentService();
     }
 
@@ -46,8 +48,8 @@ class ExamScheduleController extends BaseController
         }
 
         if (! $this->documentService->allRequiredCompleted((int) session()->get('applicant_id'), (int) session()->get('program_id'))) {
-            // If the applicant has not completed all required documents, redirect to dashboard (It should not be open to applicant in sidebar anyway)     
-        return redirect()->to('/dashboard');
+            // If the applicant has not completed all required documents, redirect to dashboard (It should not be open to applicant in sidebar anyway)
+            return redirect()->to('/dashboard');
         }
 
         $applicant = $this->requireApplicant();
@@ -74,7 +76,7 @@ class ExamScheduleController extends BaseController
             return $this->jsonError('Unauthorized.');
         }
 
-        $themeModel  = new ThemeModel();
+        $themeModel = new ThemeModel();
         if ($themeModel->getSetting('exam_enabled', '1') !== '1') {
             return $this->jsonError('Exam scheduling is disabled.');
         }
@@ -110,7 +112,7 @@ class ExamScheduleController extends BaseController
             return $this->jsonError('Applicant not found.');
         }
 
-        $db = \Config\Database::connect();
+        $db      = Database::connect();
         $booking = $db->table('exam_bookings')
             ->where('applicant_id', (int) $applicant['applicant_id'])
             ->whereIn('status', ['booked', 'attended'])
@@ -138,7 +140,7 @@ class ExamScheduleController extends BaseController
 
     private function getActiveBooking(int $applicantId): ?array
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         return $db->table('exam_bookings eb')
             ->select([
@@ -168,12 +170,12 @@ class ExamScheduleController extends BaseController
             ->getRowArray() ?: null;
     }
 
-    private function jsonSuccess(string $message): \CodeIgniter\HTTP\ResponseInterface
+    private function jsonSuccess(string $message): ResponseInterface
     {
         return $this->response->setJSON(['success' => true, 'message' => $message]);
     }
 
-    private function jsonError(string $message): \CodeIgniter\HTTP\ResponseInterface
+    private function jsonError(string $message): ResponseInterface
     {
         return $this->response->setJSON(['success' => false, 'message' => $message]);
     }

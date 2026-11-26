@@ -7,13 +7,11 @@ use CodeIgniter\Model;
 
 class ApplicationModel extends Model
 {
-    protected $table = 'applications';
-    protected $primaryKey = 'application_id';
-
+    protected $table            = 'applications';
+    protected $primaryKey       = 'application_id';
     protected $useAutoIncrement = true;
-    protected $returnType = 'array';
-
-    protected $allowedFields = [
+    protected $returnType       = 'array';
+    protected $allowedFields    = [
         'applicant_id',
         'applicant_type',
         'program_id',
@@ -25,7 +23,6 @@ class ApplicationModel extends Model
         'is_fast_track',
         'custom_fields',
     ];
-
     protected array $castHandlers = [
         'encrypted_json' => EncryptedJsonCast::class,
     ];
@@ -34,7 +31,6 @@ class ApplicationModel extends Model
     protected array $casts = [
         'custom_fields' => '?encrypted_json',
     ];
-
     protected $useTimestamps = true;
     protected $createdField  = 'application_date';
     protected $updatedField  = 'updated_at';

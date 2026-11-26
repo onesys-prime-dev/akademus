@@ -3,10 +3,11 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
-use App\Models\ThemeModel;
 use App\Models\Payment\PaymentFeeTypeModel;
-use App\Models\Payment\PaymentMethodModel;
 use App\Models\Payment\PaymentMethodAccountModel;
+use App\Models\Payment\PaymentMethodModel;
+use App\Models\ThemeModel;
+use Config\Database;
 
 class PaymentFeesController extends BaseController
 {
@@ -15,6 +16,7 @@ class PaymentFeesController extends BaseController
         if (! session()->get('admin_logged_in')) {
             return redirect()->to(base_url('admin/login'));
         }
+
         return null;
     }
 
@@ -22,14 +24,16 @@ class PaymentFeesController extends BaseController
 
     public function fees()
     {
-        if ($r = $this->requireAdmin()) return $r;
+        if ($r = $this->requireAdmin()) {
+            return $r;
+        }
 
         $feeModel    = new PaymentFeeTypeModel();
         $methodModel = new PaymentMethodModel();
         $theme       = (new ThemeModel())->getAllSettings();
 
         // Payment methods joined with their account (1-to-1)
-        $db      = \Config\Database::connect();
+        $db      = Database::connect();
         $methods = $db->table('payment_method pm')
             ->select([
                 'pm.payment_method_id',
@@ -55,15 +59,17 @@ class PaymentFeesController extends BaseController
 
     public function updateFee($id)
     {
-        if ($r = $this->requireAdmin()) return $r;
+        if ($r = $this->requireAdmin()) {
+            return $r;
+        }
 
         $amount = $this->request->getPost('amount');
 
-        if ($amount === null || ! is_numeric($amount) || (float)$amount < 0) {
+        if ($amount === null || ! is_numeric($amount) || (float) $amount < 0) {
             return $this->response->setJSON(['success' => false, 'message' => 'Invalid amount.']);
         }
 
-        (new PaymentFeeTypeModel())->update((int)$id, ['amount' => (float)$amount]);
+        (new PaymentFeeTypeModel())->update((int) $id, ['amount' => (float) $amount]);
 
         return $this->response->setJSON(['success' => true, 'message' => 'Fee amount updated.']);
     }
@@ -72,7 +78,9 @@ class PaymentFeesController extends BaseController
 
     public function addMethod()
     {
-        if ($r = $this->requireAdmin()) return $r;
+        if ($r = $this->requireAdmin()) {
+            return $r;
+        }
 
         $name          = trim($this->request->getPost('name') ?? '');
         $accountNumber = trim($this->request->getPost('account_number') ?? '');
@@ -85,7 +93,7 @@ class PaymentFeesController extends BaseController
         // Generate a code from the name (uppercase, spaces → underscores, keep alphanumeric + _)
         $code = strtoupper(preg_replace('/[^A-Z0-9_]/i', '', str_replace(' ', '_', $name)));
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $db->transStart();
 
         $methodModel = new PaymentMethodModel();
@@ -132,7 +140,9 @@ class PaymentFeesController extends BaseController
 
     public function updateMethod(int $id)
     {
-        if ($r = $this->requireAdmin()) return $r;
+        if ($r = $this->requireAdmin()) {
+            return $r;
+        }
 
         $name          = trim($this->request->getPost('name') ?? '');
         $accountNumber = trim($this->request->getPost('account_number') ?? '');
@@ -168,7 +178,9 @@ class PaymentFeesController extends BaseController
 
     public function toggleMethod(int $id)
     {
-        if ($r = $this->requireAdmin()) return $r;
+        if ($r = $this->requireAdmin()) {
+            return $r;
+        }
 
         $methodModel = new PaymentMethodModel();
         $method      = $methodModel->find($id);

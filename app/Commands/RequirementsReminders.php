@@ -2,18 +2,18 @@
 
 namespace App\Commands;
 
-use CodeIgniter\CLI\BaseCommand;
 use App\Services\NotificationService;
+use CodeIgniter\CLI\BaseCommand;
 
 class RequirementsReminders extends BaseCommand
 {
-    protected $group = 'Notifications';
-    protected $name = 'notifications:requirements';
+    protected $group       = 'Notifications';
+    protected $name        = 'notifications:requirements';
     protected $description = 'Requirements reminders (not started / incomplete)';
 
     public function run(array $params)
     {
-        $db = db_connect();
+        $db     = db_connect();
         $notify = new NotificationService();
 
         $now = time();
@@ -24,7 +24,7 @@ class RequirementsReminders extends BaseCommand
         $applicants = $db->table('applicants a')
             ->select('a.applicant_id, a.created_at')
             // @phpstan-ignore-next-line
-            ->whereNotIn('a.applicant_id', function ($builder) {
+            ->whereNotIn('a.applicant_id', static function ($builder) {
                 $builder->select('applicant_id')
                     ->from('applicant_documents');
             })
@@ -32,21 +32,24 @@ class RequirementsReminders extends BaseCommand
             ->getResultArray();
 
         foreach ($applicants as $a) {
-
             $elapsed = $now - strtotime($a['created_at']);
-            $level = $this->getLevel($elapsed);
+            $level   = $this->getLevel($elapsed);
 
-            if (!$level) continue;
+            if (! $level) {
+                continue;
+            }
 
             $key = "req_not_started_{$a['applicant_id']}_{$level}";
 
-            if ($this->alreadyQueued($db, $key)) continue;
+            if ($this->alreadyQueued($db, $key)) {
+                continue;
+            }
 
             $notify->trigger(
                 'requirements.not_started',
                 $a['applicant_id'],
                 ['level' => $level],
-                $key
+                $key,
             );
         }
 
@@ -61,7 +64,6 @@ class RequirementsReminders extends BaseCommand
             ->getResultArray();
 
         foreach ($apps as $app) {
-
             $applicantId = $app['applicant_id'];
 
             // skip if already complete
@@ -70,19 +72,23 @@ class RequirementsReminders extends BaseCommand
             }
 
             $elapsed = $now - strtotime($app['last_upload']);
-            $level = $this->getLevel($elapsed);
+            $level   = $this->getLevel($elapsed);
 
-            if (!$level) continue;
+            if (! $level) {
+                continue;
+            }
 
             $key = "req_incomplete_{$applicantId}_{$level}";
 
-            if ($this->alreadyQueued($db, $key)) continue;
+            if ($this->alreadyQueued($db, $key)) {
+                continue;
+            }
 
             $notify->trigger(
                 'requirements.incomplete',
                 $applicantId,
                 ['level' => $level],
-                $key
+                $key,
             );
         }
 
@@ -136,7 +142,9 @@ class RequirementsReminders extends BaseCommand
             ->get()
             ->getRowArray();
 
-        if (!$applicant) return false;
+        if (! $applicant) {
+            return false;
+        }
 
         $programId = $applicant['program_id'];
 
@@ -145,14 +153,16 @@ class RequirementsReminders extends BaseCommand
             ->select('pr.program_requirement_id')
             ->join(
                 'program_requirement_categories prc',
-                'prc.program_requirement_category_id = pr.program_requirement_category_id'
+                'prc.program_requirement_category_id = pr.program_requirement_category_id',
             )
             ->where('prc.program_id', $programId)
             ->where('pr.is_mandatory', 1)
             ->get()
             ->getResultArray();
 
-        if (empty($required)) return false;
+        if (empty($required)) {
+            return false;
+        }
 
         $requiredIds = array_column($required, 'program_requirement_id');
 

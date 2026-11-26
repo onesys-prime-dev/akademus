@@ -2,18 +2,18 @@
 
 namespace App\Commands;
 
-use CodeIgniter\CLI\BaseCommand;
 use App\Services\NotificationService;
+use CodeIgniter\CLI\BaseCommand;
 
 class ApplicationReminders extends BaseCommand
 {
-    protected $group = 'Notifications';
-    protected $name = 'notifications:application';
+    protected $group       = 'Notifications';
+    protected $name        = 'notifications:application';
     protected $description = 'Application reminders (not started / in progress)';
 
     public function run(array $params)
     {
-        $db = db_connect();
+        $db     = db_connect();
         $notify = new NotificationService();
 
         $now = time();
@@ -24,28 +24,31 @@ class ApplicationReminders extends BaseCommand
         $users = $db->table('applicants a')
             ->select('a.applicant_id, a.created_at')
             // @phpstan-ignore-next-line
-            ->whereNotIn('a.applicant_id', function($builder) {
+            ->whereNotIn('a.applicant_id', static function ($builder) {
                 $builder->select('applicant_id')->from('applications');
             })
             ->get()
             ->getResultArray();
 
         foreach ($users as $u) {
-
             $elapsed = $now - strtotime($u['created_at']);
-            $level = $this->getLevel($elapsed);
+            $level   = $this->getLevel($elapsed);
 
-            if (!$level) continue;
+            if (! $level) {
+                continue;
+            }
 
             $key = "app_not_started_{$u['applicant_id']}_{$level}";
 
-            if ($this->alreadyQueued($db, $key)) continue;
+            if ($this->alreadyQueued($db, $key)) {
+                continue;
+            }
 
             $notify->trigger(
                 'application.not_started',
                 $u['applicant_id'],
                 ['level' => $level],
-                $key
+                $key,
             );
         }
 
@@ -59,23 +62,26 @@ class ApplicationReminders extends BaseCommand
             ->getResultArray();
 
         foreach ($apps as $app) {
-
             $elapsed = $now - strtotime($app['updated_at']);
-            $level = $this->getLevel($elapsed);
+            $level   = $this->getLevel($elapsed);
 
-            if (!$level) continue;
+            if (! $level) {
+                continue;
+            }
 
             echo "App {$app['application_id']} elapsed: {$elapsed}, level: {$level}\n";
 
             $key = "app_draft_{$app['application_id']}_{$level}";
 
-            if ($this->alreadyQueued($db, $key)) continue;
+            if ($this->alreadyQueued($db, $key)) {
+                continue;
+            }
 
             $notify->trigger(
                 'application.in_progress',
                 $app['applicant_id'],
                 ['level' => $level],
-                $key
+                $key,
             );
         }
 

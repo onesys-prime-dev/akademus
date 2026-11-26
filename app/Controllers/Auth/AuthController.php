@@ -3,12 +3,14 @@
 namespace App\Controllers\Auth;
 
 use App\Controllers\BaseController;
-
 use App\Libraries\LoginThrottle;
 use App\Models\Auth\RememberTokenModel;
 use App\Models\Program\ProgramModel;
 use App\Models\ThemeModel;
 use App\Services\NotificationService;
+use Config\Database;
+use Exception;
+use Throwable;
 
 class AuthController extends BaseController
 {
@@ -23,54 +25,52 @@ class AuthController extends BaseController
     {
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([
-                'title' => 'Sign In',
-                'header' => 'Welcome Back!',
+                'title'     => 'Sign In',
+                'header'    => 'Welcome Back!',
                 'subheader' => 'Sign in to continue your application.',
-                'form' => view('auth/sign-in')
+                'form'      => view('auth/sign-in'),
             ]);
         }
 
         $themeModel = new ThemeModel();
 
-        $data['theme'] = $themeModel->getAllSettings();
-        $data['title'] = 'Sign In';
-        $data['auth_header'] = 'Welcome Back!';
+        $data['theme']           = $themeModel->getAllSettings();
+        $data['title']           = 'Sign In';
+        $data['auth_header']     = 'Welcome Back!';
         $data['auth_sub_header'] = 'Sign in to continue your application.';
-        $data['auth_field'] = 'auth/sign-in';
+        $data['auth_field']      = 'auth/sign-in';
 
         return view('auth/main', $data);
     }
 
     public function sign_up()
     {
-        $themeModel = new ThemeModel();
+        $themeModel   = new ThemeModel();
         $programModel = new ProgramModel();
-        $programs = $programModel->findAll();
+        $programs     = $programModel->findAll();
 
-        $programs = array_map(function ($program) {
-            return [
-                'id' => $program['program_id'],
-                'name' => $program['program_name'],
-            ];
-        }, $programs);
+        $programs = array_map(static fn ($program) => [
+            'id'   => $program['program_id'],
+            'name' => $program['program_name'],
+        ], $programs);
 
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([
-                'title' => 'Sign Up',
-                'header' => 'Create Account',
+                'title'     => 'Sign Up',
+                'header'    => 'Create Account',
                 'subheader' => 'Start your admission journey today.',
-                'form' => view('auth/sign-up', ['programs' => $programs]),
-                'programs' => $programs
+                'form'      => view('auth/sign-up', ['programs' => $programs]),
+                'programs'  => $programs,
             ]);
         }
 
         $data = [
-            'title' => 'Sign Up',
-            'auth_header' => 'Create Account',
+            'title'           => 'Sign Up',
+            'auth_header'     => 'Create Account',
             'auth_sub_header' => 'Start your admission journey today.',
-            'auth_field' => 'auth/sign-up',
-            'programs' => $programs,
-            'theme' => $themeModel->getAllSettings()
+            'auth_field'      => 'auth/sign-up',
+            'programs'        => $programs,
+            'theme'           => $themeModel->getAllSettings(),
         ];
 
         return view('auth/main', $data);
@@ -78,20 +78,20 @@ class AuthController extends BaseController
 
     public function success()
     {
-        $themeModel = new ThemeModel();
+        $themeModel      = new ThemeModel();
         $applicantNumber = session()->getFlashdata('applicant_number');
 
-        if (!$applicantNumber) {
+        if (! $applicantNumber) {
             return redirect()->to('/sign-in');
         }
 
-        $data['title'] = 'Success';
-        $data['auth_header'] = 'Account Created!';
-        $data['auth_sub_header'] = 'Your unique Applicant ID has been assigned.';
+        $data['title']            = 'Success';
+        $data['auth_header']      = 'Account Created!';
+        $data['auth_sub_header']  = 'Your unique Applicant ID has been assigned.';
         $data['applicant_number'] = $applicantNumber;
-        $data['auth_field'] = 'auth/success';
-        $data['theme'] = $themeModel->getAllSettings();
-        $data['programs'] = [];
+        $data['auth_field']       = 'auth/success';
+        $data['theme']            = $themeModel->getAllSettings();
+        $data['programs']         = [];
 
         return view('auth/main', $data);
     }
@@ -100,10 +100,10 @@ class AuthController extends BaseController
     {
         $rules = [
             'firstname' => 'required',
-            'lastname' => 'required',
-            'email' => 'required|valid_email|is_unique[users.email]',
-            'mobile' => 'required|min_length[10]|max_length[13]',
-            'program' => 'required',
+            'lastname'  => 'required',
+            'email'     => 'required|valid_email|is_unique[users.email]',
+            'mobile'    => 'required|min_length[10]|max_length[13]',
+            'program'   => 'required',
         ];
 
         $messages = [
@@ -112,82 +112,85 @@ class AuthController extends BaseController
             ],
         ];
 
-        if (!$this->validate($rules, $messages)) {
+        if (! $this->validate($rules, $messages)) {
             $errors = $this->validator->getErrors();
+
             return $this->response->setJSON([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => array_values($errors)[0],
             ]);
         }
 
         $programModel = new ProgramModel();
-        $programId = $this->request->getPost('program');
-        $program = $programModel->find($programId);
+        $programId    = $this->request->getPost('program');
+        $program      = $programModel->find($programId);
 
-        if (!$program) {
+        if (! $program) {
             return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'Invalid program selected'
+                'status'  => 'error',
+                'message' => 'Invalid program selected',
             ]);
         }
 
-        $tempPassword = bin2hex(random_bytes(6));
+        $tempPassword   = bin2hex(random_bytes(6));
         $hashedPassword = password_hash($tempPassword, PASSWORD_DEFAULT);
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $db->transBegin();
 
         try {
             $db->table('users')->insert([
                 'firstname' => $this->request->getPost('firstname'),
-                'lastname' => $this->request->getPost('lastname'),
-                'email' => $this->request->getPost('email'),
-                'mobile' => $this->request->getPost('mobile'),
-                'role' => 'applicant'
+                'lastname'  => $this->request->getPost('lastname'),
+                'email'     => $this->request->getPost('email'),
+                'mobile'    => $this->request->getPost('mobile'),
+                'role'      => 'applicant',
             ]);
 
             $userId = $db->insertID();
 
-            if (!$userId) {
-                throw new \Exception('User insert failed');
+            if (! $userId) {
+                throw new Exception('User insert failed');
             }
 
             $db->table('applicants')->insert([
-                'user_id' => $userId,
-                'program_id' => $programId,
-                'applicant_number' => null,
-                'password' => $hashedPassword,
-                'temp_password' => 1,
+                'user_id'            => $userId,
+                'program_id'         => $programId,
+                'applicant_number'   => null,
+                'password'           => $hashedPassword,
+                'temp_password'      => 1,
                 'application_status' => 'pending',
-                'application_date' => date('Y-m-d H:i:s')
+                'application_date'   => date('Y-m-d H:i:s'),
             ]);
 
-            $applicantId = $db->insertID();
-            $year = date('Y');
-            $sequence = str_pad($applicantId, 5, '0', STR_PAD_LEFT);
-            $applicantNumber = "APP-$year-$sequence";
+            $applicantId     = $db->insertID();
+            $year            = date('Y');
+            $sequence        = str_pad($applicantId, 5, '0', STR_PAD_LEFT);
+            $applicantNumber = "APP-{$year}-{$sequence}";
 
             $db->table('applicants')->where('applicant_id', $applicantId)->update([
-                'applicant_number' => $applicantNumber
+                'applicant_number' => $applicantNumber,
             ]);
 
             $db->transComplete();
 
             $this->notificationService->trigger('auth.welcome', $applicantId, [
-                'temp_password' => $tempPassword
+                'temp_password' => $tempPassword,
             ]);
 
             session()->setFlashdata('applicant_number', $applicantNumber);
+
             return $this->response->setJSON([
-                'status' => 'success',
-                'redirect' => base_url('success')
+                'status'   => 'success',
+                'redirect' => base_url('success'),
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $db->transRollback();
             log_message('error', 'Registration failed: ' . $e->getMessage());
+
             return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'Registration failed. Please try again later.'
+                'status'  => 'error',
+                'message' => 'Registration failed. Please try again later.',
             ]);
         }
     }
@@ -196,12 +199,12 @@ class AuthController extends BaseController
     {
         if (LoginThrottle::tooManyAttempts('applicant')) {
             return $this->response->setStatusCode(429)->setJSON([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => LoginThrottle::retryMessage(),
             ]);
         }
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $builder = $db->table('applicants a');
         $builder->select('
@@ -229,17 +232,17 @@ class AuthController extends BaseController
 
         $user = $builder->get()->getRowArray();
 
-        if (!$user) {
+        if (! $user) {
             return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'User not found'
+                'status'  => 'error',
+                'message' => 'User not found',
             ]);
         }
 
-        if (!password_verify($this->request->getPost('password'), $user['password'])) {
+        if (! password_verify($this->request->getPost('password'), $user['password'])) {
             return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'Invalid email or password'
+                'status'  => 'error',
+                'message' => 'Invalid email or password',
             ]);
         }
 
@@ -250,30 +253,29 @@ class AuthController extends BaseController
         }
 
         session()->set([
-            'user_id' => $user['user_id'],
-            'firstname' => $user['firstname'],
-            'lastname' => $user['lastname'],
-            'email' => $user['email'],
-            'role' => $user['role'],
+            'user_id'          => $user['user_id'],
+            'firstname'        => $user['firstname'],
+            'lastname'         => $user['lastname'],
+            'email'            => $user['email'],
+            'role'             => $user['role'],
             'applicant_number' => $user['applicant_number'],
-            'applicant_id' => $user['applicant_id'],
-            'program_id' => $user['program_id'],
-            'program_name' => $user['program_name'],
-            'temp_password' => (bool) $user['temp_password'],
-            'logged_in' => true
+            'applicant_id'     => $user['applicant_id'],
+            'program_id'       => $user['program_id'],
+            'program_name'     => $user['program_name'],
+            'temp_password'    => (bool) $user['temp_password'],
+            'logged_in'        => true,
         ]);
 
         $remember = $this->request->getPost('remember_me');
 
         if ($remember) {
-
             $token = bin2hex(random_bytes(32));
 
             $rememberTokenModel = new RememberTokenModel();
 
             $rememberTokenModel->insert([
-                'user_id' => $user['user_id'],
-                'token' => hash('sha256', $token),
+                'user_id'    => $user['user_id'],
+                'token'      => hash('sha256', $token),
                 'expires_at' => date('Y-m-d H:i:s', time() + (30 * 24 * 60 * 60)),
             ]);
 
@@ -284,13 +286,13 @@ class AuthController extends BaseController
                 '/',
                 '',
                 $this->request->isSecure(), // Secure flag only over real HTTPS
-                true
+                true,
             );
         }
 
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([
-                'status' => 'success',
+                'status'   => 'success',
                 'redirect' => base_url('dashboard'),
             ]);
         }
@@ -300,11 +302,11 @@ class AuthController extends BaseController
     {
         $email = trim($this->request->getPost('email') ?? '');
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return $this->response->setJSON(['success' => false, 'message' => 'Please enter a valid email address.']);
         }
 
-        $db = \Config\Database::connect();
+        $db   = Database::connect();
         $user = $db->table('users')->where('email', $email)->where('role', 'applicant')->get()->getRowArray();
 
         // Always return success so we don't reveal if an email is registered
@@ -312,27 +314,24 @@ class AuthController extends BaseController
             $token = bin2hex(random_bytes(32));
 
             $db->table('password_resets')->insert([
-                'email' => $email,
-                'token' => $token,
+                'email'      => $email,
+                'token'      => $token,
                 'created_at' => date('Y-m-d H:i:s'),
-                'used' => 0,
+                'used'       => 0,
             ]);
 
             $resetUrl = base_url('reset-password/' . $token);
 
             $applicant = $db->table('applicants')->where('user_id', $user['user_id'])->get()->getRowArray();
 
-
-
             try {
                 if ($applicant) {
                     $this->notificationService->trigger('auth.password_reset', $applicant['applicant_id'], [
-                        'email' => $email,
-                        'reset_url' => $resetUrl
+                        'email'     => $email,
+                        'reset_url' => $resetUrl,
                     ]);
                 }
-
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 log_message('error', 'Password reset notification error: ' . $e->getMessage());
             }
         }
@@ -346,7 +345,7 @@ class AuthController extends BaseController
     public function showResetForm(string $token)
     {
         $themeModel = new ThemeModel();
-        $db = \Config\Database::connect();
+        $db         = Database::connect();
 
         $reset = $db->table('password_resets')
             ->where('token', $token)
@@ -357,17 +356,17 @@ class AuthController extends BaseController
         return view('auth/reset-password', [
             'theme' => $themeModel->getAllSettings(),
             'token' => $token,
-            'valid' => !empty($reset),
+            'valid' => ! empty($reset),
         ]);
     }
 
     public function processReset()
     {
-        $token = $this->request->getPost('token') ?? '';
-        $newPassword = $this->request->getPost('new_password') ?? '';
+        $token           = $this->request->getPost('token') ?? '';
+        $newPassword     = $this->request->getPost('new_password') ?? '';
         $confirmPassword = $this->request->getPost('confirm_password') ?? '';
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $reset = $db->table('password_resets')
             ->where('token', $token)
@@ -375,7 +374,7 @@ class AuthController extends BaseController
             ->where('created_at >=', date('Y-m-d H:i:s', strtotime('-1 hour')))
             ->get()->getRowArray();
 
-        if (!$reset) {
+        if (! $reset) {
             return $this->response->setJSON(['success' => false, 'message' => 'This link is invalid or has expired.']);
         }
 
@@ -390,13 +389,13 @@ class AuthController extends BaseController
         // Look up the applicant by email
         $user = $db->table('users')->where('email', $reset['email'])->get()->getRowArray();
 
-        if (!$user) {
+        if (! $user) {
             return $this->response->setJSON(['success' => false, 'message' => 'Account not found.']);
         }
 
         $applicant = $db->table('applicants')->where('user_id', $user['user_id'])->get()->getRowArray();
 
-        if (!$applicant) {
+        if (! $applicant) {
             return $this->response->setJSON(['success' => false, 'message' => 'Account not found.']);
         }
 
@@ -404,7 +403,7 @@ class AuthController extends BaseController
         $db->table('applicants')
             ->where('applicant_id', $applicant['applicant_id'])
             ->update([
-                'password' => password_hash($newPassword, PASSWORD_DEFAULT),
+                'password'      => password_hash($newPassword, PASSWORD_DEFAULT),
                 'temp_password' => 0,
             ]);
 
@@ -416,11 +415,11 @@ class AuthController extends BaseController
 
     public function changePassword()
     {
-        if (!session()->get('logged_in')) {
+        if (! session()->get('logged_in')) {
             return $this->response->setJSON(['success' => false, 'message' => 'Unauthorized']);
         }
 
-        $newPassword = $this->request->getPost('new_password') ?? '';
+        $newPassword     = $this->request->getPost('new_password') ?? '';
         $confirmPassword = $this->request->getPost('confirm_password') ?? '';
 
         if (strlen($newPassword) < 8) {
@@ -431,11 +430,11 @@ class AuthController extends BaseController
             return $this->response->setJSON(['success' => false, 'message' => 'Passwords do not match.']);
         }
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $db->table('applicants')
             ->where('applicant_id', session()->get('applicant_id'))
             ->update([
-                'password' => password_hash($newPassword, PASSWORD_DEFAULT),
+                'password'      => password_hash($newPassword, PASSWORD_DEFAULT),
                 'temp_password' => 0,
             ]);
 
@@ -449,7 +448,7 @@ class AuthController extends BaseController
         if (isset($_COOKIE['remember_token'])) {
             $token = $_COOKIE['remember_token'];
 
-            $rememberModel = new \App\Models\Auth\RememberTokenModel();
+            $rememberModel = new RememberTokenModel();
             $rememberModel->where('token', hash('sha256', $token))->delete();
 
             setcookie('remember_token', '', time() - 3600, '/');

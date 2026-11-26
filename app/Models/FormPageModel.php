@@ -1,14 +1,13 @@
 <?php
 
-
 namespace App\Models;
 
 use CodeIgniter\Model;
 
 class FormPageModel extends Model
 {
-    protected $table      = 'form_pages';
-    protected $primaryKey = 'id';
+    protected $table         = 'form_pages';
+    protected $primaryKey    = 'id';
     protected $allowedFields = ['title', 'description', 'is_enabled', 'is_system', 'sort_order'];
     protected $useTimestamps = true;
 
@@ -29,9 +28,7 @@ class FormPageModel extends Model
      */
     public function getEnabledOrdered(): array
     {
-        return cache_remember('form_pages_enabled_ordered', 120, function () {
-            return $this->where('is_enabled', 1)->orderBy('sort_order', 'ASC')->findAll();
-        });
+        return cache_remember('form_pages_enabled_ordered', 120, fn () => $this->where('is_enabled', 1)->orderBy('sort_order', 'ASC')->findAll());
     }
 
     /**
@@ -41,7 +38,7 @@ class FormPageModel extends Model
     public function reorder(array $order): void
     {
         foreach ($order as $item) {
-            $this->update((int)$item['id'], ['sort_order' => (int)$item['sort_order']]);
+            $this->update((int) $item['id'], ['sort_order' => (int) $item['sort_order']]);
         }
     }
 
@@ -51,10 +48,13 @@ class FormPageModel extends Model
     public function toggle(int $id): array
     {
         $page = $this->find($id);
-        if (!$page) return ['status' => 'error', 'message' => 'Page not found'];
+        if (! $page) {
+            return ['status' => 'error', 'message' => 'Page not found'];
+        }
 
         $newState = $page['is_enabled'] ? 0 : 1;
         $this->update($id, ['is_enabled' => $newState]);
+
         return ['status' => 'success', 'is_enabled' => $newState];
     }
 
@@ -64,10 +64,15 @@ class FormPageModel extends Model
     public function deletePage(int $id): array
     {
         $page = $this->find($id);
-        if (!$page) return ['status' => 'error', 'message' => 'Page not found'];
-        if ($page['is_system']) return ['status' => 'error', 'message' => 'System pages cannot be deleted'];
+        if (! $page) {
+            return ['status' => 'error', 'message' => 'Page not found'];
+        }
+        if ($page['is_system']) {
+            return ['status' => 'error', 'message' => 'System pages cannot be deleted'];
+        }
 
         $this->delete($id);
+
         return ['status' => 'success'];
     }
 
@@ -85,6 +90,7 @@ class FormPageModel extends Model
     public function nextSortOrder(): int
     {
         $max = $this->selectMax('sort_order')->first();
-        return (int)($max['sort_order'] ?? 0) + 10;
+
+        return (int) ($max['sort_order'] ?? 0) + 10;
     }
 }

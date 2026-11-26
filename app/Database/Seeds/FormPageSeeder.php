@@ -22,7 +22,9 @@ class FormPageSeeder extends Seeder
         4 => ['Educational Background', 'Most recent senior high school information.', 50],
     ];
 
-    /** page_id => [field_key, section, label, field_type, placeholder, is_required, sort_order] */
+    /**
+     * page_id => [field_key, section, label, field_type, placeholder, is_required, sort_order]
+     */
     private const FIELDS = [
         1 => [
             ['applicant_type', 'step1-core', 'Applicant Type', 'radio', '', 1, 10],
@@ -81,9 +83,9 @@ class FormPageSeeder extends Seeder
         foreach (self::FIELDS as $pageId => $fields) {
             foreach ($fields as [$key, $section, $label, $type, $placeholder, $required, $sort]) {
                 $this->insertIfMissing('form_field_configs', ['page_id' => $pageId, 'field_key' => $key], [
-                    'step' => $pageId, 'section' => $section, 'label' => $label, 'field_type' => $type,
+                    'step'        => $pageId, 'section' => $section, 'label' => $label, 'field_type' => $type,
                     'placeholder' => $placeholder, 'is_visible' => 1, 'is_required' => $required,
-                    'is_system' => 1, 'sort_order' => $sort,
+                    'is_system'   => 1, 'sort_order' => $sort,
                 ]);
             }
         }

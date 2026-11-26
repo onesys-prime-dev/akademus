@@ -34,6 +34,7 @@ class SisSync extends BaseCommand
 
         if (CLI::getOption('status') !== null) {
             $this->status();
+
             return;
         }
 
@@ -56,6 +57,7 @@ class SisSync extends BaseCommand
 
         if ($ids === []) {
             CLI::write('Nothing due.');
+
             return;
         }
 
@@ -63,7 +65,7 @@ class SisSync extends BaseCommand
             $result = $service->attempt($id);
             CLI::write(
                 sprintf('#%d  %s  %s', $id, $result['ok'] ? 'OK  ' : 'FAIL', $result['message']),
-                $result['ok'] ? 'green' : 'red'
+                $result['ok'] ? 'green' : 'red',
             );
         }
     }
@@ -74,10 +76,12 @@ class SisSync extends BaseCommand
 
         if ($rows === []) {
             CLI::write('Outbox is empty.');
+
             return;
         }
 
         $table = [];
+
         foreach ($rows as $r) {
             $table[] = [
                 $r['sync_id'],

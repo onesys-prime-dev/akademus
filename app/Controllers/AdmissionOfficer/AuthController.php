@@ -5,6 +5,7 @@ namespace App\Controllers\AdmissionOfficer;
 use App\Controllers\BaseController;
 use App\Libraries\LoginThrottle;
 use App\Models\ThemeModel;
+use Config\Database;
 
 class AuthController extends BaseController
 {
@@ -15,6 +16,7 @@ class AuthController extends BaseController
         }
 
         $data['theme'] = (new ThemeModel())->getAllSettings();
+
         return view('admission-officer/login', $data);
     }
 
@@ -27,22 +29,24 @@ class AuthController extends BaseController
                     'message' => LoginThrottle::retryMessage(),
                 ]);
             }
+
             return redirect()->back()->with('error', LoginThrottle::retryMessage());
         }
 
         $email    = $this->request->getPost('email');
         $password = $this->request->getPost('password');
 
-        $db   = \Config\Database::connect();
+        $db   = Database::connect();
         $user = $db->table('users')
             ->where('email', $email)
             ->where('role', 'admission_officer')
             ->get()->getRowArray();
 
-        if (!$user || !password_verify($password, $user['password'] ?? '')) {
+        if (! $user || ! password_verify($password, $user['password'] ?? '')) {
             if ($this->request->isAJAX()) {
                 return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid credentials. Please try again.']);
             }
+
             return redirect()->back()->with('error', 'Invalid credentials');
         }
 
@@ -69,6 +73,7 @@ class AuthController extends BaseController
     public function logout()
     {
         session()->remove(['ao_logged_in', 'ao_id', 'ao_name', 'ao_email']);
+
         return redirect()->to('admission-officer/login');
     }
 }

@@ -16,8 +16,9 @@ class NotificationService
             ->where('applicants.applicant_id', $applicantId)
             ->first();
 
-        if (!$applicant || empty($applicant['email'])) {
+        if (! $applicant || empty($applicant['email'])) {
             log_message('error', 'NotificationService: email not found for applicant ID ' . $applicantId);
+
             return;
         }
 
@@ -25,7 +26,6 @@ class NotificationService
         // 🔥 FOLLOW-UP MESSAGE (WITH BATCHING + DELAY)
         // =========================================================
         if ($type === 'followup.new_message') {
-
             $cooldownMinutes = 15;
 
             $existing = $db->table('email_queue')
@@ -39,18 +39,17 @@ class NotificationService
                 ->getRowArray();
 
             if ($existing) {
-
-                $payload = json_decode($existing['payload'], true) ?? [];
+                $payload  = json_decode($existing['payload'], true) ?? [];
                 $messages = $payload['messages'] ?? [];
 
                 $messages[] = $data['message'] ?? '';
 
                 // 🔥 SLIDING DELAY WITH MAX CAP
-                $delayMinutes = 2;
+                $delayMinutes    = 2;
                 $maxDelayMinutes = 15;
 
                 $originalCreated = strtotime($existing['created_at']);
-                $maxSendTime = strtotime("+{$maxDelayMinutes} minutes", $originalCreated);
+                $maxSendTime     = strtotime("+{$maxDelayMinutes} minutes", $originalCreated);
 
                 $newSendAfter = strtotime("+{$delayMinutes} minutes");
 
@@ -64,9 +63,9 @@ class NotificationService
                     ->where('email_id', $existing['email_id'])
                     ->update([
                         'payload' => json_encode([
-                            'messages' => $messages
+                            'messages' => $messages,
                         ]),
-                        'send_after' => $newSendAfter
+                        'send_after' => $newSendAfter,
                     ]);
 
                 return;
@@ -79,11 +78,11 @@ class NotificationService
                 'to_email' => $applicant['email'],
                 'type'     => $type,
                 'payload'  => json_encode([
-                    'messages' => [$data['message'] ?? '']
+                    'messages' => [$data['message'] ?? ''],
                 ]),
                 'related_applicant_id' => $applicantId,
-                'status'   => 'pending',
-                'send_after' => date('Y-m-d H:i:s', strtotime("+{$delayMinutes} minutes")),
+                'status'               => 'pending',
+                'send_after'           => date('Y-m-d H:i:s', strtotime("+{$delayMinutes} minutes")),
             ]);
 
             return;
@@ -93,13 +92,13 @@ class NotificationService
         // ✅ DEFAULT (NO DELAY / NO BATCHING)
         // =========================================================
         $db->table('email_queue')->insert([
-            'to_email' => $applicant['email'],
-            'type'     => $type,
-            'payload'  => json_encode($data),
+            'to_email'             => $applicant['email'],
+            'type'                 => $type,
+            'payload'              => json_encode($data),
             'related_applicant_id' => $applicantId,
-            'status'   => 'pending',
-            'send_after' => null,
-            'notification_key' => $key,
+            'status'               => 'pending',
+            'send_after'           => null,
+            'notification_key'     => $key,
         ]);
     }
 }

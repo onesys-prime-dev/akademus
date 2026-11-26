@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use Config\Services;
+
 class EmailService
 {
     private static function send(string $to, string $subject, string $message): bool
     {
-        $email = \Config\Services::email();
+        $email = Services::email();
         $email->clear();
 
         $email->setFrom('testakademusmentora@gmail.com', 'Akademus Portal');
@@ -15,13 +17,15 @@ class EmailService
         $email->setMailType('html');
         $email->setMessage($message);
 
-        if (!$email->send()) {
+        if (! $email->send()) {
             log_message('error', 'EmailService failed: ' . $email->printDebugger(['headers', 'subject', 'body']));
+
             return false;
         }
 
         return true;
     }
+
     public static function sendWelcomeEmail(string $to, string $tempPassword): bool
     {
         $loginUrl = base_url('sign-in');
@@ -30,9 +34,9 @@ class EmailService
         <table width='100%' cellpadding='0' cellspacing='0' style='background-color:#f3f4f6;padding:30px 0;font-family:Arial,sans-serif;'>
             <tr>
                 <td align='center'>
-                    
+
                     <table width='100%' cellpadding='0' cellspacing='0' style='max-width:600px;background:#ffffff;border-radius:10px;padding:30px;'>
-                        
+
                         <!-- Header -->
                         <tr>
                             <td style='font-size:22px;font-weight:bold;color:#111827;padding-bottom:10px;'>
@@ -50,7 +54,7 @@ class EmailService
                         <!-- Credentials Box -->
                         <tr>
                             <td style='background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:15px;'>
-                                
+
                                 <table width='100%' cellpadding='0' cellspacing='0'>
                                     <tr>
                                         <td style='font-size:13px;color:#6b7280;padding-bottom:5px;'>Email</td>
@@ -77,7 +81,7 @@ class EmailService
                         <!-- CTA Button -->
                         <tr>
                             <td align='center' style='padding:25px 0 10px 0;'>
-                                <a href='{$loginUrl}' 
+                                <a href='{$loginUrl}'
                                 style='background:#3b82f6;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;display:inline-block;'>
                                     Sign In to Your Account
                                 </a>
@@ -123,34 +127,34 @@ class EmailService
 
     public static function sendDocumentReceived(string $to): bool
     {
-        $message = "
+        $message = '
             <h2>Document Received</h2>
             <p>Your uploaded document has been successfully received.</p>
             <p>Admissions will review it shortly.</p>
             <p>Thank you and have a great day!</p>
-        ";
+        ';
 
         return self::send($to, 'Document Received - Akademus', $message);
     }
 
     public static function sendApplicationApproved(string $to): bool
     {
-        $message = "
+        $message = '
             <h2>Application Approved</h2>
             <p>Congratulations! Your application has been approved.</p>
             <p>You may now proceed with the enrollment process.</p>
-        ";
+        ';
 
         return self::send($to, 'Application Approved - Akademus', $message);
     }
 
     public static function sendApplicationDeclined(string $to): bool
     {
-        $message = "
+        $message = '
             <h2>Application Status Update</h2>
             <p>We regret to inform you that your application was not approved.</p>
             <p>If you have questions, please contact admissions.</p>
-        ";
+        ';
 
         return self::send($to, 'Application Status Update - Akademus', $message);
     }
@@ -197,9 +201,9 @@ class EmailService
             $formatted .= "<li style='margin-bottom:8px;'>{$safe}</li>";
         }
 
-        $message = "
+        $message = '
             <h2>New Messages from Admissions</h2>
-            <p>You have " . count($messages) . " new message(s):</p>
+            <p>You have ' . count($messages) . " new message(s):</p>
 
             <ul style='padding-left:16px;color:#4b5563;'>
                 {$formatted}
@@ -301,12 +305,12 @@ class EmailService
 
     public static function sendApplicationSubmittedNotification(string $to): bool
     {
-        $message = "
+        $message = '
             <h2>Application Submitted</h2>
             <p>Your application has been successfully submitted and is now under review by the admissions committee.</p>
             <p>We will notify you of any updates regarding your application status.</p>
             <p>Thank you for applying to our institution!</p>
-        ";
+        ';
 
         return self::send($to, 'Application Submitted - Akademus', $message);
     }
@@ -348,11 +352,11 @@ class EmailService
 
     public static function sendRequirementsCompletedNotification(string $to): bool
     {
-        $message = "
+        $message = '
             <h2>All Requirements Completed</h2>
             <p>Congratulations! You have uploaded all the required documents for your application.</p>
             <p>Admissions will review your complete application shortly. We will notify you of any updates regarding your application status.</p>
-        ";
+        ';
 
         return self::send($to, 'All Requirements Completed - Akademus', $message);
     }

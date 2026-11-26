@@ -6,19 +6,21 @@ use CodeIgniter\Model;
 
 class ApplicationModel extends Model
 {
-    protected $table = 'applications';
-    protected $primaryKey = 'id';
+    protected $table            = 'applications';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType = 'array';
-    protected $allowedFields = ['applicant_id', 'course_id', 'status', 'submitted_at'];
-    protected $useTimestamps = true;
-    protected $createdField = 'created_at';
-    protected $updatedField = 'updated_at';
+    protected $returnType       = 'array';
+    protected $allowedFields    = ['applicant_id', 'course_id', 'status', 'submitted_at'];
+    protected $useTimestamps    = true;
+    protected $createdField     = 'created_at';
+    protected $updatedField     = 'updated_at';
 
     public function getApplicationWithAnswers($applicationId)
     {
         $application = $this->find($applicationId);
-        if (!$application) return null;
+        if (! $application) {
+            return null;
+        }
 
         $answers = model('ApplicationAnswerModel')
             ->where('application_id', $applicationId)

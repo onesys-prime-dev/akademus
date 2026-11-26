@@ -3,6 +3,7 @@
 namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
+use RuntimeException;
 
 /**
  * Puts the exam tables of the TEST database back to the state E2ETestSeeder leaves them in:
@@ -21,16 +22,16 @@ use CodeIgniter\Database\Seeder;
  */
 class E2EExamResetSeeder extends Seeder
 {
-    protected $DBGroup = 'tests';
-
     private const SAFE_DATABASE = 'akademus_test';
-    private const PAYER_EMAIL = 'e2e.payer@example.com';
+    private const PAYER_EMAIL   = 'e2e.payer@example.com';
+
+    protected $DBGroup = 'tests';
 
     public function run(): void
     {
         $name = $this->db->getDatabase();
         if ($name !== self::SAFE_DATABASE) {
-            throw new \RuntimeException("E2EExamResetSeeder only runs against '" . self::SAFE_DATABASE . "', but the connection is '{$name}'.");
+            throw new RuntimeException("E2EExamResetSeeder only runs against '" . self::SAFE_DATABASE . "', but the connection is '{$name}'.");
         }
 
         // Throwaway schedules created by the specs, with whatever booked them.
@@ -47,7 +48,8 @@ class E2EExamResetSeeder extends Seeder
             ->like('u.email', 'e2e.', 'after')->like('u.email', '@example.com', 'before')
             ->get()->getResultArray();
         $payerId = null;
-        $others = [];
+        $others  = [];
+
         foreach ($applicants as $row) {
             if ($row['email'] === self::PAYER_EMAIL) {
                 $payerId = (int) $row['applicant_id'];
@@ -60,7 +62,7 @@ class E2EExamResetSeeder extends Seeder
         }
         if ($payerId) {
             $this->db->table('exam_bookings')->where('applicant_id', $payerId)->update([
-                'status' => 'booked', 'checked_in_at' => null, 'result_status' => 'PENDING', 'score' => null,
+                'status'         => 'booked', 'checked_in_at' => null, 'result_status' => 'PENDING', 'score' => null,
                 'result_remarks' => null, 'result_recorded_at' => null, 'result_recorded_by' => null,
             ]);
         }

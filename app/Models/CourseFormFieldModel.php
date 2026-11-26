@@ -6,11 +6,11 @@ use CodeIgniter\Model;
 
 class CourseFormFieldModel extends Model
 {
-    protected $table = 'course_form_fields';
-    protected $primaryKey = 'id';
+    protected $table            = 'course_form_fields';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType = 'array';
-    protected $allowedFields = [
+    protected $returnType       = 'array';
+    protected $allowedFields    = [
         'course_id',
         'field_name',
         'field_type',
@@ -24,8 +24,8 @@ class CourseFormFieldModel extends Model
         'is_active',
     ];
     protected $useTimestamps = true;
-    protected $createdField = 'created_at';
-    protected $updatedField = 'updated_at';
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
 
     public function getFieldsByCourse($courseId)
     {
@@ -40,6 +40,7 @@ class CourseFormFieldModel extends Model
         $rows = $this->where('course_id', $courseId)
             ->where('override_global', true)
             ->findAll();
+
         return array_column($rows, 'field_name');
     }
 }

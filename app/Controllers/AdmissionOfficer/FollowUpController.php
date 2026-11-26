@@ -3,10 +3,11 @@
 namespace App\Controllers\AdmissionOfficer;
 
 use App\Controllers\BaseController;
-use App\Models\FollowUpMessageModel;
 use App\Models\Applicant\ApplicantModel;
+use App\Models\FollowUpMessageModel;
 use App\Models\ThemeModel;
 use App\Services\NotificationService;
+use Config\Database;
 
 class FollowUpController extends BaseController
 {
@@ -15,7 +16,7 @@ class FollowUpController extends BaseController
 
     public function __construct()
     {
-        $this->messageModel = new FollowUpMessageModel();
+        $this->messageModel        = new FollowUpMessageModel();
         $this->notificationService = new NotificationService();
     }
 
@@ -27,9 +28,9 @@ class FollowUpController extends BaseController
         $conversations = $this->messageModel->getConversationsSummary();
 
         return view('admission-officer/main', [
-            'title'         => 'Follow-Up Messages',
-            'page_content'  => 'admission-officer/follow-up/follow_up',
-            'breadcrumb'    => [
+            'title'        => 'Follow-Up Messages',
+            'page_content' => 'admission-officer/follow-up/follow_up',
+            'breadcrumb'   => [
                 ['label' => 'Dashboard', 'url' => base_url('/admission-officer/dashboard')],
                 ['label' => 'Follow-Up Messages'],
             ],
@@ -47,11 +48,11 @@ class FollowUpController extends BaseController
 
         $applicant = $applicantModel->find($applicantId);
 
-        if (!$applicant) {
+        if (! $applicant) {
             return redirect()->to(base_url('/admission-officer/follow-up'));
         }
 
-        $db   = \Config\Database::connect();
+        $db   = Database::connect();
         $user = $db->table('users')->where('user_id', $applicant['user_id'])->get()->getRowArray();
 
         $this->messageModel->markAsRead($applicantId, 'applicant');
@@ -60,9 +61,9 @@ class FollowUpController extends BaseController
         $conversations = $this->messageModel->getConversationsSummary();
 
         return view('admission-officer/main', [
-            'title'           => 'Follow-Up Messages',
-            'page_content'    => 'admission-officer/follow-up/follow_up',
-            'breadcrumb'      => [
+            'title'        => 'Follow-Up Messages',
+            'page_content' => 'admission-officer/follow-up/follow_up',
+            'breadcrumb'   => [
                 ['label' => 'Dashboard', 'url' => base_url('/admission-officer/dashboard')],
                 ['label' => 'Follow-Up Messages', 'url' => base_url('/admission-officer/follow-up')],
                 ['label' => ($user['firstname'] ?? '') . ' ' . ($user['lastname'] ?? '')],
@@ -79,13 +80,13 @@ class FollowUpController extends BaseController
         $applicantId = (int) ($this->request->getPost('applicant_id') ?? 0);
         $message     = trim($this->request->getPost('message') ?? '');
 
-        if (!$applicantId || $message === '') {
+        if (! $applicantId || $message === '') {
             return $this->response->setJSON(['success' => false, 'message' => 'Invalid payload']);
         }
 
         $applicantModel = new ApplicantModel();
 
-        if (!$applicantModel->find($applicantId)) {
+        if (! $applicantModel->find($applicantId)) {
             return $this->response->setJSON(['success' => false, 'message' => 'Applicant not found']);
         }
 
@@ -97,12 +98,12 @@ class FollowUpController extends BaseController
             'created_at'   => date('Y-m-d H:i:s'),
         ]);
 
-        if (!$messageId) {
+        if (! $messageId) {
             log_message('error', 'Failed to insert follow_up_message for applicant ID: ' . $applicantId);
 
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Failed to send message. Please try again.'
+                'message' => 'Failed to send message. Please try again.',
             ]);
         }
 
@@ -119,7 +120,7 @@ class FollowUpController extends BaseController
     {
         $applicantId = (int) ($this->request->getGet('applicant_id') ?? 0);
 
-        if (!$applicantId) {
+        if (! $applicantId) {
             return $this->response->setJSON(['success' => false]);
         }
 
@@ -129,7 +130,7 @@ class FollowUpController extends BaseController
             : $this->messageModel->getMessagesForApplicant($applicantId);
 
         // Mark applicant messages as read while officer is viewing the conversation
-        if (!empty($messages)) {
+        if (! empty($messages)) {
             $this->messageModel->markAsRead($applicantId, 'applicant');
         }
 
@@ -150,6 +151,7 @@ class FollowUpController extends BaseController
     public function fetchConversations()
     {
         $conversations = $this->messageModel->getConversationsSummary();
+
         return $this->response->setJSON([
             'success'       => true,
             'conversations' => $conversations,

@@ -10,15 +10,15 @@ class CreateApplicantDocumentsTable extends Migration
     public function up(): void
     {
         $this->forge->addField([
-            'document_id' => ['type' => 'INT', 'constraint' => 11, 'auto_increment' => true, 'null' => false],
-            'applicant_id' => ['type' => 'INT', 'constraint' => 11, 'null' => false],
+            'document_id'            => ['type' => 'INT', 'constraint' => 11, 'auto_increment' => true, 'null' => false],
+            'applicant_id'           => ['type' => 'INT', 'constraint' => 11, 'null' => false],
             'program_requirement_id' => ['type' => 'INT', 'constraint' => 11, 'null' => true],
-            'document_name' => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => false],
-            'mime_type' => ['type' => 'VARCHAR', 'constraint' => 127, 'null' => true],
-            'status' => ['type' => 'ENUM', 'constraint' => ['pending', 'approved', 'rejected'], 'null' => true, 'default' => 'pending'],
-            'verified_by' => ['type' => 'INT', 'constraint' => 11, 'null' => true],
-            'remarks' => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
-            'uploaded_at' => ['type' => 'DATETIME', 'null' => true, 'default' => new RawSql('CURRENT_TIMESTAMP')],
+            'document_name'          => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => false],
+            'mime_type'              => ['type' => 'VARCHAR', 'constraint' => 127, 'null' => true],
+            'status'                 => ['type' => 'ENUM', 'constraint' => ['pending', 'approved', 'rejected'], 'null' => true, 'default' => 'pending'],
+            'verified_by'            => ['type' => 'INT', 'constraint' => 11, 'null' => true],
+            'remarks'                => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
+            'uploaded_at'            => ['type' => 'DATETIME', 'null' => true, 'default' => new RawSql('CURRENT_TIMESTAMP')],
             '`updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
         ]);
         $this->forge->addPrimaryKey('document_id');

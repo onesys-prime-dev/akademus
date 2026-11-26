@@ -13,7 +13,9 @@ class RequirementSeeder extends Seeder
 {
     use InsertsMissingRows;
 
-    /** category => [description, display_order, [[requirement, description, is_fast_track_required], ...]] */
+    /**
+     * category => [description, display_order, [[requirement, description, is_fast_track_required], ...]]
+     */
     public const CATEGORIES = [
         'Personal Documents' => ['Basic personal identification documents', 10, [
             ['Birth Certificate', 'PSA-issued birth certificate', 1],
@@ -44,7 +46,7 @@ class RequirementSeeder extends Seeder
 
             foreach ($requirements as $i => [$name, $reqDescription, $fastTrack]) {
                 $this->insertIfMissing('requirements', ['category_id' => $categoryId, 'requirement_name' => $name], [
-                    'description' => $reqDescription, 'is_required' => 1, 'is_fast_track_required' => $fastTrack,
+                    'description'   => $reqDescription, 'is_required' => 1, 'is_fast_track_required' => $fastTrack,
                     'display_order' => $i + 1, 'is_active' => 1,
                 ], 'requirement_id');
             }

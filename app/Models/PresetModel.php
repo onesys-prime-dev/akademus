@@ -6,15 +6,15 @@ use CodeIgniter\Model;
 
 class PresetModel extends Model
 {
-    protected $table      = 'form_presets';
-    protected $primaryKey = 'id';
+    protected $table            = 'form_presets';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType = 'array';
-    protected $useSoftDeletes = false;
-    protected $allowedFields = ['name', 'description', 'is_global', 'is_active'];
-    protected $useTimestamps = true;
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
+    protected $returnType       = 'array';
+    protected $useSoftDeletes   = false;
+    protected $allowedFields    = ['name', 'description', 'is_global', 'is_active'];
+    protected $useTimestamps    = true;
+    protected $createdField     = 'created_at';
+    protected $updatedField     = 'updated_at';
 
     /**
      * Get all active presets
@@ -34,15 +34,17 @@ class PresetModel extends Model
 
     /**
      * Get preset with all its sections
+     *
+     * @param mixed $presetId
      */
     public function getPresetWithSections($presetId)
     {
         $preset = $this->find($presetId);
-        if (!$preset) {
+        if (! $preset) {
             return null;
         }
 
-        $sectionModel = new PresetSectionModel();
+        $sectionModel       = new PresetSectionModel();
         $preset['sections'] = $sectionModel
             ->where('preset_id', $presetId)
             ->orderBy('sort_order', 'ASC')
@@ -53,10 +55,13 @@ class PresetModel extends Model
 
     /**
      * Get all sections for a preset (useful for loading form)
+     *
+     * @param mixed $presetId
      */
     public function getSections($presetId)
     {
         $sectionModel = new PresetSectionModel();
+
         return $sectionModel
             ->where('preset_id', $presetId)
             ->orderBy('sort_order', 'ASC')
@@ -65,6 +70,10 @@ class PresetModel extends Model
 
     /**
      * Create preset with sections and requirement category assignments.
+     *
+     * @param mixed $presetData
+     * @param mixed $sectionIds
+     * @param mixed $categoryIds
      */
     public function createPresetWithSections($presetData, $sectionIds, $categoryIds = [])
     {
@@ -74,6 +83,7 @@ class PresetModel extends Model
         $presetId = $this->getInsertID();
 
         $sectionModel = new PresetSectionModel();
+
         foreach ($sectionIds as $index => $sectionId) {
             $sectionModel->insert([
                 'preset_id'    => $presetId,
@@ -83,12 +93,15 @@ class PresetModel extends Model
             ]);
         }
 
-        $prcModel = new \App\Models\PresetRequirementCategoryModel();
+        $prcModel = new PresetRequirementCategoryModel();
+
         foreach ($categoryIds as $index => $catId) {
-            if (empty($catId)) continue;
+            if (empty($catId)) {
+                continue;
+            }
             $prcModel->insert([
                 'preset_id'               => $presetId,
-                'requirement_category_id' => (int)$catId,
+                'requirement_category_id' => (int) $catId,
                 'sort_order'              => $index,
             ]);
         }
@@ -100,6 +113,11 @@ class PresetModel extends Model
 
     /**
      * Update preset with new sections and requirement category assignments.
+     *
+     * @param mixed $presetId
+     * @param mixed $presetData
+     * @param mixed $sectionIds
+     * @param mixed $categoryIds
      */
     public function updatePresetWithSections($presetId, $presetData, $sectionIds, $categoryIds = [])
     {
@@ -110,6 +128,7 @@ class PresetModel extends Model
         // Replace sections
         $sectionModel = new PresetSectionModel();
         $sectionModel->where('preset_id', $presetId)->delete();
+
         foreach ($sectionIds as $index => $sectionId) {
             $sectionModel->insert([
                 'preset_id'    => $presetId,
@@ -120,13 +139,16 @@ class PresetModel extends Model
         }
 
         // Replace requirement category assignments
-        $prcModel = new \App\Models\PresetRequirementCategoryModel();
+        $prcModel = new PresetRequirementCategoryModel();
         $prcModel->where('preset_id', $presetId)->delete();
+
         foreach ($categoryIds as $index => $catId) {
-            if (empty($catId)) continue;
+            if (empty($catId)) {
+                continue;
+            }
             $prcModel->insert([
                 'preset_id'               => $presetId,
-                'requirement_category_id' => (int)$catId,
+                'requirement_category_id' => (int) $catId,
                 'sort_order'              => $index,
             ]);
         }

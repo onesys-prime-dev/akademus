@@ -6,14 +6,14 @@ use CodeIgniter\Model;
 
 class RequirementCategoryModel extends Model
 {
-    protected $table      = 'requirement_categories';
-    protected $primaryKey = 'category_id';
-    protected $returnType = 'array';
+    protected $table            = 'requirement_categories';
+    protected $primaryKey       = 'category_id';
+    protected $returnType       = 'array';
     protected $useAutoIncrement = true;
-    protected $allowedFields = ['category_name', 'description', 'display_order', 'is_active'];
-    protected $useTimestamps = true;
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
+    protected $allowedFields    = ['category_name', 'description', 'display_order', 'is_active'];
+    protected $useTimestamps    = true;
+    protected $createdField     = 'created_at';
+    protected $updatedField     = 'updated_at';
 
     public function getActiveCategories(): array
     {

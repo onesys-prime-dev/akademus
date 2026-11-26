@@ -10,9 +10,9 @@ class CreateRememberMeTokensTable extends Migration
     public function up(): void
     {
         $this->forge->addField([
-            'id' => ['type' => 'INT', 'constraint' => 11, 'null' => false],
-            'user_id' => ['type' => 'INT', 'constraint' => 11, 'null' => false],
-            'token' => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => false],
+            'id'         => ['type' => 'INT', 'constraint' => 11, 'null' => false],
+            'user_id'    => ['type' => 'INT', 'constraint' => 11, 'null' => false],
+            'token'      => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => false],
             'expires_at' => ['type' => 'DATETIME', 'null' => false],
             'created_at' => ['type' => 'DATETIME', 'null' => true, 'default' => new RawSql('CURRENT_TIMESTAMP')],
         ]);

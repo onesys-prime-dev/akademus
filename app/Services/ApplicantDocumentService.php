@@ -7,8 +7,6 @@ use App\Models\Requirements\ApplicantDocumentModel;
 
 class ApplicantDocumentService
 {
-    protected $applicantDocumentModel;
-
     private const ALLOWED_MIME_TYPES = [
         'application/pdf',
         'image/jpeg',
@@ -27,7 +25,10 @@ class ApplicantDocumentService
     // that extension, so a disguised file (e.g. a renamed .exe) still won't match.
     private const ALLOWED_EXTENSIONS = ['pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'doc', 'docx'];
 
-    public function __construct() {
+    protected $applicantDocumentModel;
+
+    public function __construct()
+    {
         $this->applicantDocumentModel = new ApplicantDocumentModel();
     }
 
@@ -38,6 +39,9 @@ class ApplicantDocumentService
     }
 
     /**
+     * @param mixed $applicant_id
+     * @param mixed $files
+     *
      * @return array{uploaded: list<array{requirement_name: string}>, rejected: list<array{program_requirement_id: mixed, message: string}>}
      */
     public function insertDocuments($applicant_id, $files): array
@@ -50,7 +54,7 @@ class ApplicantDocumentService
 
         $uploadPath = WRITEPATH . "uploads/applicants/{$applicant_id}/";
 
-        if (!is_dir($uploadPath)) {
+        if (! is_dir($uploadPath)) {
             mkdir($uploadPath, 0755, true);
         }
 
@@ -58,42 +62,43 @@ class ApplicantDocumentService
         $rejected = [];
 
         foreach ($files['documents'] as $program_requirement_id => $file) {
-
             // No file chosen for this slot in this submit — normal (only some
             // upload fields change per save), not an error worth reporting.
             if ($file->getError() === UPLOAD_ERR_NO_FILE) {
                 continue;
             }
 
-            if (!$file->isValid()) {
+            if (! $file->isValid()) {
                 $rejected[] = [
                     'program_requirement_id' => $program_requirement_id,
                     'message'                => $file->getErrorString(),
                 ];
+
                 continue;
             }
 
-            if (!$this->isAllowedUpload($file)) {
+            if (! $this->isAllowedUpload($file)) {
                 $rejected[] = [
                     'program_requirement_id' => $program_requirement_id,
                     'message'                => "\"{$file->getClientName()}\" isn't a supported file type. Please upload a PDF, Word document (.doc/.docx), or image.",
                 ];
+
                 continue;
             }
 
             $extension = $file->getExtension();
-            $fileName = "{$applicant_id}_{$program_requirement_id}.{$extension}";
-            $mimeType = $file->getMimeType();
+            $fileName  = "{$applicant_id}_{$program_requirement_id}.{$extension}";
+            $mimeType  = $file->getMimeType();
 
             EncryptedFileStorage::storeFromPath($file->getTempName(), $uploadPath . $fileName);
 
             db_connect()
                 ->table('applicant_documents')
                 ->replace([
-                    'applicant_id'            => $applicant_id,
-                    'program_requirement_id'  => $program_requirement_id,
-                    'document_name'           => $fileName,
-                    'mime_type'               => $mimeType,
+                    'applicant_id'           => $applicant_id,
+                    'program_requirement_id' => $program_requirement_id,
+                    'document_name'          => $fileName,
+                    'mime_type'              => $mimeType,
                 ]);
 
             // 🔥 get requirement name
@@ -105,7 +110,7 @@ class ApplicantDocumentService
                 ->getRowArray();
 
             $uploaded[] = [
-                'requirement_name' => $requirement['requirement_name'] ?? 'Document'
+                'requirement_name' => $requirement['requirement_name'] ?? 'Document',
             ];
         }
 
@@ -121,7 +126,8 @@ class ApplicantDocumentService
             ->first();
     }
 
-    public function getStepDocuments($applicant_id, $requirements) {
+    public function getStepDocuments($applicant_id, $requirements)
+    {
         if (empty($requirements)) {
             return [];
         }
@@ -144,7 +150,7 @@ class ApplicantDocumentService
             $result[$doc['program_requirement_id']] = [
                 'document_name' => $doc['document_name'],
                 'status'        => $doc['status'],
-                'uploaded_at'   => $doc['uploaded_at']
+                'uploaded_at'   => $doc['uploaded_at'],
             ];
         }
 
@@ -164,7 +170,7 @@ class ApplicantDocumentService
         $requiredKey  = $isFastTrack ? 'is_fast_track_required' : 'is_required';
         $requiredReqs = array_filter(
             $allReqs,
-            fn($r) => $r[$requiredKey]
+            static fn ($r) => $r[$requiredKey],
         );
 
         $totalRequired = count($requiredReqs);
@@ -172,9 +178,8 @@ class ApplicantDocumentService
         $uploadedRequired = count(
             array_filter(
                 $requiredReqs,
-                fn($r) =>
-                    isset($uploadedDocs[$r['program_requirement_id']])
-            )
+                static fn ($r) => isset($uploadedDocs[$r['program_requirement_id']]),
+            ),
         );
 
         return $totalRequired > 0
@@ -194,7 +199,7 @@ class ApplicantDocumentService
         $requiredKey  = $isFastTrack ? 'is_fast_track_required' : 'is_required';
         $requiredReqs = array_filter(
             $allReqs,
-            fn($r) => $r[$requiredKey]
+            static fn ($r) => $r[$requiredKey],
         );
 
         $totalRequired = count($requiredReqs);
@@ -202,10 +207,9 @@ class ApplicantDocumentService
         $approvedRequired = count(
             array_filter(
                 $requiredReqs,
-                fn($r) =>
-                    isset($uploadedDocs[$r['program_requirement_id']]) &&
-                    ($uploadedDocs[$r['program_requirement_id']]['status'] ?? null) === 'approved'
-            )
+                static fn ($r) => isset($uploadedDocs[$r['program_requirement_id']])
+                    && ($uploadedDocs[$r['program_requirement_id']]['status'] ?? null) === 'approved',
+            ),
         );
 
         return $totalRequired > 0

@@ -3,12 +3,16 @@
 namespace App\Models\Payment;
 
 use CodeIgniter\Model;
+use RuntimeException;
 
 class PaymentFeeTypeModel extends Model
 {
-    protected $table      = 'payment_fee_type';
-    protected $primaryKey = 'payment_fee_type_id';
+    public const CODE_ADMISSION   = 'ADMISSION_FEE';
+    public const CODE_RESERVATION = 'RESERVATION_FEE';
+    public const CODE_FAST_TRACK  = 'FAST_TRACK_FEE';
 
+    protected $table         = 'payment_fee_type';
+    protected $primaryKey    = 'payment_fee_type_id';
     protected $allowedFields = [
         'code',
         'name',
@@ -16,21 +20,16 @@ class PaymentFeeTypeModel extends Model
         'amount',
         'is_active',
     ];
-
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
-
-    const CODE_ADMISSION   = 'ADMISSION_FEE';
-    const CODE_RESERVATION = 'RESERVATION_FEE';
-    const CODE_FAST_TRACK  = 'FAST_TRACK_FEE';
 
     public function getIdByCode(string $code): int
     {
         $row = $this->getByCode($code);
 
         if (! $row) {
-            throw new \RuntimeException("Payment fee type '{$code}' not found or inactive.");
+            throw new RuntimeException("Payment fee type '{$code}' not found or inactive.");
         }
 
         return (int) $row['payment_fee_type_id'];
@@ -45,10 +44,8 @@ class PaymentFeeTypeModel extends Model
     {
         $code = strtoupper($code);
 
-        return cache_remember("payment_fee_type_{$code}", 120, function () use ($code) {
-            return $this->where('code', $code)
-                        ->where('is_active', 1)
-                        ->first();
-        });
+        return cache_remember("payment_fee_type_{$code}", 120, fn () => $this->where('code', $code)
+            ->where('is_active', 1)
+            ->first());
     }
 }

@@ -25,7 +25,7 @@ class OfficerAuth implements FilterInterface
             return null;
         }
 
-        if (!session()->get('ao_logged_in')) {
+        if (! session()->get('ao_logged_in')) {
             return redirect()->to(base_url('admission-officer/login'));
         }
 

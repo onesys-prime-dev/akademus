@@ -9,11 +9,11 @@ class CreatePresetSectionsTable extends Migration
     public function up(): void
     {
         $this->forge->addField([
-            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true, 'null' => false],
-            'preset_id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'null' => false],
+            'id'           => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true, 'null' => false],
+            'preset_id'    => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'null' => false],
             'form_page_id' => ['type' => 'INT', 'constraint' => 11, 'null' => false],
-            'sort_order' => ['type' => 'INT', 'constraint' => 11, 'null' => false, 'default' => '0'],
-            'is_required' => ['type' => 'TINYINT', 'constraint' => 1, 'null' => false, 'default' => '1', 'comment' => '1 = mandatory section, 0 = optional'],
+            'sort_order'   => ['type' => 'INT', 'constraint' => 11, 'null' => false, 'default' => '0'],
+            'is_required'  => ['type' => 'TINYINT', 'constraint' => 1, 'null' => false, 'default' => '1', 'comment' => '1 = mandatory section, 0 = optional'],
         ]);
         $this->forge->addPrimaryKey('id');
         $this->forge->addKey('preset_id', false, false, 'preset_id');

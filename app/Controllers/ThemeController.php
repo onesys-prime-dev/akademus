@@ -3,15 +3,15 @@
 namespace App\Controllers;
 
 use App\Libraries\LoginThrottle;
+use App\Libraries\PreviewSession;
 use App\Models\ThemeModel;
 use App\Models\ThemePresetModel;
-use App\Models\UserModel;
+use App\Services\ThemePreviewDataService;
+use Config\Database;
+use Config\Services;
 
 class ThemeController extends BaseController
 {
-    protected ThemeModel $themeModel;
-    protected ThemePresetModel $themePresetModel;
-
     /**
      * The color fields a preset (built-in or custom) carries — also the
      * fields accepted by the custom-preset save endpoint.
@@ -26,6 +26,9 @@ class ThemeController extends BaseController
         'header_text_color', 'progress_active_color',
     ];
 
+    protected ThemeModel $themeModel;
+    protected ThemePresetModel $themePresetModel;
+
     public function __construct()
     {
         $this->themeModel       = new ThemeModel();
@@ -39,6 +42,7 @@ class ThemeController extends BaseController
             return redirect()->to('admin/theme');
         }
         $data['theme'] = $this->themeModel->getAllSettings();
+
         return view('admin/login', $data);
     }
 
@@ -51,13 +55,14 @@ class ThemeController extends BaseController
                     'message' => LoginThrottle::retryMessage(),
                 ]);
             }
+
             return redirect()->back()->with('error', LoginThrottle::retryMessage());
         }
 
         $email    = $this->request->getPost('email');
         $password = $this->request->getPost('password');
 
-        $db   = \Config\Database::connect();
+        $db   = Database::connect();
         $user = $db->table('users u')
             ->select('u.*, ac.password as admin_password')
             ->join('admin_credentials ac', 'ac.user_id = u.user_id')
@@ -65,10 +70,11 @@ class ThemeController extends BaseController
             ->where('u.role', 'admin')
             ->get()->getRowArray();
 
-        if (!$user || !password_verify($password, $user['admin_password'])) {
+        if (! $user || ! password_verify($password, $user['admin_password'])) {
             if ($this->request->isAJAX()) {
                 return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid credentials. Please try again.']);
             }
+
             return redirect()->back()->with('error', 'Invalid credentials');
         }
 
@@ -95,13 +101,14 @@ class ThemeController extends BaseController
     public function adminLogout()
     {
         session()->remove(['admin_logged_in', 'admin_id', 'admin_name', 'admin_email']);
+
         return redirect()->to('admin/login');
     }
 
     // ── Theme Editor ─────────────────────────────────────────
     public function index()
     {
-        if (!session()->get('admin_logged_in')) {
+        if (! session()->get('admin_logged_in')) {
             return redirect()->to('admin/login');
         }
 
@@ -115,7 +122,7 @@ class ThemeController extends BaseController
 
     public function save()
     {
-        if (!session()->get('admin_logged_in')) {
+        if (! session()->get('admin_logged_in')) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
         }
 
@@ -126,6 +133,7 @@ class ThemeController extends BaseController
         ]);
 
         $data = [];
+
         foreach ($allowed as $key) {
             $val = $this->request->getPost($key);
             if ($val !== null) {
@@ -135,14 +143,15 @@ class ThemeController extends BaseController
 
         // Handle logo upload
         $logo = $this->request->getFile('logo_file');
-        if ($logo && $logo->isValid() && !$logo->hasMoved()) {
+        if ($logo && $logo->isValid() && ! $logo->hasMoved()) {
             $valid = $this->validate([
                 'logo_file' => 'is_image[logo_file]|mime_in[logo_file,image/jpeg,image/png,image/gif,image/webp]|max_size[logo_file,2048]',
             ]);
-            if (!$valid) {
+            if (! $valid) {
                 if ($this->request->isAJAX()) {
                     return $this->response->setJSON(['status' => 'error', 'message' => 'Logo must be a JPEG, PNG, GIF, or WebP image under 2 MB.'])->setStatusCode(422);
                 }
+
                 return redirect()->back()->with('error', 'Logo must be a JPEG, PNG, GIF, or WebP image under 2 MB.');
             }
             $newName = $logo->getRandomName();
@@ -162,7 +171,7 @@ class ThemeController extends BaseController
     // ── Theme Preview (iframe) ────────────────────────────────
     public function preview()
     {
-        if (!session()->get('admin_logged_in')) {
+        if (! session()->get('admin_logged_in')) {
             return redirect()->to('admin/login');
         }
 
@@ -172,11 +181,11 @@ class ThemeController extends BaseController
             'admission-fee', 'reservation-fee', 'faq', 'followup', 'tuition-calc',
             'signin', 'signup', 'success',
         ];
-        if (!in_array($page, $allowed, true)) {
+        if (! in_array($page, $allowed, true)) {
             $page = 'dashboard';
         }
 
-        $built = (new \App\Services\ThemePreviewDataService())->build($page);
+        $built = (new ThemePreviewDataService())->build($page);
 
         // A few real partials/models (sidebar, step-1, ExamBookingModel…) read
         // applicant identity straight from session() rather than $data. Instead
@@ -185,12 +194,12 @@ class ThemeController extends BaseController
         // this request with an in-memory one. The real session is never read
         // or written from here on, so there is nothing to snapshot or restore.
         // The admin auth check above already ran against the real session.
-        \Config\Services::injectMock(
+        Services::injectMock(
             'session',
-            new \App\Libraries\PreviewSession(\App\Services\ThemePreviewDataService::SESSION_PERSONA)
+            new PreviewSession(ThemePreviewDataService::SESSION_PERSONA),
         );
 
-        $data = $built['data'];
+        $data              = $built['data'];
         $data['isPreview'] = true;
 
         return $this->response->setBody(view($built['view'], $data));
@@ -202,28 +211,29 @@ class ThemeController extends BaseController
     public function getThemeJson()
     {
         $theme = $this->themeModel->getAllSettings();
+
         return $this->response->setJSON($theme);
     }
 
     public function uploadLogo()
     {
-        if (!session()->get('admin_logged_in')) {
+        if (! session()->get('admin_logged_in')) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
         }
 
         $file = $this->request->getFile('logo_file');
 
-        if (!$file || !$file->isValid()) {
+        if (! $file || ! $file->isValid()) {
             return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'Invalid file'
+                'status'  => 'error',
+                'message' => 'Invalid file',
             ]);
         }
 
         $valid = $this->validate([
             'logo_file' => 'is_image[logo_file]|mime_in[logo_file,image/jpeg,image/png,image/gif,image/webp]|max_size[logo_file,2048]',
         ]);
-        if (!$valid) {
+        if (! $valid) {
             return $this->response->setJSON([
                 'status'  => 'error',
                 'message' => 'Logo must be a JPEG, PNG, GIF, or WebP image under 2 MB.',
@@ -234,29 +244,30 @@ class ThemeController extends BaseController
 
         $file->move(
             FCPATH . 'assets/images/logos',
-            $newName
+            $newName,
         );
 
         return $this->response->setJSON([
-            'status' => 'success',
+            'status'    => 'success',
             'logo_path' => 'assets/images/logos/' . $newName,
-            'logo_url'  => base_url('assets/images/logos/' . $newName)
+            'logo_url'  => base_url('assets/images/logos/' . $newName),
         ]);
     }
 
     // ── Custom Presets ────────────────────────────────────────
     public function saveCustomPreset()
     {
-        if (!session()->get('admin_logged_in')) {
+        if (! session()->get('admin_logged_in')) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
         }
 
         $rules = ['name' => 'required|max_length[100]'];
+
         foreach (self::PRESET_COLOR_FIELDS as $field) {
             $rules[$field] = 'required|regex_match[/^#[0-9a-fA-F]{3,8}$/]';
         }
 
-        if (!$this->validate($rules)) {
+        if (! $this->validate($rules)) {
             return $this->response->setJSON([
                 'status'  => 'error',
                 'message' => 'A preset name and 15 valid hex colors are required.',
@@ -264,11 +275,12 @@ class ThemeController extends BaseController
         }
 
         $data = ['name' => $this->request->getPost('name')];
+
         foreach (self::PRESET_COLOR_FIELDS as $field) {
             $data[$field] = $this->request->getPost($field);
         }
 
-        $id = $this->themePresetModel->createPreset($data);
+        $id         = $this->themePresetModel->createPreset($data);
         $data['id'] = $id;
 
         return $this->response->setJSON(['status' => 'success', 'preset' => $data]);
@@ -276,7 +288,7 @@ class ThemeController extends BaseController
 
     public function deleteCustomPreset($id)
     {
-        if (!session()->get('admin_logged_in')) {
+        if (! session()->get('admin_logged_in')) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
         }
 

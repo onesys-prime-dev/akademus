@@ -36,8 +36,9 @@ class ProgramRequirementProjectionService
             ->get()
             ->getRowArray();
 
-        if (!$program || empty($program['preset_id'])) {
+        if (! $program || empty($program['preset_id'])) {
             $db->transComplete();
+
             return;
         }
 
@@ -51,12 +52,12 @@ class ProgramRequirementProjectionService
         foreach ($presetCategories as $catIndex => $pc) {
             // insert program category
             $db->table('program_requirement_categories')->insert([
-                'program_id'     => $programId,
-                'category_id'    => $pc['requirement_category_id'],
-                'display_order'  => $catIndex,
-                'is_active'      => 1,
-                'created_at'     => date('Y-m-d H:i:s'),
-                'updated_at'     => date('Y-m-d H:i:s'),
+                'program_id'    => $programId,
+                'category_id'   => $pc['requirement_category_id'],
+                'display_order' => $catIndex,
+                'is_active'     => 1,
+                'created_at'    => date('Y-m-d H:i:s'),
+                'updated_at'    => date('Y-m-d H:i:s'),
             ]);
 
             $programRequirementCategoryId = $db->insertID();
@@ -108,7 +109,7 @@ class ProgramRequirementProjectionService
             ->select('DISTINCT p.program_id')
             ->join(
                 'preset_requirement_categories prc',
-                'prc.preset_id = p.preset_id'
+                'prc.preset_id = p.preset_id',
             )
             ->where('prc.requirement_category_id', $categoryId)
             ->get()

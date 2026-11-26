@@ -18,7 +18,7 @@ class FollowUpController extends BaseController
 
     public function index()
     {
-        if (!session()->get('logged_in')) {
+        if (! session()->get('logged_in')) {
             return redirect()->to('/sign-in');
         }
 
@@ -31,7 +31,7 @@ class FollowUpController extends BaseController
             ->where('user_id', session()->get('user_id'))
             ->first();
 
-        if (!$applicant) {
+        if (! $applicant) {
             return redirect()->to('/sign-in');
         }
 
@@ -56,14 +56,14 @@ class FollowUpController extends BaseController
      */
     public function fetchMessages()
     {
-        if (!session()->get('logged_in')) {
+        if (! session()->get('logged_in')) {
             return $this->response->setJSON(['success' => false]);
         }
 
         $applicantModel = new ApplicantModel();
         $applicant      = $applicantModel->where('user_id', session()->get('user_id'))->first();
 
-        if (!$applicant) {
+        if (! $applicant) {
             return $this->response->setJSON(['success' => false]);
         }
 
@@ -75,7 +75,7 @@ class FollowUpController extends BaseController
             : $this->messageModel->getMessagesForApplicant($applicantId);
 
         // Mark new officer messages as read while the applicant is actively viewing
-        if (!empty($messages)) {
+        if (! empty($messages)) {
             $this->messageModel->markAsRead($applicantId, 'officer');
         }
 
@@ -87,14 +87,14 @@ class FollowUpController extends BaseController
 
     public function unreadCount()
     {
-        if (!session()->get('logged_in')) {
+        if (! session()->get('logged_in')) {
             return $this->response->setJSON(['success' => false, 'count' => 0, 'notifications' => []]);
         }
 
         $applicantModel = new ApplicantModel();
         $applicant      = $applicantModel->where('user_id', session()->get('user_id'))->first();
 
-        if (!$applicant) {
+        if (! $applicant) {
             return $this->response->setJSON(['success' => false, 'count' => 0, 'notifications' => []]);
         }
 
@@ -109,14 +109,14 @@ class FollowUpController extends BaseController
 
     public function send()
     {
-        if (!session()->get('logged_in')) {
+        if (! session()->get('logged_in')) {
             return $this->response->setJSON(['success' => false, 'message' => 'Unauthorized']);
         }
 
         $applicantModel = new ApplicantModel();
         $applicant      = $applicantModel->where('user_id', session()->get('user_id'))->first();
 
-        if (!$applicant) {
+        if (! $applicant) {
             return $this->response->setJSON(['success' => false, 'message' => 'Applicant not found']);
         }
 

@@ -25,36 +25,36 @@ class ExamScheduleService
                 es.status
             ");
 
-        if (!empty($filters['search'])) {
+        if (! empty($filters['search'])) {
             $search = trim($filters['search']);
             $builder->groupStart()
                 ->like('es.location', $search)
                 ->orLike('es.exam_date', $search)
                 ->orLike("CONCAT(es.start_time, ' - ', es.end_time)", $search, 'both', null, true)
-            ->groupEnd();
+                ->groupEnd();
         }
 
-        if (!empty($filters['status']) && $filters['status'] !== 'all') {
+        if (! empty($filters['status']) && $filters['status'] !== 'all') {
             $status = $filters['status'];
             $builder->where('es.status', $this->normalizeStatus($status));
         }
 
-        if (!empty($filters['day'])) {
+        if (! empty($filters['day'])) {
             $builder->where('DAY(es.exam_date)', (int) $filters['day']);
         }
 
-        if (!empty($filters['month'])) {
+        if (! empty($filters['month'])) {
             $builder->where('MONTH(es.exam_date)', (int) $filters['month']);
         }
 
-        if (!empty($filters['year'])) {
+        if (! empty($filters['year'])) {
             $builder->where('YEAR(es.exam_date)', (int) $filters['year']);
         }
 
         $counts = $this->getCounts($filters);
 
         $countBuilder = clone $builder;
-        $total = $countBuilder->countAllResults(false);
+        $total        = $countBuilder->countAllResults(false);
 
         $rows = $builder
             ->orderBy('es.exam_date', 'ASC')
@@ -64,9 +64,9 @@ class ExamScheduleService
             ->getResultArray();
 
         return [
-            'rows' => $rows,
-            'total' => $total,
-            'pages' => max(1, (int) ceil($total / $perPage)),
+            'rows'   => $rows,
+            'total'  => $total,
+            'pages'  => max(1, (int) ceil($total / $perPage)),
             'counts' => $counts,
         ];
     }
@@ -87,6 +87,7 @@ class ExamScheduleService
             ->getResultArray();
 
         $map = [];
+
         foreach ($rows as $row) {
             $map[(int) $row['day_num']] = $row;
         }
@@ -213,15 +214,15 @@ class ExamScheduleService
     public function createSchedule(array $data): int
     {
         $this->db->table('exam_schedules')->insert([
-            'exam_date'   => $data['exam_date'],
-            'start_time'  => $data['start_time'],
-            'end_time'    => $data['end_time'],
-            'location'    => $data['location'],
-            'max_slots'   => $data['max_slots'],
-            'booked_slots'=> 0,
-            'status'      => 'open',
-            'created_at'  => date('Y-m-d H:i:s'),
-            'updated_at'  => date('Y-m-d H:i:s'),
+            'exam_date'    => $data['exam_date'],
+            'start_time'   => $data['start_time'],
+            'end_time'     => $data['end_time'],
+            'location'     => $data['location'],
+            'max_slots'    => $data['max_slots'],
+            'booked_slots' => 0,
+            'status'       => 'open',
+            'created_at'   => date('Y-m-d H:i:s'),
+            'updated_at'   => date('Y-m-d H:i:s'),
         ]);
 
         return (int) $this->db->insertID();
@@ -230,7 +231,7 @@ class ExamScheduleService
     public function updateSchedule(int $id, array $data): bool
     {
         $current = $this->getScheduleById($id);
-        if (!$current) {
+        if (! $current) {
             return false;
         }
 
@@ -250,7 +251,9 @@ class ExamScheduleService
             ]);
     }
 
-    /** Applicants who currently hold a 'booked' (not yet attended or cancelled) seat on a schedule. */
+    /**
+     * Applicants who currently hold a 'booked' (not yet attended or cancelled) seat on a schedule.
+     */
     public function getBookedApplicantIds(int $scheduleId): array
     {
         return array_map('intval', array_column(
@@ -259,7 +262,7 @@ class ExamScheduleService
                 ->where('exam_schedule_id', $scheduleId)
                 ->where('status', 'booked')
                 ->get()->getResultArray(),
-            'applicant_id'
+            'applicant_id',
         ));
     }
 
@@ -289,7 +292,7 @@ class ExamScheduleService
             ->where('exam_booking_id', $bookingId)
             ->update([
                 'checked_in_at' => date('Y-m-d H:i:s'),
-                'status' => 'attended',
+                'status'        => 'attended',
             ]);
     }
 
@@ -300,7 +303,7 @@ class ExamScheduleService
             ->get()
             ->getRowArray();
 
-        if (!$booking || $booking['status'] === 'cancelled') {
+        if (! $booking || $booking['status'] === 'cancelled') {
             return false;
         }
 
@@ -330,29 +333,29 @@ class ExamScheduleService
         $builder = $this->db->table('exam_schedules es');
 
         // Apply SAME filters except status
-        if (!empty($filters['search'])) {
+        if (! empty($filters['search'])) {
             $search = trim($filters['search']);
             $builder->groupStart()
                 ->like('es.location', $search)
                 ->orLike('es.exam_date', $search)
-            ->groupEnd();
+                ->groupEnd();
         }
 
-        if (!empty($filters['day'])) {
+        if (! empty($filters['day'])) {
             $builder->where('DAY(es.exam_date)', (int) $filters['day']);
         }
 
-        if (!empty($filters['month'])) {
+        if (! empty($filters['month'])) {
             $builder->where('MONTH(es.exam_date)', (int) $filters['month']);
         }
 
-        if (!empty($filters['year'])) {
+        if (! empty($filters['year'])) {
             $builder->where('YEAR(es.exam_date)', (int) $filters['year']);
         }
 
         // Clone for reuse
-        $allBuilder = clone $builder;
-        $openBuilder = clone $builder;
+        $allBuilder    = clone $builder;
+        $openBuilder   = clone $builder;
         $closedBuilder = clone $builder;
 
         return [
@@ -373,7 +376,7 @@ class ExamScheduleService
         string $resultStatus,
         ?float $score,
         ?string $remarks,
-        int $recordedBy
+        int $recordedBy,
     ): bool {
         $allowed = ['PASSED', 'FAILED', 'PENDING'];
 

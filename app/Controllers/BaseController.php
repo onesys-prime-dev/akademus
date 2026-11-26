@@ -2,12 +2,13 @@
 
 namespace App\Controllers;
 
+use App\Models\Auth\RememberTokenModel;
+use App\Models\ThemeModel;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
+use Config\Database;
 use Psr\Log\LoggerInterface;
-
-use App\Models\Auth\RememberTokenModel;
 
 /**
  * BaseController provides a convenient place for loading components
@@ -45,8 +46,7 @@ abstract class BaseController extends Controller
         // $this->session = service('session');
 
         // COOKIES for login applicant
-        if (!session()->get('logged_in') && isset($_COOKIE['remember_token'])) {
-
+        if (! session()->get('logged_in') && isset($_COOKIE['remember_token'])) {
             $token = $_COOKIE['remember_token'];
 
             $rememberModel = new RememberTokenModel();
@@ -57,7 +57,7 @@ abstract class BaseController extends Controller
                 ->first();
 
             if ($record) {
-                $db = \Config\Database::connect();
+                $db = Database::connect();
 
                 $user = $db->table('applicants a')
                     ->join('users u', 'a.user_id = u.user_id')
@@ -77,7 +77,7 @@ abstract class BaseController extends Controller
                         'applicant_id'     => $user['applicant_id'],
                         'program_id'       => $user['program_id'],
                         'program_name'     => $user['program_name'],
-                        'logged_in'        => true
+                        'logged_in'        => true,
                     ]);
                 }
             }
@@ -86,11 +86,11 @@ abstract class BaseController extends Controller
 
     protected function renderApplicant($page, $data = [])
     {
-        $themeModel = new \App\Models\ThemeModel();
+        $themeModel    = new ThemeModel();
         $data['theme'] = $themeModel->getAllSettings();
 
         return view('applicant/main', array_merge($data, [
-            'page_content' => $page
+            'page_content' => $page,
         ]));
     }
 }

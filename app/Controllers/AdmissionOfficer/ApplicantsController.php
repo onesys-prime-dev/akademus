@@ -4,35 +4,40 @@ namespace App\Controllers\AdmissionOfficer;
 
 use App\Controllers\BaseController;
 use App\Libraries\EncryptedFileStorage;
-use App\Models\ThemeModel;
+use App\Models\FollowUpMessageModel;
+use App\Models\FormPageModel;
 use App\Models\ProgramModel;
-use App\Services\ApplicantService;
+use App\Models\ThemeModel;
 use App\Services\ApplicantProfileService;
+use App\Services\ApplicantService;
+use App\Services\ExamScheduleService;
 use App\Services\NotificationService;
 use App\Services\SisSyncService;
 use CodeIgniter\Events\Events;
+use CodeIgniter\Exceptions\PageNotFoundException;
+use Config\Database;
 use Throwable;
 
 class ApplicantsController extends BaseController
 {
+    private const DEFAULT_TAB = 'applicant_form';
+
     protected ApplicantService $applicantService;
     protected ApplicantProfileService $applicantProfileService;
     protected NotificationService $notificationService;
 
-    private const DEFAULT_TAB = 'applicant_form';
-
     public function __construct()
     {
-        $this->applicantService = new ApplicantService();
+        $this->applicantService        = new ApplicantService();
         $this->applicantProfileService = new ApplicantProfileService();
-        $this->notificationService = new NotificationService();
+        $this->notificationService     = new NotificationService();
     }
 
     public function index()
     {
         helper('theme');
 
-        $themeModel = new ThemeModel();
+        $themeModel   = new ThemeModel();
         $programModel = new ProgramModel();
 
         return view('admission-officer/main', [
@@ -41,14 +46,14 @@ class ApplicantsController extends BaseController
             'breadcrumb'   => [
                 [
                     'label' => 'Applicants',
-                    'url'   => base_url('/admission-officer/applicants')
+                    'url'   => base_url('/admission-officer/applicants'),
                 ],
                 [
-                    'label' => 'List of Applicants'
-                ]
+                    'label' => 'List of Applicants',
+                ],
             ],
             'theme'    => $themeModel->getAllSettings(),
-            'programs' => $programModel->getAllPrograms()
+            'programs' => $programModel->getAllPrograms(),
         ]);
     }
 
@@ -60,12 +65,12 @@ class ApplicantsController extends BaseController
             'search'  => $this->request->getGet('search'),
         ];
 
-        $page  = max(1, (int) ($this->request->getGet('page') ?? 1));
-        $limit = 10;
+        $page   = max(1, (int) ($this->request->getGet('page') ?? 1));
+        $limit  = 10;
         $offset = ($page - 1) * $limit;
 
-        $applicants = $this->applicantService->getApplicants($filters, $limit, $offset);
-        $totalCounts = $this->applicantService->countApplicants($filters);
+        $applicants   = $this->applicantService->getApplicants($filters, $limit, $offset);
+        $totalCounts  = $this->applicantService->countApplicants($filters);
         $statusCounts = $this->applicantService->getStatusCounts($filters);
 
         return $this->response->setJSON([
@@ -73,7 +78,7 @@ class ApplicantsController extends BaseController
             'page'   => $page,
             'total'  => $totalCounts,
             'limit'  => $limit,
-            'counts' => $statusCounts
+            'counts' => $statusCounts,
         ]);
     }
 
@@ -83,14 +88,14 @@ class ApplicantsController extends BaseController
         $status  = $this->request->getPost('status');
         $remarks = trim($this->request->getPost('remarks') ?? '');
 
-        if (!in_array($status, $allowed) || !$applicantId) {
+        if (! in_array($status, $allowed, true) || ! $applicantId) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Invalid request.'
+                'message' => 'Invalid request.',
             ]);
         }
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         // 🔍 Get current status FIRST (important)
         $current = $db->table('applicants')
@@ -99,10 +104,10 @@ class ApplicantsController extends BaseController
             ->get()
             ->getRowArray();
 
-        if (!$current) {
+        if (! $current) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Applicant not found.'
+                'message' => 'Applicant not found.',
             ]);
         }
 
@@ -111,7 +116,7 @@ class ApplicantsController extends BaseController
             return $this->response->setJSON([
                 'success' => true,
                 'status'  => $status,
-                'message' => 'No changes made.'
+                'message' => 'No changes made.',
             ]);
         }
 
@@ -124,12 +129,12 @@ class ApplicantsController extends BaseController
             ]);
 
         // ❗ CHECK if update query failed
-        if (!$updated) {
+        if (! $updated) {
             log_message('error', 'Failed to update applicant decision ID: ' . $applicantId);
 
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Failed to update decision.'
+                'message' => 'Failed to update decision.',
             ]);
         }
 
@@ -137,7 +142,7 @@ class ApplicantsController extends BaseController
         if ($db->affectedRows() === 0) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'No changes applied.'
+                'message' => 'No changes applied.',
             ]);
         }
 
@@ -190,7 +195,7 @@ class ApplicantsController extends BaseController
         $pageIds = $this->request->getPost('page_ids');
         $note    = trim($this->request->getPost('note') ?? '');
 
-        if (empty($pageIds) || !is_array($pageIds) || $note === '' || !$applicantId) {
+        if (empty($pageIds) || ! is_array($pageIds) || $note === '' || ! $applicantId) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Select at least one step and provide a note.',
@@ -199,7 +204,7 @@ class ApplicantsController extends BaseController
 
         $pageIds = array_values(array_unique(array_map('intval', $pageIds)));
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $application = $db->table('applications')
             ->where('applicant_id', $applicantId)
@@ -207,14 +212,14 @@ class ApplicantsController extends BaseController
             ->get()
             ->getRowArray();
 
-        if (!$application) {
+        if (! $application) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'No submitted application found.',
             ]);
         }
 
-        if (!in_array($application['application_status'], ['pending', 'needs_revision'], true)) {
+        if (! in_array($application['application_status'], ['pending', 'needs_revision'], true)) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'This application cannot be sent back for revision in its current state.',
@@ -229,7 +234,7 @@ class ApplicantsController extends BaseController
                 'revision_pages'     => json_encode($pageIds),
             ]);
 
-        if (!$updated) {
+        if (! $updated) {
             log_message('error', 'Failed to set needs_revision for application ID: ' . $application['application_id']);
 
             return $this->response->setJSON([
@@ -238,7 +243,7 @@ class ApplicantsController extends BaseController
             ]);
         }
 
-        $pageTitles = (new \App\Models\FormPageModel())
+        $pageTitles = (new FormPageModel())
             ->whereIn('id', $pageIds)
             ->orderBy('sort_order', 'ASC')
             ->findColumn('title');
@@ -246,7 +251,7 @@ class ApplicantsController extends BaseController
         $stepList    = implode(', ', $pageTitles ?: []);
         $messageBody = "Your application requires revision on: {$stepList}.\n\n" . $note;
 
-        (new \App\Models\FollowUpMessageModel())->insert([
+        (new FollowUpMessageModel())->insert([
             'applicant_id' => $applicantId,
             'sender_role'  => 'officer',
             'message'      => $messageBody,
@@ -271,14 +276,14 @@ class ApplicantsController extends BaseController
 
         $allowed = ['approved', 'rejected', 'pending', 'in_progress'];
 
-        if (empty($ids) || !$status || !in_array($status, $allowed, true)) {
+        if (empty($ids) || ! $status || ! in_array($status, $allowed, true)) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Invalid payload'
+                'message' => 'Invalid payload',
             ]);
         }
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         // 🔍 Get current statuses
         $applicants = $db->table('applicants')
@@ -290,15 +295,14 @@ class ApplicantsController extends BaseController
         if (empty($applicants)) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'No valid applicants found'
+                'message' => 'No valid applicants found',
             ]);
         }
 
         $updatedCount = 0;
 
         foreach ($applicants as $applicant) {
-
-            $applicantId = $applicant['applicant_id'];
+            $applicantId   = $applicant['applicant_id'];
             $currentStatus = $applicant['application_status'];
 
             // ❗ Skip if same status (prevents duplicate emails)
@@ -310,11 +314,12 @@ class ApplicantsController extends BaseController
             $updated = $db->table('applicants')
                 ->where('applicant_id', $applicantId)
                 ->update([
-                    'application_status' => $status
+                    'application_status' => $status,
                 ]);
 
-            if (!$updated || $db->affectedRows() === 0) {
+            if (! $updated || $db->affectedRows() === 0) {
                 log_message('error', 'Bulk update failed for applicant ID: ' . $applicantId);
+
                 continue;
             }
 
@@ -334,7 +339,7 @@ class ApplicantsController extends BaseController
         return $this->response->setJSON([
             'success' => true,
             'updated' => $updatedCount,
-            'message' => "{$updatedCount} applicant(s) updated successfully."
+            'message' => "{$updatedCount} applicant(s) updated successfully.",
         ]);
     }
 
@@ -344,7 +349,7 @@ class ApplicantsController extends BaseController
 
         $applicantId = (int) $applicantId;
 
-        if (!$applicantId) {
+        if (! $applicantId) {
             return redirect()->to(base_url('/admission-officer/applicants'));
         }
 
@@ -372,7 +377,7 @@ class ApplicantsController extends BaseController
             $activeTab,
             $filters,
             $limit,
-            $offset
+            $offset,
         );
 
         $viewMap = $this->applicantProfileService->getViewMap();
@@ -382,27 +387,27 @@ class ApplicantsController extends BaseController
             array_merge($payload, [
                 'applicantId' => $applicantId,
                 'activeTab'   => $activeTab,
-            ])
+            ]),
         );
 
         return view('admission-officer/main', [
-            'title'         => 'Applicants',
-            'page_content'  => 'admission-officer/applicants/detailed-applicant/detailed-applicant',
-            'breadcrumb'    => [
+            'title'        => 'Applicants',
+            'page_content' => 'admission-officer/applicants/detailed-applicant/detailed-applicant',
+            'breadcrumb'   => [
                 [
                     'label' => 'Applicants',
-                    'url'   => base_url('/admission-officer/applicants')
+                    'url'   => base_url('/admission-officer/applicants'),
                 ],
                 [
-                    'label' => 'Applicant Profile'
-                ]
+                    'label' => 'Applicant Profile',
+                ],
             ],
-            'theme'          => $themeModel->getAllSettings(),
-            'applicantId'    => $applicantId,
-            'profile'        => $profile,
-            'activeTab'      => $activeTab,
-            'initialContent' => $initialContent,
-            'formPages'      => (new \App\Models\FormPageModel())->getEnabledOrdered(),
+            'theme'           => $themeModel->getAllSettings(),
+            'applicantId'     => $applicantId,
+            'profile'         => $profile,
+            'activeTab'       => $activeTab,
+            'initialContent'  => $initialContent,
+            'formPages'       => (new FormPageModel())->getEnabledOrdered(),
             'incompleteSteps' => $this->applicantProfileService->getIncompleteSteps($applicantId),
         ]);
     }
@@ -415,52 +420,52 @@ class ApplicantsController extends BaseController
 
         $allowed = ['approved', 'rejected'];
 
-        if (!in_array($status, $allowed, true)) {
+        if (! in_array($status, $allowed, true)) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Invalid status'
+                'message' => 'Invalid status',
             ]);
         }
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $updated = $db->table('applicant_documents')
             ->where('document_id', $id)
             ->update([
-                'status' => $status,
-                'updated_at' => date('Y-m-d H:i:s')
+                'status'     => $status,
+                'updated_at' => date('Y-m-d H:i:s'),
             ]);
 
-        if (!$updated) {
+        if (! $updated) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Failed to update document status'
+                'message' => 'Failed to update document status',
             ]);
         }
 
         return $this->response->setJSON([
             'success' => true,
             'message' => 'Document updated successfully',
-            'status'  => $status
+            'status'  => $status,
         ]);
     }
 
     public function viewDocument(int $applicantId, int $requirementId)
     {
-        $db  = \Config\Database::connect();
+        $db  = Database::connect();
         $doc = $db->table('applicant_documents')
             ->where('applicant_id', $applicantId)
             ->where('program_requirement_id', $requirementId)
             ->get()->getRowArray();
 
-        if (!$doc) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        if (! $doc) {
+            throw PageNotFoundException::forPageNotFound();
         }
 
         $filePath = WRITEPATH . "uploads/applicants/{$applicantId}/" . basename($doc['document_name']);
 
-        if (!file_exists($filePath)) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        if (! file_exists($filePath)) {
+            throw PageNotFoundException::forPageNotFound();
         }
 
         $mime = $doc['mime_type'] ?? 'application/octet-stream';
@@ -479,10 +484,10 @@ class ApplicantsController extends BaseController
         $search      = (string) ($this->request->getGet('search') ?? '');
         $page        = max(1, (int) ($this->request->getGet('page') ?? 1));
 
-        if (!$applicantId) {
+        if (! $applicantId) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Invalid applicant ID'
+                'message' => 'Invalid applicant ID',
             ]);
         }
 
@@ -497,10 +502,11 @@ class ApplicantsController extends BaseController
                 $tab,
                 $filters,
                 $limit,
-                $offset
+                $offset,
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             log_message('error', 'fetchContent getTabPayload error: ' . $e->getMessage());
+
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Error loading tab data: ' . $e->getMessage(),
@@ -509,7 +515,7 @@ class ApplicantsController extends BaseController
 
         $viewMap = $this->applicantProfileService->getViewMap();
 
-        if (!isset($viewMap[$tab])) {
+        if (! isset($viewMap[$tab])) {
             $tab = self::DEFAULT_TAB;
         }
 
@@ -521,8 +527,9 @@ class ApplicantsController extends BaseController
                 'page'        => $page,
                 'limit'       => $limit,
             ]));
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             log_message('error', 'fetchContent view error: ' . $e->getMessage());
+
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Error rendering tab: ' . $e->getMessage(),
@@ -565,14 +572,14 @@ class ApplicantsController extends BaseController
             ? (float) $scoreRaw
             : null;
 
-        $service = new \App\Services\ExamScheduleService();
+        $service = new ExamScheduleService();
 
         $saved = $service->saveResult(
             $bookingId,
             $resultStatus,
             $score,
             $remarks !== '' ? $remarks : null,
-            $recordedBy
+            $recordedBy,
         );
 
         if (! $saved) {

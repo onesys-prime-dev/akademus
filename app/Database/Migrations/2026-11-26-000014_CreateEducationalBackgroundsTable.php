@@ -11,15 +11,15 @@ class CreateEducationalBackgroundsTable extends Migration
     {
         $this->forge->addField([
             'educational_bg_id' => ['type' => 'INT', 'constraint' => 11, 'auto_increment' => true, 'null' => false],
-            'application_id' => ['type' => 'INT', 'constraint' => 11, 'null' => false],
-            'school_name' => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
-            'school_location' => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
-            'strand' => ['type' => 'VARCHAR', 'constraint' => 150, 'null' => true],
+            'application_id'    => ['type' => 'INT', 'constraint' => 11, 'null' => false],
+            'school_name'       => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
+            'school_location'   => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
+            'strand'            => ['type' => 'VARCHAR', 'constraint' => 150, 'null' => true],
             'school_year_start' => ['type' => 'YEAR', 'constraint' => 4, 'null' => true],
-            'school_year_end' => ['type' => 'YEAR', 'constraint' => 4, 'null' => true],
-            'gwa' => ['type' => 'DECIMAL', 'constraint' => '5,2', 'null' => true],
-            'school_type' => ['type' => 'VARCHAR', 'constraint' => 50, 'null' => true],
-            'created_at' => ['type' => 'DATETIME', 'null' => true, 'default' => new RawSql('CURRENT_TIMESTAMP')],
+            'school_year_end'   => ['type' => 'YEAR', 'constraint' => 4, 'null' => true],
+            'gwa'               => ['type' => 'DECIMAL', 'constraint' => '5,2', 'null' => true],
+            'school_type'       => ['type' => 'VARCHAR', 'constraint' => 50, 'null' => true],
+            'created_at'        => ['type' => 'DATETIME', 'null' => true, 'default' => new RawSql('CURRENT_TIMESTAMP')],
             '`updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
         ]);
         $this->forge->addPrimaryKey('educational_bg_id');

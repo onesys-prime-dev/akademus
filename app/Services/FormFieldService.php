@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use CodeIgniter\Database\BaseBuilder;
+use Config\Database;
 
 class FormFieldService
 {
@@ -10,19 +10,21 @@ class FormFieldService
 
     public function __construct()
     {
-        $this->db = \Config\Database::connect();
+        $this->db = Database::connect();
     }
 
     /**
      * Get merged form fields for a program
      * Uses form_field_configs as base + program_form_field_overrides for customization
+     *
+     * @param mixed $programId
      */
     public function getMergedFormFields($programId)
     {
         // Admin "what's actually active for this program" view — visible fields only.
         $fields = array_filter(
             $this->mergedFieldRows((int) $programId),
-            fn($f) => (int) $f['is_visible'] === 1
+            static fn ($f) => (int) $f['is_visible'] === 1,
         );
 
         // Group by section for easier frontend rendering
@@ -39,9 +41,11 @@ class FormFieldService
     public function getMergedFieldConfigsForPage(int $programId, int $pageId): array
     {
         $result = [];
+
         foreach ($this->mergedFieldRows($programId, $pageId) as $row) {
             $result[$row['field_key']] = $row;
         }
+
         return $result;
     }
 
@@ -74,7 +78,7 @@ class FormFieldService
             ->join(
                 'program_form_field_overrides pffo',
                 'pffo.field_config_id = ffc.id AND pffo.program_id = ' . $programId,
-                'left'
+                'left',
             );
 
         if ($pageId !== null) {
@@ -105,6 +109,8 @@ class FormFieldService
 
     /**
      * Get program-specific overrides only
+     *
+     * @param mixed $programId
      */
     public function getProgramOverrides($programId)
     {
@@ -116,6 +122,10 @@ class FormFieldService
 
     /**
      * Save or update field override for a program
+     *
+     * @param mixed $programId
+     * @param mixed $fieldConfigId
+     * @param mixed $overrides
      */
     public function saveProgramFieldOverride($programId, $fieldConfigId, $overrides)
     {
@@ -138,6 +148,9 @@ class FormFieldService
 
     /**
      * Remove field override for a program
+     *
+     * @param mixed $programId
+     * @param mixed $fieldConfigId
      */
     public function removeProgramFieldOverride($programId, $fieldConfigId)
     {
@@ -149,6 +162,9 @@ class FormFieldService
 
     /**
      * Validate form submission against field rules
+     *
+     * @param mixed $programId
+     * @param mixed $data
      */
     public function validateSubmission($programId, $data)
     {
@@ -158,11 +174,12 @@ class FormFieldService
         foreach ($fields as $section) {
             foreach ($section as $field) {
                 $fieldKey = $field['field_key'];
-                $value = $data[$fieldKey] ?? null;
+                $value    = $data[$fieldKey] ?? null;
 
                 // Check required
                 if ($field['is_required'] && empty($value)) {
                     $errors[$fieldKey] = "{$field['label']} is required";
+
                     continue;
                 }
             }
@@ -173,17 +190,21 @@ class FormFieldService
 
     /**
      * Group fields by section for better frontend organization
+     *
+     * @param mixed $fields
      */
     private function groupFieldsBySection($fields)
     {
         $grouped = [];
+
         foreach ($fields as $field) {
             $section = $field['section'] ?? 'general';
-            if (!isset($grouped[$section])) {
+            if (! isset($grouped[$section])) {
                 $grouped[$section] = [];
             }
             $grouped[$section][] = $field;
         }
+
         return $grouped;
     }
 
