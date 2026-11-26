@@ -11,7 +11,9 @@ class EmailService
         $email = Services::email();
         $email->clear();
 
-        $email->setFrom('testakademusmentora@gmail.com', 'Akademus Portal');
+        // Sender comes from email.fromEmail / email.fromName in .env (per environment), not from code.
+        $config = config('Email');
+        $email->setFrom($config->fromEmail, $config->fromName !== '' ? $config->fromName : 'Akademus Portal');
         $email->setTo($to);
         $email->setSubject($subject);
         $email->setMailType('html');

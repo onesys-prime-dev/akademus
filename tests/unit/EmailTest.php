@@ -17,7 +17,11 @@ final class EmailTest extends CIUnitTestCase
     {
         parent::setUp();
 
-        $email = new MockEmail(config('Email'));
+        $config            = config('Email');
+        $config->fromEmail = 'noreply@akademus.test';
+        $config->fromName  = 'Akademus Test';
+
+        $email = new MockEmail($config);
         Services::injectMock('email', $email);
     }
 
@@ -74,6 +78,7 @@ final class EmailTest extends CIUnitTestCase
         $this->assertInstanceOf(MockEmail::class, $sent);
         $this->assertNotSame('', trim((string) $sent->archive['body']), "{$method}() produced an empty body.");
         $this->assertNotSame('', trim((string) $sent->archive['subject']), "{$method}() produced an empty subject.");
+        $this->assertSame('noreply@akademus.test', $sent->archive['fromEmail'], "{$method}() must use email.fromEmail from the config.");
         $this->assertStringNotContainsString('<b>with markup</b>', (string) $sent->archive['body'], "{$method}() does not escape user content.");
     }
 
