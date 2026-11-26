@@ -4,6 +4,9 @@ use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
 $routes->get('/', 'LandingPage\HomeController::index');
+
+// Deploy/uptime health probe (no auth; reports pass/fail and the release SHA only)
+$routes->get('health', 'HealthController::index');
 $routes->get('applynowpage', 'ApplyNow::index');
 
 // -------------------------- LANDING PAGE ROUTES -------------------------- //
