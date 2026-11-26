@@ -1,0 +1,51 @@
+# Staging: every merge into main is tested (full CI gate on the merge commit) and then deployed.
+# Direct pushes to main are blocked by the branch ruleset - changes arrive through pull requests only.
+# See docs/CI-CD.md.
+name: Deploy staging
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {} # redeploy the current main (e.g. after fixing the server)
+
+permissions: {}
+
+concurrency:
+  # Different from the reusable job's "deploy-staging" group (same name would deadlock).
+  # A newer merge waits for the running pipeline; it is never cancelled mid-deploy.
+  group: staging-pipeline
+  cancel-in-progress: false
+
+jobs:
+  guard:
+    name: Only main deploys to staging
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      - name: Check ref
+        env:
+          REF: ${{ github.ref }}
+        run: '[[ "$REF" == "refs/heads/main" ]] || { echo "::error::Staging deploys only from main (got $REF)"; exit 1; }'
+
+  ci:
+    name: CI
+    needs: guard
+    uses: ./.github/workflows/ci.yml
+    with:
+      sha: ${{ github.sha }}
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+  deploy:
+    name: Staging
+    needs: ci
+    uses: ./.github/workflows/deploy-reusable.yml
+    with:
+      environment: staging
+      sha: ${{ github.sha }}
+      release-label: main@${{ github.sha }}
+    permissions:
+      contents: read

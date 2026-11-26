@@ -1,5 +1,6 @@
 parameters:
     level: 5
+    tmpDir: build/phpstan
     paths:
         - app
     excludePaths:

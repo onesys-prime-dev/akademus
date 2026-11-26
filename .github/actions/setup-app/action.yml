@@ -1,0 +1,72 @@
+name: Set up PHP app
+description: >
+  Installs PHP (version from .ci/php-version unless overridden) with the extensions Akademus needs,
+  restores the Composer cache and installs Composer dependencies from composer.lock.
+
+inputs:
+  php-version:
+    description: PHP version to use instead of .ci/php-version (e.g. the "next" version check).
+    required: false
+    default: ''
+  coverage:
+    description: Coverage driver for setup-php (none, pcov, xdebug).
+    required: false
+    default: none
+  composer-flags:
+    description: Extra flags for composer install (e.g. --no-dev --classmap-authoritative).
+    required: false
+    default: ''
+  install:
+    description: Run composer install.
+    required: false
+    default: 'true'
+
+outputs:
+  php-version:
+    description: The PHP version that was installed (major.minor).
+    value: ${{ steps.version.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    - name: Resolve PHP version
+      id: version
+      shell: bash
+      env:
+        OVERRIDE: ${{ inputs.php-version }}
+      run: |
+        v="${OVERRIDE:-$(tr -d '[:space:]' < .ci/php-version)}"
+        [[ "$v" =~ ^[0-9]+\.[0-9]+$ ]] || { echo "::error::Invalid PHP version '$v'"; exit 1; }
+        echo "version=$v" >> "$GITHUB_OUTPUT"
+
+    - name: Set up PHP ${{ steps.version.outputs.version }}
+      uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+      with:
+        php-version: ${{ steps.version.outputs.version }}
+        extensions: intl, mbstring, mysqli, curl, gd, fileinfo, openssl, sodium, zip
+        coverage: ${{ inputs.coverage }}
+        ini-values: memory_limit=1G${{ inputs.coverage == 'pcov' && ', pcov.directory=app' || '' }}
+        tools: composer:v2
+
+    - name: Locate Composer cache
+      if: inputs.install == 'true'
+      id: composer-cache
+      shell: bash
+      run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+    - name: Restore Composer cache
+      if: inputs.install == 'true'
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: composer-${{ runner.os }}-php${{ steps.version.outputs.version }}-${{ hashFiles('composer.lock') }}
+        restore-keys: composer-${{ runner.os }}-php${{ steps.version.outputs.version }}-
+
+    - name: Install Composer dependencies
+      if: inputs.install == 'true'
+      shell: bash
+      env:
+        FLAGS: ${{ inputs.composer-flags }}
+      run: |
+        # shellcheck disable=SC2086 # FLAGS is a deliberate list of flags
+        composer install --no-interaction --no-progress --prefer-dist $FLAGS
