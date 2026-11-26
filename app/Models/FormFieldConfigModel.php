@@ -19,7 +19,7 @@ class FormFieldConfigModel extends Model
     {
         $rows = $this->orderBy('page_id')->orderBy('section')->orderBy('sort_order')->findAll();
         // Attach the option list of select fields so the admin editor can show/edit it.
-        $selectIds = array_column(array_filter($rows, static fn ($r) => $r['field_type'] === 'select'), 'id');
+        $selectIds = array_column(array_filter($rows, fn ($r) => $r['field_type'] === 'select'), 'id');
         $options   = (new FormFieldOptionConfigModel())->getNamesForFields(array_map('intval', $selectIds));
 
         $grouped = [];
@@ -126,7 +126,7 @@ class FormFieldConfigModel extends Model
     public function deleteCustomFields(array $keys): void
     {
         $keys = array_values(array_filter(array_map(
-            static fn ($k) => is_string($k) ? trim($k) : '',
+            fn ($k) => is_string($k) ? trim($k) : '',
             $keys,
         )));
         if (! $keys) {

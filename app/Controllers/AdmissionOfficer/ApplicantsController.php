@@ -88,7 +88,7 @@ class ApplicantsController extends BaseController
         $status  = $this->request->getPost('status');
         $remarks = trim($this->request->getPost('remarks') ?? '');
 
-        if (! in_array($status, $allowed, true) || ! $applicantId) {
+        if (! in_array($status, $allowed) || ! $applicantId) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Invalid request.',

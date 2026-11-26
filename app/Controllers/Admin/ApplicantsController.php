@@ -24,7 +24,7 @@ class ApplicantsController extends BaseAdminController
         $status = $this->request->getGet('status');
         $query  = $this->applicationModel;
 
-        if ($status && in_array($status, ['pending', 'reviewed', 'approved', 'rejected'], true)) {
+        if ($status && in_array($status, ['pending', 'reviewed', 'approved', 'rejected'])) {
             $query = $query->where('status', $status);
         }
 
@@ -67,7 +67,7 @@ class ApplicantsController extends BaseAdminController
     {
         $status = $this->request->getPost('status');
 
-        if (! in_array($status, ['pending', 'reviewed', 'approved', 'rejected'], true)) {
+        if (! in_array($status, ['pending', 'reviewed', 'approved', 'rejected'])) {
             return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid status']);
         }
 

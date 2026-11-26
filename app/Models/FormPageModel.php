@@ -28,7 +28,9 @@ class FormPageModel extends Model
      */
     public function getEnabledOrdered(): array
     {
-        return cache_remember('form_pages_enabled_ordered', 120, fn () => $this->where('is_enabled', 1)->orderBy('sort_order', 'ASC')->findAll());
+        return cache_remember('form_pages_enabled_ordered', 120, function () {
+            return $this->where('is_enabled', 1)->orderBy('sort_order', 'ASC')->findAll();
+        });
     }
 
     /**

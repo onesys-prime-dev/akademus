@@ -72,8 +72,8 @@ class RequirementsController extends BaseController
                 true,
             );
             $fastTrackRequiredDocs = array_values(array_map(
-                static fn ($r) => $r['requirement_name'],
-                array_filter($reqs, static fn ($r) => $r['is_required']),
+                fn ($r) => $r['requirement_name'],
+                array_filter($reqs, fn ($r) => $r['is_required']),
             ));
         }
 
@@ -126,7 +126,7 @@ class RequirementsController extends BaseController
             return $requirements;
         }
 
-        return array_map(static function ($r) {
+        return array_map(function ($r) {
             $r['is_required'] = $r['is_fast_track_required'] ?? false;
 
             return $r;
@@ -160,7 +160,7 @@ class RequirementsController extends BaseController
             throw PageNotFoundException::forPageNotFound();
         }
 
-        if ($step === $maxSteps) {
+        if ($step == $maxSteps) {
             $requirements = $this->requirementService->getRequirements($program_id);
 
             $category_name        = 'Review';
@@ -182,15 +182,15 @@ class RequirementsController extends BaseController
         $formData = $this->documentService->getStepDocuments($applicant_id, $requirements);
 
         // Compute upload counts for the counter shown in the step header
-        $totalRequired    = count(array_filter($requirements, static fn ($r) => $r['is_required']));
-        $uploadedRequired = count(array_filter($requirements, static fn ($r) => $r['is_required'] && isset($formData[$r['program_requirement_id']])));
+        $totalRequired    = count(array_filter($requirements, fn ($r) => $r['is_required']));
+        $uploadedRequired = count(array_filter($requirements, fn ($r) => $r['is_required'] && isset($formData[$r['program_requirement_id']])));
         $totalUploaded    = count($formData);
 
         // Check ALL requirements across every step (not just the current one)
         $allReqs          = $this->applyFastTrackRequiredFlag($this->requirementService->getRequirements($program_id), $isFastTrack);
         $allUploaded      = $this->documentService->getStepDocuments($applicant_id, $allReqs);
-        $allTotalRequired = count(array_filter($allReqs, static fn ($r) => $r['is_required']));
-        $allUploadedReq   = count(array_filter($allReqs, static fn ($r) => $r['is_required'] && isset($allUploaded[$r['program_requirement_id']])));
+        $allTotalRequired = count(array_filter($allReqs, fn ($r) => $r['is_required']));
+        $allUploadedReq   = count(array_filter($allReqs, fn ($r) => $r['is_required'] && isset($allUploaded[$r['program_requirement_id']])));
 
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([

@@ -24,7 +24,7 @@ class FormFieldService
         // Admin "what's actually active for this program" view — visible fields only.
         $fields = array_filter(
             $this->mergedFieldRows((int) $programId),
-            static fn ($f) => (int) $f['is_visible'] === 1,
+            fn ($f) => (int) $f['is_visible'] === 1,
         );
 
         // Group by section for easier frontend rendering

@@ -159,7 +159,7 @@ class ApplicationController extends Controller
 
         // Check authorization (ensure applicant owns this application)
         $applicantId = session()->get('applicant_id');
-        if ($application->applicant_id !== $applicantId) {
+        if ($application->applicant_id != $applicantId) {
             return redirect()->to('/')->with('error', 'Unauthorized');
         }
 

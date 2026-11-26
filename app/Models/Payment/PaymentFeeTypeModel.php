@@ -44,8 +44,10 @@ class PaymentFeeTypeModel extends Model
     {
         $code = strtoupper($code);
 
-        return cache_remember("payment_fee_type_{$code}", 120, fn () => $this->where('code', $code)
-            ->where('is_active', 1)
-            ->first());
+        return cache_remember("payment_fee_type_{$code}", 120, function () use ($code) {
+            return $this->where('code', $code)
+                ->where('is_active', 1)
+                ->first();
+        });
     }
 }

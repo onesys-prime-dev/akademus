@@ -23,24 +23,26 @@ class PaymentMethodModel extends Model
     // short window rather than re-queried on every payment-page load.
     public function getActiveWithAccounts(): array
     {
-        return cache_remember('payment_methods_active_with_accounts', 120, fn () => $this->db
-            ->table('payment_method pm')
-            ->select([
-                'pm.payment_method_id',
-                'pm.code',
-                'pm.name',
-                'pma.payment_method_account_id',
-                'pma.account_number',
-                'pma.account_name',
-            ])
-            ->join(
-                'payment_method_account pma',
-                'pma.payment_method_id = pm.payment_method_id AND pma.is_active = 1',
-                'left',
-            )
-            ->where('pm.is_active', 1)
-            ->orderBy('pm.payment_method_id', 'ASC')
-            ->get()
-            ->getResultArray());
+        return cache_remember('payment_methods_active_with_accounts', 120, function () {
+            return $this->db
+                ->table('payment_method pm')
+                ->select([
+                    'pm.payment_method_id',
+                    'pm.code',
+                    'pm.name',
+                    'pma.payment_method_account_id',
+                    'pma.account_number',
+                    'pma.account_name',
+                ])
+                ->join(
+                    'payment_method_account pma',
+                    'pma.payment_method_id = pm.payment_method_id AND pma.is_active = 1',
+                    'left',
+                )
+                ->where('pm.is_active', 1)
+                ->orderBy('pm.payment_method_id', 'ASC')
+                ->get()
+                ->getResultArray();
+        });
     }
 }

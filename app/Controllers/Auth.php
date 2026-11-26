@@ -43,10 +43,12 @@ class Auth extends BaseController
         $programModel = new ProgramModel();
         $programs     = $programModel->findAll();
 
-        $programs = array_map(static fn ($program) => [
-            'id'   => $program['program_id'],
-            'name' => preg_replace('/^Bachelor of Science in\s*/', '', $program['program_name']),
-        ], $programs);
+        $programs = array_map(function ($program) {
+            return [
+                'id'   => $program['program_id'],
+                'name' => preg_replace('/^Bachelor of Science in\s*/', '', $program['program_name']),
+            ];
+        }, $programs);
 
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([

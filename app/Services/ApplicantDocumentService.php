@@ -170,7 +170,7 @@ class ApplicantDocumentService
         $requiredKey  = $isFastTrack ? 'is_fast_track_required' : 'is_required';
         $requiredReqs = array_filter(
             $allReqs,
-            static fn ($r) => $r[$requiredKey],
+            fn ($r) => $r[$requiredKey],
         );
 
         $totalRequired = count($requiredReqs);
@@ -178,7 +178,7 @@ class ApplicantDocumentService
         $uploadedRequired = count(
             array_filter(
                 $requiredReqs,
-                static fn ($r) => isset($uploadedDocs[$r['program_requirement_id']]),
+                fn ($r) => isset($uploadedDocs[$r['program_requirement_id']]),
             ),
         );
 
@@ -199,7 +199,7 @@ class ApplicantDocumentService
         $requiredKey  = $isFastTrack ? 'is_fast_track_required' : 'is_required';
         $requiredReqs = array_filter(
             $allReqs,
-            static fn ($r) => $r[$requiredKey],
+            fn ($r) => $r[$requiredKey],
         );
 
         $totalRequired = count($requiredReqs);
@@ -207,7 +207,7 @@ class ApplicantDocumentService
         $approvedRequired = count(
             array_filter(
                 $requiredReqs,
-                static fn ($r) => isset($uploadedDocs[$r['program_requirement_id']])
+                fn ($r) => isset($uploadedDocs[$r['program_requirement_id']])
                     && ($uploadedDocs[$r['program_requirement_id']]['status'] ?? null) === 'approved',
             ),
         );

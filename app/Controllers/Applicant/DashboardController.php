@@ -91,7 +91,7 @@ class DashboardController extends BaseController
 
         $doneSteps = count(array_filter(
             $progressSteps,
-            static fn ($step) => in_array($step['status'], ['done', 'rejected'], true),
+            fn ($step) => in_array($step['status'], ['done', 'rejected']),
         ));
 
         $overallProgress = count($progressSteps) > 0
@@ -174,23 +174,23 @@ class DashboardController extends BaseController
 
                 $totalRequired = count(array_filter(
                     $allReqs,
-                    static fn ($r) => $r['is_required'],
+                    fn ($r) => $r['is_required'],
                 ));
 
                 $uploadedRequired = count(array_filter(
                     $allReqs,
-                    static fn ($r) => $r['is_required']
+                    fn ($r) => $r['is_required']
                         && isset($uploadedDocs[$r['program_requirement_id']]),
                 ));
 
                 $totalOptional = count(array_filter(
                     $allReqs,
-                    static fn ($r) => ! $r['is_required'],
+                    fn ($r) => ! $r['is_required'],
                 ));
 
                 $uploadedOptional = count(array_filter(
                     $allReqs,
-                    static fn ($r) => ! $r['is_required']
+                    fn ($r) => ! $r['is_required']
                         && isset($uploadedDocs[$r['program_requirement_id']]),
                 ));
 

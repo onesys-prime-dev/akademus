@@ -217,7 +217,7 @@ class RequirementCategoriesController extends BaseAdminController
             ->findAll();
 
         foreach ($existing as $row) {
-            if (! in_array($row['requirement_id'], $seenIds, true)) {
+            if (! in_array($row['requirement_id'], $seenIds)) {
                 $this->docModel->update($row['requirement_id'], [
                     'is_active' => 0,
                 ]);

@@ -107,7 +107,7 @@ class PresetsController extends BaseAdminController
             return redirect()->to(base_url('admin/presets'));
         }
 
-        $selectedPageIds     = array_map(static fn ($s) => $s['form_page_id'], $preset['sections']);
+        $selectedPageIds     = array_map(fn ($s) => $s['form_page_id'], $preset['sections']);
         $selectedCategoryIds = $this->prcModel->getCategoryIdsForPreset((int) $presetId);
 
         return view('admin/presets/form', [

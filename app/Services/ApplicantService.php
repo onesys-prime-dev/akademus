@@ -14,8 +14,8 @@ class ApplicantService
             ->join('users u', 'u.user_id = a.user_id')
 
             ->join(
-                '(SELECT applicant_id, MAX(application_date) as latest_created
-                FROM applications
+                '(SELECT applicant_id, MAX(application_date) as latest_created 
+                FROM applications 
                 GROUP BY applicant_id) latest_app',
                 'latest_app.applicant_id = a.applicant_id',
                 'left',
@@ -24,7 +24,7 @@ class ApplicantService
 
             ->join(
                 'applications ass',
-                'ass.applicant_id = latest_app.applicant_id
+                'ass.applicant_id = latest_app.applicant_id 
                 AND ass.application_date = latest_app.latest_created',
                 'left',
             )

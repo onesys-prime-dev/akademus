@@ -87,7 +87,7 @@ class ApplicationProgressService
             && $formPagesCompleted >= $formPageCount;
 
         $formSubmitted = $application
-            && ! in_array($appStatus, ['draft', ''], true);
+            && ! in_array($appStatus, ['draft', '']);
 
         // ── Fast Track deferred pages ──────────────
         // Family Background / Educational Background were never required to reach
@@ -97,7 +97,7 @@ class ApplicationProgressService
         if ($isFastTrack && $formSubmitted) {
             $incompleteIds = array_keys(array_filter(
                 $formCompletion,
-                static fn ($done, $pageId) => ! $done && in_array($pageId, [3, 4], true),
+                fn ($done, $pageId) => ! $done && in_array($pageId, [3, 4], true),
                 ARRAY_FILTER_USE_BOTH,
             ));
 
@@ -125,7 +125,7 @@ class ApplicationProgressService
 
                 $requiredReqs = array_filter(
                     $allReqs,
-                    static fn ($r) => $r['is_required'],
+                    fn ($r) => $r['is_required'],
                 );
 
                 $docStats['total_required'] = count($requiredReqs);
@@ -133,14 +133,14 @@ class ApplicationProgressService
                 $docStats['uploaded_required'] = count(
                     array_filter(
                         $requiredReqs,
-                        static fn ($r) => isset($uploadedDocs[$r['program_requirement_id']]),
+                        fn ($r) => isset($uploadedDocs[$r['program_requirement_id']]),
                     ),
                 );
 
                 $docStats['approved_required'] = count(
                     array_filter(
                         $requiredReqs,
-                        static fn ($r) => isset($uploadedDocs[$r['program_requirement_id']])
+                        fn ($r) => isset($uploadedDocs[$r['program_requirement_id']])
                             && ($uploadedDocs[$r['program_requirement_id']]['status'] ?? null) === 'approved',
                     ),
                 );
@@ -157,13 +157,11 @@ class ApplicationProgressService
         $decisionMade = in_array(
             $applicantStatus,
             ['approved', 'rejected', 'enrolled'],
-            true,
         );
 
         $isApproved = in_array(
             $applicantStatus,
             ['approved', 'enrolled'],
-            true,
         );
 
         $isRejected = $applicantStatus === 'rejected';

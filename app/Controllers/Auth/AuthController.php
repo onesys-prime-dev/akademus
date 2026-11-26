@@ -50,10 +50,12 @@ class AuthController extends BaseController
         $programModel = new ProgramModel();
         $programs     = $programModel->findAll();
 
-        $programs = array_map(static fn ($program) => [
-            'id'   => $program['program_id'],
-            'name' => $program['program_name'],
-        ], $programs);
+        $programs = array_map(function ($program) {
+            return [
+                'id'   => $program['program_id'],
+                'name' => $program['program_name'],
+            ];
+        }, $programs);
 
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([

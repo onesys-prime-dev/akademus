@@ -64,7 +64,7 @@ class ApplicantProfileService
      * applicant. Post-approval steps (reservation fee, clearance) are not
      * prerequisites and are intentionally excluded.
      *
-     * @return list<string>
+     * @return string[]
      */
     public function getIncompleteSteps(int $applicantId): array
     {

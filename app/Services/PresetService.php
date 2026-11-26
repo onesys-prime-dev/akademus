@@ -91,7 +91,9 @@ class PresetService
             }
 
             // Get the form page IDs from the preset
-            $pageIds = array_map(static fn ($section) => $section['form_page_id'], $preset['sections']);
+            $pageIds = array_map(function ($section) {
+                return $section['form_page_id'];
+            }, $preset['sections']);
 
             if (empty($pageIds)) {
                 return [];

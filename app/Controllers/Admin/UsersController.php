@@ -51,7 +51,7 @@ class UsersController extends BaseController
         $password  = $this->request->getPost('password') ?? '';
         $role      = $this->request->getPost('role') ?? '';
 
-        if (! in_array($role, ['admin', 'admission_officer'], true)) {
+        if (! in_array($role, ['admin', 'admission_officer'])) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid role.']);
         }
         if (! $firstname || ! $lastname || ! $email || ! $password) {
@@ -113,7 +113,7 @@ class UsersController extends BaseController
         $email     = trim($this->request->getPost('email') ?? '');
         $role      = $this->request->getPost('role') ?? '';
 
-        if (! in_array($role, ['admin', 'admission_officer'], true)) {
+        if (! in_array($role, ['admin', 'admission_officer'])) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid role.']);
         }
         if (! $firstname || ! $lastname || ! $email) {

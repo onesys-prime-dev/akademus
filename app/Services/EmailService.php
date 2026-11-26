@@ -36,9 +36,9 @@ class EmailService
         <table width='100%' cellpadding='0' cellspacing='0' style='background-color:#f3f4f6;padding:30px 0;font-family:Arial,sans-serif;'>
             <tr>
                 <td align='center'>
-
+                    
                     <table width='100%' cellpadding='0' cellspacing='0' style='max-width:600px;background:#ffffff;border-radius:10px;padding:30px;'>
-
+                        
                         <!-- Header -->
                         <tr>
                             <td style='font-size:22px;font-weight:bold;color:#111827;padding-bottom:10px;'>
@@ -56,7 +56,7 @@ class EmailService
                         <!-- Credentials Box -->
                         <tr>
                             <td style='background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:15px;'>
-
+                                
                                 <table width='100%' cellpadding='0' cellspacing='0'>
                                     <tr>
                                         <td style='font-size:13px;color:#6b7280;padding-bottom:5px;'>Email</td>
@@ -83,7 +83,7 @@ class EmailService
                         <!-- CTA Button -->
                         <tr>
                             <td align='center' style='padding:25px 0 10px 0;'>
-                                <a href='{$loginUrl}'
+                                <a href='{$loginUrl}' 
                                 style='background:#3b82f6;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;display:inline-block;'>
                                     Sign In to Your Account
                                 </a>

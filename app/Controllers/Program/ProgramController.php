@@ -16,10 +16,12 @@ class ProgramController extends BaseController
         $programs = $model->findAll();
 
         $response = [
-            'programs' => array_map(static fn ($program) => [
-                'id'   => $program['program_id'],
-                'name' => $program['program_name'],
-            ], $programs),
+            'programs' => array_map(function ($program) {
+                return [
+                    'id'   => $program['program_id'],
+                    'name' => $program['program_name'],
+                ];
+            }, $programs),
         ];
 
         return $this->response->setJSON($response);

@@ -123,7 +123,7 @@ class ThemePreviewDataService
                 default            => '',
             };
         }
-        $doneSteps       = count(array_filter($progressData['steps'], static fn ($s) => in_array($s['status'], ['done', 'rejected'], true)));
+        $doneSteps       = count(array_filter($progressData['steps'], fn ($s) => in_array($s['status'], ['done', 'rejected'], true)));
         $overallProgress = count($progressData['steps']) > 0
             ? (int) round(($doneSteps / count($progressData['steps'])) * 100)
             : 0;
@@ -142,10 +142,10 @@ class ThemePreviewDataService
             ? (new ApplicantDocumentService())->getStepDocuments(self::PERSONA_APPLICANT_ID, $allReqs)
             : [];
 
-        $totalRequired    = count(array_filter($allReqs, static fn ($r) => $r['is_required']));
-        $uploadedRequired = count(array_filter($allReqs, static fn ($r) => $r['is_required'] && isset($uploadedDocs[$r['program_requirement_id']])));
-        $totalOptional    = count(array_filter($allReqs, static fn ($r) => ! $r['is_required']));
-        $uploadedOptional = count(array_filter($allReqs, static fn ($r) => ! $r['is_required'] && isset($uploadedDocs[$r['program_requirement_id']])));
+        $totalRequired    = count(array_filter($allReqs, fn ($r) => $r['is_required']));
+        $uploadedRequired = count(array_filter($allReqs, fn ($r) => $r['is_required'] && isset($uploadedDocs[$r['program_requirement_id']])));
+        $totalOptional    = count(array_filter($allReqs, fn ($r) => ! $r['is_required']));
+        $uploadedOptional = count(array_filter($allReqs, fn ($r) => ! $r['is_required'] && isset($uploadedDocs[$r['program_requirement_id']])));
 
         $docStats = [
             'total_required'    => $totalRequired,
@@ -405,7 +405,7 @@ class ThemePreviewDataService
     private function buildSignUp(): array
     {
         $programs = array_map(
-            static fn ($p) => ['id' => $p['program_id'], 'name' => $p['program_name']],
+            fn ($p) => ['id' => $p['program_id'], 'name' => $p['program_name']],
             (new ProgramModel())->findAll(),
         );
 
