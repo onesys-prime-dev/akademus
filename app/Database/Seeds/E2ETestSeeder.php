@@ -13,7 +13,8 @@ use CodeIgniter\Database\Seeder;
  * - Idempotent: users are matched by email and updated, everything else is created only when missing.
  * - Credentials come from .env.e2e (the same file Playwright reads) or real environment variables.
  *   A user whose variables are not set is skipped with a warning.
- * - Assumes the schema already exists and is migrated (it does not create tables or presets).
+ * - Assumes the schema already exists and is migrated (`php spark migrate -g tests`); reference data comes from
+ *   ReferenceDataSeeder, which it calls first.
  *
  * It does NOT delete the QA leftovers earlier runs create (QA programs, payment methods, e2e+ sign-ups).
  */
@@ -36,9 +37,8 @@ class E2ETestSeeder extends Seeder
         $this->loadEnv();
         $now = date('Y-m-d H:i:s');
 
-        // Reference data (both seeders are idempotent)
-        $this->call(PaymentFeeTypeSeeder::class);
-        $this->call(PaymentMethodAccountSeeder::class);
+        // Reference data (idempotent): settings, form pages, requirements, programs, fees, payment methods
+        $this->call(ReferenceDataSeeder::class);
 
         $programs = $this->seedPrograms();
         $this->seedSettings($now);
