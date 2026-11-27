@@ -132,6 +132,10 @@ jobs:
           [[ "$HAS_KNOWN_HOSTS" == "true" ]] || missing+=("secret VPS_KNOWN_HOSTS")
           for v in DEPLOY_PATH PHP_BIN SITE_URL; do [[ -n "${!v}" ]] || missing+=("variable $v"); done
           if (( ${#missing[@]} )); then echo "::error::Environment '$TARGET_ENV' is missing: ${missing[*]}"; exit 1; fi
+          # Normalise the path (a trailing "/" in the variable would give "<domain>//.deploy/..." later).
+          while [[ "$DEPLOY_PATH" == *//* ]]; do DEPLOY_PATH="${DEPLOY_PATH//\/\//\/}"; done
+          DEPLOY_PATH="${DEPLOY_PATH%/}"
+          echo "DEPLOY_PATH=$DEPLOY_PATH" >> "$GITHUB_ENV"
           [[ "$DEPLOY_PATH" == /* && "$DEPLOY_PATH" == */htdocs/* ]] || { echo "::error::DEPLOY_PATH must be an absolute CloudPanel path /home/<site-user>/htdocs/<domain> (got '$DEPLOY_PATH')"; exit 1; }
           [[ -z "$SSH_PORT" || "$SSH_PORT" =~ ^[0-9]+$ ]] || { echo "::error::SSH_PORT must be a number"; exit 1; }
           [[ -z "$TLS_INSECURE" || "$TLS_INSECURE" =~ ^(true|false)$ ]] || { echo "::error::TLS_INSECURE must be true or false"; exit 1; }
