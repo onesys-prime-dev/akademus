@@ -85,7 +85,7 @@ not succeed (`php-next` and the Firefox/WebKit E2E runs are informational and ne
 | **Routes, filters, translations, filesystem** (`app-config`) | routes load; `adminAuth` / `officerAuth` attached to the protected areas; every `lang()` key exists; `writable/` layout, no committed runtime files / `.env` / keys / SQL dumps, no stray PHP in `public/`; `shellcheck`; `actionlint` | any | as reported |
 | **Deploy rehearsal** | runs the real `.github/scripts/deploy-remote.sh` on the runner against MySQL in a CloudPanel-like directory: deploy → verify → finalize; failing migration (live release untouched); failed verification (rollback); finalize removes failed releases; production version guard; foreign `.env` / real `public/` refused | any scenario | fix `.github/scripts/deploy-remote.sh` |
 | **E2E (chromium)** | Playwright suite against `php spark serve` + a migrated, seeded MySQL; throwaway credentials from `.ci/e2e-credentials.sh` | any test (after 2 retries) | download the `playwright-chromium` artifact (report + traces + server logs) |
-| **Next PHP version** (`php-next`, non-blocking) | PHPStan + unit tests on the next PHP version (`PHP_NEXT` in `ci.yml`, currently 8.6) | — (informational) | prepare for the next PHP upgrade |
+| **Next PHP version** (`php-next`, non-blocking) | PHPStan + unit tests on the next PHP version (`PHP_NEXT` in `ci.yml`, currently 8.6) | never — problems show as a yellow **warning** and in the job summary; the job stays green | usually the framework or a dependency is not ready yet: wait for their update (Dependabot); fix it in our code only if the warning points to `app/` |
 
 Other test coverage worth knowing (inside PHPUnit):
 
