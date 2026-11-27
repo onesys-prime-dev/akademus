@@ -50,7 +50,13 @@ command="${1:-}"
 KEEP_RELEASES="${KEEP_RELEASES:-5}"
 if [[ "$TARGET_ENV" == production ]]; then KEEP_BACKUPS="${KEEP_BACKUPS:-15}"; else KEEP_BACKUPS="${KEEP_BACKUPS:-5}"; fi
 
+# Tolerate a trailing slash or doubled slashes in the configured path (e.g. ".../<domain>/").
+while [[ "$DEPLOY_PATH" == *//* ]]; do DEPLOY_PATH="${DEPLOY_PATH//\/\//\/}"; done
 DEPLOY_PATH="${DEPLOY_PATH%/}"
+if [[ -n "${INCOMING:-}" ]]; then
+  while [[ "$INCOMING" == *//* ]]; do INCOMING="${INCOMING//\/\//\/}"; done
+  INCOMING="${INCOMING%/}"
+fi
 SHARED="$DEPLOY_PATH/shared"
 RELEASES="$DEPLOY_PATH/releases"
 BACKUPS="$SHARED/backups"

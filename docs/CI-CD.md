@@ -336,6 +336,7 @@ npm run e2e                    # Playwright (see e2e/README.md)
 | `AnonymousAccessTest` fails | A new route renders without login. Protect it, or add it to `PUBLIC_ROUTES` if it is public by design. |
 | `e2e` fails | Download `playwright-chromium`: HTML report, traces (`npx playwright show-trace`), `serve.log`, app logs. |
 | Deploy: `Environment '<env>' is missing: secret VPS_…` although the secrets are set | The calling workflow (`deploy-staging.yml` / `deploy-production.yml`) lost `secrets: inherit`: a reusable workflow only sees the secrets its caller passes, environment secrets included (variables are not affected). |
+| Deploy: `INCOMING must be inside <path>/.deploy/incoming/` | Fixed: older versions failed when `DEPLOY_PATH` ended in `/` (the upload path became `<domain>//.deploy/...`). Both the workflow and `deploy-remote.sh` now normalise the path; writing it without a trailing `/` is still preferred. |
 | Deploy: `Host key verification failed` | `VPS_KNOWN_HOSTS` is missing/outdated, or was scanned for the hostname while `VPS_HOST` is the IP (or the other way round): `ssh-keyscan -p <port> <VPS_HOST value>` → update the secret. A reinstalled VPS has new host keys. |
 | Deploy: `Permission denied (publickey)` | Public key not in the deploy user's `authorized_keys`, or wrong `VPS_USERNAME`. |
 | Deploy: `DEPLOY_PATH must be absolute` | The variable lacks the leading `/` (e.g. `home/...` instead of `/home/...`). |

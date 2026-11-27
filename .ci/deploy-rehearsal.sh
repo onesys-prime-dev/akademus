@@ -111,7 +111,9 @@ write_env "$SITE_URL"
 
 echo; echo "======== 1. Normal deploy -> verify -> finalize"
 id1="$(stage "$BUILD")"
-out=$(run deploy "$id1" 2>&1) || { show "$out"; die "1: deploy failed"; }
+# With a trailing "/" in DEPLOY_PATH and the doubled "//" it produces in INCOMING, as a real variable may have.
+out=$(run deploy "$id1" DEPLOY_PATH="$DEPLOY_PATH/" INCOMING="$DEPLOY_PATH//.deploy/incoming/$id1" 2>&1) \
+  || { show "$out"; die "1: deploy failed"; }
 show "$out"
 grep -q "^DEPLOY_RESULT release=$id1 previous=none" <<< "$out" || die "1: no DEPLOY_RESULT"
 [[ "$(live)" == "$id1" ]] || die "1: current is not the new release"
