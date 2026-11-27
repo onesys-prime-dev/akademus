@@ -494,23 +494,28 @@ jobs:
       - name: PHPStan on PHP ${{ env.PHP_NEXT }}
         id: phpstan
         if: steps.setup.outcome == 'success'
-        continue-on-error: true
+        # Records the result instead of failing: a failed step leaves a red annotation even with continue-on-error.
         run: |
-          set -o pipefail
-          vendor/bin/phpstan analyse --no-progress --no-ansi --memory-limit=1G --error-format=table 2>&1 | tee "$RUNNER_TEMP/php-next-phpstan.txt"
+          if (set -o pipefail; vendor/bin/phpstan analyse --no-progress --no-ansi --memory-limit=1G --error-format=table 2>&1 | tee "$RUNNER_TEMP/php-next-phpstan.txt"); then
+            echo "result=success" >> "$GITHUB_OUTPUT"
+          else
+            echo "result=failure" >> "$GITHUB_OUTPUT"
+          fi
       - name: Unit tests on PHP ${{ env.PHP_NEXT }}
         id: phpunit
         if: steps.setup.outcome == 'success'
-        continue-on-error: true
         run: |
-          set -o pipefail
-          vendor/bin/phpunit --no-coverage --colors=never --testsuite unit 2>&1 | tee "$RUNNER_TEMP/php-next-phpunit.txt"
+          if (set -o pipefail; vendor/bin/phpunit --no-coverage --colors=never --testsuite unit 2>&1 | tee "$RUNNER_TEMP/php-next-phpunit.txt"); then
+            echo "result=success" >> "$GITHUB_OUTPUT"
+          else
+            echo "result=failure" >> "$GITHUB_OUTPUT"
+          fi
       - name: Report (warning, never a failure)
         if: always()
         env:
           SETUP: ${{ steps.setup.outcome }}
-          PHPSTAN: ${{ steps.phpstan.outcome }}
-          PHPUNIT: ${{ steps.phpunit.outcome }}
+          PHPSTAN: ${{ steps.phpstan.outputs.result }}
+          PHPUNIT: ${{ steps.phpunit.outputs.result }}
         run: |
           problems=()
           [[ "$SETUP" == success ]] || problems+=("PHP $PHP_NEXT or the Composer install failed (see the setup step)")

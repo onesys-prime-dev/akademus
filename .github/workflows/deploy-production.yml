@@ -92,6 +92,9 @@ jobs:
     # Runs when validation passed and CI either passed now or had already passed (ci skipped).
     if: ${{ !cancelled() && needs.validate.result == 'success' && (needs.ci.result == 'success' || needs.ci.result == 'skipped') }}
     uses: ./.github/workflows/deploy-reusable.yml
+    # Required: a reusable workflow only sees the secrets its caller passes. "inherit" makes the production
+    # environment's VPS_* secrets available to the job that declares environment: production (variables need nothing).
+    secrets: inherit
     with:
       environment: production
       sha: ${{ needs.validate.outputs.sha }}

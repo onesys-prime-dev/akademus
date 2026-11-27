@@ -43,6 +43,9 @@ jobs:
     name: Staging
     needs: ci
     uses: ./.github/workflows/deploy-reusable.yml
+    # Required: a reusable workflow only sees the secrets its caller passes. "inherit" makes the staging
+    # environment's VPS_* secrets available to the job that declares environment: staging (variables need nothing).
+    secrets: inherit
     with:
       environment: staging
       sha: ${{ github.sha }}
