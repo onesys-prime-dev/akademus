@@ -10,7 +10,7 @@ in GitHub and on the servers, and what to do when something fails.
 - [5. Releasing to production](#5-releasing-to-production)
 - [6. Required GitHub settings](#6-required-github-settings)
 - [7. GitHub Environments: secrets and variables](#7-github-environments-secrets-and-variables)
-- [8. Server setup (one time per environment)](#8-server-setup-one-time-per-environment)
+- [8. Server setup (one time per environment)](#8-server-setup-one-time-per-environment) — details in [SERVER-SETUP.md](SERVER-SETUP.md)
 - [9. CodeIgniter 4 deployment notes](#9-codeigniter-4-deployment-notes)
 - [10. Database: migrations, seeding, backups, restore](#10-database-migrations-seeding-backups-restore)
 - [11. Rolling back](#11-rolling-back)
@@ -53,6 +53,7 @@ Principles:
 | `.github/workflows/deploy-production.yml` | push of a tag `v*` | Validate the release, reuse or run CI, deploy to **production**, publish a GitHub Release |
 | `.github/workflows/deploy-reusable.yml` | `workflow_call` only | Shared build + deploy logic for both environments |
 | `.github/actions/setup-app` | composite action | PHP + extensions + Composer cache + install, used by every PHP job |
+| `.github/scripts/` | scripts used by the workflows | `deploy-remote.sh` (the server-side deploy, shipped inside every release artifact) and `bundle-exclude.txt` (what stays out of the release). `.github/` itself is never part of the release |
 | `.github/dependabot.yml` | weekly | Updates pinned actions, Composer and npm packages through PRs |
 
 **Why CI runs again after a merge.** Merging creates a new commit on `main` that was never tested as such (it combines
@@ -82,9 +83,9 @@ not succeed (`php-next` and the Firefox/WebKit E2E runs are informational and ne
 | **Database** | MySQL 8.4: `spark migrate` on an empty DB → all applied → `migrate:rollback` to zero (every `down()`) → nothing left → migrate again → `db:seed DatabaseSeeder` twice (idempotent) → `.ci/schema-integrity.php` (InnoDB/utf8mb4, primary keys, indexed FKs, column collations, no orphan rows, views queryable) | any step | fix the migration/seeder |
 | **PHPUnit** (`tests`) | unit, database and feature suites with PCOV coverage; **coverage ratchet** (`.ci/coverage-baseline.txt`); no ERROR/WARNING/NOTICE/deprecation in `writable/logs` (`.ci/log-allowlist.txt`) | failing test, coverage drop > 0.1 point, unexpected log entries | fix; add tests. When coverage rises, raise the baseline in the same PR (`php .ci/coverage-ratchet.php build/logs/clover.xml --update`) |
 | **Routes, filters, translations, filesystem** (`app-config`) | routes load; `adminAuth` / `officerAuth` attached to the protected areas; every `lang()` key exists; `writable/` layout, no committed runtime files / `.env` / keys / SQL dumps, no stray PHP in `public/`; `shellcheck`; `actionlint` | any | as reported |
-| **Deploy rehearsal** | runs the real `deploy/remote-deploy.sh` on the runner against MySQL with stubbed `sudo`/`systemctl`: normal deploy; failing migration (live release untouched); failing health check (automatic rollback) | any scenario | fix `deploy/remote-deploy.sh` |
+| **Deploy rehearsal** | runs the real `.github/scripts/deploy-remote.sh` on the runner against MySQL in a CloudPanel-like directory: deploy → verify → finalize; failing migration (live release untouched); failed verification (rollback); finalize removes failed releases; production version guard; foreign `.env` / real `public/` refused | any scenario | fix `.github/scripts/deploy-remote.sh` |
 | **E2E (chromium)** | Playwright suite against `php spark serve` + a migrated, seeded MySQL; throwaway credentials from `.ci/e2e-credentials.sh` | any test (after 2 retries) | download the `playwright-chromium` artifact (report + traces + server logs) |
-| **Next PHP version** (`php-next`, non-blocking) | PHPStan + unit tests on PHP 8.3 | — (informational) | prepare for the next PHP upgrade |
+| **Next PHP version** (`php-next`, non-blocking) | PHPStan + unit tests on the next PHP version (`PHP_NEXT` in `ci.yml`, currently 8.6) | — (informational) | prepare for the next PHP upgrade |
 
 Other test coverage worth knowing (inside PHPUnit):
 
@@ -95,9 +96,20 @@ Other test coverage worth knowing (inside PHPUnit):
 - `HealthEndpointTest`, `AdminAuthFilterTest`, `MigrationsTest`, `SeedersTest`, `PublicPagesTest`.
 
 Artifacts (kept 7–14 days): `phpunit-reports` (JUnit, Clover, HTML coverage, logs), `schema` (`schema.sql`),
-`semgrep-sarif`, `playwright-<browser>` (on failure), `release-<env>-<sha>` (deploy bundle).
+`semgrep-sarif`, `playwright-<browser>` (on failure), `release-<env>-<sha>` (`release.tar.gz`, `deploy-remote.sh`, `SHA256SUMS`).
 
 ## 4. Deployment lifecycle
+
+Atomic releases on a CloudPanel site, deployed as the **site user without sudo** (one-time server setup:
+[SERVER-SETUP.md](SERVER-SETUP.md)). Layout under `DEPLOY_PATH` (`/home/<site-user>/htdocs/<domain>`):
+
+```
+shared/.env  shared/writable/  shared/backups/    data - created once by hand, never touched by CI
+releases/<UTC yyyymmddThhmmssZ>-<sha7>/           code; .env and writable are symlinks into shared/
+current -> releases/<id>                          the live release
+public  -> current/public                         CloudPanel's web root; nginx resolves it with $realpath_root
+.deploy/                                          lock, state, uploads
+```
 
 `deploy-reusable.yml` runs two jobs.
 
@@ -105,34 +117,44 @@ Artifacts (kept 7–14 days): `phpunit-reports` (JUnit, Clover, HTML coverage, l
 1. Check out the exact SHA and verify `HEAD` matches.
 2. `composer install --no-dev --classmap-authoritative --no-scripts` on the PHP version from `.ci/php-version`.
 3. Write `REVISION` (the SHA) and `RELEASE` (tag or `main@sha`).
-4. Tar everything except `deploy/bundle-exclude.txt` (no `.git`, `.env*`, `writable/`, tests, E2E, Node, CI configs).
-   The build fails if the bundle contains `.env`, `writable/`, `.git/`, `tests/` or lacks `vendor/autoload.php`.
-5. Upload the bundle + SHA-256 as an artifact.
+4. `release.tar.gz` = everything except `.github/scripts/bundle-exclude.txt` (no `.git`, `.github`, `.env*`,
+   `writable/`, tests, E2E, Node, CI configs). The build fails if it contains any of those or lacks
+   `vendor/autoload.php`.
+5. Upload the artifact: `release.tar.gz` + `deploy-remote.sh` + `SHA256SUMS`. The server runs the script from the
+   artifact, so the script that deploys is exactly the one CI tested for that commit.
 
 **deploy** (`environment: staging|production` → approval rules and environment secrets apply here only):
-1. Validate the environment's secrets/variables (production refuses `TLS_INSECURE=true`).
-2. Download the bundle, verify its checksum.
-3. Configure SSH with `VPS_PRIVATE_KEY` and **strict host key checking** against `VPS_KNOWN_HOSTS`.
-4. `scp` the bundle to `DEPLOY_PATH/incoming/` (connection failures retried 3×).
-5. Run `deploy/remote-deploy.sh` on the server (piped over SSH):
+1. Validate the environment's secrets/variables (`DEPLOY_PATH` must be a CloudPanel `…/htdocs/…` path; production
+   refuses `TLS_INSECURE=true`).
+2. Download the artifact, verify `SHA256SUMS`.
+3. Configure SSH with `VPS_PRIVATE_KEY` and **strict host key checking** against `VPS_KNOWN_HOSTS`; test the login.
+4. `scp` the artifact to `DEPLOY_PATH/.deploy/incoming/<id>/` (connection failures retried 3×).
+5. `deploy-remote.sh deploy` on the server:
 
 | Step | What happens | On failure |
 |---|---|---|
-| lock | `flock DEPLOY_PATH/.deploy.lock` | waits up to 10 min, then fails |
-| preflight | `PHP_BIN` version = `.ci/php-version`; required extensions; `shared/.env` and `shared/writable/*` present and writable; ≥ 1 GB free; checksum | fails, nothing changed |
-| unpack | `releases/<UTC timestamp>-<sha12>/`; `.env` → `../../shared/.env`; `writable` → `../../shared/writable`; dirs 750 / files 640 | release dir removed |
-| backup | `mysqldump --single-transaction` → `backups/<env>-<timestamp>-<sha12>.sql.gz` (0600); credentials go from `shared/.env` into a temporary 0600 option file, never echoed | fails, nothing changed |
-| migrate | `php spark migrate` and `php spark db:seed ReferenceDataSeeder` **from the new release, before switching** | fails, **live release untouched**; backup path printed |
-| switch | atomic `ln -s` + `mv -T` of `current`; `spark cache:clear` | — |
-| reload | `sudo systemctl reload php<ver>-fpm` (OPcache), `sudo systemctl restart akademus-mail@<env>` (email worker) | automatic rollback |
-| health | `SITE_URL/health` must report `status: ok` **and** the new SHA (12 tries × 5 s) | automatic rollback: `current` → previous release, reload again; the database is not rolled back |
-| prune | keep 5 releases (never current/previous); keep 5 (staging) / 15 (production) backups; clear `incoming/` | — |
+| lock | `flock .deploy/lock` | waits up to 10 min, then fails |
+| preflight | path is inside `htdocs` and owned by the SSH user; `PHP_BIN` version = `.ci/php-version` and extensions; `shared/.env` has the required keys, `app.baseURL` host = `SITE_URL` host, production has `CI_ENVIRONMENT = production`; `mysqldump`; `shared/writable` writable; ≥ 1 GB free; `public` is not a real directory; production **version guard** (never an older tag than the live one) | fails, nothing changed |
+| unpack | checksums; `releases/<id>/`; `REVISION` = SHA; `.env` → `../../shared/.env`; `writable` → `../../shared/writable`; `.release.json` (sha, version, previous release) | the release is marked failed by the rollback step |
+| boot check | `php spark env` in the new release | fails, nothing switched |
+| backup | `mysqldump --single-transaction --no-tablespaces` → `shared/backups/<env>-<id>.sql.gz` (0600); credentials go from `shared/.env` into a temporary 0600 option file, never printed | fails, nothing migrated or switched |
+| migrate | `php spark migrate` (output checked for exceptions, then no pending migration left) and `php spark db:seed ReferenceDataSeeder` **from the new release, before switching** | fails, **live release untouched** |
+| switch | atomic `ln -s` + `mv -T` of `current`; first deploy creates `public -> current/public`; `spark cache:clear`; `spark emails:restart` (the worker exits, Supervisor restarts it on the new release) | — |
 
-6. Verify again **from outside** (runner → `SITE_URL/health`, must report the SHA) and write a job summary.
-7. Remove the SSH key from the runner (always).
+6. **Verify** from outside and on the server: `SITE_URL/health` reports `status: ok` **and** the new SHA (12 tries ×
+   5 s); the home page answers 200 and its stylesheet is served; `deploy-remote.sh verify` checks the live
+   `REVISION`, the CodeIgniter environment and that no migration is pending.
+7. **Rollback** (only if a step after the upload failed): `deploy-remote.sh rollback` marks the release `.failed`
+   and, if it was already switched in, points `current` back to the previous release, clears the cache and restarts
+   the worker. The database is **not** rolled back (see §10).
+8. **Finalize** (only on success): mark the release `.healthy`; keep the 5 newest healthy releases (always the live
+   and the previous one), delete failed ones; keep 5 (staging) / 15 (production) backups; remove the upload.
+9. Job summary (outcome of deploy, verification and rollback, migration output); remove the SSH key (always).
 
-**Zero downtime.** Code is switched atomically; requests in flight finish on the old release. Migrations run
-**before** the switch while the old code is still serving, so every migration must be compatible with the
+**Zero downtime, no sudo.** Code is switched atomically; requests in flight finish on the old release. nginx passes
+`$realpath_root` to PHP-FPM, so each request resolves `public → current → releases/<id>` once and OPcache sees new
+file paths after a switch — no PHP-FPM reload is needed. The email worker restarts itself on a signal. Migrations
+run **before** the switch while the old code is still serving, so every migration must be compatible with the
 currently deployed code (see §10). No maintenance mode is used; if a change truly needs one, do it in two releases.
 
 ## 5. Releasing to production
@@ -191,64 +213,51 @@ Both environments (`staging`, `production`) already contain these; the workflows
 | Name | Kind | Used for |
 |---|---|---|
 | `VPS_HOST` | secret | SSH host |
-| `VPS_USERNAME` | secret | SSH user (the deploy user) |
+| `VPS_USERNAME` | secret | SSH user (the deploy user; on CloudPanel the site user) |
 | `VPS_PRIVATE_KEY` | secret | SSH private key (ed25519 recommended, no passphrase, dedicated to deploys) |
 | `VPS_KNOWN_HOSTS` | secret | `ssh-keyscan -p <port> <host>` output; host keys are verified strictly |
 | `GITLEAKS_LICENSE` | secret | **not needed** — CI uses the Gitleaks CLI, which requires no license (the secret can stay, it is unused) |
-| `DEPLOY_PATH` | variable | absolute base directory, e.g. `/var/www/akademus-staging` |
-| `PHP_BIN` | variable | PHP CLI on the server, e.g. `/usr/bin/php8.2` (its version must equal `.ci/php-version`) |
+| `DEPLOY_PATH` | variable | the CloudPanel site directory `/home/<site-user>/htdocs/<domain>` (leading `/`; must contain `/htdocs/`) |
+| `PHP_BIN` | variable | PHP CLI on the server as an absolute path, e.g. `/usr/bin/php8.5` (its major.minor must equal `.ci/php-version`) |
 | `SITE_URL` | variable | public URL, e.g. `https://staging.example.org` (used for the health checks and the environment link) |
 | `SSH_PORT` | variable | SSH port (default 22) |
-| `TLS_INSECURE` | variable | `true` skips TLS verification for the health check — staging with a self-signed certificate only; refused for production |
+| `TLS_INSECURE` | variable | `true` skips TLS verification for the health check — staging with a self-signed certificate only; refused for production. Set `false` once Let's Encrypt is active ([SERVER-SETUP.md §1](SERVER-SETUP.md#1-create-the-site)) |
 
-Optional server-side override: `PHP_FPM_SERVICE` (environment variable of the deploy user) if the FPM unit is not
-named `php<major.minor>-fpm`.
+Current staging values are listed in [SERVER-SETUP.md §4](SERVER-SETUP.md#4-ssh-access-for-github-actions).
 
 ## 8. Server setup (one time per environment)
 
-Do staging first. Staging and production can share the VPS (different `DEPLOY_PATH`s).
+The one-time setup of a Hostinger VPS with CloudPanel is described step by step in **[SERVER-SETUP.md](SERVER-SETUP.md)**.
+It is done by hand, on purpose: the pipeline deploys as the CloudPanel site user without sudo and never creates
+sites, databases, services or cron jobs. In short, per environment:
 
-1. **Deploy user**: a normal user (e.g. `deploy`) with the public half of `VPS_PRIVATE_KEY` in `~/.ssh/authorized_keys`,
-   member of the web server group (e.g. `www-data`). PHP-FPM must run as a user in that group.
-2. **Prepare the layout** (dry run first, then `--apply`):
-
-   ```console
-   sudo bash deploy/server-setup.sh --env staging --deploy-path /var/www/akademus-staging \
-        --php-bin /usr/bin/php8.2 --user deploy --web-group www-data --from /var/www/<current-app-dir>
-   sudo bash deploy/server-setup.sh ... --apply
-   ```
-
-   It creates `releases/ shared/ backups/ incoming/`, **copies** the existing `.env` and `writable/` into `shared/`
-   (originals untouched), installs the email worker unit (`akademus-mail@<env>`), the cron file
-   (`/etc/cron.d/akademus-<env>`) and the sudo rules (validated with `visudo`), and prints the web server snippet.
-   Without `--from` it lists the keys `shared/.env` must contain (`CI_ENVIRONMENT = production`, `app.baseURL`,
-   `encryption.key`, `database.default.*`, `email.*`, Groq, SmartPay, SIS keys).
-3. **Web server**: document root `DEPLOY_PATH/current/public`. With nginx + PHP-FPM pass the resolved path so each
-   request uses the release `current` points to at that moment:
-   `fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name; fastcgi_param DOCUMENT_ROOT $realpath_root;`
-4. **GitHub**: set `DEPLOY_PATH`, `PHP_BIN`, `VPS_KNOWN_HOSTS` for the environment (§7).
-5. Run **Actions → Deploy staging → Run workflow**, check `SITE_URL/health`, then switch the old site off.
-
-Scheduled commands installed by `server-setup.sh` (each wrapped in `flock -n`, logs in `shared/writable/logs/cron-*.log`):
+1. CloudPanel PHP 8.5 site (Generic); Root Directory `<domain>/public`; placeholder `public/` removed; vhost uses
+   `$realpath_root`; PHP upload limits; Let's Encrypt.
+2. Database and user; `shared/.env` (chmod 600) with `app.baseURL` = `SITE_URL`.
+3. Deploy key for the site user; the GitHub environment's secrets and variables (§7).
+4. Supervisor program `<site-user>-mail` for `php spark emails:send` (as root).
+5. Three cron jobs in CloudPanel's *Cron Jobs* tab (as the site user):
 
 | Command | Schedule | Why |
 |---|---|---|
 | `php spark sis:sync` | every minute | SIS handoff retries start after 1 minute (backoff 1, 5, 15, 60, 240, 720 min) |
 | `php spark notifications:application` | hourly at :05 | reminder levels start at 2 hours |
 | `php spark notifications:requirements` | hourly at :35 | same, offset to spread load |
-| `php spark emails:send` | systemd service `akademus-mail@<env>`, always running, restarted by every deploy | it is a long-running worker polling `email_queue` every 2 s |
+| `php spark emails:send` | Supervisor, always running; every deploy runs `spark emails:restart` | long-running worker polling `email_queue` every 2 s |
 
 ## 9. CodeIgniter 4 deployment notes
 
-- **Environment**: `shared/.env` must set `CI_ENVIRONMENT = production` (errors hidden, logging threshold 4). The
-  deploy warns if it does not.
+- **Environment**: `shared/.env` must set `CI_ENVIRONMENT = production` (errors hidden, logging threshold 4) on
+  staging and production. The deploy refuses anything else on production and warns on staging.
 - **Web root**: only `public/` is served; `app/`, `vendor/`, `writable/` and `.env` are outside the document root.
-- **writable/**: one shared directory (`shared/writable`, group-writable, setgid) linked into every release, so
-  sessions, logs and uploads survive deploys. It is never part of a bundle.
+- **writable/**: one shared directory (`shared/writable`) linked into every release, so sessions, logs, uploads and
+  the worker restart signal (`writable/worker-restart`) survive deploys. It is never part of a release.
 - **Caches**: `writable/cache` is cleared on every deploy (`spark cache:clear`). `spark optimize` is deliberately
   **not** used: it edits `app/Config/Optimize.php` and runs `composer install` on the server; the bundle already
   ships an authoritative Composer classmap.
-- **OPcache**: PHP-FPM is reloaded after the switch so no stale bytecode from the previous release is served.
+- **OPcache**: no reload needed — nginx passes `$realpath_root`, so a new release means new file paths for OPcache.
+- **Email worker**: `php spark emails:restart` (run by every deploy and rollback) makes `emails:send` finish its
+  batch and exit; Supervisor starts it again on the live release. Use it after editing `shared/.env` too.
 - **Encryption**: personal data columns are encrypted with `encryption.key`. Never change it on a running
   environment and keep a copy in your password manager — without it the data cannot be decrypted.
 - **Health endpoint**: `GET /health` → `{"status","release","checks":{"database","writable","migrations"}}`,
@@ -271,29 +280,32 @@ Scheduled commands installed by `server-setup.sh` (each wrapped in `flock -n`, l
     remove old columns in a **later** release;
   - never rename or drop something the currently deployed code still uses;
   - always implement `down()` — CI rolls every migration back.
-- **Backups**: every deploy writes `DEPLOY_PATH/backups/<env>-<UTC time>-<sha12>.sql.gz` (0600) before migrating.
+- **Backups**: every deploy writes `DEPLOY_PATH/shared/backups/<env>-<release id>.sql.gz` (0600) before migrating.
   Copy production backups off the server regularly (they are not uploaded anywhere by CI).
 - **Restoring the database** (only if a migration damaged data and the previous release cannot run):
 
   ```console
-  # on the server, as the deploy user
+  # on the server, as the site user (no sudo needed)
   cd $DEPLOY_PATH
-  ls -1 backups/                                   # pick the backup taken right before the bad deploy
-  gunzip -c backups/production-<time>-<sha>.sql.gz | mysql --defaults-extra-file=<(printf '[client]\nuser=...\npassword=...\n') <database>
-  ln -sfn releases/<previous-release> current.tmp && mv -Tf current.tmp current
-  sudo systemctl reload php8.2-fpm && sudo systemctl restart akademus-mail@production
+  ls -1 shared/backups/                            # pick the backup taken right before the bad deploy
+  cat releases/*/.release.json                     # find the previous release
+  gunzip -c shared/backups/production-<id>.sql.gz | mysql --defaults-extra-file=<(printf '[client]\nuser=...\npassword=...\n') <database>
+  ln -sfn releases/<previous-release> .current.tmp && mv -Tf .current.tmp current
+  cd current && php8.5 spark cache:clear && php8.5 spark emails:restart
   ```
 
   Data written between the backup and the restore is lost — prefer fixing forward with a new migration.
 
 ## 11. Rolling back
 
-- **Automatic**: a failed health check switches `current` back to the previous release during the deploy.
+- **Automatic**: if verification fails after the switch, the workflow runs `deploy-remote.sh rollback`, which points
+  `current` back to the previous release. A failed migration never switches in the first place.
 - **Code rollback, production**: tag the last good commit with a **new, higher** version and push it
   (`git tag -a v1.4.1 <good-sha> -m "Rollback to <good-sha>"`). The normal pipeline deploys it (CI is reused).
 - **Code rollback, staging**: revert the bad PR on `main` (through a PR) — staging redeploys.
-- **Emergency** (GitHub unavailable): on the server, point `current` at a previous `releases/` directory and
-  reload PHP-FPM + restart the worker (commands in §10). Fix forward afterwards.
+- **Emergency** (GitHub unavailable): as the site user, point `current` at a previous `releases/` directory and
+  run `spark cache:clear` + `spark emails:restart` (commands in §10). Fix forward afterwards.
+- **Production never moves to an older tag**: the server-side version guard refuses it; roll back with a new, higher tag.
 - The database is never rolled back automatically (see §10).
 
 ## 12. Running the checks locally
@@ -323,13 +335,21 @@ npm run e2e                    # Playwright (see e2e/README.md)
 | `tests` fails on logs | Code logged an error/warning during tests; see the `phpunit-reports` artifact (`writable/logs`). |
 | `AnonymousAccessTest` fails | A new route renders without login. Protect it, or add it to `PUBLIC_ROUTES` if it is public by design. |
 | `e2e` fails | Download `playwright-chromium`: HTML report, traces (`npx playwright show-trace`), `serve.log`, app logs. |
-| Deploy: `Host key verification failed` | `VPS_KNOWN_HOSTS` is missing/outdated: `ssh-keyscan -p <port> <host>` → update the secret. |
+| Deploy: `Host key verification failed` | `VPS_KNOWN_HOSTS` is missing/outdated, or was scanned for the hostname while `VPS_HOST` is the IP (or the other way round): `ssh-keyscan -p <port> <VPS_HOST value>` → update the secret. A reinstalled VPS has new host keys. |
 | Deploy: `Permission denied (publickey)` | Public key not in the deploy user's `authorized_keys`, or wrong `VPS_USERNAME`. |
+| Deploy: `DEPLOY_PATH must be absolute` | The variable lacks the leading `/` (e.g. `home/...` instead of `/home/...`). |
 | Deploy: `PHP_BIN is PHP x but CI tested PHP y` | Align the server's PHP with `.ci/php-version` (or change `.ci/php-version` in a PR — CI then tests that version). |
-| Deploy: `shared/.env is missing` | Run `deploy/server-setup.sh` (§8). |
-| Deploy: `sudo: a password is required` | Sudo rules not installed or FPM service name differs (`PHP_FPM_SERVICE`); re-run `server-setup.sh --apply`. |
+| Deploy: `must be inside a CloudPanel htdocs directory` / `is not owned by` | `DEPLOY_PATH` is not the site directory, or `VPS_USERNAME` is not that site's user. |
+| Deploy: `shared/.env is missing` / `… is missing or empty` | Create or complete `shared/.env` ([SERVER-SETUP.md §3](SERVER-SETUP.md#3-directory-layout-and-sharedenv)). |
+| Deploy: `app.baseURL host … differs from SITE_URL host` | The `.env` belongs to another site, or `SITE_URL` is wrong. |
+| Deploy: `public is a real directory` | Remove CloudPanel's placeholder `public/` once ([SERVER-SETUP.md §1](SERVER-SETUP.md#1-create-the-site)). |
+| Deploy: `Database backup failed` | Wrong database credentials in `shared/.env`, or MySQL asks for the `PROCESS` privilege ([SERVER-SETUP.md §2](SERVER-SETUP.md#2-database)). |
+| Deploy: `refusing to deploy older vX` | Production runs a newer tag. Roll back with a new, higher tag (§11). |
+| Site shows CloudPanel 404 / placeholder | Root Directory is not `<domain>/public`, or no deploy has run yet ([SERVER-SETUP.md §1](SERVER-SETUP.md#1-create-the-site)). |
+| Site still shows the old release after a deploy | The vhost uses `$document_root` instead of `$realpath_root`. |
+| Scheduled commands run twice / two email workers | Files from the earlier `server-setup.sh` layout are still installed ([SERVER-SETUP.md §8](SERVER-SETUP.md#8-moving-from-the-earlier-layout-server-setupsh)). |
 | Deploy: migration failed | Live site untouched. Fix the migration in a PR. The backup path is in the log. |
-| Deploy: health check failed → rolled back | Check `SITE_URL/health` checks, `shared/writable/logs`, PHP-FPM / web server logs, document root (`current/public`), `$realpath_root`. |
+| Deploy: verification failed → rolled back | Check `SITE_URL/health` checks, `shared/writable/logs`, PHP-FPM / nginx logs, the Root Directory (`<domain>/public`) and `$realpath_root`. |
 | Production deploy did not start after tagging | Tag not `vX.Y.Z`, commit not on `main`, tag not newer than the last release, or waiting for reviewer approval. |
 | Deploy waits for a long time | Another pipeline for the same environment is running (concurrency) or the server lock is held. |
-| Emails not sent after deploy | `systemctl status akademus-mail@<env>`; `journalctl -u akademus-mail@<env>`. |
+| Emails not sent after deploy | `supervisorctl status <site-user>-mail`; `shared/writable/logs/email-worker.log`; before the first deploy start it once with `supervisorctl start`. |

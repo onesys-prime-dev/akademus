@@ -34,7 +34,7 @@ concurrency:
 env:
   # Commit under test: the deploy's SHA when called, otherwise the event's commit (PR merge commit / main).
   SHA: ${{ inputs.sha || github.sha }}
-  PHP_NEXT: '8.3'
+  PHP_NEXT: '8.6'
   COMPOSER_NO_INTERACTION: '1'
   # spark commands run as development. Never set 'testing' here: CodeIgniter then expects SUPPORTPATH,
   # which only PHPUnit's bootstrap defines (PHPUnit switches to 'testing' by itself).
@@ -341,7 +341,7 @@ jobs:
           curl -sSfL -o "$RUNNER_TEMP/shellcheck.tar.xz" https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.x86_64.tar.xz
           echo "${SHELLCHECK_SHA256}  $RUNNER_TEMP/shellcheck.tar.xz" | sha256sum -c -
           tar -xJf "$RUNNER_TEMP/shellcheck.tar.xz" -C "$RUNNER_TEMP"
-          "$RUNNER_TEMP/shellcheck-v0.11.0/shellcheck" -S info .ci/*.sh deploy/*.sh
+          "$RUNNER_TEMP/shellcheck-v0.11.0/shellcheck" -S info .ci/*.sh .github/scripts/*.sh
       - name: Workflows (actionlint 1.7.12, checksum verified)
         env:
           ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
@@ -353,7 +353,7 @@ jobs:
 
   # ---------------------------------------------------------------- deploy script rehearsal
   deploy-rehearsal:
-    name: Deploy rehearsal (remote-deploy.sh on the runner)
+    name: Deploy rehearsal (deploy-remote.sh on the runner)
     needs: deps
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -378,7 +378,7 @@ jobs:
       - uses: ./.github/actions/setup-app
         with:
           install: 'false'
-      - name: Normal deploy, failed migration, failed health check -> rollback
+      - name: Deploy, failed migration, rollback, version guard, preflight guards
         run: bash .ci/deploy-rehearsal.sh
 
   # ---------------------------------------------------------------- browser tests

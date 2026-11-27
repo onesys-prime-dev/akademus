@@ -25,9 +25,5 @@
 ./phpmd.baseline.xml
 ./deptrac.yaml
 ./deptrac.baseline.yaml
-./deploy/systemd
-./deploy/cron
-./deploy/sudoers
-./deploy/server-setup.sh
 ./writable
 ./*.md

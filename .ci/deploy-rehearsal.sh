@@ -1,58 +1,94 @@
 #!/usr/bin/env bash
-# Rehearses deploy/remote-deploy.sh on the CI runner (no real server involved) - CI job "deploy-rehearsal".
+# Rehearses .github/scripts/deploy-remote.sh on the CI runner (no real server) - CI job "deploy-rehearsal".
 #
-# Builds the release bundle exactly like deploy-reusable.yml, prepares a server layout in a temp dir,
-# stubs `sudo` / `systemctl` (the stubbed "PHP-FPM reload" restarts a php dev server on the new release),
-# then checks three scenarios:
-#   1. normal deploy            -> succeeds, current -> new release, /health reports the commit
-#   2. failing migration        -> fails, live release untouched, half-built release removed
-#   3. failing health check     -> fails, current switched back to the previous release
+# Builds the release artifact exactly like deploy-reusable.yml, prepares a CloudPanel-like site directory
+# (/…/home/<user>/htdocs/<domain>) and runs the script's commands the way the workflow does. A php dev
+# server is (re)started on the resolved web root after every switch, like nginx with $realpath_root.
+#   1. normal deploy -> verify -> finalize
+#   2. failing migration          -> deploy fails, live release untouched, rollback "not-needed"
+#   3. failed verification        -> rollback switches back to the previous release, workers signalled
+#   4. finalize                   -> failed releases removed, live and previous kept
+#   5. production version guard   -> an older tag is refused
+#   6. preflight guards           -> wrong .env for the site, a real public/ directory
 #
 # Needs: MySQL reachable with DB_HOST/DB_PORT/DB_USER/DB_PASSWORD, an empty database DB_NAME, PHP, composer.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 SHA="$(git rev-parse HEAD)"
-PHP_VERSION="$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')"
 WORK="$(mktemp -d)"
-DEPLOY_PATH="$WORK/srv/akademus"
 PORT=8090
 SITE_URL="http://127.0.0.1:${PORT}"
-BUNDLE="akademus-${SHA:0:12}.tar.gz"
-STUBS="$WORK/stubs"
 SERVER_PID_FILE="$WORK/server.pid"
+DEPLOY_PATH="$WORK/home/akademus-test/htdocs/akademus.test"
+PHP_BIN="$(command -v php)"
+EXPECTED_PHP="$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')"
+export DEPLOY_PATH PHP_BIN EXPECTED_PHP SITE_URL TARGET_ENV=staging KEEP_RELEASES=3
+passed=0
 
-pass() { echo "PASS: $*"; }
-die()  { echo "::error title=Deploy rehearsal::$*"; exit 1; }
+ok() { passed=$((passed + 1)); echo "PASS $passed: $*"; }
+die() { echo "::error title=Deploy rehearsal::$*"; exit 1; }
+live() { basename "$(readlink "$DEPLOY_PATH/current")"; }
+signal() { cat "$DEPLOY_PATH/shared/writable/worker-restart" 2> /dev/null || true; }
 
 stop_server() {
   if [[ -f "$SERVER_PID_FILE" ]]; then
-    kill "$(cat "$SERVER_PID_FILE")" 2>/dev/null || true
+    kill "$(cat "$SERVER_PID_FILE")" 2> /dev/null || true
     rm -f "$SERVER_PID_FILE"
+    sleep 1
   fi
 }
+serve() { # what nginx does with $realpath_root: resolve public -> current/public -> releases/<id>/public
+  stop_server
+  local root
+  root="$(readlink -f "$DEPLOY_PATH/public")"
+  (cd "$root/.." && { nohup php -S "127.0.0.1:${PORT}" -t "$root" vendor/codeigniter4/framework/system/rewrite.php > "$WORK/server.log" 2>&1 & echo $! > "$SERVER_PID_FILE"; })
+  sleep 1
+}
+health_has() { curl -sf --max-time 5 "$SITE_URL/health" | grep -q "$1"; }
 trap 'stop_server; rm -rf "$WORK"' EXIT
 
-echo "== Build bundle (as deploy-reusable.yml does)"
+echo "== Build the release (as deploy-reusable.yml does)"
 BUILD="$WORK/build"
-mkdir -p "$BUILD"
+mkdir -p "$BUILD" "$WORK/dist"
 git archive HEAD | tar -x -C "$BUILD"
-( cd "$BUILD" && composer install --no-dev --classmap-authoritative --no-scripts --no-interaction --no-progress --prefer-dist -q )
+(cd "$BUILD" && composer install --no-dev --classmap-authoritative --no-scripts --no-interaction --no-progress --prefer-dist -q)
 echo "$SHA" > "$BUILD/REVISION"
 echo "rehearsal" > "$BUILD/RELEASE"
-make_bundle() { # $1 = source dir
-  mkdir -p "$DEPLOY_PATH/incoming"
-  tar --exclude-from=deploy/bundle-exclude.txt -czf "$DEPLOY_PATH/incoming/$BUNDLE" -C "$1" .
-  ( cd "$DEPLOY_PATH/incoming" && sha256sum "$BUNDLE" > "$BUNDLE.sha256" )
-}
-tar -tzf <(tar --exclude-from=deploy/bundle-exclude.txt -czf - -C "$BUILD" .) | grep -qE '(^|/)\.env$|^\./writable/' \
-  && die "bundle contains .env or writable/"
+tar -tzf <(tar --exclude-from=.github/scripts/bundle-exclude.txt -czf - -C "$BUILD" .) | grep -qE '(^|/)\.env$|^\./writable/|^\./\.github/' \
+  && die "release contains .env, writable/ or .github/"
 
-echo "== Server layout (what deploy/server-setup.sh creates)"
-mkdir -p "$DEPLOY_PATH"/{releases,backups,shared/writable/{cache,logs,session,uploads,debugbar}}
-cat > "$DEPLOY_PATH/shared/.env" <<EOF
+# Stage an upload like the workflow: .deploy/incoming/<id>/{release.tar.gz,deploy-remote.sh,SHA256SUMS}. Prints the id.
+stage() { # source dir
+  local id in
+  sleep 1 # release ids are per second
+  id="$(date -u +%Y%m%dT%H%M%SZ)-${SHA:0:7}"
+  in="$DEPLOY_PATH/.deploy/incoming/$id"
+  mkdir -p "$in"
+  tar --exclude-from=.github/scripts/bundle-exclude.txt -czf "$in/release.tar.gz" -C "$1" .
+  cp .github/scripts/deploy-remote.sh "$in/deploy-remote.sh"
+  (cd "$in" && sha256sum release.tar.gz deploy-remote.sh > SHA256SUMS)
+  echo "$id"
+}
+run() { # command id [extra env...] - runs the uploaded copy of the script, as the workflow does
+  local cmd="$1" id="$2"
+  shift 2
+  env RELEASE_ID="$id" RELEASE_SHA="$SHA" INCOMING="$DEPLOY_PATH/.deploy/incoming/$id" "$@" \
+    bash "$DEPLOY_PATH/.deploy/incoming/$id/deploy-remote.sh" "$cmd"
+}
+run_installed() { # command id [extra env...] - verify/finalize/rollback after the upload may be gone
+  local cmd="$1" id="$2"
+  shift 2
+  env RELEASE_ID="$id" RELEASE_SHA="$SHA" INCOMING="$DEPLOY_PATH/.deploy/incoming/$id" "$@" \
+    bash .github/scripts/deploy-remote.sh "$cmd"
+}
+
+echo "== CloudPanel-like site (what docs/SERVER-SETUP.md creates by hand)"
+mkdir -p "$DEPLOY_PATH/shared"
+write_env() { # baseURL
+  cat > "$DEPLOY_PATH/shared/.env" << EOF
 CI_ENVIRONMENT = production
-app.baseURL = '${SITE_URL}/'
+app.baseURL = '$1/'
 encryption.key = hex2bin:$(php -r 'echo bin2hex(random_bytes(32));')
 database.default.hostname = ${DB_HOST}
 database.default.port = ${DB_PORT}
@@ -61,47 +97,33 @@ database.default.username = ${DB_USER}
 database.default.password = ${DB_PASSWORD}
 database.default.DBDriver = MySQLi
 EOF
-chmod 640 "$DEPLOY_PATH/shared/.env"
-
-echo "== Stubs for sudo / systemctl"
-mkdir -p "$STUBS"
-cat > "$STUBS/sudo" <<EOF
-#!/usr/bin/env bash
-[[ "\$1" == "-n" ]] && shift
-if [[ "\$1 \$2" == "systemctl reload" ]]; then
-  [[ -f "$SERVER_PID_FILE" ]] && kill "\$(cat "$SERVER_PID_FILE")" 2>/dev/null || true
-  sleep 1
-  # Only the php process is backgrounded, so \$! is its PID and stop_server really stops it.
-  ( cd "$DEPLOY_PATH/current" && { nohup php -S 127.0.0.1:${PORT} -t "\$(readlink -f public)" vendor/codeigniter4/framework/system/rewrite.php > "$WORK/server.log" 2>&1 & echo \$! > "$SERVER_PID_FILE"; } )
-  sleep 1
-  echo "stub: reloaded (php dev server restarted on \$(readlink -f "$DEPLOY_PATH/current"))"
-  exit 0
-fi
-echo "stub: sudo \$*"
-EOF
-printf '#!/usr/bin/env bash\nexit 0\n' > "$STUBS/systemctl"
-chmod +x "$STUBS"/*
-
-deploy() { # runs remote-deploy.sh the way the workflow does (script on stdin)
-  PATH="$STUBS:$PATH" KEEP_RELEASES=3 bash -s -- staging "$SHA" "$DEPLOY_PATH" php "$SITE_URL" false "$PHP_VERSION" "$BUNDLE" < deploy/remote-deploy.sh
+  chmod 600 "$DEPLOY_PATH/shared/.env"
 }
-current() { readlink "$DEPLOY_PATH/current"; }
+write_env "$SITE_URL"
 
-echo; echo "======== Scenario 1: normal deploy"
-make_bundle "$BUILD"
-deploy || die "scenario 1: deploy failed"
-first="$(current)"
-[[ "$(cat "$DEPLOY_PATH/$first/REVISION")" == "$SHA" ]] || die "scenario 1: current is not the new release"
-[[ -L "$DEPLOY_PATH/$first/.env" && -L "$DEPLOY_PATH/$first/writable" ]] || die "scenario 1: shared .env / writable are not linked"
-curl -sf "$SITE_URL/health" | grep -q "$SHA" || die "scenario 1: /health does not report $SHA"
-ls "$DEPLOY_PATH"/backups/staging-*.sql.gz > /dev/null || die "scenario 1: no database backup"
-[[ ! -e "$DEPLOY_PATH/incoming/$BUNDLE" ]] || die "scenario 1: incoming bundle not cleaned up"
-pass "normal deploy -> $first"
+echo; echo "======== 1. Normal deploy -> verify -> finalize"
+id1="$(stage "$BUILD")"
+out=$(run deploy "$id1" 2>&1) || { echo "$out"; die "1: deploy failed"; }
+echo "$out"
+grep -q "^DEPLOY_RESULT release=$id1 previous=none" <<< "$out" || die "1: no DEPLOY_RESULT"
+[[ "$(live)" == "$id1" ]] || die "1: current is not the new release"
+[[ "$(readlink "$DEPLOY_PATH/public")" == current/public ]] || die "1: public -> current/public was not created"
+[[ -L "$DEPLOY_PATH/releases/$id1/.env" && -L "$DEPLOY_PATH/releases/$id1/writable" ]] || die "1: shared .env / writable not linked"
+ls "$DEPLOY_PATH"/shared/backups/staging-"$id1".sql.gz > /dev/null || die "1: no database backup"
+[[ -n "$(signal)" ]] || die "1: email workers were not signalled"
+serve
+health_has "$SHA" || die "1: /health does not report $SHA"
+run_installed verify "$id1" | tee "$WORK/verify.log"
+grep -q '^VERIFY_RESULT ok' "$WORK/verify.log" || die "1: verify failed"
+run_installed finalize "$id1"
+[[ -f "$DEPLOY_PATH/releases/$id1/.healthy" ]] || die "1: release not marked healthy"
+[[ ! -e "$DEPLOY_PATH/.deploy/incoming/$id1" ]] || die "1: upload not removed"
+ok "normal deploy -> $id1"
 
-echo; echo "======== Scenario 2: failing migration (live release must stay untouched)"
-sleep 1
-BROKEN="$WORK/broken"; cp -a "$BUILD" "$BROKEN"
-cat > "$BROKEN/app/Database/Migrations/2099-01-01-000000_RehearsalBrokenMigration.php" <<'EOF'
+echo; echo "======== 2. Failing migration (live release must stay untouched)"
+BROKEN="$WORK/broken"
+cp -a "$BUILD" "$BROKEN"
+cat > "$BROKEN/app/Database/Migrations/2099-01-01-000000_RehearsalBrokenMigration.php" << 'EOF'
 <?php
 namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
@@ -111,47 +133,64 @@ class RehearsalBrokenMigration extends Migration
     public function down(): void {}
 }
 EOF
-( cd "$BROKEN" && composer dump-autoload --classmap-authoritative --no-dev -q )
-make_bundle "$BROKEN"
-# Must fail, and for the right reason (not e.g. a held lock).
-if out=$(deploy 2>&1); then echo "$out"; die "scenario 2: deploy succeeded despite a broken migration"; fi
+(cd "$BROKEN" && composer dump-autoload --classmap-authoritative --no-dev -q)
+id2="$(stage "$BROKEN")"
+if out=$(run deploy "$id2" 2>&1); then echo "$out"; die "2: deploy succeeded despite a broken migration"; fi
 echo "$out"
-grep -q "Migration failed" <<<"$out" || die "scenario 2: deploy failed, but not because of the migration"
-[[ "$(current)" == "$first" ]] || die "scenario 2: current changed after a failed migration"
-[[ "$(find "$DEPLOY_PATH/releases" -mindepth 1 -maxdepth 1 -type d | wc -l)" -eq 1 ]] || die "scenario 2: half-built release left behind"
-curl -sf "$SITE_URL/health" | grep -q "$SHA" || die "scenario 2: site not healthy after failed deploy"
-pass "failed migration -> still serving $first"
+grep -q "Migration failed" <<< "$out" || die "2: deploy failed, but not because of the migration"
+[[ "$(live)" == "$id1" ]] || die "2: current changed after a failed migration"
+out=$(run rollback "$id2" 2>&1) || { echo "$out"; die "2: rollback command failed"; }
+grep -q "ROLLBACK_RESULT not-needed" <<< "$out" || { echo "$out"; die "2: rollback should not be needed"; }
+[[ -f "$DEPLOY_PATH/releases/$id2/.failed" ]] || die "2: failed release not marked"
+health_has "$SHA" || die "2: site not healthy after the failed deploy"
+ok "failed migration -> still serving $id1"
 
-echo; echo "======== Scenario 3: failing health check (automatic code rollback)"
-sleep 1
-make_bundle "$BUILD"
-stop_server
-sleep 1
-curl -sf --max-time 3 "$SITE_URL/health" > /dev/null && die "scenario 3: the previous server is still answering, the scenario would be meaningless"
-touch "$WORK/break-reload-after-switch"
-# The reload after the switch "succeeds" but leaves the server down -> health fails -> rollback,
-# whose reload starts the server again on the previous release.
-cat > "$STUBS/sudo" <<EOF
-#!/usr/bin/env bash
-[[ "\$1" == "-n" ]] && shift
-if [[ "\$1 \$2" == "systemctl reload" && -f "$WORK/break-reload-after-switch" ]]; then
-  rm -f "$WORK/break-reload-after-switch"   # first reload (after switch): server stays down
-  echo "stub: reloaded (server intentionally left down)"; exit 0
-fi
-if [[ "\$1 \$2" == "systemctl reload" ]]; then
-  # Only the php process is backgrounded, so \$! is its PID and stop_server really stops it.
-  ( cd "$DEPLOY_PATH/current" && { nohup php -S 127.0.0.1:${PORT} -t "\$(readlink -f public)" vendor/codeigniter4/framework/system/rewrite.php > "$WORK/server.log" 2>&1 & echo \$! > "$SERVER_PID_FILE"; } )
-  sleep 1; echo "stub: reloaded"; exit 0
-fi
-exit 0
-EOF
-chmod +x "$STUBS/sudo"
-if out=$(deploy 2>&1); then echo "$out"; die "scenario 3: deploy succeeded although the health check could not pass"; fi
+echo; echo "======== 3. Failed verification (automatic code rollback)"
+id3="$(stage "$BUILD")"
+out=$(run deploy "$id3" 2>&1) || { echo "$out"; die "3: deploy failed"; }
+[[ "$(live)" == "$id3" ]] || die "3: not switched to $id3"
+before="$(signal)"
+# The workflow's external verification "fails" here; it then runs rollback:
+out=$(run rollback "$id3" 2>&1) || { echo "$out"; die "3: rollback failed"; }
 echo "$out"
-grep -q "Health check failed" <<<"$out" || die "scenario 3: deploy failed, but not because of the health check"
-grep -q "rolling back" <<<"$out" || die "scenario 3: no rollback was performed"
-[[ "$(current)" == "$first" ]] || die "scenario 3: current was not rolled back to $first"
-curl -sf "$SITE_URL/health" | grep -q "$SHA" || die "scenario 3: site not healthy after rollback"
-pass "failed health check -> rolled back to $first"
+grep -q "ROLLBACK_RESULT release=$id1" <<< "$out" || die "3: rollback did not report $id1"
+[[ "$(live)" == "$id1" ]] || die "3: current was not switched back to $id1"
+[[ -f "$DEPLOY_PATH/releases/$id3/.failed" ]] || die "3: rolled-back release not marked failed"
+[[ "$(signal)" != "$before" ]] || die "3: email workers were not signalled after the rollback"
+serve
+health_has "$SHA" || die "3: site not healthy after rollback"
+ok "failed verification -> rolled back to $id1"
 
-echo; echo "All deploy rehearsal scenarios passed."
+echo; echo "======== 4. Finalize removes failed releases"
+run_installed finalize "$id1"
+[[ ! -e "$DEPLOY_PATH/releases/$id2" && ! -e "$DEPLOY_PATH/releases/$id3" ]] || die "4: failed releases still present"
+[[ -d "$DEPLOY_PATH/releases/$id1" ]] || die "4: live release removed"
+ok "finalize keeps only healthy releases"
+
+echo; echo "======== 5. Production version guard"
+id5="$(stage "$BUILD")"
+out=$(run deploy "$id5" TARGET_ENV=production RELEASE_VERSION=v2.0.0 2>&1) || { echo "$out"; die "5: v2.0.0 deploy failed"; }
+run_installed finalize "$id5" TARGET_ENV=production > /dev/null
+id6="$(stage "$BUILD")"
+if out=$(run deploy "$id6" TARGET_ENV=production RELEASE_VERSION=v1.9.0 2>&1); then echo "$out"; die "5: an older version was deployed"; fi
+grep -q "refusing to deploy older v1.9.0" <<< "$out" || { echo "$out"; die "5: refused, but not by the version guard"; }
+[[ "$(live)" == "$id5" ]] || die "5: current changed"
+run rollback "$id6" TARGET_ENV=production > /dev/null
+ok "production refuses v1.9.0 after v2.0.0"
+
+echo; echo "======== 6. Preflight guards"
+write_env "https://another-site.example"
+id7="$(stage "$BUILD")"
+if out=$(run deploy "$id7" 2>&1); then die "6: deployed with another site's .env"; fi
+grep -q "differs from SITE_URL" <<< "$out" || { echo "$out"; die "6: wrong failure for a foreign .env"; }
+write_env "$SITE_URL"
+mv "$DEPLOY_PATH/public" "$WORK/public-link"
+mkdir "$DEPLOY_PATH/public"
+if out=$(run deploy "$id7" 2>&1); then die "6: replaced a real public/ directory"; fi
+grep -q "is a real directory" <<< "$out" || { echo "$out"; die "6: wrong failure for a real public/"; }
+rmdir "$DEPLOY_PATH/public"
+mv "$WORK/public-link" "$DEPLOY_PATH/public"
+[[ "$(live)" == "$id5" ]] || die "6: current changed"
+ok "foreign .env and a real public/ directory are refused"
+
+echo; echo "All $passed deploy rehearsal scenarios passed."
