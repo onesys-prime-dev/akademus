@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Libraries\WorkerRestartSignal;
 use App\Services\EmailService;
 use CodeIgniter\CLI\BaseCommand;
 use Throwable;
@@ -16,8 +17,12 @@ class SendEmails extends BaseCommand
     {
         $db = db_connect();
 
-        // @phpstan-ignore-next-line
-        while (true) {
+        // A deploy runs "php spark emails:restart": the worker then finishes its current batch and exits, and
+        // Supervisor starts it again on the new release (docs/SERVER-SETUP.md).
+        $restart     = new WorkerRestartSignal();
+        $seenAtStart = $restart->read();
+
+        while (! $restart->changedSince($seenAtStart)) {
             $emails = $db->table('email_queue')
                 ->where('status', 'pending')
                 ->where('attempts <', 3)
@@ -181,5 +186,9 @@ class SendEmails extends BaseCommand
 
             echo 'Processed ' . count($emails) . " emails\n";
         }
+
+        echo "Restart requested - exiting so Supervisor starts the worker on the current release\n";
+
+        return EXIT_SUCCESS;
     }
 }
