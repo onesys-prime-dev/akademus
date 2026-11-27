@@ -240,8 +240,10 @@ backup_database() {
   (set -o pipefail; mysqldump --defaults-extra-file="$cnf" --single-transaction --routines --triggers --no-tablespaces "$db_name" | gzip > "$file") || rc=$?
   rm -f "$cnf"
   chmod 600 "$file" 2> /dev/null || true
-  [[ $rc -eq 0 ]] && gzip -dc "$file" | tail -n 1 | grep -q 'Dump completed' \
-    || { rm -f "$file"; fail "Database backup failed - nothing was migrated or switched (docs/SERVER-SETUP.md: GRANT PROCESS)"; }
+  if [[ $rc -ne 0 ]] || ! gzip -dc "$file" | tail -n 1 | grep -q 'Dump completed'; then
+    rm -f "$file"
+    fail "Database backup failed - nothing was migrated or switched (docs/SERVER-SETUP.md: GRANT PROCESS)"
+  fi
   log "Backup: $file ($(du -h "$file" | cut -f1))"
 }
 
@@ -277,7 +279,9 @@ cmd_deploy() {
   endgroup
 
   group "Boot check"
-  spark "$dir" env || fail "The new release does not boot (php spark env failed)"
+  # Loads the configuration, filters and routes of the new release. (Not "spark env": it exits 1 even on success.)
+  spark "$dir" routes > /dev/null || fail "The new release does not boot (php spark routes failed)"
+  log "The new release boots"
   endgroup
 
   group "Pre-migration backup"
@@ -311,7 +315,9 @@ cmd_verify() {
   if [[ -n "${RELEASE_SHA:-}" ]]; then
     [[ "$(cat "$live/REVISION")" == "$RELEASE_SHA" ]] || fail "Live release is $(cat "$live/REVISION"), expected $RELEASE_SHA"
   fi
-  out="$(cd "$live" && "$PHP_BIN" spark env 2>&1)" || fail "php spark env failed on the live release"
+  # "spark env" without arguments prints the environment but exits 1 (CodeIgniter 4.7), so only its output counts.
+  out="$(cd "$live" && "$PHP_BIN" spark env 2>&1 || true)"
+  grep -q 'environment is currently set as' <<< "$out" || fail "php spark env failed on the live release: $out"
   grep -q 'production' <<< "$out" || {
     [[ "$TARGET_ENV" == production ]] && fail "Live release does not run in the production environment: $out"
     warn "Live release environment: $out"

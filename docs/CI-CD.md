@@ -136,7 +136,7 @@ public  -> current/public                         CloudPanel's web root; nginx r
 | lock | `flock .deploy/lock` | waits up to 10 min, then fails |
 | preflight | path is inside `htdocs` and owned by the SSH user; `PHP_BIN` version = `.ci/php-version` and extensions; `shared/.env` has the required keys, `app.baseURL` host = `SITE_URL` host, production has `CI_ENVIRONMENT = production`; `mysqldump`; `shared/writable` writable; ≥ 1 GB free; `public` is not a real directory; production **version guard** (never an older tag than the live one) | fails, nothing changed |
 | unpack | checksums; `releases/<id>/`; `REVISION` = SHA; `.env` → `../../shared/.env`; `writable` → `../../shared/writable`; `.release.json` (sha, version, previous release) | the release is marked failed by the rollback step |
-| boot check | `php spark env` in the new release | fails, nothing switched |
+| boot check | `php spark routes` in the new release (loads config, filters and routes) | fails, nothing switched |
 | backup | `mysqldump --single-transaction --no-tablespaces` → `shared/backups/<env>-<id>.sql.gz` (0600); credentials go from `shared/.env` into a temporary 0600 option file, never printed | fails, nothing migrated or switched |
 | migrate | `php spark migrate` (output checked for exceptions, then no pending migration left) and `php spark db:seed ReferenceDataSeeder` **from the new release, before switching** | fails, **live release untouched** |
 | switch | atomic `ln -s` + `mv -T` of `current`; first deploy creates `public -> current/public`; `spark cache:clear`; `spark emails:restart` (the worker exits, Supervisor restarts it on the new release) | — |
