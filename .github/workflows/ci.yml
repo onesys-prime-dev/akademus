@@ -34,7 +34,7 @@ concurrency:
 env:
   # Commit under test: the deploy's SHA when called, otherwise the event's commit (PR merge commit / main).
   SHA: ${{ inputs.sha || github.sha }}
-  PHP_NEXT: '8.3'
+  PHP_NEXT: '8.6'
   COMPOSER_NO_INTERACTION: '1'
   # spark commands run as development. Never set 'testing' here: CodeIgniter then expects SUPPORTPATH,
   # which only PHPUnit's bootstrap defines (PHPUnit switches to 'testing' by itself).
@@ -341,7 +341,7 @@ jobs:
           curl -sSfL -o "$RUNNER_TEMP/shellcheck.tar.xz" https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.x86_64.tar.xz
           echo "${SHELLCHECK_SHA256}  $RUNNER_TEMP/shellcheck.tar.xz" | sha256sum -c -
           tar -xJf "$RUNNER_TEMP/shellcheck.tar.xz" -C "$RUNNER_TEMP"
-          "$RUNNER_TEMP/shellcheck-v0.11.0/shellcheck" -S info .ci/*.sh deploy/*.sh
+          "$RUNNER_TEMP/shellcheck-v0.11.0/shellcheck" -S info .ci/*.sh .github/scripts/*.sh
       - name: Workflows (actionlint 1.7.12, checksum verified)
         env:
           ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
@@ -353,7 +353,7 @@ jobs:
 
   # ---------------------------------------------------------------- deploy script rehearsal
   deploy-rehearsal:
-    name: Deploy rehearsal (remote-deploy.sh on the runner)
+    name: Deploy rehearsal (deploy-remote.sh on the runner)
     needs: deps
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -378,7 +378,7 @@ jobs:
       - uses: ./.github/actions/setup-app
         with:
           install: 'false'
-      - name: Normal deploy, failed migration, failed health check -> rollback
+      - name: Deploy, failed migration, rollback, version guard, preflight guards
         run: bash .ci/deploy-rehearsal.sh
 
   # ---------------------------------------------------------------- browser tests
@@ -474,6 +474,7 @@ jobs:
     needs: deps
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    # Informational: problems become a yellow warning (see the last step), the job itself stays green.
     continue-on-error: true
     permissions:
       contents: read
@@ -482,11 +483,58 @@ jobs:
         with:
           ref: ${{ env.SHA }}
           persist-credentials: false
-      - uses: ./.github/actions/setup-app
+      - name: Set up PHP ${{ env.PHP_NEXT }}
+        id: setup
+        continue-on-error: true
+        uses: ./.github/actions/setup-app
         with:
           php-version: ${{ env.PHP_NEXT }}
-      - run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G --error-format=github
-      - run: vendor/bin/phpunit --no-coverage --testsuite unit
+          # Locked packages may not declare the next PHP yet (e.g. laminas-escaper caps at 8.5): test anyway.
+          composer-flags: --ignore-platform-req=php
+      - name: PHPStan on PHP ${{ env.PHP_NEXT }}
+        id: phpstan
+        if: steps.setup.outcome == 'success'
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          vendor/bin/phpstan analyse --no-progress --no-ansi --memory-limit=1G --error-format=table 2>&1 | tee "$RUNNER_TEMP/php-next-phpstan.txt"
+      - name: Unit tests on PHP ${{ env.PHP_NEXT }}
+        id: phpunit
+        if: steps.setup.outcome == 'success'
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          vendor/bin/phpunit --no-coverage --colors=never --testsuite unit 2>&1 | tee "$RUNNER_TEMP/php-next-phpunit.txt"
+      - name: Report (warning, never a failure)
+        if: always()
+        env:
+          SETUP: ${{ steps.setup.outcome }}
+          PHPSTAN: ${{ steps.phpstan.outcome }}
+          PHPUNIT: ${{ steps.phpunit.outcome }}
+        run: |
+          problems=()
+          [[ "$SETUP" == success ]] || problems+=("PHP $PHP_NEXT or the Composer install failed (see the setup step)")
+          [[ "$PHPSTAN" == failure ]] && problems+=("PHPStan reports errors (see the PHPStan step)")
+          if [[ "$PHPUNIT" == failure ]]; then
+            # The numbered headings of PHPUnit's error/failure list, e.g. "1) EmailTest::testX" + its first message line.
+            details=$(grep -A1 -E '^[0-9]+\) ' "$RUNNER_TEMP/php-next-phpunit.txt" | grep -v '^--$' | head -n 12 || true)
+            problems+=("Unit tests fail:%0A${details//$'\n'/%0A}")
+          fi
+          {
+            echo "### PHP $PHP_NEXT compatibility"
+            if (( ${#problems[@]} )); then
+              echo "Not ready yet (informational, does not block merging):"
+              for p in "${problems[@]}"; do echo "- ${p//%0A/ / }"; done
+            else
+              echo "PHPStan and the unit tests pass on PHP $PHP_NEXT."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          if (( ${#problems[@]} )); then
+            msg=$(printf '%s%%0A' "${problems[@]}")
+            echo "::warning title=Not ready for PHP $PHP_NEXT yet (non-blocking)::${msg}Usually the framework or a dependency (vendor/) - wait for their update; Akademus runs on .ci/php-version."
+          else
+            echo "PHP $PHP_NEXT: no problems found."
+          fi
 
   # ---------------------------------------------------------------- the gate
   ci-gate:

@@ -1,9 +1,10 @@
 # Shared deployment logic, called by deploy-staging.yml and deploy-production.yml AFTER the CI gate
-# passed for the same commit. See docs/CI-CD.md.
+# passed for the same commit. See docs/CI-CD.md (lifecycle) and docs/SERVER-SETUP.md (one-time server setup).
 #
 # Uses the GitHub Environment's secrets (VPS_HOST, VPS_USERNAME, VPS_PRIVATE_KEY, VPS_KNOWN_HOSTS) and
-# variables (DEPLOY_PATH, PHP_BIN, SITE_URL, SSH_PORT, TLS_INSECURE). GITLEAKS_LICENSE is not needed
-# (CI runs the Gitleaks CLI, which needs no license).
+# variables (DEPLOY_PATH, PHP_BIN, SITE_URL, SSH_PORT, TLS_INSECURE). GITLEAKS_LICENSE is not needed.
+# The server-side steps live in .github/scripts/deploy-remote.sh, shipped inside the release artifact.
+# The deploy user is the CloudPanel site user: nothing runs with sudo.
 name: Deploy (reusable)
 
 on:
@@ -18,7 +19,7 @@ on:
         type: string
         required: true
       release-label:
-        description: Human label for the summary (e.g. the tag v1.4.0).
+        description: Human label for the summary; a vX.Y.Z tag also feeds the production version guard.
         type: string
         required: false
         default: ''
@@ -27,14 +28,14 @@ permissions: {}
 
 jobs:
   build:
-    name: Build release bundle
+    name: Build release artifact
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
       contents: read
     outputs:
-      bundle: ${{ steps.bundle.outputs.name }}
       php-version: ${{ steps.php.outputs.php-version }}
+      release-id: ${{ steps.bundle.outputs.release-id }}
     steps:
       - name: Validate inputs
         env:
@@ -61,7 +62,7 @@ jobs:
           # Clean build: never restore or save the shared Composer cache for a release bundle.
           cache: 'false'
 
-      - name: Build bundle
+      - name: Build release artifact (release.tar.gz + deploy-remote.sh + SHA256SUMS)
         id: bundle
         env:
           SHA: ${{ inputs.sha }}
@@ -69,25 +70,24 @@ jobs:
         run: |
           echo "$SHA" > REVISION
           printf '%s\n' "${LABEL:-$SHA}" > RELEASE
-          name="akademus-${SHA:0:12}.tar.gz"
-          tar --exclude-from=deploy/bundle-exclude.txt -czf "$RUNNER_TEMP/$name" .
-          ( cd "$RUNNER_TEMP" && sha256sum "$name" > "$name.sha256" )
+          dist="$RUNNER_TEMP/dist"; mkdir -p "$dist"
+          tar --exclude-from=.github/scripts/bundle-exclude.txt -czf "$dist/release.tar.gz" .
+          cp .github/scripts/deploy-remote.sh "$dist/deploy-remote.sh"
+          ( cd "$dist" && sha256sum release.tar.gz deploy-remote.sh > SHA256SUMS )
 
           # Guard: nothing sensitive or mutable may ship.
-          if tar -tzf "$RUNNER_TEMP/$name" | grep -E '(^|/)\.env($|\.)|^\./writable/|^\./\.git/|^\./tests/|^\./node_modules/'; then
-            echo "::error::The bundle contains files that must never be deployed (listed above)"; exit 1
+          if tar -tzf "$dist/release.tar.gz" | grep -E '(^|/)\.env($|\.)|^\./writable/|^\./\.git/|^\./\.github/|^\./tests/|^\./node_modules/'; then
+            echo "::error::The release contains files that must never be deployed (listed above)"; exit 1
           fi
-          tar -tzf "$RUNNER_TEMP/$name" | grep -qx './vendor/autoload.php' || { echo "::error::vendor/ missing from bundle"; exit 1; }
+          tar -tzf "$dist/release.tar.gz" | grep -qx './vendor/autoload.php' || { echo "::error::vendor/ missing from the release"; exit 1; }
 
-          echo "name=$name" >> "$GITHUB_OUTPUT"
-          echo "Bundle $name: $(du -h "$RUNNER_TEMP/$name" | cut -f1), $(tar -tzf "$RUNNER_TEMP/$name" | wc -l) entries"
+          echo "release-id=$(date -u +%Y%m%dT%H%M%SZ)-${SHA:0:7}" >> "$GITHUB_OUTPUT"
+          echo "Release: $(du -h "$dist/release.tar.gz" | cut -f1), $(tar -tzf "$dist/release.tar.gz" | wc -l) entries"
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: release-${{ inputs.environment }}-${{ inputs.sha }}
-          path: |
-            ${{ runner.temp }}/${{ steps.bundle.outputs.name }}
-            ${{ runner.temp }}/${{ steps.bundle.outputs.name }}.sha256
+          path: ${{ runner.temp }}/dist/
           retention-days: 7
           if-no-files-found: error
 
@@ -102,18 +102,21 @@ jobs:
       name: ${{ inputs.environment }}
       url: ${{ vars.SITE_URL }}
     concurrency:
+      # One deployment per environment at a time; never cancel one that is running.
       group: deploy-${{ inputs.environment }}
       cancel-in-progress: false
     env:
-      ENVIRONMENT: ${{ inputs.environment }}
-      SHA: ${{ inputs.sha }}
-      BUNDLE: ${{ needs.build.outputs.bundle }}
+      TARGET_ENV: ${{ inputs.environment }}
+      RELEASE_SHA: ${{ inputs.sha }}
+      RELEASE_ID: ${{ needs.build.outputs.release-id }}
+      LABEL: ${{ inputs.release-label }}
       EXPECTED_PHP: ${{ needs.build.outputs.php-version }}
       DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
       PHP_BIN: ${{ vars.PHP_BIN }}
       SITE_URL: ${{ vars.SITE_URL }}
       SSH_PORT: ${{ vars.SSH_PORT }}
       TLS_INSECURE: ${{ vars.TLS_INSECURE }}
+      KEEP_RELEASES: '5'
     steps:
       - name: Check environment configuration
         env:
@@ -128,31 +131,27 @@ jobs:
           [[ "$HAS_KEY" == "true" ]] || missing+=("secret VPS_PRIVATE_KEY")
           [[ "$HAS_KNOWN_HOSTS" == "true" ]] || missing+=("secret VPS_KNOWN_HOSTS")
           for v in DEPLOY_PATH PHP_BIN SITE_URL; do [[ -n "${!v}" ]] || missing+=("variable $v"); done
-          if (( ${#missing[@]} )); then echo "::error::Environment '$ENVIRONMENT' is missing: ${missing[*]}"; exit 1; fi
-          [[ "$DEPLOY_PATH" == /* && "$DEPLOY_PATH" != "/" ]] || { echo "::error::DEPLOY_PATH must be absolute and not /"; exit 1; }
+          if (( ${#missing[@]} )); then echo "::error::Environment '$TARGET_ENV' is missing: ${missing[*]}"; exit 1; fi
+          [[ "$DEPLOY_PATH" == /* && "$DEPLOY_PATH" == */htdocs/* ]] || { echo "::error::DEPLOY_PATH must be an absolute CloudPanel path /home/<site-user>/htdocs/<domain> (got '$DEPLOY_PATH')"; exit 1; }
           [[ -z "$SSH_PORT" || "$SSH_PORT" =~ ^[0-9]+$ ]] || { echo "::error::SSH_PORT must be a number"; exit 1; }
           [[ -z "$TLS_INSECURE" || "$TLS_INSECURE" =~ ^(true|false)$ ]] || { echo "::error::TLS_INSECURE must be true or false"; exit 1; }
-          if [[ "$ENVIRONMENT" == "production" && "$TLS_INSECURE" == "true" ]]; then
+          if [[ "$TARGET_ENV" == "production" && "$TLS_INSECURE" == "true" ]]; then
             echo "::error::TLS_INSECURE=true is not allowed for production"; exit 1
           fi
           [[ "$SITE_URL" =~ ^https?:// ]] || { echo "::error::SITE_URL must start with http:// or https://"; exit 1; }
-
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ inputs.sha }}
-          persist-credentials: false
-          sparse-checkout: deploy/remote-deploy.sh
-          sparse-checkout-cone-mode: false
+          # A vX.Y.Z label (production tag) feeds the server-side version guard.
+          if [[ "$LABEL" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then echo "RELEASE_VERSION=$LABEL" >> "$GITHUB_ENV"; else echo "RELEASE_VERSION=" >> "$GITHUB_ENV"; fi
+          echo "Deploying ${RELEASE_SHA:0:12} ${LABEL:+($LABEL) }to $TARGET_ENV as release $RELEASE_ID"
 
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: release-${{ inputs.environment }}-${{ inputs.sha }}
-          path: ${{ runner.temp }}/release
-      - name: Verify bundle checksum
-        working-directory: ${{ runner.temp }}/release
-        run: sha256sum -c "$BUNDLE.sha256"
+          path: dist
+      - name: Verify artifact checksums
+        working-directory: dist
+        run: sha256sum -c SHA256SUMS
 
-      - name: Configure SSH (strict host key checking)
+      - name: Set up SSH (strict host key checking)
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
@@ -178,51 +177,115 @@ jobs:
             ServerAliveCountMax 4
           EOF
           echo "SSH_OPTS=-F $d/config" >> "$GITHUB_ENV"
+          # shellcheck disable=SC2086
+          ssh -F "$d/config" deploy-target true || { echo "::error::SSH connection failed. Check VPS_HOST, SSH_PORT, VPS_USERNAME, VPS_PRIVATE_KEY and that VPS_KNOWN_HOSTS matches the server (docs/SERVER-SETUP.md)."; exit 1; }
+          echo "SSH connection OK"
 
-      - name: Upload bundle
-        working-directory: ${{ runner.temp }}/release
+      - name: Upload release to the server
+        id: upload
         run: |
+          incoming="$DEPLOY_PATH/.deploy/incoming/$RELEASE_ID"
+          echo "INCOMING=$incoming" >> "$GITHUB_ENV"
           # Retry only connection failures (ssh/scp exit code 255).
           retry() { local n; for n in 1 2 3; do "$@" && return 0; rc=$?; [[ $rc -eq 255 ]] || return $rc; echo "connection failed (attempt $n), retrying..."; sleep $((n * 10)); done; return 255; }
+          # shellcheck disable=SC2029,SC2086 # the path is meant to expand on the runner
+          retry ssh $SSH_OPTS deploy-target "mkdir -p $(printf '%q' "$incoming")"
           # shellcheck disable=SC2086
-          retry ssh $SSH_OPTS deploy-target "mkdir -p '$DEPLOY_PATH/incoming'"
-          # shellcheck disable=SC2086
-          retry scp $SSH_OPTS -q "$BUNDLE" "$BUNDLE.sha256" "deploy-target:$DEPLOY_PATH/incoming/"
+          retry scp $SSH_OPTS -q dist/release.tar.gz dist/deploy-remote.sh dist/SHA256SUMS "deploy-target:$(printf '%q' "$incoming")/"
+          echo "Uploaded to $incoming"
 
-      - name: Deploy on the server (deploy/remote-deploy.sh)
+      - name: Deploy on the server (backup, migrate, switch)
+        id: deploy
         run: |
-          # shellcheck disable=SC2086
-          ssh $SSH_OPTS deploy-target bash -s -- \
-            "$(printf '%q' "$ENVIRONMENT")" "$(printf '%q' "$SHA")" "$(printf '%q' "$DEPLOY_PATH")" \
-            "$(printf '%q' "$PHP_BIN")" "$(printf '%q' "$SITE_URL")" "$(printf '%q' "${TLS_INSECURE:-false}")" \
-            "$(printf '%q' "$EXPECTED_PHP")" "$(printf '%q' "$BUNDLE")" \
-            < deploy/remote-deploy.sh
+          # remote <command> - runs the uploaded deploy-remote.sh with the deploy variables
+          remote_env=()
+          for v in DEPLOY_PATH PHP_BIN TARGET_ENV EXPECTED_PHP SITE_URL RELEASE_ID RELEASE_SHA RELEASE_VERSION INCOMING KEEP_RELEASES; do
+            remote_env+=("$v=$(printf '%q' "${!v}")")
+          done
+          echo "REMOTE_ENV=${remote_env[*]}" >> "$GITHUB_ENV"
+          # shellcheck disable=SC2029,SC2086
+          ssh $SSH_OPTS deploy-target "env ${remote_env[*]} bash $(printf '%q' "$INCOMING/deploy-remote.sh") deploy" 2>&1 | tee deploy.log
+          grep -q '^DEPLOY_RESULT ' deploy.log
 
-      - name: Verify from outside (GitHub runner -> SITE_URL/health)
+      - name: Verify the live site
+        id: verify
         run: |
           tls=(); [[ "$TLS_INSECURE" == "true" ]] && tls=(--insecure)
-          for _ in $(seq 1 6); do
-            body=$(curl -sS --max-time 10 "${tls[@]}" "${SITE_URL%/}/health" || true)
-            if [[ "$(jq -r .status <<<"$body" 2>/dev/null)" == "ok" && "$(jq -r .release <<<"$body" 2>/dev/null)" == "$SHA" ]]; then
-              echo "$SITE_URL serves $SHA and is healthy."; exit 0
-            fi
-            sleep 10
-          done
-          echo "::error::External health check failed: $body"; exit 1
+          base="${SITE_URL%/}"
 
-      - name: Summary
+          echo "::group::1. ${base}/health is ok and serves ${RELEASE_SHA:0:12}"
+          healthy=false
+          for i in $(seq 1 12); do
+            body=$(curl -sS --max-time 10 "${tls[@]}" "${base}/health" || true)
+            if [[ "$(jq -r .status <<<"$body" 2>/dev/null)" == "ok" && "$(jq -r .release <<<"$body" 2>/dev/null)" == "$RELEASE_SHA" ]]; then
+              healthy=true; break
+            fi
+            echo "attempt $i: ${body:-no answer}"; sleep 5
+          done
+          $healthy || { echo "::error::${base}/health did not report status ok and $RELEASE_SHA"; exit 1; }
+          echo "::endgroup::"
+
+          echo "::group::2. Home page renders and its stylesheet is served"
+          code=$(curl -sS --max-time 20 "${tls[@]}" -o home.html -w '%{http_code}' "${base}/")
+          [[ "$code" == 200 ]] || { echo "::error::${base}/ returned HTTP $code"; exit 1; }
+          css=$(grep -oE 'href="[^"]+\.css[^"]*"' home.html | head -n1 | sed -E 's/^href="//; s/"$//' || true)
+          if [[ -n "$css" ]]; then
+            [[ "$css" =~ ^https?:// ]] || css="${base}/${css#/}"
+            if [[ "$css" == "$base"* ]]; then
+              code=$(curl -sS --max-time 20 "${tls[@]}" -o /dev/null -w '%{http_code}' "$css")
+              [[ "$code" == 200 ]] || { echo "::error::$css returned HTTP $code (can nginx read the release files?)"; exit 1; }
+              echo "$css: 200"
+            fi
+          fi
+          echo "::endgroup::"
+
+          echo "::group::3. Revision, environment and migrations on the server"
+          # shellcheck disable=SC2029,SC2086
+          ssh $SSH_OPTS deploy-target "env $REMOTE_ENV bash $(printf '%q' "$INCOMING/deploy-remote.sh") verify"
+          echo "::endgroup::"
+
+      - name: Roll back after a failed deployment
+        id: rollback
+        if: ${{ failure() && steps.upload.outcome == 'success' }}
+        run: |
+          # shellcheck disable=SC2029,SC2086
+          ssh $SSH_OPTS deploy-target "env $REMOTE_ENV bash $(printf '%q' "$INCOMING/deploy-remote.sh") rollback" 2>&1 | tee rollback.log
+          tls=(); [[ "$TLS_INSECURE" == "true" ]] && tls=(--insecure)
+          echo "After rollback: ${SITE_URL%/}/health -> $(curl -sS --max-time 10 "${tls[@]}" "${SITE_URL%/}/health" || true)"
+
+      - name: Finalize (mark healthy, remove old releases and backups)
+        run: |
+          # shellcheck disable=SC2029,SC2086
+          ssh $SSH_OPTS deploy-target "env $REMOTE_ENV bash $(printf '%q' "$INCOMING/deploy-remote.sh") finalize"
+
+      - name: Job summary
         if: always()
         env:
-          LABEL: ${{ inputs.release-label }}
-          OUTCOME: ${{ job.status }}
+          DEPLOY_OUTCOME: ${{ steps.deploy.outcome }}
+          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+          ROLLBACK_OUTCOME: ${{ steps.rollback.outcome }}
+          JOB_STATUS: ${{ job.status }}
         run: |
           {
-            echo "### Deploy to \`$ENVIRONMENT\`: $OUTCOME"
+            echo "### Deploy to \`$TARGET_ENV\`: $JOB_STATUS"
             echo "| | |"; echo "|---|---|"
-            echo "| Commit | \`$SHA\` |"
+            echo "| Commit | \`$RELEASE_SHA\` |"
             [[ -n "$LABEL" ]] && echo "| Release | \`$LABEL\` |"
+            echo "| Release directory | \`releases/$RELEASE_ID\` |"
             echo "| URL | $SITE_URL |"
             echo "| PHP | $EXPECTED_PHP |"
+            echo "| Deploy step | ${DEPLOY_OUTCOME:-skipped} |"
+            echo "| Verification | ${VERIFY_OUTCOME:-skipped} |"
+            echo "| Automatic rollback | ${ROLLBACK_OUTCOME:-skipped} |"
+            if [[ -f deploy.log ]]; then
+              echo ""
+              echo "<details><summary>Migration output</summary>"
+              echo ""
+              echo '```'
+              sed -n '/Database migrations/,/::endgroup::/p' deploy.log | grep -v '::' | tail -n 40
+              echo '```'
+              echo "</details>"
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Remove SSH material

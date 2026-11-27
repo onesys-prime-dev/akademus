@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Runs `php spark <args>` and fails when the command printed an exception.
 # Needed because spark commands such as migrate and db:seed catch exceptions, print them and still
-# exit 0 - a broken migration or seeder would otherwise pass CI. Same check as deploy/remote-deploy.sh.
+# exit 0 - a broken migration or seeder would otherwise pass CI. Same check as .github/scripts/deploy-remote.sh.
 #
 #   bash .ci/spark.sh migrate
 #   bash .ci/spark.sh db:seed DatabaseSeeder
