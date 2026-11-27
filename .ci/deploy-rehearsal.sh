@@ -28,6 +28,14 @@ passed=0
 
 ok() { passed=$((passed + 1)); echo "PASS $passed: $*"; }
 die() { echo "::error title=Deploy rehearsal::$*"; exit 1; }
+# Print deploy output as plain text: the expected failures of these scenarios (a broken migration, a rollback)
+# must not become error/warning annotations on an otherwise green run.
+show() {
+  local token="rehearsal-output-$RANDOM$RANDOM"
+  echo "::stop-commands::$token"
+  printf '%s\n' "$1"
+  echo "::$token::"
+}
 live() { basename "$(readlink "$DEPLOY_PATH/current")"; }
 signal() { cat "$DEPLOY_PATH/shared/writable/worker-restart" 2> /dev/null || true; }
 
@@ -103,8 +111,8 @@ write_env "$SITE_URL"
 
 echo; echo "======== 1. Normal deploy -> verify -> finalize"
 id1="$(stage "$BUILD")"
-out=$(run deploy "$id1" 2>&1) || { echo "$out"; die "1: deploy failed"; }
-echo "$out"
+out=$(run deploy "$id1" 2>&1) || { show "$out"; die "1: deploy failed"; }
+show "$out"
 grep -q "^DEPLOY_RESULT release=$id1 previous=none" <<< "$out" || die "1: no DEPLOY_RESULT"
 [[ "$(live)" == "$id1" ]] || die "1: current is not the new release"
 [[ "$(readlink "$DEPLOY_PATH/public")" == current/public ]] || die "1: public -> current/public was not created"
@@ -135,24 +143,24 @@ class RehearsalBrokenMigration extends Migration
 EOF
 (cd "$BROKEN" && composer dump-autoload --classmap-authoritative --no-dev -q)
 id2="$(stage "$BROKEN")"
-if out=$(run deploy "$id2" 2>&1); then echo "$out"; die "2: deploy succeeded despite a broken migration"; fi
-echo "$out"
+if out=$(run deploy "$id2" 2>&1); then show "$out"; die "2: deploy succeeded despite a broken migration"; fi
+show "$out"
 grep -q "Migration failed" <<< "$out" || die "2: deploy failed, but not because of the migration"
 [[ "$(live)" == "$id1" ]] || die "2: current changed after a failed migration"
-out=$(run rollback "$id2" 2>&1) || { echo "$out"; die "2: rollback command failed"; }
-grep -q "ROLLBACK_RESULT not-needed" <<< "$out" || { echo "$out"; die "2: rollback should not be needed"; }
+out=$(run rollback "$id2" 2>&1) || { show "$out"; die "2: rollback command failed"; }
+grep -q "ROLLBACK_RESULT not-needed" <<< "$out" || { show "$out"; die "2: rollback should not be needed"; }
 [[ -f "$DEPLOY_PATH/releases/$id2/.failed" ]] || die "2: failed release not marked"
 health_has "$SHA" || die "2: site not healthy after the failed deploy"
 ok "failed migration -> still serving $id1"
 
 echo; echo "======== 3. Failed verification (automatic code rollback)"
 id3="$(stage "$BUILD")"
-out=$(run deploy "$id3" 2>&1) || { echo "$out"; die "3: deploy failed"; }
+out=$(run deploy "$id3" 2>&1) || { show "$out"; die "3: deploy failed"; }
 [[ "$(live)" == "$id3" ]] || die "3: not switched to $id3"
 before="$(signal)"
 # The workflow's external verification "fails" here; it then runs rollback:
-out=$(run rollback "$id3" 2>&1) || { echo "$out"; die "3: rollback failed"; }
-echo "$out"
+out=$(run rollback "$id3" 2>&1) || { show "$out"; die "3: rollback failed"; }
+show "$out"
 grep -q "ROLLBACK_RESULT release=$id1" <<< "$out" || die "3: rollback did not report $id1"
 [[ "$(live)" == "$id1" ]] || die "3: current was not switched back to $id1"
 [[ -f "$DEPLOY_PATH/releases/$id3/.failed" ]] || die "3: rolled-back release not marked failed"
@@ -169,11 +177,11 @@ ok "finalize keeps only healthy releases"
 
 echo; echo "======== 5. Production version guard"
 id5="$(stage "$BUILD")"
-out=$(run deploy "$id5" TARGET_ENV=production RELEASE_VERSION=v2.0.0 2>&1) || { echo "$out"; die "5: v2.0.0 deploy failed"; }
+out=$(run deploy "$id5" TARGET_ENV=production RELEASE_VERSION=v2.0.0 2>&1) || { show "$out"; die "5: v2.0.0 deploy failed"; }
 run_installed finalize "$id5" TARGET_ENV=production > /dev/null
 id6="$(stage "$BUILD")"
-if out=$(run deploy "$id6" TARGET_ENV=production RELEASE_VERSION=v1.9.0 2>&1); then echo "$out"; die "5: an older version was deployed"; fi
-grep -q "refusing to deploy older v1.9.0" <<< "$out" || { echo "$out"; die "5: refused, but not by the version guard"; }
+if out=$(run deploy "$id6" TARGET_ENV=production RELEASE_VERSION=v1.9.0 2>&1); then show "$out"; die "5: an older version was deployed"; fi
+grep -q "refusing to deploy older v1.9.0" <<< "$out" || { show "$out"; die "5: refused, but not by the version guard"; }
 [[ "$(live)" == "$id5" ]] || die "5: current changed"
 run rollback "$id6" TARGET_ENV=production > /dev/null
 ok "production refuses v1.9.0 after v2.0.0"
@@ -182,12 +190,12 @@ echo; echo "======== 6. Preflight guards"
 write_env "https://another-site.example"
 id7="$(stage "$BUILD")"
 if out=$(run deploy "$id7" 2>&1); then die "6: deployed with another site's .env"; fi
-grep -q "differs from SITE_URL" <<< "$out" || { echo "$out"; die "6: wrong failure for a foreign .env"; }
+grep -q "differs from SITE_URL" <<< "$out" || { show "$out"; die "6: wrong failure for a foreign .env"; }
 write_env "$SITE_URL"
 mv "$DEPLOY_PATH/public" "$WORK/public-link"
 mkdir "$DEPLOY_PATH/public"
 if out=$(run deploy "$id7" 2>&1); then die "6: replaced a real public/ directory"; fi
-grep -q "is a real directory" <<< "$out" || { echo "$out"; die "6: wrong failure for a real public/"; }
+grep -q "is a real directory" <<< "$out" || { show "$out"; die "6: wrong failure for a real public/"; }
 rmdir "$DEPLOY_PATH/public"
 mv "$WORK/public-link" "$DEPLOY_PATH/public"
 [[ "$(live)" == "$id5" ]] || die "6: current changed"
